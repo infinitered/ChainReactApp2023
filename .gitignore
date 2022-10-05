@@ -81,9 +81,5 @@ npm-debug.*
 *.orig.*
 web-build/
 
-*.tar.gz
-*.app
-*.apk
-
 # Configurations
 !env.js
