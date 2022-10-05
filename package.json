@@ -45,6 +45,7 @@
     "expo": "~46.0.13",
     "expo-application": "~4.2.2",
     "expo-constants": "~13.2.3",
+    "expo-dev-client": "^1.3.0",
     "expo-device": "~4.3.0",
     "expo-file-system": "~14.1.0",
     "expo-font": "~10.2.0",
