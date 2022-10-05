@@ -1,21 +1,15 @@
 import { observer } from "mobx-react-lite"
-import React, {
-} from "react"
+import React from "react"
 import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import {
-  Text,
-} from "../components"
+import { Text } from "../components"
 import { isRTL } from "../i18n"
 import { colors, spacing } from "../theme"
 
 const welcomeLogo = require("../../assets/images/logo.png")
 const welcomeFace = require("../../assets/images/welcome-face.png")
 
-
-export const WelcomeScreen = observer(function WelcomeScreen(
-) {
-
+export const WelcomeScreen = observer(function WelcomeScreen() {
   return (
     <View style={$container}>
       <View style={$topContainer}>
