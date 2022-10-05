@@ -16,7 +16,9 @@
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.chainreactapp2023",
@@ -47,6 +49,12 @@
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
         "backgroundColor": "#191015"
+      }
+    },
+    "owner": "infinitered",
+    "extra": {
+      "eas": {
+        "projectId": "b72c79d7-7c87-4aa7-b964-998dcff69e07"
       }
     }
   }
