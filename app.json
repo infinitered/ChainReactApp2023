@@ -16,7 +16,9 @@
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.chainreactapp2023",
@@ -47,6 +49,11 @@
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
         "backgroundColor": "#191015"
+      }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "95f68b2a-7930-42f8-bd69-10519da86afa"
       }
     }
   }
