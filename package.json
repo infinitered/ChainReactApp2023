@@ -2,9 +2,8 @@
   "name": "chain-react-app-2023",
   "version": "0.0.1",
   "private": true,
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npx expo start --dev-client",
+    "start": "expo start --dev-client",
     "build:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform ios",
     "build:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform android",
     "compile": "tsc --noEmit -p . --pretty",
@@ -14,7 +13,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "adb": "adb reverse tcp:9090 tcp:9090 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9001 tcp:9001 && adb reverse tcp:8081 tcp:8081",
-    "postinstall": "node ./bin/postInstall"
+    "postinstall": "node ./bin/postInstall",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo-google-fonts/space-grotesk": "^0.2.2",
@@ -36,7 +37,7 @@
     "expo-linear-gradient": "~11.4.0",
     "expo-localization": "13.1.0",
     "expo-modules-core": "~0.11.3",
-    "expo-splash-screen": "~0.16.1",
+    "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "i18n-js": "3.9.2",
     "mobx": "6.6.0",
@@ -51,7 +52,9 @@
     "react-native-screens": "3.15.0",
     "reactotron-mst": "3.1.4",
     "reactotron-react-js": "^3.3.7",
-    "reactotron-react-native": "5.0.2"
+    "reactotron-react-native": "5.0.2",
+    "react-dom": "18.0.0",
+    "react-native-web": "~0.18.7"
   },
   "devDependencies": {
     "@babel/core": "^7.18.0",
