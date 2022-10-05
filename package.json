@@ -5,8 +5,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "npx expo start --dev-client",
-    "build:ios": "eas build --profile preview --local --platform ios",
-    "build:android": "eas build --profile preview --local --platform android",
+    "build:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform ios",
+    "build:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform android",
     "compile": "tsc --noEmit -p . --pretty",
     "format": "prettier --write \"app/**/*.{js,jsx,json,md,ts,tsx}\"",
     "lint": "eslint index.js App.js app test --fix --ext .js,.ts,.tsx && npm run format",
@@ -70,6 +70,7 @@
     "@typescript-eslint/parser": "5.28.0",
     "babel-jest": "26.6.3",
     "babel-loader": "8.2.5",
+    "cross-env": "^7.0.3",
     "detox": "19.12.1",
     "detox-expo-helpers": "0.6.0",
     "eslint": "8.17.0",
