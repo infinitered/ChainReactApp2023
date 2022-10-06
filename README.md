@@ -9,7 +9,10 @@ Coming soon! This will be the home for the app for [Chain React 2023](https://cr
 1. `brew install fastlane`
 2. `yarn global add eas-cli@2.1.0` or `npm install -g eas-cli@2.1.0`
 
-Note: After pulling `main`, if there are no changes to your `package.json` file, you don't need to run through the steps below, therwise follow the steps.
+Note: The steps below will have to be run when either of the following happen:
+
+1. Fresh app checkout
+2. After pulling `main`, and either `package.json`, `app.json`, or `eas.json` files have updates
 
 ### iOS Simulator
 
