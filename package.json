@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --dev-client",
     "build:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform ios",
     "build:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform android",
     "compile": "tsc --noEmit -p . --pretty",
