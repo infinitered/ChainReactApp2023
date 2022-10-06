@@ -31,6 +31,12 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
+          <string>com.googleusercontent.apps.1051103944258-1ser3n77nmsf0o1vml734oo31i3v8qft</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
           <string>exp+chainreactapp2023</string>
         </array>
       </dict>

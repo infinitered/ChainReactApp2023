@@ -14,11 +14,6 @@ if (["darwin", "linux"].includes(process.platform)) {
   run('pkill -f "cli.js start" || set exit 0')
 }
 
-// On iOS, make sure CocoaPods are installed
-if (process.platform === "darwin") {
-  run('if [ -d "ios" ]; then cd ios && pod install && cd -; fi')
-}
-
 // Run baby run
 function run(command) {
   console.log(`./bin/postInstall script running: ${command}`)
