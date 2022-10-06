@@ -17,4 +17,4 @@ jobs:
           trello-card-action: "Comment"
           trello-list-name-commit: "Doing"
           trello-list-name-pr-open: "Doing"
-          trello-list-name-pr-closed: "Done"
+          trello-list-name-pr-closed: "DONE"
