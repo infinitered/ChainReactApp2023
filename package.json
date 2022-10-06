@@ -101,8 +101,6 @@
     "prettier": "2.6.2",
     "query-string": "^7.0.1",
     "react-devtools-core": "4.24.7",
-    "react-dom": "18.0.0",
-    "react-native-web": "^0.18.7",
     "reactotron-core-client": "^2.8.10",
     "regenerator-runtime": "^0.13.4",
     "ts-jest": "26",
