@@ -36,4 +36,6 @@ Note: The steps below will have to be run when either of the following happen:
 
 1. `yarn build:ios`
 2. `tar zxvf build/build-*.tar.gz -C build/`
-3. `yarn e2e:ios`
+3. `yarn start`
+4. Open iOS simulator if you want to watch tests in action
+5. `yarn e2e:ios` (separate terminal, do not stop step 3)
