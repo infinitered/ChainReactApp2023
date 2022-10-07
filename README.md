@@ -9,11 +9,12 @@ Coming soon! This will be the home for the app for [Chain React 2023](https://cr
 1. `brew install fastlane`
 2. `yarn global add eas-cli@2.1.0` or `npm install -g eas-cli@2.1.0`
 
+Note: The steps below will have to be run when either of the following happen:
+
+1. Fresh app checkout
+2. After pulling `main`, and either `package.json`, `app.json`, or `eas.json` files have updates
+
 ### iOS Simulator
-
-1. `yarn ios`
-
-### iOS Simulator—Manual
 
 1. `yarn build:ios`
 2. double click newly created `*.tar.gz` file in `build\` directory of project
@@ -22,10 +23,6 @@ Coming soon! This will be the home for the app for [Chain React 2023](https://cr
 5. `i` > app should now open and build
 
 ### Android Emulator
-
-1. `yarn android`
-
-### Android Emulator—Manual
 
 1. `yarn build:android`
 2. APK will be generated in the `build\` directory of the project
