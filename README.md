@@ -29,3 +29,11 @@ Note: The steps below will have to be run when either of the following happen:
 3. Drag and drop this file to your emulator or sideload to Android device of choice
 4. `yarn start`
 5. `a` > app will open on the emulator or connected device (use `adb devices` to see if properly connected)
+
+## E2E Tests
+
+### iOS Simulator
+
+1. `yarn build:ios`
+2. `tar zxvf build/build-*.tar.gz -C build/`
+3. `yarn e2e:ios`

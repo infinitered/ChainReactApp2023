@@ -1130,6 +1130,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@config-plugins/detox@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@config-plugins/detox/-/detox-3.0.0.tgz#27567f6e898532a9ebcdbfeb350a7d4ade71d061"
+  integrity sha512-TmGXfmRABB6mG+zn5jfHzEZ6VEBayeaBu+G6S25b9XISBHsM8eTq1LsmhpxnBp4yGDnOHBNYjzYwz6OIgvzSUQ==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
@@ -5736,10 +5741,10 @@ detox-expo-helpers@0.6.0:
     semver "^5.6.0"
     xdl "^51.5.0"
 
-detox@19.12.1:
-  version "19.12.1"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-19.12.1.tgz#6ad924f93c60dd9188ac62866222233435b53bd2"
-  integrity sha512-sh8xxWLSykJ8zH1zxP2nXV9iIcuwQ4Umn8LKCtkilrLen9K/EJqNN2miMfu7Mue63aTVt6KFLJ6y11yFuZ2LXQ==
+detox@19.12.5:
+  version "19.12.5"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-19.12.5.tgz#6e34b461ebfb42a504b1c0a1211ab1a84b84d5c4"
+  integrity sha512-vGL3CwfSARimbwbBPW3JZ4WEGgeqpT2PXyVcDyCWgmFu//K9/Ng6c0H2lysh4foSbtcMJgC6+zrATUX5wbThhw==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"

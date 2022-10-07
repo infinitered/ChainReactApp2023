@@ -16,9 +16,7 @@
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.chainreactapp2023",
@@ -62,9 +60,7 @@
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/crashlytics",
-      [
-        "expo-build-properties", { "ios": { "useFrameworks": "static" } }
-      ]
+      ["expo-build-properties", { "ios": { "useFrameworks": "static" } }]
     ]
   }
 }
