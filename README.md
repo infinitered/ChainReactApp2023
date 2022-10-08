@@ -32,10 +32,21 @@ Note: The steps below will have to be run when either of the following happen:
 
 ## E2E Tests
 
+### Pre-reqs
+
+1. `brew install applesimutils`
+2. Make sure you have an iPhone simulator named `iPhone 14`, if not add one:
+   a. Open Simulator
+   b. File > New Simulator
+
+_Note: we'll get this more automated with a script in the future_
+
 ### iOS Simulator
 
-1. `yarn build:ios`
-2. `tar zxvf build/build-*.tar.gz -C build/`
-3. `yarn start`
-4. Open iOS simulator if you want to watch tests in action
-5. `yarn e2e:ios` (separate terminal, do not stop step 3)
+1. Skip to step 5 if you've already built the latest dev client and extracted `ChainReactApp2023.app` to `build/`
+2. `rm build/build-*tar.gz; rm -rf build/ChainReactApp2023.app`
+3. `yarn build:ios`
+4. `tar zxvf build/build-*.tar.gz -C build/`
+5. `yarn start`
+6. Open iOS simulator if you want to watch tests in action
+7. `yarn e2e:ios` (separate terminal, do not stop step 3)
