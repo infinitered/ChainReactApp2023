@@ -14,10 +14,10 @@
     "test:watch": "jest --watch",
     "adb": "adb reverse tcp:9090 tcp:9090 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9001 tcp:9001 && adb reverse tcp:8081 tcp:8081",
     "postinstall": "node ./bin/postInstall",
-    "android": "expo run:android",
-    "ios": "expo run:ios"
+    "e2e:ios": "detox test --configuration ios"
   },
   "dependencies": {
+    "@config-plugins/detox": "^3.0.0",
     "@expo-google-fonts/space-grotesk": "^0.2.2",
     "@expo/webpack-config": "^0.17.0",
     "@react-native-async-storage/async-storage": "^1.17.3",
@@ -77,8 +77,7 @@
     "babel-jest": "26.6.3",
     "babel-loader": "8.2.5",
     "cross-env": "^7.0.3",
-    "detox": "19.12.1",
-    "detox-expo-helpers": "0.6.0",
+    "detox": "19.12.5",
     "eslint": "8.17.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-config-standard": "17.0.0",
@@ -88,7 +87,6 @@
     "eslint-plugin-promise": "6.0.0",
     "eslint-plugin-react": "7.30.0",
     "eslint-plugin-react-native": "4.0.0",
-    "expo-detox-hook": "1.0.10",
     "expo-modules-autolinking": "0.10.1",
     "fbjs-scripts": "3.0.1",
     "jest": "26",
@@ -121,32 +119,41 @@
     "trailingComma": "all"
   },
   "detox": {
-    "test-runner": "jest",
-    "runnerConfig": "./detox/config.json",
-    "specs": "detox",
+    "testRunner": "jest",
+    "runnerConfig": "e2e/config.json",
+    "skipLegacyWorkersInjection": true,
+    "apps": {
+      "ios": {
+        "type": "ios.app",
+        "binaryPath": "build/ChainReactApp2023.app"
+      },
+      "android": {
+        "type": "android.apk",
+        "binaryPath": "build/ChainReactApp2023.apk"
+      }
+    },
+    "devices": {
+      "simulator": {
+        "type": "ios.simulator",
+        "device": {
+          "type": "iPhone 14"
+        }
+      },
+      "emulator": {
+        "type": "android.emulator",
+        "device": {
+          "avdName": "Pixel_5_API_31"
+        }
+      }
+    },
     "configurations": {
-      "ios.sim.debug": {
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/ChainReactApp2023.app",
-        "build": "xcodebuild -workspace ios/ChainReactApp2023.xcworkspace -scheme ChainReactApp2023 -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build -destination 'name=iPhone 14'",
-        "type": "ios.simulator",
-        "device": {
-          "name": "iPhone 14",
-          "os": "iOS 15.5"
-        }
+      "ios": {
+        "device": "simulator",
+        "app": "ios"
       },
-      "ios.sim.release": {
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/ChainReactApp2023.app",
-        "build": "xcodebuild -workspace ios/ChainReactApp2023.xcworkspace -scheme ChainReactApp2023 -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -destination 'name=iPhone 14'",
-        "type": "ios.simulator",
-        "device": {
-          "name": "iPhone 14",
-          "os": "iOS 15.5"
-        }
-      },
-      "ios.sim.expo": {
-        "binaryPath": "bin/Exponent.app",
-        "type": "ios.simulator",
-        "name": "iPhone 14"
+      "android": {
+        "device": "emulator",
+        "app": "android"
       }
     }
   },

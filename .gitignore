@@ -82,6 +82,9 @@ npm-debug.*
 *.orig.*
 web-build/
 
+ios/
+android/
+
 # Configurations
 !env.js
 
