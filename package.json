@@ -8,7 +8,7 @@
     "build:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview --local --platform android",
     "compile": "tsc --noEmit -p . --pretty",
     "format": "prettier --write \"app/**/*.{js,jsx,json,md,ts,tsx}\"",
-    "lint": "eslint index.js App.js app test --fix --ext .js,.ts,.tsx && npm run format",
+    "lint": "eslint App.js app test --fix --ext .js,.ts,.tsx && npm run format",
     "patch": "patch-package",
     "test": "jest",
     "test:watch": "jest --watch",
