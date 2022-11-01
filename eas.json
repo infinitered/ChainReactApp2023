@@ -4,23 +4,48 @@
   },
   "build": {
     "development": {
+      "extends": "production",
+      "channel": "development-simulator",
+      "developmentClient": true,
       "distribution": "internal",
       "android": {
         "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
-        "buildConfiguration": "Debug"
+        "buildConfiguration": "Debug",
+        "simulator": true
       }
     },
-    "preview": {
-      "distribution": "internal",
+    "development:device": {
+      "extends": "development",
+      "channel": "development-device",
       "developmentClient": true,
-      "ios": { "simulator": true },
-      "android": { "buildType": "apk" }
+      "distribution": "internal"
     },
-    "production": {}
+    "preview": {
+      "extends": "production",
+      "channel": "preview",
+      "distribution": "internal",
+      "ios": { "simulator": true },
+      "android": { "buildType": "apk" },
+      "env": {}
+    },
+    "preview:device": {
+      "extends": "preview",
+      "channel": "preview-device",
+      "developmentClient": true
+    },
+    "production": {
+      "channel": "production",
+      "env": {}
+    }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "ascAppId": "1239112816",
+        "appleTeamId": "L7YNDPLSEB"
+      }
+    }
   }
 }
