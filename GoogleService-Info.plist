@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>1051103944258-1ser3n77nmsf0o1vml734oo31i3v8qft.apps.googleusercontent.com</string>
+	<string>1051103944258-kiu02m337mppqd2p8o71boood0gjs3f2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.1051103944258-1ser3n77nmsf0o1vml734oo31i3v8qft</string>
+	<string>com.googleusercontent.apps.1051103944258-kiu02m337mppqd2p8o71boood0gjs3f2</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAYh9bdhPS3h2OY0j5qxvteslvaaRyPrN0</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.chainreactapp2023</string>
+	<string>infinitered.stage.ChainReactConf</string>
 	<key>PROJECT_ID</key>
 	<string>chainreactapp2023</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1051103944258:ios:b0b31af4fd390d31a157db</string>
+	<string>1:1051103944258:ios:2f134a7cc5f68cb3a157db</string>
 </dict>
 </plist>
