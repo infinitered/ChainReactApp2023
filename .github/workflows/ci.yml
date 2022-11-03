@@ -45,4 +45,4 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build on EAS
-          run: eas build --platform all --non-interactive
+        run: eas build --platform all --non-interactive
