@@ -9,7 +9,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-20.04
-
     steps:
       - name: Clone repository
         uses: actions/checkout@v3
@@ -28,5 +27,22 @@ jobs:
       - name: Run linter
         run: yarn lint
 
-      # - name: Deploy beta build
-      #   run: TODO!
+  install-and-build-eas:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: yarn
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v7
+        with:
+          expo-version: 5.x
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Build on EAS
+          run: eas build --platform all --non-interactive
