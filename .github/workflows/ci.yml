@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install
@@ -26,16 +27,6 @@ jobs:
 
       - name: Run linter
         run: yarn lint
-
-  install-and-build-eas:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          cache: yarn
 
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v7
