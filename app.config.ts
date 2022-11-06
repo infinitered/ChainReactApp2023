@@ -1,6 +1,8 @@
 import { ExpoConfig, ConfigContext } from '@expo/config';
 import { version } from './package.json'
 
+const BUILD_NUMBER = 2;
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Chain React App 2023',
@@ -21,6 +23,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     icon: './assets/images/app-icon-android-legacy.png',
     package: 'com.chainreactapp',
+    versionCode: BUILD_NUMBER,
     adaptiveIcon: {
       foregroundImage: './assets/images/app-icon-android-adaptive-foreground.png',
       backgroundImage: './assets/images/app-icon-android-adaptive-background.png'
@@ -36,6 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     icon: './assets/images/app-icon-ios.png',
     supportsTablet: true,
     bundleIdentifier: 'infinitered.stage.ChainReactConf',
+    buildNumber: String(BUILD_NUMBER),
     splash: {
       image: './assets/images/splash-logo-ios-mobile.png',
       tabletImage: './assets/images/splash-logo-ios-tablet.png',
