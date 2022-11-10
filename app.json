@@ -10,13 +10,15 @@
     "splash": {
       "image": "./assets/images/splash-logo-all.png",
       "resizeMode": "contain",
-      "backgroundColor": "#191015"
+      "backgroundColor": "#081828"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.chainreactapp2023",
@@ -27,7 +29,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-android-universal.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#081828"
       },
       "googleServicesFile": "./google-services.json"
     },
@@ -39,7 +41,7 @@
         "image": "./assets/images/splash-logo-ios-mobile.png",
         "tabletImage": "./assets/images/splash-logo-ios-tablet.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#081828"
       },
       "googleServicesFile": "./GoogleService-Info.plist"
     },
@@ -48,7 +50,7 @@
       "splash": {
         "image": "./assets/images/splash-logo-web.png",
         "resizeMode": "contain",
-        "backgroundColor": "#191015"
+        "backgroundColor": "#081828"
       }
     },
     "owner": "infinitered",
@@ -60,7 +62,14 @@
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/crashlytics",
-      ["expo-build-properties", { "ios": { "useFrameworks": "static" } }]
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
     ]
   }
 }
