@@ -4,7 +4,9 @@ import {
   PressableProps,
   PressableStateCallbackType,
   StyleProp,
+  StyleSheet,
   TextStyle,
+  View,
   ViewStyle,
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
@@ -117,6 +119,7 @@ export function Button(props: ButtonProps) {
           {!!RightAccessory && (
             <RightAccessory style={$rightAccessoryStyle} pressableState={state} />
           )}
+          <View style={$shadow} />
         </>
       )}
     </Pressable>
@@ -124,7 +127,7 @@ export function Button(props: ButtonProps) {
 }
 
 const $baseViewStyle: ViewStyle = {
-  minHeight: 56,
+  minHeight: 54,
   borderRadius: 100,
   borderColor: colors.palette.neutral500,
   justifyContent: "center",
@@ -174,7 +177,7 @@ const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { backgroundColor: colors.palette.neutral100 },
+  default: { backgroundColor: colors.palette.primary100 },
   filled: { backgroundColor: colors.palette.neutral300 },
   reversed: { backgroundColor: colors.palette.neutral500 },
 }
@@ -183,4 +186,13 @@ const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: { opacity: 0.9 },
   filled: { opacity: 0.9 },
   reversed: { opacity: 0.9 },
+}
+
+const $shadow: ViewStyle = {
+  ...StyleSheet.absoluteFillObject,
+  backgroundColor: "transparent",
+  borderColor: colors.palette.neutral500,
+  borderRadius: 100,
+  height: 50,
+  borderWidth: 1,
 }
