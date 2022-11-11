@@ -1157,11 +1157,6 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@expo-google-fonts/space-grotesk@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@expo-google-fonts/space-grotesk/-/space-grotesk-0.2.2.tgz#96df4663a4a45fa14faf569cf8b311ad019b49dc"
-  integrity sha512-KesfcuS+OUvs3itJUTd89TLzkFNcFsyG1tRQm2GxirErLpHbG/bLErNloFQabeCRaBY5gOheN3VKlGC3w4WJ5g==
-
 "@expo/bunyan@4.0.0", "@expo/bunyan@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-4.0.0.tgz#be0c1de943c7987a9fbd309ea0b1acd605890c7b"
@@ -1172,10 +1167,10 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@expo/cli@0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.3.1.tgz#827cbfa4e538243962217d684e924f55b5bafaa7"
-  integrity sha512-amdsNf5quVs9ZbO+q35sdtpWJvvQz5pqtl8ZOv5jqRriIp1G9zcOFTDG0TnGxANQ0F2b5GcU4fn7pxAzRLDHmQ==
+"@expo/cli@0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@expo/cli/-/cli-0.3.2.tgz#83c8587ec38f9c7361222751bc4bb829520201b8"
+  integrity sha512-P6yogdPCRKaoLjuH7D8jgq6kTzM4gWuQ+vssBPWhbnoymV5AClQOxvACPDHD+biKhvGsaXEQLMoi93lPQzcDlQ==
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@expo/code-signing-certificates" "^0.0.2"
@@ -5963,7 +5958,15 @@ expo-modules-autolinking@0.10.3:
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@0.11.7, expo-modules-core@~0.11.3:
+expo-modules-core@0.11.9:
+  version "0.11.9"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.11.9.tgz#43763bca72b72f268ad5d7f1f0fc1c7cc75a6e9f"
+  integrity sha512-6AlOE4KHN3/WWbY8hH7W6ceuIFj0qbk1N+UhmMhiCEUas3NvXA6wcH3xjO+8JZ+BRcIB9M4QEeX72j6vDDuExg==
+  dependencies:
+    compare-versions "^3.4.0"
+    invariant "^2.2.4"
+
+expo-modules-core@~0.11.3:
   version "0.11.7"
   resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.11.7.tgz#538f2a4d7c353467fb0313de4788e86dd8f251e3"
   integrity sha512-lTH6MYULX99JK3zN4bhjRD3I9Y1CGx0RAhpZ6gCTO8GQ/DNw4xZRUwburKL9dJeZM5G1xJOcGoBkTfeMjUVe+g==
@@ -5999,13 +6002,13 @@ expo-updates-interface@~0.7.0:
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.7.0.tgz#f4f03b61dbdd949cac9fb44e250e1162ba177650"
   integrity sha512-saThnbrYDSjKxfMFFguAvh5o5KGabvAOHItkJRwq2L3c0T/3q26Q0kM83880h/+TTtAVsl1+Vhny9d+ImD3yvQ==
 
-expo@~46.0.15:
-  version "46.0.15"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.15.tgz#c10d27c0ee85669132310949f2e56e95b4a14469"
-  integrity sha512-/uZLQgXKni/rLoJPUESte901Z8owZH4weItLGhac2T37zZEUHIqcWdI/1+BaN8Racz9x54PzgbIMh09QMgv9mQ==
+expo@~46.0.16:
+  version "46.0.17"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.17.tgz#d558aa11056007269d2a38481982f1ebbe0852f3"
+  integrity sha512-rB+KMvjU3lFMkec5LcVFFn0Q2iJUEIoyB9TckKMirA15H5mW4yZMao0ilR7239fJ5ytVoDC8SIf7ZAvTmiMuMw==
   dependencies:
     "@babel/runtime" "^7.14.0"
-    "@expo/cli" "0.3.1"
+    "@expo/cli" "0.3.2"
     "@expo/vector-icons" "^13.0.0"
     babel-preset-expo "~9.2.0"
     cross-spawn "^6.0.5"
@@ -6016,7 +6019,7 @@ expo@~46.0.15:
     expo-font "~10.2.1"
     expo-keep-awake "~10.2.0"
     expo-modules-autolinking "0.10.3"
-    expo-modules-core "0.11.7"
+    expo-modules-core "0.11.9"
     fbemitter "^3.0.0"
     getenv "^1.0.0"
     invariant "^2.2.4"
