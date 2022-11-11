@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1051103944258:android:d0d729a736c2d18ba157db",
+        "mobilesdk_app_id": "1:1051103944258:android:28c3e3c2aac23be9a157db",
         "android_client_info": {
-          "package_name": "com.chainreactapp2023"
+          "package_name": "com.chainreactapp"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "1051103944258-1ser3n77nmsf0o1vml734oo31i3v8qft.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.chainreactapp2023"
+                "bundle_id": "infinitered.stage.ChainReactConf"
               }
             }
           ]
