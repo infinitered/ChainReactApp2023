@@ -2,52 +2,26 @@
 // markdown file and add links from here
 
 import { Platform } from "react-native"
-import {
-  SpaceGrotesk_300Light as spaceGroteskLight,
-  SpaceGrotesk_400Regular as spaceGroteskRegular,
-  SpaceGrotesk_500Medium as spaceGroteskMedium,
-  SpaceGrotesk_600SemiBold as spaceGroteskSemiBold,
-  SpaceGrotesk_700Bold as spaceGroteskBold,
-} from "@expo-google-fonts/space-grotesk"
 
 export const customFontsToLoad = {
-  spaceGroteskLight,
-  spaceGroteskRegular,
-  spaceGroteskMedium,
-  spaceGroteskSemiBold,
-  spaceGroteskBold,
+  gothamRoundedBold: require("../../assets/fonts/GothamRounded-Bold.otf"),
+  gothamRoundedBook: require("../../assets/fonts/GothamRounded-Book.otf"),
+  gothamRoundedMedium: require("../../assets/fonts/GothamRounded-Medium.otf"),
+  gothamSsmBold: require("../../assets/fonts/GothamSSm-Bold.otf"),
+  gothamSsmBook: require("../../assets/fonts/GothamSSm-Book.otf"),
+  gothamSsmMedium: require("../../assets/fonts/GothamSSm-Medium.otf"),
 }
 
 const fonts = {
-  spaceGrotesk: {
-    // Cross-platform Google font.
-    light: "spaceGroteskLight",
-    normal: "spaceGroteskRegular",
-    medium: "spaceGroteskMedium",
-    semiBold: "spaceGroteskSemiBold",
-    bold: "spaceGroteskBold",
+  gothamRounded: {
+    book: "gothamRoundedBook",
+    medium: "gothamRoundedMedium",
+    bold: "gothamRoundedBold",
   },
-  helveticaNeue: {
-    // iOS only font.
-    thin: "HelveticaNeue-Thin",
-    light: "HelveticaNeue-Light",
-    normal: "Helvetica Neue",
-    medium: "HelveticaNeue-Medium",
-  },
-  courier: {
-    // iOS only font.
-    normal: "Courier",
-  },
-  sansSerif: {
-    // Android only font.
-    thin: "sans-serif-thin",
-    light: "sans-serif-light",
-    normal: "sans-serif",
-    medium: "sans-serif-medium",
-  },
-  monospace: {
-    // Android only font.
-    normal: "monospace",
+  gothamSsm: {
+    book: "gothamSsmBook",
+    medium: "gothamSsmMedium",
+    bold: "gothamSsmBold",
   },
 }
 
@@ -59,13 +33,9 @@ export const typography = {
   /**
    * The primary font. Used in most places.
    */
-  primary: fonts.spaceGrotesk,
+  primary: fonts.gothamSsm,
   /**
    * An alternate font used for perhaps titles and stuff.
    */
-  secondary: Platform.select({ ios: fonts.helveticaNeue, android: fonts.sansSerif }),
-  /**
-   * Lets get fancy with a monospace font!
-   */
-  code: Platform.select({ ios: fonts.courier, android: fonts.monospace }),
+  secondary: fonts.gothamRounded,
 }
