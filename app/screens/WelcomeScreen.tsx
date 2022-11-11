@@ -1,35 +1,48 @@
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { Dimensions, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { Text } from "../components"
-import { isRTL } from "../i18n"
+import { Button, Screen, Text } from "../components"
+import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 
-const welcomeLogo = require("../../assets/images/logo.png")
-const welcomeFace = require("../../assets/images/welcome-face.png")
+const welcomeLogo = require("../../assets/images/welcome-shapes.png")
 
-export const WelcomeScreen = observer(function WelcomeScreen() {
+interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
+  const { navigation } = _props
+
+  function goNext() {
+    navigation.navigate("Tabs", { screen: "Schedule" })
+  }
+
   return (
-    <View style={$container}>
+    <Screen style={$container}>
       <View style={$topContainer}>
-        <Image style={$welcomeLogo} source={welcomeLogo} resizeMode="contain" />
+        <Image style={$welcomeLogo} source={welcomeLogo} />
+      </View>
+      <View style={$middleContainer}>
         <Text
           testID="welcome-heading"
           style={$welcomeHeading}
-          tx="welcomeScreen.readyForLaunch"
+          tx="welcomeScreen.heading"
           preset="heading"
         />
-        <Text tx="welcomeScreen.exciting" preset="subheading" />
-        <Image style={$welcomeFace} source={welcomeFace} resizeMode="contain" />
+        <Text tx="welcomeScreen.topBlurb" preset="companionHeading" style={$topBlurb} />
+        <Text tx="welcomeScreen.bottomBlurb" preset="companionHeading" />
       </View>
 
       <SafeAreaView style={$bottomContainer} edges={["bottom"]}>
         <View style={$bottomContentContainer}>
-          <Text tx="welcomeScreen.postscript" size="md" />
+          <Button
+            testID="see-the-schedule-button"
+            tx="welcomeScreen.scheduleButton"
+            onPress={goNext}
+          />
         </View>
       </SafeAreaView>
-    </View>
+    </Screen>
   )
 })
 
@@ -41,7 +54,14 @@ const $container: ViewStyle = {
 const $topContainer: ViewStyle = {
   flexShrink: 1,
   flexGrow: 1,
-  flexBasis: "57%",
+  flexBasis: "25%",
+  justifyContent: "flex-start",
+}
+
+const $middleContainer: ViewStyle = {
+  flexShrink: 1,
+  flexGrow: 1,
+  flexBasis: "50%",
   justifyContent: "center",
   paddingHorizontal: spacing.large,
 }
@@ -49,33 +69,28 @@ const $topContainer: ViewStyle = {
 const $bottomContainer: ViewStyle = {
   flexShrink: 1,
   flexGrow: 0,
-  flexBasis: "43%",
-  backgroundColor: colors.palette.neutral100,
+  flexBasis: "25%",
+  backgroundColor: colors.background,
   borderTopLeftRadius: 16,
   borderTopRightRadius: 16,
 }
 
 const $bottomContentContainer: ViewStyle = {
   flex: 1,
-  paddingHorizontal: spacing.large,
-  justifyContent: "space-around",
+  paddingHorizontal: Dimensions.get("screen").width * 0.25,
+  paddingBottom: spacing.large,
+  justifyContent: "flex-end",
 }
 
 const $welcomeLogo: ImageStyle = {
-  height: 88,
   width: "100%",
   marginBottom: spacing.huge,
 }
 
-const $welcomeFace: ImageStyle = {
-  height: 169,
-  width: 269,
-  position: "absolute",
-  bottom: -47,
-  right: -80,
-  transform: [{ scaleX: isRTL ? -1 : 1 }],
-}
-
 const $welcomeHeading: TextStyle = {
   marginBottom: spacing.medium,
+}
+
+const $topBlurb: TextStyle = {
+  marginBottom: spacing.small,
 }

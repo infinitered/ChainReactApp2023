@@ -5,10 +5,11 @@ const en = {
     back: "Back",
   },
   welcomeScreen: {
-    postscript:
-      "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",
-    readyForLaunch: "Your app, almost ready for launch!",
-    exciting: "(ohh, this is exciting!)",
+    heading: "Welcome to Chain React 2023",
+    topBlurb:
+      "Yay! You're here! It's been a while, but glad you could join us. Get all the details for workshops, talks, and events right here.",
+    bottomBlurb: "And if you're sticking around for a bit, we've added some places to explore.",
+    scheduleButton: "See the schedule",
   },
   errorScreen: {
     title: "Something went wrong!",
@@ -22,6 +23,12 @@ const en = {
       content: "No data found yet. Try clicking the button to refresh or reload the app.",
       button: "Let's try this again",
     },
+  },
+  tabNavigator: {
+    scheduleTab: "Schedule",
+    venueTab: "Venue",
+    exploreTab: "Explore",
+    infoTab: "Info",
   },
 }
 
