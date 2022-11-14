@@ -193,6 +193,6 @@ const $shadow: ViewStyle = {
   backgroundColor: "transparent",
   borderColor: colors.palette.neutral500,
   borderRadius: 100,
-  height: 50,
+  height: 48,
   borderWidth: 1,
 }
