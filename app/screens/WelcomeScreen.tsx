@@ -88,9 +88,9 @@ const $welcomeLogo: ImageStyle = {
 }
 
 const $welcomeHeading: TextStyle = {
-  marginBottom: spacing.medium,
+  marginBottom: spacing.large,
 }
 
 const $topBlurb: TextStyle = {
-  marginBottom: spacing.small,
+  marginBottom: spacing.large,
 }
