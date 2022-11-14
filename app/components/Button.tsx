@@ -133,8 +133,8 @@ const $baseViewStyle: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
-  paddingVertical: spacing.small,
-  paddingHorizontal: spacing.small,
+  paddingVertical: spacing.medium,
+  paddingHorizontal: spacing.large,
   overflow: "hidden",
 }
 
