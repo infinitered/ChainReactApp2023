@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "expo start --dev-client",
-    "build:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview -p ios --local",
-    "build:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview -p android --local",
+    "build:local:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development -p ios --local",
+    "build:local:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development -p android --local",
     "build:dev": "eas build --profile development",
     "build:dev:ios": "eas build --profile development -p ios",
     "build:dev:android": "eas build --profile development -p android",
