@@ -1,10 +1,10 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
-import React from "react"
+import React, { ComponentType } from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Icon } from "../components"
-import { translate } from "../i18n"
+import { Icon, IconTypes } from "../components"
+import { translate, TxKeyPath } from "../i18n"
 import { PlaceholderScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
@@ -28,6 +28,40 @@ export type TabScreenProps<T extends keyof TabParamList> = CompositeScreenProps<
 
 const Tab = createBottomTabNavigator<TabParamList>()
 
+interface Screen {
+  name: keyof TabParamList
+  component: ComponentType
+  txLabel: TxKeyPath
+  icon: IconTypes
+}
+
+const screens: Screen[] = [
+  {
+    name: "Schedule",
+    component: PlaceholderScreen,
+    txLabel: "tabNavigator.scheduleTab",
+    icon: "components",
+  },
+  {
+    name: "Venue",
+    component: PlaceholderScreen,
+    txLabel: "tabNavigator.venueTab",
+    icon: "community",
+  },
+  {
+    name: "Explore",
+    component: PlaceholderScreen,
+    txLabel: "tabNavigator.exploreTab",
+    icon: "podcast",
+  },
+  {
+    name: "Info",
+    component: PlaceholderScreen,
+    txLabel: "tabNavigator.infoTab",
+    icon: "debug",
+  },
+]
+
 export function TabNavigator() {
   const { bottom } = useSafeAreaInsets()
 
@@ -43,49 +77,19 @@ export function TabNavigator() {
         tabBarItemStyle: $tabBarItem,
       }}
     >
-      <Tab.Screen
-        name="Schedule"
-        component={PlaceholderScreen}
-        options={{
-          tabBarLabel: translate("tabNavigator.scheduleTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="components" color={focused ? colors.tint : colors.palette.primary100} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Venue"
-        component={PlaceholderScreen}
-        options={{
-          tabBarLabel: translate("tabNavigator.venueTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="community" color={focused ? colors.tint : colors.palette.primary100} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Explore"
-        component={PlaceholderScreen}
-        options={{
-          tabBarLabel: translate("tabNavigator.exploreTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="podcast" color={focused ? colors.tint : colors.palette.primary100} />
-          ),
-        }}
-      />
-
-      <Tab.Screen
-        name="Info"
-        component={PlaceholderScreen}
-        options={{
-          tabBarLabel: translate("tabNavigator.infoTab"),
-          tabBarIcon: ({ focused }) => (
-            <Icon icon="debug" color={focused ? colors.tint : colors.palette.primary100} />
-          ),
-        }}
-      />
+      {screens.map((screen) => (
+        <Tab.Screen
+          key={screen.name}
+          name={screen.name}
+          component={PlaceholderScreen}
+          options={{
+            tabBarLabel: translate(screen.txLabel),
+            tabBarIcon: ({ focused }) => (
+              <Icon icon={screen.icon} color={focused ? colors.tint : colors.palette.primary100} />
+            ),
+          }}
+        />
+      ))}
     </Tab.Navigator>
   )
 }
@@ -105,5 +109,3 @@ const $tabBarLabel: TextStyle = {
   lineHeight: 16,
   flex: 1,
 }
-
-// @demo remove-file
