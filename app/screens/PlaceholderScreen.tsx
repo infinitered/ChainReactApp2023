@@ -2,9 +2,7 @@ import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { Button, Screen } from "../components"
-import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { TabParamList, TabScreenProps } from "../navigators/TabNavigator"
+import { TabScreenProps } from "../navigators/TabNavigator"
 import { useTabNavigation } from "../hooks"
 
 export const PlaceholderScreen: FC<TabScreenProps<"Schedule">> = observer(
