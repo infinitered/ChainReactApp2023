@@ -81,7 +81,7 @@ export function TabNavigator() {
         <Tab.Screen
           key={screen.name}
           name={screen.name}
-          component={PlaceholderScreen}
+          component={screen.component}
           options={{
             tabBarLabel: translate(screen.txLabel),
             tabBarIcon: ({ focused }) => (
