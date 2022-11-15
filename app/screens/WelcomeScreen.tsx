@@ -3,6 +3,7 @@ import React from "react"
 import { Dimensions, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Button, Screen, Text } from "../components"
+import { useAppNavigation } from "../hooks"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 
@@ -11,7 +12,7 @@ const welcomeLogo = require("../../assets/images/welcome-shapes.png")
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
-  const { navigation } = _props
+  const navigation = useAppNavigation()
 
   function goNext() {
     navigation.navigate("Tabs", { screen: "Schedule" })
