@@ -4,7 +4,6 @@ import {
   PressableProps,
   PressableStateCallbackType,
   StyleProp,
-  StyleSheet,
   TextStyle,
   View,
   ViewStyle,
