@@ -40,25 +40,25 @@ const screens: Screen[] = [
     name: "Schedule",
     component: PlaceholderScreen,
     txLabel: "tabNavigator.scheduleTab",
-    icon: "components",
+    icon: "schedule",
   },
   {
     name: "Venue",
     component: PlaceholderScreen,
     txLabel: "tabNavigator.venueTab",
-    icon: "community",
+    icon: "venue",
   },
   {
     name: "Explore",
     component: PlaceholderScreen,
     txLabel: "tabNavigator.exploreTab",
-    icon: "podcast",
+    icon: "explore",
   },
   {
     name: "Info",
     component: PlaceholderScreen,
     txLabel: "tabNavigator.infoTab",
-    icon: "debug",
+    icon: "info",
   },
 ]
 
