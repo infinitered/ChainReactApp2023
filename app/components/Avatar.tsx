@@ -5,15 +5,11 @@ import { colors } from "../theme"
 
 type Presets = keyof typeof $viewPresets
 
-interface CommonProps {
+type CommonProps = {
   /**
    * An optional style override useful for padding & margin.
    */
   style?: StyleProp<ViewStyle>
-  /**
-   * One of the different types of button presets.
-   */
-  preset?: Presets
   /**
    * An optional style to override the Image
    */
@@ -22,7 +18,7 @@ interface CommonProps {
 
 type SourceProps =
   | {
-      preset?: Omit<Presets, "panel">
+      preset?: "default" | "talk"
       /**
        * The avatar to display
        */
@@ -30,7 +26,7 @@ type SourceProps =
       sources: never
     }
   | {
-      preset: Omit<Presets, "default" | "talk">
+      preset: "panel"
       source: never
       /**
        * Multiple avatars to display
