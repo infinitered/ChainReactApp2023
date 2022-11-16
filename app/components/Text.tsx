@@ -73,13 +73,14 @@ export function Text(props: TextProps) {
 }
 
 const $sizeStyles = {
-  xxl: { fontSize: 36, lineHeight: 44 } as TextStyle,
-  xl: { fontSize: 24, lineHeight: 34 } as TextStyle,
-  lg: { fontSize: 20, lineHeight: 32 } as TextStyle,
-  md: { fontSize: 18, lineHeight: 26 } as TextStyle,
-  sm: { fontSize: 16, lineHeight: 24 } as TextStyle,
-  xs: { fontSize: 14, lineHeight: 21 } as TextStyle,
-  xxs: { fontSize: 12, lineHeight: 18 } as TextStyle,
+  xxxl: { fontSize: 42, lineHeight: 46.2 } as TextStyle,
+  xxl: { fontSize: 32, lineHeight: 45.2 } as TextStyle,
+  xl: { fontSize: 26, lineHeight: 28.6 } as TextStyle,
+  lg: { fontSize: 22, lineHeight: 24.2 } as TextStyle,
+  md: { fontSize: 18, lineHeight: 19.8 } as TextStyle,
+  sm: { fontSize: 16, lineHeight: 17.6 } as TextStyle,
+  xs: { fontSize: 14, lineHeight: 15.4 } as TextStyle,
+  xxs: { fontSize: 12, lineHeight: 13.2 } as TextStyle,
 }
 
 const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
@@ -88,7 +89,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weigh
 
 const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
-  $fontWeightStyles.normal,
+  $fontWeightStyles.book,
   { color: colors.text },
 ]
 
@@ -97,13 +98,15 @@ const $presets = {
 
   bold: [$baseStyle, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
-  heading: [$baseStyle, $sizeStyles.xxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+  heading: [$baseStyle, $sizeStyles.xxxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+
+  companionHeading: [$baseStyle, $sizeStyles.md, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   subheading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
-  formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.normal] as StyleProp<TextStyle>,
+  formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.book] as StyleProp<TextStyle>,
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}

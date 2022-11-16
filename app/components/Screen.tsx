@@ -199,7 +199,7 @@ export function Screen(props: ScreenProps) {
     safeAreaEdges,
     SafeAreaViewProps,
     StatusBarProps,
-    statusBarStyle = "dark",
+    statusBarStyle = "light",
   } = props
 
   const Wrapper = safeAreaEdges?.length ? SafeAreaView : View

@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "expo start --dev-client",
-    "build:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview -p ios --local",
-    "build:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile preview -p android --local",
+    "build:local:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development -p ios --local",
+    "build:local:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development -p android --local",
     "build:dev": "eas build --profile development",
     "build:dev:ios": "eas build --profile development -p ios",
     "build:dev:android": "eas build --profile development -p android",
@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@config-plugins/detox": "^3.0.0",
-    "@expo-google-fonts/space-grotesk": "^0.2.2",
     "@expo/webpack-config": "^0.17.0",
     "@react-native-async-storage/async-storage": "^1.17.3",
     "@react-native-firebase/app": "^15.7.0",

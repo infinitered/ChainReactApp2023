@@ -13,7 +13,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   splash: {
     image: './assets/images/splash-logo-all.png',
     resizeMode: 'contain',
-    backgroundColor: '#191015'
+    backgroundColor: '#081828'
   },
   updates: {
     fallbackToCacheTimeout: 0
@@ -31,7 +31,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     splash: {
       image: './assets/images/splash-logo-android-universal.png',
       resizeMode: 'contain',
-      backgroundColor: '#191015'
+      backgroundColor: '#081828'
     },
     googleServicesFile: `./google-services.json`
   },
@@ -44,7 +44,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       image: './assets/images/splash-logo-ios-mobile.png',
       tabletImage: './assets/images/splash-logo-ios-tablet.png',
       resizeMode: 'contain',
-      backgroundColor: '#191015'
+      backgroundColor: '#081828'
     },
     googleServicesFile: `./GoogleService-Info.plist`
   },
@@ -53,7 +53,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     splash: {
       image: './assets/images/splash-logo-web.png',
       resizeMode: 'contain',
-      backgroundColor: '#191015'
+      backgroundColor: '#081828'
     }
   },
   owner: 'infinitered',

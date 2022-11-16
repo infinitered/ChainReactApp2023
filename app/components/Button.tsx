@@ -5,6 +5,7 @@ import {
   PressableStateCallbackType,
   StyleProp,
   TextStyle,
+  View,
   ViewStyle,
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
@@ -105,36 +106,42 @@ export function Button(props: ButtonProps) {
   }
 
   return (
-    <Pressable style={$viewStyle} accessibilityRole="button" {...rest}>
-      {(state) => (
-        <>
-          {!!LeftAccessory && <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />}
+    <View style={$shadowPresets[preset]}>
+      <Pressable style={$viewStyle} accessibilityRole="button" {...rest}>
+        {(state) => (
+          <>
+            {!!LeftAccessory && (
+              <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />
+            )}
 
-          <Text tx={tx} text={text} txOptions={txOptions} style={$textStyle(state)}>
-            {children}
-          </Text>
+            <Text tx={tx} text={text} txOptions={txOptions} style={$textStyle(state)}>
+              {children}
+            </Text>
 
-          {!!RightAccessory && (
-            <RightAccessory style={$rightAccessoryStyle} pressableState={state} />
-          )}
-        </>
-      )}
-    </Pressable>
+            {!!RightAccessory && (
+              <RightAccessory style={$rightAccessoryStyle} pressableState={state} />
+            )}
+          </>
+        )}
+      </Pressable>
+    </View>
   )
 }
 
 const $baseViewStyle: ViewStyle = {
-  minHeight: 56,
-  borderRadius: 4,
+  minHeight: 48,
+  borderRadius: 100,
+  borderColor: colors.palette.neutral500,
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
-  paddingVertical: spacing.small,
-  paddingHorizontal: spacing.small,
+  paddingVertical: spacing.medium,
+  paddingHorizontal: spacing.large,
   overflow: "hidden",
 }
 
 const $baseTextStyle: TextStyle = {
+  color: colors.palette.neutral500,
   fontSize: 16,
   lineHeight: 20,
   fontFamily: typography.primary.medium,
@@ -152,33 +159,48 @@ const $viewPresets = {
     $baseViewStyle,
     {
       borderWidth: 1,
-      borderColor: colors.palette.neutral400,
-      backgroundColor: colors.palette.neutral100,
+      borderColor: colors.palette.neutral500,
+      backgroundColor: colors.palette.primary500,
     },
   ] as StyleProp<ViewStyle>,
 
-  filled: [$baseViewStyle, { backgroundColor: colors.palette.neutral300 }] as StyleProp<ViewStyle>,
+  // filled: [$baseViewStyle, { backgroundColor: colors.palette.neutral300 }] as StyleProp<ViewStyle>,
 
-  reversed: [
-    $baseViewStyle,
-    { backgroundColor: colors.palette.neutral800 },
-  ] as StyleProp<ViewStyle>,
+  // reversed: [
+  //   $baseViewStyle,
+  //   { backgroundColor: colors.palette.neutral100 },
+  // ] as StyleProp<ViewStyle>,
 }
 
 const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: $baseTextStyle,
-  filled: $baseTextStyle,
-  reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
+  // filled: $baseTextStyle,
+  // reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { backgroundColor: colors.palette.neutral200 },
-  filled: { backgroundColor: colors.palette.neutral400 },
-  reversed: { backgroundColor: colors.palette.neutral700 },
+  default: { backgroundColor: colors.palette.primary100 },
+  // filled: { backgroundColor: colors.palette.neutral300 },
+  // reversed: { backgroundColor: colors.palette.neutral500 },
 }
 
 const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: { opacity: 0.9 },
-  filled: { opacity: 0.9 },
-  reversed: { opacity: 0.9 },
+  // filled: { opacity: 0.9 },
+  // reversed: { opacity: 0.9 },
+}
+
+const $baseShadowStyle: ViewStyle = {
+  paddingBottom: 4,
+  borderRadius: 100,
+  borderColor: colors.palette.neutral500,
+}
+
+const $shadowPresets = {
+  default: [
+    $baseShadowStyle,
+    {
+      backgroundColor: colors.palette.primary500,
+    },
+  ] as StyleProp<ViewStyle>,
 }
