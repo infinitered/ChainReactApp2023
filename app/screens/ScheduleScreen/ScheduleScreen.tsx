@@ -7,7 +7,7 @@ import { useAppNavigation } from "../../hooks"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
-// import ScheduleCard from "./ScheduleCard"
+import ScheduleCard from "./ScheduleCard"
 import { useStores } from "../../models"
 
 export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function ScheduleScreen() {
@@ -23,7 +23,7 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
           {viewingDay}
         </Text>
         <Text style={$subheading}>React Native Workshops</Text>
-        {/* <ScheduleCard
+        <ScheduleCard
           variant="event"
           time="6:00 — 8:00 am"
           eventTitle="Check-in & Registration"
@@ -50,7 +50,7 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
           eventTitle="Check-in & Registration"
           heading="Ferran Negre Pizarro"
           subheading="React Native case study: from an idea to market"
-        /> */}
+        />
       </Screen>
       <ScheduleDayPicker />
     </>
