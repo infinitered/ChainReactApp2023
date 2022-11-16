@@ -1,61 +1,11 @@
 import * as React from "react"
-import {
-  Image,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-  StyleSheet,
-  ImageStyle,
-  ImageSourcePropType,
-} from "react-native"
+import { Image, StyleProp, View, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors, spacing, typography } from "../theme"
-import { Text } from "./Text"
+import { colors } from "../theme"
 
 type Presets = keyof typeof $viewPresets
 
-// interface SingleAvatarProps {
-//   /**
-//    * An optional style override useful for padding & margin.
-//    */
-//   style?: StyleProp<ViewStyle>
-//   /**
-//    * One of the different types of button presets.
-//    */
-//   preset?: Omit<Presets, "panel">
-//   /**
-//    * An optional style to override the Image
-//    */
-//   imageStyle?: StyleProp<ImageStyle>
-//   /**
-//    * The avatar to display
-//    */
-//   source: ImageSourcePropType
-// }
-
-// interface MultipleAvatarProps {
-//   /**
-//    * An optional style override useful for padding & margin.
-//    */
-//   style?: StyleProp<ViewStyle>
-//   /**
-//    * One of the different types of button presets.
-//    */
-//   preset?: Pick<Presets, "panel">
-//   /**
-//    * An optional style to override the Image
-//    */
-//   imageStyle?: StyleProp<ImageStyle>
-//   /**
-//    * The avatars to display
-//    */
-//   sources: ImageSourcePropType[]
-// }
-
-// export type AvatarProps = MultipleAvatarProps | SingleAvatarProps
-
-export interface AvatarProps {
+interface CommonProps {
   /**
    * An optional style override useful for padding & margin.
    */
@@ -68,25 +18,48 @@ export interface AvatarProps {
    * An optional style to override the Image
    */
   imageStyle?: StyleProp<ImageStyle>
-  /**
-   * The avatar to display
-   */
-  source: ImageSourcePropType
 }
 
+type SourceProps =
+  | {
+      preset?: Omit<Presets, "panel">
+      /**
+       * The avatar to display
+       */
+      source: ImageSourcePropType
+      sources: never
+    }
+  | {
+      preset: Omit<Presets, "default" | "talk">
+      source: never
+      /**
+       * Multiple avatars to display
+       */
+      sources: ImageSourcePropType[]
+    }
+
+type AvatarProps = CommonProps & SourceProps
+
 /**
- * Describe your component here
+ * Displays an avatar for a workshop, talk or speaker panel
  */
 export const Avatar = observer(function Avatar(props: AvatarProps) {
-  const { style, imageStyle, source } = props
+  const { style, imageStyle } = props
   const preset: Presets = $viewPresets[props.preset] ? props.preset : "default"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
 
-  return (
-    <View style={style}>
-      <Image source={source} style={$imageStyle} resizeMode="contain" />
-    </View>
-  )
+  if (preset !== "panel") {
+    return (
+      <View style={style}>
+        <Image source={props.source} style={$imageStyle} resizeMode="contain" />
+      </View>
+    )
+  } else {
+    // TODO
+    // speaker panel multiple images here
+    // map over sources
+    return <View />
+  }
 })
 
 const $viewPresets = {
