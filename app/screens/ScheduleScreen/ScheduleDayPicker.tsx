@@ -68,6 +68,8 @@ const $buttonBaseStyle: ViewStyle = {
 
 const $textStyle: TextStyle = {
   color: colors.palette.neutral100,
+  fontSize: 16,
+  lineHeight: 22.4,
 }
 
 const $textSelectedStyle: TextStyle = {
