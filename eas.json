@@ -33,7 +33,10 @@
     "preview:device": {
       "extends": "preview",
       "channel": "preview-device",
-      "developmentClient": true
+      "developmentClient": true,
+      "ios": {
+        "simulator": false
+      }
     },
     "production": {
       "channel": "production",
