@@ -5,7 +5,7 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon, IconTypes } from "../components"
 import { translate, TxKeyPath } from "../i18n"
-import { PlaceholderScreen } from "../screens"
+import { PlaceholderScreen, ScheduleScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 
@@ -38,7 +38,7 @@ interface Screen {
 const screens: Screen[] = [
   {
     name: "Schedule",
-    component: PlaceholderScreen,
+    component: ScheduleScreen,
     txLabel: "tabNavigator.scheduleTab",
     icon: "schedule",
   },
