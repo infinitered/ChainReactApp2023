@@ -63,7 +63,7 @@ const baseSpeakingEventProps = (heading: string, subheading: string) => ({
   RightComponent: (
     <View style={$rightContainer}>
       <Avatar
-        preset="talk"
+        // preset="talk"
         style={$avatar}
         source={{ uri: "https://avatars.githubusercontent.com/u/997157?v=4" }}
       />
