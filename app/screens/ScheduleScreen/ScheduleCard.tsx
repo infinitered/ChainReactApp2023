@@ -148,7 +148,7 @@ const $arrowContainer: ViewStyle = {
 }
 
 const $headerContainer: ViewStyle = {
-  flex: 1,
+  marginBottom: spacing.small,
 }
 
 export default ScheduleCard
