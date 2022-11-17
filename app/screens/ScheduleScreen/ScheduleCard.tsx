@@ -22,7 +22,7 @@ const Footer = ({ heading, subheading }) => (
   </View>
 )
 
-type Variants = "event" | "workshop" | "talk"
+export type Variants = "event" | "workshop" | "talk"
 
 interface ScheduleCardProps {
   /**
@@ -31,10 +31,27 @@ interface ScheduleCardProps {
    * Default: "event"
    */
   variant?: Variants
+  /**
+   * Optional onPress for a touchable card
+   */
   onPress?: () => void
+  /**
+   * Start time or time range
+   * 8:00 am
+   * 6:00 - 8:00 am
+   */
   time: string
+  /**
+   * The event title
+   */
   eventTitle: string
+  /**
+   * Card bold heading
+   */
   heading?: string
+  /**
+   * Card subheading beneath heading
+   */
   subheading: string
 }
 
@@ -67,10 +84,15 @@ const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props
   const cardProps = { ...baseEventProps(time, eventTitle) }
   const variantProps =
     variant === "event"
-      ? { preset: "reversed", content: subheading, contentStyle: $contentText }
+      ? { content: subheading, contentStyle: $contentText }
       : baseSpeakingEventProps(heading, subheading)
 
-  return <Card {...{ ...cardProps, ...variantProps, onPress }} />
+  return (
+    <Card
+      preset={variant === "event" ? "reversed" : "default"}
+      {...{ ...cardProps, ...variantProps, onPress }}
+    />
+  )
 })
 
 const $avatar: ViewStyle = {
@@ -113,7 +135,8 @@ const $footerContainer: ViewStyle = {
 const $rightContainer: ViewStyle = {
   position: "absolute",
   right: spacing.extraSmall,
-  minHeight: 213,
+  top: 0,
+  bottom: 0,
   width: 50,
   marginRight: -spacing.medium,
 }
