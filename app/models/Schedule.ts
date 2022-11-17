@@ -1,14 +1,14 @@
 import { types, Instance } from "mobx-state-tree"
+import { ScheduleCardProps } from "../screens/ScheduleScreen/ScheduleCard"
 
 export interface Schedules {
-  [key: string]: Schedule
+  [key: string]: Schedule[]
 }
 
 export const ScheduleModel = types.model("Schedule").props({
-  id: types.optional(types.identifier, ""),
-  name: types.optional(types.string, ""),
-  description: types.optional(types.string, ""),
-  date: types.optional(types.Date, new Date()),
+  date: types.identifier,
+  title: types.string,
+  events: types.optional(types.frozen<ScheduleCardProps[]>(), []),
 })
 
 export interface Schedule extends Instance<typeof ScheduleModel> {}

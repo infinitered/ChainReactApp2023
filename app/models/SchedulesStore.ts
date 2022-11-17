@@ -1,15 +1,23 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { ScheduleModel, Schedules } from "./Schedule"
+import { Schedule, ScheduleModel } from "./Schedule"
+
+import data from "./mock-data.json"
 
 export const SchedulesStoreModel = types
   .model("SchedulesStore")
   .props({
-    viewingDay: "",
-    schedules: types.optional(ScheduleModel, {} as Schedules),
+    selectedSchedule: types.safeReference(ScheduleModel),
+    schedules: types.array(ScheduleModel),
   })
   .actions((self) => ({
-    setViewingDay(day: string) {
-      self.viewingDay = day
+    setSelectedSchedule(schedule: Schedule) {
+      self.selectedSchedule = schedule
+    },
+  }))
+  .actions((self) => ({
+    fetchData() {
+      self.schedules.replace(data as any)
+      self.setSelectedSchedule(self.schedules[0])
     },
   }))
 
