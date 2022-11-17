@@ -16,7 +16,7 @@ import { observer } from "mobx-react-lite"
 import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import { PlaceholderScreen, WelcomeScreen } from "../screens"
+import { TalkDetailsScreen, WelcomeScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
 
@@ -36,7 +36,7 @@ import { TabNavigator, TabParamList } from "./TabNavigator"
 export type AppStackParamList = {
   Welcome: undefined
   Tabs: NavigatorScreenParams<TabParamList>
-  EventDetail: undefined
+  TalkDetails: undefined
 }
 
 /**
@@ -58,7 +58,7 @@ const AppStack = observer(function AppStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Tabs" component={TabNavigator} />
-      <Stack.Screen name="EventDetail" component={PlaceholderScreen} />
+      <Stack.Screen name="TalkDetails" component={TalkDetailsScreen} />
     </Stack.Navigator>
   )
 })

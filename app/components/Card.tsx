@@ -1,6 +1,5 @@
 import React, { ComponentType, Fragment, ReactElement } from "react"
 import {
-  Dimensions,
   Image,
   ImageStyle,
   StyleProp,
@@ -190,18 +189,20 @@ export function Card(props: CardProps) {
   ]
   const $offsetStyle = [$offsetPresets[preset]]
 
+  const [cardHeight, setCardHeight] = React.useState(null)
+
   return (
-    <View>
-      <View
-        style={{
-          position: "absolute",
-          left: spacing.tiny,
-          top: spacing.tiny,
-          elevation: 1,
-          zIndex: 1,
-        }}
-      >
-        <Image style={[$offsetStyle, { resizeMode: "contain" }]} source={cardOffset} />
+    <View
+      onLayout={(e) => {
+        setCardHeight(e.nativeEvent.layout.height)
+      }}
+    >
+      <View style={$offsetContainer}>
+        <Image
+          style={[$offsetStyle, { height: cardHeight }]}
+          resizeMode="stretch"
+          source={cardOffset}
+        />
       </View>
       <Wrapper
         style={$containerStyle}
@@ -262,7 +263,6 @@ const $containerBase: ViewStyle = {
   paddingVertical: spacing.extraLarge,
   paddingHorizontal: spacing.large,
   borderWidth: 1,
-  minHeight: 213,
   flexDirection: "row",
   zIndex: 2,
   elevation: 2,
@@ -271,7 +271,7 @@ const $containerBase: ViewStyle = {
 
 const $alignmentWrapper: ViewStyle = {
   flex: 1,
-  alignSelf: "stretch",
+  alignSelf: "auto",
 }
 
 const $alignmentWrapperFlexOptions = {
@@ -282,16 +282,28 @@ const $alignmentWrapperFlexOptions = {
 } as const
 
 const $offsetPresets = {
-  default: {
-    tintColor: colors.palette.secondary500,
-    backgroundColor: colors.palette.primary500,
-    borderColor: colors.palette.neutral500,
-    borderWidth: 1,
-  } as StyleProp<ImageStyle>,
+  default: [
+    {
+      tintColor: colors.palette.secondary500,
+      backgroundColor: colors.palette.primary500,
+      borderColor: colors.palette.neutral500,
+      borderWidth: 1,
+    },
+  ] as StyleProp<ImageStyle>,
 
-  reversed: {
-    tintColor: colors.palette.primary500,
-  } as StyleProp<ImageStyle>,
+  reversed: [
+    {
+      tintColor: colors.palette.primary500,
+    },
+  ] as StyleProp<ImageStyle>,
+}
+
+const $offsetContainer: ViewStyle = {
+  position: "absolute",
+  left: spacing.tiny,
+  top: spacing.tiny,
+  elevation: 1,
+  zIndex: 1,
 }
 
 const $containerPresets = {

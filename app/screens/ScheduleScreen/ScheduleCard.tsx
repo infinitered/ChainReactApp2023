@@ -23,7 +23,7 @@ const Footer = ({ heading, subheading }) => (
   </View>
 )
 
-type Variants = "event" | "workshop" | "talk"
+export type Variants = "event" | "workshop" | "talk"
 
 export interface ScheduleCardProps {
   /**
@@ -32,9 +32,23 @@ export interface ScheduleCardProps {
    * Default: "event"
    */
   variant?: Variants
+  /**
+   * Start time or time range
+   * 8:00 am
+   * 6:00 - 8:00 am
+   */
   time: string
+  /**
+   * The event title
+   */
   eventTitle: string
+  /**
+   * Card bold heading
+   */
   heading?: string
+  /**
+   * Card subheading beneath heading
+   */
   subheading: string
 }
 
@@ -46,7 +60,7 @@ const baseSpeakingEventProps = (heading: string, subheading: string) => ({
   RightComponent: (
     <View style={$rightContainer}>
       <Avatar
-        preset="talk"
+        // preset="talk"
         style={$avatar}
         source={{ uri: "https://avatars.githubusercontent.com/u/997157?v=4" }}
       />
@@ -70,10 +84,15 @@ const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props
   const cardProps = { ...baseEventProps(time, eventTitle) }
   const variantProps =
     variant === "event"
-      ? { preset: "reversed", content: subheading, contentStyle: $contentText }
+      ? { content: subheading, contentStyle: $contentText }
       : baseSpeakingEventProps(heading, subheading)
 
-  return <Card {...{ ...cardProps, ...variantProps, onPress }} />
+  return (
+    <Card
+      preset={variant === "event" ? "reversed" : "default"}
+      {...{ ...cardProps, ...variantProps, onPress }}
+    />
+  )
 })
 
 const $avatar: ViewStyle = {
@@ -99,6 +118,7 @@ const $titleText: TextStyle = {
 
 const $contentText: TextStyle = {
   color: colors.palette.neutral500,
+  paddingTop: 10,
 }
 
 const $footerHeading: TextStyle = {
@@ -116,7 +136,8 @@ const $footerContainer: ViewStyle = {
 const $rightContainer: ViewStyle = {
   position: "absolute",
   right: spacing.extraSmall,
-  minHeight: 213,
+  top: 0,
+  bottom: 0,
   width: 50,
   marginRight: -spacing.medium,
 }
@@ -128,7 +149,7 @@ const $arrowContainer: ViewStyle = {
 }
 
 const $headerContainer: ViewStyle = {
-  flex: 1,
+  marginBottom: spacing.small,
 }
 
 export default ScheduleCard
