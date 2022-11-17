@@ -16,30 +16,28 @@ type CommonProps = {
   imageStyle?: StyleProp<ImageStyle>
 }
 
-type SourceProps =
-  | {
-      preset?: "default" | "talk"
-      /**
-       * The avatar to display
-       */
-      source: ImageSourcePropType
-      sources: never
-    }
-  | {
-      preset: "panel"
-      source: never
-      /**
-       * Multiple avatars to display
-       */
-      sources: ImageSourcePropType[]
-    }
+interface SingleAvatarProps extends CommonProps {
+  preset?: "default" | "talk"
+  /**
+   * The avatar to display
+   */
+  source: ImageSourcePropType
+}
 
-type AvatarProps = CommonProps & SourceProps
+interface PanelAvatarProps extends CommonProps {
+  preset: "panel"
+  /**
+   * Multiple avatars to display
+   */
+  sources: ImageSourcePropType[]
+}
+
+type AvatarProps = SingleAvatarProps | PanelAvatarProps
 
 /**
  * Displays an avatar for a workshop, talk or speaker panel
  */
-export const Avatar = observer(function Avatar(props: AvatarProps) {
+export const Avatar: React.FC<AvatarProps> = observer(function Avatar(props) {
   const { style, imageStyle } = props
   const preset: Presets = $viewPresets[props.preset] ? props.preset : "default"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
@@ -47,7 +45,11 @@ export const Avatar = observer(function Avatar(props: AvatarProps) {
   if (preset !== "panel") {
     return (
       <View style={style}>
-        <Image source={props.source} style={$imageStyle} resizeMode="contain" />
+        <Image
+          source={(props as SingleAvatarProps).source}
+          style={$imageStyle}
+          resizeMode="contain"
+        />
       </View>
     )
   } else {
