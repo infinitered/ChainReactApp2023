@@ -79,7 +79,7 @@ const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props
   const { variant = "event", time, eventTitle, heading, subheading } = props
   const navigation = useAppNavigation()
   const onPress =
-    ["talk", "workshop"].includes(variant) && (() => navigation.navigate("EventDetail"))
+    ["talk", "workshop"].includes(variant) && (() => navigation.navigate("TalkDetails"))
 
   const cardProps = { ...baseEventProps(time, eventTitle) }
   const variantProps =
