@@ -23,10 +23,9 @@ const data = [
     id: 2,
     type: "workshop",
     time: "8:00 am",
-    eventTitle: "beginner workshop",
-    heading: "Gant Laborde",
-    subheading: "Leveling up on the new architecture",
-    // onPress: () => navigation.navigate("EventDetail"),
+    eventTitle: "advanced workshop",
+    subheading: "Gant Laborde",
+    heading: "Leveling up on the new architecture",
   },
   {
     id: 3,
@@ -35,7 +34,6 @@ const data = [
     eventTitle: "talk",
     heading: "Ferran Negre Pizarro",
     subheading: "React Native case study: from an idea to market",
-    // onPress: () => navigation.navigate("EventDetail"),
   },
   {
     id: 4,
@@ -66,7 +64,7 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
             renderItem={({ item }) => {
               const { time, eventTitle, heading, subheading } = item
               const onPress =
-                item.type !== "event" ? () => navigation.navigate("EventDetail") : undefined
+                item.type !== "event" ? () => navigation.navigate("TalkDetails") : undefined
               return (
                 <View style={$cardContainer}>
                   <ScheduleCard
