@@ -189,10 +189,20 @@ export function Card(props: CardProps) {
   ]
   const $offsetStyle = [$offsetPresets[preset]]
 
+  const [cardHeight, setCardHeight] = React.useState(null)
+
   return (
-    <View>
+    <View
+      onLayout={(e) => {
+        setCardHeight(e.nativeEvent.layout.height)
+      }}
+    >
       <View style={$offsetContainer}>
-        <Image style={$offsetStyle} resizeMode="stretch" source={cardOffset} />
+        <Image
+          style={[$offsetStyle, { height: cardHeight }]}
+          resizeMode="stretch"
+          source={cardOffset}
+        />
       </View>
       <Wrapper
         style={$containerStyle}
@@ -249,13 +259,10 @@ export function Card(props: CardProps) {
   )
 }
 
-const CARD_HEIGHT = 225
-
 const $containerBase: ViewStyle = {
   paddingVertical: spacing.extraLarge,
   paddingHorizontal: spacing.large,
   borderWidth: 1,
-  minHeight: CARD_HEIGHT,
   flexDirection: "row",
   zIndex: 2,
   elevation: 2,
@@ -264,7 +271,7 @@ const $containerBase: ViewStyle = {
 
 const $alignmentWrapper: ViewStyle = {
   flex: 1,
-  alignSelf: "stretch",
+  alignSelf: "auto",
 }
 
 const $alignmentWrapperFlexOptions = {
@@ -274,13 +281,8 @@ const $alignmentWrapperFlexOptions = {
   "force-footer-bottom": "space-between",
 } as const
 
-const $offsetBase: ImageStyle = {
-  minHeight: CARD_HEIGHT,
-}
-
 const $offsetPresets = {
   default: [
-    $offsetBase,
     {
       tintColor: colors.palette.secondary500,
       backgroundColor: colors.palette.primary500,
@@ -290,7 +292,6 @@ const $offsetPresets = {
   ] as StyleProp<ImageStyle>,
 
   reversed: [
-    $offsetBase,
     {
       tintColor: colors.palette.primary500,
     },

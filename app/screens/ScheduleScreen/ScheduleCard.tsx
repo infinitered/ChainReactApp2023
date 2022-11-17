@@ -118,6 +118,7 @@ const $titleText: TextStyle = {
 
 const $contentText: TextStyle = {
   color: colors.palette.neutral500,
+  paddingTop: 10,
 }
 
 const $footerHeading: TextStyle = {
