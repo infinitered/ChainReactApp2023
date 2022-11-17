@@ -1,6 +1,5 @@
 import React, { ComponentType, Fragment, ReactElement } from "react"
 import {
-  Dimensions,
   Image,
   ImageStyle,
   StyleProp,
@@ -193,7 +192,7 @@ export function Card(props: CardProps) {
   return (
     <View>
       <View style={$offsetContainer}>
-        <Image style={[$offsetStyle]} resizeMode="stretch" source={cardOffset} />
+        <Image style={$offsetStyle} resizeMode="stretch" source={cardOffset} />
       </View>
       <Wrapper
         style={$containerStyle}
