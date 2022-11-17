@@ -192,16 +192,8 @@ export function Card(props: CardProps) {
 
   return (
     <View>
-      <View
-        style={{
-          position: "absolute",
-          left: spacing.tiny,
-          top: spacing.tiny,
-          elevation: 1,
-          zIndex: 1,
-        }}
-      >
-        <Image style={[$offsetStyle, { resizeMode: "contain" }]} source={cardOffset} />
+      <View style={$offsetContainer}>
+        <Image style={[$offsetStyle]} resizeMode="stretch" source={cardOffset} />
       </View>
       <Wrapper
         style={$containerStyle}
@@ -258,11 +250,13 @@ export function Card(props: CardProps) {
   )
 }
 
+const CARD_HEIGHT = 225
+
 const $containerBase: ViewStyle = {
   paddingVertical: spacing.extraLarge,
   paddingHorizontal: spacing.large,
   borderWidth: 1,
-  minHeight: 213,
+  minHeight: CARD_HEIGHT,
   flexDirection: "row",
   zIndex: 2,
   elevation: 2,
@@ -281,17 +275,35 @@ const $alignmentWrapperFlexOptions = {
   "force-footer-bottom": "space-between",
 } as const
 
-const $offsetPresets = {
-  default: {
-    tintColor: colors.palette.secondary500,
-    backgroundColor: colors.palette.primary500,
-    borderColor: colors.palette.neutral500,
-    borderWidth: 1,
-  } as StyleProp<ImageStyle>,
+const $offsetBase: ImageStyle = {
+  minHeight: CARD_HEIGHT,
+}
 
-  reversed: {
-    tintColor: colors.palette.primary500,
-  } as StyleProp<ImageStyle>,
+const $offsetPresets = {
+  default: [
+    $offsetBase,
+    {
+      tintColor: colors.palette.secondary500,
+      backgroundColor: colors.palette.primary500,
+      borderColor: colors.palette.neutral500,
+      borderWidth: 1,
+    },
+  ] as StyleProp<ImageStyle>,
+
+  reversed: [
+    $offsetBase,
+    {
+      tintColor: colors.palette.primary500,
+    },
+  ] as StyleProp<ImageStyle>,
+}
+
+const $offsetContainer: ViewStyle = {
+  position: "absolute",
+  left: spacing.tiny,
+  top: spacing.tiny,
+  elevation: 1,
+  zIndex: 1,
 }
 
 const $containerPresets = {
