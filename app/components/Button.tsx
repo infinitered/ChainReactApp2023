@@ -179,7 +179,7 @@ const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
-  default: { backgroundColor: colors.palette.primary100 },
+  default: { backgroundColor: colors.palette.neutral100, opacity: 0.65 },
   // filled: { backgroundColor: colors.palette.neutral300 },
   // reversed: { backgroundColor: colors.palette.neutral500 },
 }
