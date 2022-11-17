@@ -1,56 +1,39 @@
-import React, { FC } from "react"
+import React, { FC, Fragment, useLayoutEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View, TextStyle, ViewStyle } from "react-native"
 import { Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { useAppNavigation } from "../../hooks"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard from "./ScheduleCard"
 import { useStores } from "../../models"
+import { formatDate } from "../../utils/formatDate"
 
 export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function ScheduleScreen() {
   useHeader({ title: "Schedule" })
-  const navigation = useAppNavigation()
   const { schedulesStore } = useStores()
-  const { viewingDay } = schedulesStore
+  const { fetchData, selectedSchedule } = schedulesStore
+
+  useLayoutEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  if (!selectedSchedule) return null
 
   return (
     <>
       <Screen style={$root} preset="scroll" contentContainerStyle={$container}>
         <Text preset="heading" style={$heading}>
-          {viewingDay}
+          {formatDate(selectedSchedule.date, "EE, MMMM dd")}
         </Text>
-        <Text style={$subheading}>React Native Workshops</Text>
-        <ScheduleCard
-          variant="event"
-          time="6:00 — 8:00 am"
-          eventTitle="Check-in & Registration"
-          subheading="Check-in for attendees with a workshop ticket begins at 6:00 am."
-        />
-
-        <View style={{ height: spacing.large }} />
-
-        <ScheduleCard
-          variant="workshop"
-          onPress={() => navigation.navigate("EventDetail")}
-          time="6:00 — 8:00 am"
-          eventTitle="Check-in & Registration"
-          heading="Gant Laborde"
-          subheading="Leveling up on the new architecture"
-        />
-
-        <View style={{ height: spacing.large }} />
-
-        <ScheduleCard
-          variant="talk"
-          onPress={() => navigation.navigate("EventDetail")}
-          time="6:00 — 8:00 am"
-          eventTitle="Check-in & Registration"
-          heading="Ferran Negre Pizarro"
-          subheading="React Native case study: from an idea to market"
-        />
+        <Text style={$subheading}>{selectedSchedule.title}</Text>
+        {selectedSchedule.events.map((event, index) => (
+          <Fragment key={index}>
+            <ScheduleCard {...event} />
+            <View style={{ height: spacing.large }} />
+          </Fragment>
+        ))}
       </Screen>
       <ScheduleDayPicker />
     </>

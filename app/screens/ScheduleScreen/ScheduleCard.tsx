@@ -3,6 +3,7 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { Avatar, Card, Icon, Text } from "../../components"
 import { colors, spacing } from "../../theme"
+import { useAppNavigation } from "../../hooks"
 
 const Header = ({ time, title }) => (
   <View style={$headerContainer}>
@@ -24,14 +25,13 @@ const Footer = ({ heading, subheading }) => (
 
 type Variants = "event" | "workshop" | "talk"
 
-interface ScheduleCardProps {
+export interface ScheduleCardProps {
   /**
    * The variant of the card.
    * Options: "event", "workshop", "talk"
    * Default: "event"
    */
   variant?: Variants
-  onPress?: () => void
   time: string
   eventTitle: string
   heading?: string
@@ -62,7 +62,10 @@ const baseSpeakingEventProps = (heading: string, subheading: string) => ({
 })
 
 const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props) {
-  const { variant = "event", onPress, time, eventTitle, heading, subheading } = props
+  const { variant = "event", time, eventTitle, heading, subheading } = props
+  const navigation = useAppNavigation()
+  const onPress =
+    ["talk", "workshop"].includes(variant) && (() => navigation.navigate("EventDetail"))
 
   const cardProps = { ...baseEventProps(time, eventTitle) }
   const variantProps =

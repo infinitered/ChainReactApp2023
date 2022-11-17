@@ -5,20 +5,14 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import { Text } from "../../components"
 import { useStores } from "../../models"
 import { colors, spacing } from "../../theme"
-
-interface ButtonsProps {
-  text: string
-  onPress?: () => void
-}
-
-const buttons: ButtonsProps[] = [{ text: "Wed" }, { text: "Thurs" }, { text: "Fri" }]
+import { formatDate } from "../../utils/formatDate"
 
 export const ScheduleDayPicker: FC = observer(function ScheduleDayPicker() {
   const { schedulesStore } = useStores()
-  const { setViewingDay, viewingDay = buttons[0].text } = schedulesStore
+  const { setSelectedSchedule, schedules, selectedSchedule } = schedulesStore
   const leftValue = useSharedValue(0)
   const wrapperWidth = Dimensions.get("screen").width - spacing.extraSmall * 2
-  const widthSize = wrapperWidth / buttons.length
+  const widthSize = wrapperWidth / schedules.length
 
   const $animatedLeftStyle = useAnimatedStyle(() => {
     return {
@@ -30,21 +24,20 @@ export const ScheduleDayPicker: FC = observer(function ScheduleDayPicker() {
   return (
     <View style={$wrapperStyle}>
       <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />
-      {buttons.map((button, index) => (
+      {schedules.map((schedule, index) => (
         <Pressable
-          key={index}
+          key={schedule.date}
           onPress={() => {
-            button.onPress?.()
             leftValue.value = widthSize * index
-            setTimeout(() => setViewingDay(button.text), 250)
+            setTimeout(() => setSelectedSchedule(schedule), 250)
           }}
           style={$buttonStyle}
         >
           <Text
             preset="companionHeading"
-            style={[$textStyle, viewingDay === button.text && $textSelectedStyle]}
+            style={[$textStyle, selectedSchedule.date === schedule.date && $textSelectedStyle]}
           >
-            {button.text}
+            {formatDate(schedule.date, "EE")}
           </Text>
         </Pressable>
       ))}
