@@ -60,29 +60,31 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
         </Text>
         <Text style={$subheading}>React Native Workshops</Text>
 
-        <FlashList
-          data={data}
-          renderItem={({ item }) => {
-            const { time, eventTitle, heading, subheading } = item
-            const onPress =
-              item.type !== "event" ? () => navigation.navigate("EventDetail") : undefined
-            return (
-              <View style={$cardContainer}>
-                <ScheduleCard
-                  variant={item.type as Variants}
-                  {...{ time, eventTitle, heading, subheading, onPress }}
-                />
-              </View>
-            )
-          }}
-          getItemType={(item) => {
-            // To achieve better performance, specify the type based on the item
-            return item.type
-          }}
-          estimatedItemSize={225}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={$list}
-        />
+        <View style={$listContainer}>
+          <FlashList
+            data={data}
+            renderItem={({ item }) => {
+              const { time, eventTitle, heading, subheading } = item
+              const onPress =
+                item.type !== "event" ? () => navigation.navigate("EventDetail") : undefined
+              return (
+                <View style={$cardContainer}>
+                  <ScheduleCard
+                    variant={item.type as Variants}
+                    {...{ time, eventTitle, heading, subheading, onPress }}
+                  />
+                </View>
+              )
+            }}
+            getItemType={(item) => {
+              // To achieve better performance, specify the type based on the item
+              return item.type
+            }}
+            estimatedItemSize={225}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={$list}
+          />
+        </View>
       </Screen>
       <ScheduleDayPicker />
     </>
@@ -113,4 +115,8 @@ const $list: ContentStyle = {
 
 const $cardContainer: ViewStyle = {
   paddingBottom: spacing.large,
+}
+
+const $listContainer: ViewStyle = {
+  height: "100%",
 }
