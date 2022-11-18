@@ -30,6 +30,11 @@ const en = {
     exploreTab: "Explore",
     infoTab: "Info",
   },
+  VenueScreen: {
+    title: "Venue",
+    conferenceAndWorkshopVenues: 'Conference and workshop venues',
+    thanksToThisYearsSponsors: 'Thanks to this year\'s sponsors'
+  }
 }
 
 export default en
