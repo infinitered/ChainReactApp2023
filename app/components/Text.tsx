@@ -93,6 +93,19 @@ const $baseStyle: StyleProp<TextStyle> = [
   { color: colors.text },
 ]
 
+const $secondaryFontWeightStyles = Object.entries(typography.secondary).reduce(
+  (acc, [weight, fontFamily]) => {
+    return { ...acc, [weight]: { fontFamily } }
+  },
+  {},
+) as Record<Weights, TextStyle>
+
+const $baseSecondaryStyle: StyleProp<TextStyle> = [
+  $sizeStyles.sm,
+  $secondaryFontWeightStyles.book,
+  { color: colors.text },
+]
+
 const $presets = {
   default: $baseStyle,
 
@@ -107,6 +120,8 @@ const $presets = {
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.book] as StyleProp<TextStyle>,
+
+  eventTitle: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}

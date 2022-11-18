@@ -1,0 +1,38 @@
+[ 
+  {
+    "date": "2023-05-17",
+    "title": "React Native Workshops",
+    "events": [
+      {
+        "variant": "event",
+        "time": "6:00 — 8:00 am",
+        "eventTitle": "Check-in & Registration",
+        "subheading": "Check-in for attendees with a workshop ticket begins at 6:00 am."
+      },
+      {
+        "variant": "workshop",
+        "time": "6:00 — 8:00 am",
+        "eventTitle": "Check-in & Registration",
+        "heading": "Gant Laborde",
+        "subheading": "Leveling up on the new architecture"
+      },
+      {
+        "variant": "talk",
+        "time": "6:00 — 8:00 am",
+        "eventTitle": "Check-in & Registration",
+        "heading": "Ferran Negre Pizarro",
+        "subheading": "React Native case study: from an idea to market"
+      }
+    ]
+  },
+  {
+    "date": "2023-05-18",
+    "title": "Conference Day 1",
+    "events": []
+  },
+  {
+    "date": "2023-05-19",
+    "title": "Conference Day 2",
+    "events": []
+  }
+]

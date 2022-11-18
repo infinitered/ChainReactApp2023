@@ -1,18 +1,20 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
-import { Button, Screen } from "../components"
+import { Screen, Text } from "../components"
 import { TabScreenProps } from "../navigators/TabNavigator"
-import { useTabNavigation } from "../hooks"
+import { spacing } from "../theme"
 
 export const PlaceholderScreen: FC<TabScreenProps<"Schedule">> = observer(
   function PlaceholderScreen() {
-    // Pull in navigation via hook
-    const navigation = useTabNavigation()
-
     return (
-      <Screen style={$root} preset="scroll" safeAreaEdges={["top", "bottom"]}>
-        <Button onPress={navigation.goBack} text="Go Back" />
+      <Screen
+        style={$root}
+        preset="scroll"
+        safeAreaEdges={["top", "bottom"]}
+        contentContainerStyle={$container}
+      >
+        <Text>Placeholder!</Text>
       </Screen>
     )
   },
@@ -20,4 +22,10 @@ export const PlaceholderScreen: FC<TabScreenProps<"Schedule">> = observer(
 
 const $root: ViewStyle = {
   flex: 1,
+}
+
+const $container: ViewStyle = {
+  padding: spacing.large,
+  flex: 1,
+  justifyContent: "space-around",
 }

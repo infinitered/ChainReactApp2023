@@ -1,5 +1,7 @@
 import React, { ComponentType, Fragment, ReactElement } from "react"
 import {
+  Image,
+  ImageStyle,
   StyleProp,
   TextStyle,
   TouchableOpacity,
@@ -9,6 +11,8 @@ import {
 } from "react-native"
 import { colors, spacing } from "../theme"
 import { Text, TextProps } from "./Text"
+
+const cardOffset = require("../../assets/images/card-offset.png")
 
 type Presets = keyof typeof $containerPresets
 
@@ -183,78 +187,91 @@ export function Card(props: CardProps) {
     LeftComponent && { marginLeft: spacing.medium },
     RightComponent && { marginRight: spacing.medium },
   ]
+  const $offsetStyle = [$offsetPresets[preset]]
+
+  const [cardHeight, setCardHeight] = React.useState(null)
 
   return (
-    <Wrapper
-      style={$containerStyle}
-      activeOpacity={0.8}
-      accessibilityRole={isPressable ? "button" : undefined}
-      {...WrapperProps}
+    <View
+      onLayout={(e) => {
+        setCardHeight(e.nativeEvent.layout.height)
+      }}
     >
-      {LeftComponent}
-
-      <View style={$alignmentWrapperStyle}>
-        <HeaderContentWrapper>
-          {HeadingComponent ||
-            (isHeadingPresent && (
-              <Text
-                weight="bold"
-                text={heading}
-                tx={headingTx}
-                txOptions={headingTxOptions}
-                {...HeadingTextProps}
-                style={$headingStyle}
-              />
-            ))}
-
-          {ContentComponent ||
-            (isContentPresent && (
-              <Text
-                weight="normal"
-                text={content}
-                tx={contentTx}
-                txOptions={contentTxOptions}
-                {...ContentTextProps}
-                style={$contentStyle}
-              />
-            ))}
-        </HeaderContentWrapper>
-
-        {FooterComponent ||
-          (isFooterPresent && (
-            <Text
-              weight="normal"
-              size="xs"
-              text={footer}
-              tx={footerTx}
-              txOptions={footerTxOptions}
-              {...FooterTextProps}
-              style={$footerStyle}
-            />
-          ))}
+      <View style={$offsetContainer}>
+        <Image
+          style={[$offsetStyle, { height: cardHeight }]}
+          resizeMode="stretch"
+          source={cardOffset}
+        />
       </View>
+      <Wrapper
+        style={$containerStyle}
+        activeOpacity={0.8}
+        accessibilityRole={isPressable ? "button" : undefined}
+        {...WrapperProps}
+      >
+        {LeftComponent}
 
-      {RightComponent}
-    </Wrapper>
+        <View style={$alignmentWrapperStyle}>
+          <HeaderContentWrapper>
+            {HeadingComponent ||
+              (isHeadingPresent && (
+                <Text
+                  weight="bold"
+                  text={heading}
+                  tx={headingTx}
+                  txOptions={headingTxOptions}
+                  {...HeadingTextProps}
+                  style={$headingStyle}
+                />
+              ))}
+
+            {ContentComponent ||
+              (isContentPresent && (
+                <Text
+                  weight="book"
+                  text={content}
+                  tx={contentTx}
+                  txOptions={contentTxOptions}
+                  {...ContentTextProps}
+                  style={$contentStyle}
+                />
+              ))}
+          </HeaderContentWrapper>
+
+          {FooterComponent ||
+            (isFooterPresent && (
+              <Text
+                weight="book"
+                size="xs"
+                text={footer}
+                tx={footerTx}
+                txOptions={footerTxOptions}
+                {...FooterTextProps}
+                style={$footerStyle}
+              />
+            ))}
+        </View>
+
+        {RightComponent}
+      </Wrapper>
+    </View>
   )
 }
 
 const $containerBase: ViewStyle = {
-  borderRadius: spacing.medium,
-  padding: spacing.extraSmall,
+  paddingVertical: spacing.extraLarge,
+  paddingHorizontal: spacing.large,
   borderWidth: 1,
-  shadowColor: colors.palette.neutral800,
-  shadowOffset: { width: 0, height: 12 },
-  shadowOpacity: 0.08,
-  shadowRadius: 12.81,
-  elevation: 16,
-  minHeight: 96,
   flexDirection: "row",
+  zIndex: 2,
+  elevation: 2,
+  marginRight: spacing.tiny,
 }
 
 const $alignmentWrapper: ViewStyle = {
   flex: 1,
-  alignSelf: "stretch",
+  alignSelf: "auto",
 }
 
 const $alignmentWrapperFlexOptions = {
@@ -264,18 +281,43 @@ const $alignmentWrapperFlexOptions = {
   "force-footer-bottom": "space-between",
 } as const
 
+const $offsetPresets = {
+  default: [
+    {
+      tintColor: colors.palette.secondary500,
+      backgroundColor: colors.palette.primary500,
+      borderColor: colors.palette.neutral500,
+      borderWidth: 1,
+    },
+  ] as StyleProp<ImageStyle>,
+
+  reversed: [
+    {
+      tintColor: colors.palette.primary500,
+    },
+  ] as StyleProp<ImageStyle>,
+}
+
+const $offsetContainer: ViewStyle = {
+  position: "absolute",
+  left: spacing.tiny,
+  top: spacing.tiny,
+  elevation: 1,
+  zIndex: 1,
+}
+
 const $containerPresets = {
   default: [
     $containerBase,
     {
       backgroundColor: colors.palette.neutral100,
-      borderColor: colors.palette.neutral300,
+      borderColor: colors.palette.neutral500,
     },
   ] as StyleProp<ViewStyle>,
 
   reversed: [
     $containerBase,
-    { backgroundColor: colors.palette.neutral800, borderColor: colors.palette.neutral500 },
+    { backgroundColor: colors.palette.primary100, borderColor: colors.palette.primary500 },
   ] as StyleProp<ViewStyle>,
 }
 
