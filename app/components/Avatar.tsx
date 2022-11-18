@@ -61,7 +61,7 @@ export const Avatar: React.FC<AvatarProps> = observer(function Avatar(props) {
           <Image
             key={`panel-${index}-${source}`}
             source={source}
-            style={[$imageStyle, { marginTop: spacing.small, marginLeft: -spacing.tiny * index }]}
+            style={[$imageStyle, $panelImageStyle]}
             resizeMode="contain"
           />
         ))}
@@ -93,4 +93,9 @@ const $viewPresets = {
     height: 42,
     borderRadius: 21,
   } as StyleProp<ImageStyle>,
+}
+
+const $panelImageStyle: ImageStyle = {
+  marginTop: spacing.small,
+  marginLeft: -spacing.small,
 }
