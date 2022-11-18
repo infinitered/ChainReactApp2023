@@ -59,24 +59,34 @@ const baseEventProps = (time: string, title: string) => ({
   HeadingComponent: <Header {...{ time, title }} />,
 })
 
-const baseSpeakingEventProps = (heading: string, subheading: string) => ({
-  RightComponent: (
-    <View style={$rightContainer}>
-      <Avatar
-        // preset="talk"
-        style={$avatar}
-        source={{ uri: "https://avatars.githubusercontent.com/u/997157?v=4" }}
-      />
-      <Icon
-        icon="arrow"
-        size={24}
-        color={colors.palette.primary500}
-        containerStyle={$arrowContainer}
-      />
-    </View>
-  ),
-  FooterComponent: <Footer {...{ heading, subheading }} />,
-})
+const baseSpeakingEventProps = (heading: string, subheading: string, eventTitle: string) => {
+  const props = {}
+  if (eventTitle === "speaker panel") {
+    props.sources = [
+      { uri: "https://picsum.photos/200" },
+      { uri: "https://picsum.photos/200" },
+      { uri: "https://picsum.photos/200" },
+      { uri: "https://picsum.photos/200" },
+      { uri: "https://picsum.photos/200" },
+    ]
+  } else {
+    props.source = { uri: "https://picsum.photos/200" }
+  }
+  return {
+    RightComponent: (
+      <View style={$rightContainer}>
+        <Avatar preset={eventTitle} style={$avatar} {...props} />
+        <Icon
+          icon="arrow"
+          size={24}
+          color={colors.palette.primary500}
+          containerStyle={$arrowContainer}
+        />
+      </View>
+    ),
+    FooterComponent: <Footer {...{ heading, subheading }} />,
+  }
+}
 
 const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props) {
   const { variant = "event", onPress, time, eventTitle, heading, subheading } = props
@@ -85,7 +95,7 @@ const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props
   const variantProps =
     variant === "event"
       ? { content: subheading, contentStyle: $contentText }
-      : baseSpeakingEventProps(heading, subheading)
+      : baseSpeakingEventProps(heading, subheading, eventTitle)
 
   return (
     <Card
@@ -138,7 +148,7 @@ const $rightContainer: ViewStyle = {
   right: spacing.extraSmall,
   top: 0,
   bottom: 0,
-  width: 50,
+  width: 200,
   marginRight: -spacing.medium,
 }
 

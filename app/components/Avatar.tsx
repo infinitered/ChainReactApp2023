@@ -1,9 +1,9 @@
 import * as React from "react"
 import { Image, StyleProp, View, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native"
 import { observer } from "mobx-react-lite"
-import { colors } from "../theme"
+import { spacing } from "../theme"
 
-type Presets = keyof typeof $viewPresets
+export type AvatarPresets = keyof typeof $viewPresets
 
 type CommonProps = {
   /**
@@ -17,7 +17,7 @@ type CommonProps = {
 }
 
 interface SingleAvatarProps extends CommonProps {
-  preset?: "default" | "talk"
+  preset?: "workshop" | "talk"
   /**
    * The avatar to display
    */
@@ -25,7 +25,7 @@ interface SingleAvatarProps extends CommonProps {
 }
 
 interface PanelAvatarProps extends CommonProps {
-  preset: "panel"
+  preset: "speaker panel"
   /**
    * Multiple avatars to display
    */
@@ -38,13 +38,14 @@ type AvatarProps = SingleAvatarProps | PanelAvatarProps
  * Displays an avatar for a workshop, talk or speaker panel
  */
 export const Avatar: React.FC<AvatarProps> = observer(function Avatar(props) {
-  const { style, imageStyle } = props
-  const preset: Presets = $viewPresets[props.preset] ? props.preset : "default"
+  const { style: $styleOverride, imageStyle } = props
+  const preset: AvatarPresets = $viewPresets[props.preset] ? props.preset : "workshop"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
+  const $containerStyle = [$baseContainerStyle, $styleOverride]
 
-  if (preset !== "panel") {
+  if (preset !== "speaker panel") {
     return (
-      <View style={style}>
+      <View style={$containerStyle}>
         <Image
           source={(props as SingleAvatarProps).source}
           style={$imageStyle}
@@ -53,29 +54,41 @@ export const Avatar: React.FC<AvatarProps> = observer(function Avatar(props) {
       </View>
     )
   } else {
-    // TODO
-    // speaker panel multiple images here
-    // map over sources
-    return <View />
+    const sources = (props as PanelAvatarProps).sources
+    return (
+      <View style={$containerStyle}>
+        {sources.map((source, index) => (
+          <Image
+            key={`panel-${index}-${source}`}
+            source={source}
+            style={[$imageStyle, { marginTop: spacing.small, marginLeft: -spacing.tiny * index }]}
+            resizeMode="contain"
+          />
+        ))}
+      </View>
+    )
   }
 })
 
+const $baseContainerStyle: ViewStyle = {
+  flex: 1,
+  flexDirection: "row",
+}
+
 const $viewPresets = {
-  default: {
-    backgroundColor: colors.palette.primary500,
+  workshop: {
     width: 80,
     height: 80,
     borderRadius: 40,
   } as StyleProp<ImageStyle>,
 
   talk: {
-    backgroundColor: colors.palette.primary500,
     width: 100,
     height: 100,
     borderRadius: 50,
   } as StyleProp<ImageStyle>,
 
-  panel: {
+  "speaker panel": {
     width: 42,
     height: 42,
     borderRadius: 21,

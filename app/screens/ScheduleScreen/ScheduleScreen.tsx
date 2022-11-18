@@ -37,10 +37,11 @@ const data = [
   },
   {
     id: 4,
-    type: "event",
-    time: "6:00 — 8:00 am",
-    eventTitle: "Check-in & Registration",
-    subheading: "Check-in for attendees with a workshop ticket begins at 6:00 am.",
+    type: "talk",
+    time: "6:00 pm",
+    eventTitle: "speaker panel",
+    heading:
+      "Liz Tiller, Ankita Kulkarni, Adhithi Ravichandran, Ferran Negre Pizarro, and Alex Hinson",
   },
 ]
 
