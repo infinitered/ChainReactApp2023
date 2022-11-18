@@ -72,7 +72,7 @@ const baseSpeakingEventProps = (heading: string, subheading: string, eventTitle:
   return {
     RightComponent: (
       <View style={$rightContainer}>
-        <Avatar preset={eventTitle} style={$avatar} {...props} />
+        <Avatar preset={eventTitle.replace(" ", "-")} style={$avatar} {...props} />
         <Icon
           icon="arrow"
           size={24}
