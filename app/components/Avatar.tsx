@@ -32,7 +32,7 @@ interface PanelAvatarProps extends CommonProps {
   sources: ImageSourcePropType[]
 }
 
-type AvatarProps = SingleAvatarProps | PanelAvatarProps
+export type AvatarProps = SingleAvatarProps | PanelAvatarProps
 
 /**
  * Displays an avatar for a workshop, talk or speaker panel

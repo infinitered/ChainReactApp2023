@@ -1,75 +1,48 @@
-import React, { FC } from "react"
+import React, { FC, Fragment, useLayoutEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { View, TextStyle, ViewStyle } from "react-native"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
 import { Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { useAppNavigation } from "../../hooks"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
-import ScheduleCard, { Variants } from "./ScheduleCard"
+import ScheduleCard, { ScheduleCardProps, Variants } from "./ScheduleCard"
 import { useStores } from "../../models"
-
-const data = [
-  {
-    id: 1,
-    type: "event",
-    time: "6:00 — 8:00 am",
-    eventTitle: "Check-in & Registration",
-    subheading: "Check-in for attendees with a workshop ticket begins at 6:00 am.",
-  },
-  {
-    id: 2,
-    type: "workshop",
-    time: "8:00 am",
-    eventTitle: "advanced workshop",
-    subheading: "Gant Laborde",
-    heading: "Leveling up on the new architecture",
-  },
-  {
-    id: 3,
-    type: "talk",
-    time: "8:00 am",
-    eventTitle: "talk",
-    heading: "Ferran Negre Pizarro",
-    subheading: "React Native case study: from an idea to market",
-  },
-  {
-    id: 4,
-    type: "talk",
-    time: "6:00 pm",
-    eventTitle: "speaker panel",
-    heading:
-      "Liz Tiller, Ankita Kulkarni, Adhithi Ravichandran, Ferran Negre Pizarro, and Alex Hinson",
-  },
-]
+import { formatDate } from "../../utils/formatDate"
+import { useAppNavigation } from "../../hooks"
 
 export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function ScheduleScreen() {
   useHeader({ title: "Schedule" })
   const navigation = useAppNavigation()
   const { schedulesStore } = useStores()
-  const { viewingDay } = schedulesStore
+  const { fetchData, selectedSchedule } = schedulesStore
+
+  useLayoutEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  if (!selectedSchedule) return null
 
   return (
     <>
       <Screen style={$root} preset="scroll" contentContainerStyle={$container}>
         <Text preset="heading" style={$heading}>
-          {viewingDay}
+          {formatDate(selectedSchedule.date, "EE, MMMM dd")}
         </Text>
-        <Text style={$subheading}>React Native Workshops</Text>
+        <Text style={$subheading}>{selectedSchedule.title}</Text>
 
         <View style={$listContainer}>
           <FlashList
-            data={data}
-            renderItem={({ item }) => {
+            data={selectedSchedule.events}
+            renderItem={({ item }: { item: ScheduleCardProps }) => {
               const { time, eventTitle, heading, subheading } = item
               const onPress =
-                item.type !== "event" ? () => navigation.navigate("TalkDetails") : undefined
+                item.variant !== "event" ? () => navigation.navigate("TalkDetails") : undefined
               return (
                 <View style={$cardContainer}>
                   <ScheduleCard
-                    variant={item.type as Variants}
+                    variant={item.variant as Variants}
                     {...{ time, eventTitle, heading, subheading, onPress }}
                   />
                 </View>
@@ -77,7 +50,7 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
             }}
             getItemType={(item) => {
               // To achieve better performance, specify the type based on the item
-              return item.type
+              return item.variant
             }}
             estimatedItemSize={225}
             showsVerticalScrollIndicator={false}
