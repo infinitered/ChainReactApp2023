@@ -16,7 +16,7 @@ type CommonProps = {
   imageStyle?: StyleProp<ImageStyle>
 }
 
-interface SingleAvatarProps extends CommonProps {
+export interface SingleAvatarProps extends CommonProps {
   preset?: "workshop" | "talk"
   /**
    * The avatar to display
@@ -24,7 +24,7 @@ interface SingleAvatarProps extends CommonProps {
   source: ImageSourcePropType
 }
 
-interface PanelAvatarProps extends CommonProps {
+export interface PanelAvatarProps extends CommonProps {
   preset: "speaker-panel"
   /**
    * Multiple avatars to display
@@ -32,7 +32,7 @@ interface PanelAvatarProps extends CommonProps {
   sources: ImageSourcePropType[]
 }
 
-type AvatarProps = SingleAvatarProps | PanelAvatarProps
+export type AvatarProps = SingleAvatarProps | PanelAvatarProps
 
 /**
  * Displays an avatar for a workshop, talk or speaker panel

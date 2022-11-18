@@ -1,7 +1,7 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
-import { Avatar, Card, Icon, Text } from "../../components"
+import { Avatar, AvatarPresets, AvatarProps, Card, Icon, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
 
@@ -41,7 +41,7 @@ export interface ScheduleCardProps {
   /**
    * The event title
    */
-  eventTitle: string
+  eventTitle: AvatarPresets
   /**
    * Card bold heading
    */
@@ -56,9 +56,11 @@ const baseEventProps = (time: string, title: string) => ({
   HeadingComponent: <Header {...{ time, title }} />,
 })
 
-const baseSpeakingEventProps = (heading: string, subheading: string, eventTitle: string) => {
-  const props = {}
-  if (eventTitle === "speaker panel") {
+const baseSpeakingEventProps = (heading: string, subheading: string, eventTitle: AvatarPresets) => {
+  const props = {
+    preset: eventTitle,
+  } as AvatarProps
+  if (props.preset === "speaker-panel") {
     props.sources = [
       { uri: "https://picsum.photos/200" },
       { uri: "https://picsum.photos/200" },
@@ -72,7 +74,7 @@ const baseSpeakingEventProps = (heading: string, subheading: string, eventTitle:
   return {
     RightComponent: (
       <View style={$rightContainer}>
-        <Avatar preset={eventTitle.replace(" ", "-")} style={$avatar} {...props} />
+        <Avatar style={$avatar} {...props} />
         <Icon
           icon="arrow"
           size={24}
