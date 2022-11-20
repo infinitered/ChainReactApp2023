@@ -1,22 +1,42 @@
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, SharedValue, interpolate } from "react-native-reanimated"
 import { Text } from "../../components"
 import { useStores } from "../../models"
 import { colors, spacing } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
 
-export const ScheduleDayPicker: FC = observer(function ScheduleDayPicker() {
+type Props = {
+  scrollX: SharedValue<number>
+  onItemPress: (itemIndex) => void
+}
+
+const { width } = Dimensions.get("window")
+
+export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker({
+  scrollX,
+  onItemPress,
+}) {
   const { schedulesStore } = useStores()
   const { setSelectedSchedule, schedules, selectedSchedule } = schedulesStore
-  const leftValue = useSharedValue(0)
-  const wrapperWidth = Dimensions.get("screen").width - spacing.extraSmall * 2
+  const wrapperWidth = width - spacing.extraSmall * 2
   const widthSize = wrapperWidth / schedules.length
+
+  const inputRange = schedules.map((_, index) => index * width)
+  console.log({ inputRange, scrollX: scrollX.value })
+
+  const translateX = interpolate(
+    scrollX.value,
+    inputRange,
+    schedules.map((_, index) => widthSize * index),
+  )
 
   const $animatedLeftStyle = useAnimatedStyle(() => {
     return {
-      left: withTiming(leftValue.value, { duration: 300 }),
+      // left: clamp(scrollX.value - (spacing.small * index) / 2, 0, widthSize),
+      // left,
+      transform: [{ translateX }],
       width: widthSize,
     }
   })
@@ -28,8 +48,10 @@ export const ScheduleDayPicker: FC = observer(function ScheduleDayPicker() {
         <Pressable
           key={schedule.date}
           onPress={() => {
-            leftValue.value = widthSize * index
-            setTimeout(() => setSelectedSchedule(schedule), 250)
+            // onItemPress(index)
+            // leftValue.value = widthSize * index
+            // setTimeout(() => setSelectedSchedule(schedule), 250)
+            setSelectedSchedule(schedule)
           }}
           style={$buttonStyle}
         >
