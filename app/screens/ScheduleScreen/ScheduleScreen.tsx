@@ -30,13 +30,29 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
     fetchData()
   }, [fetchData])
 
+  const updateSchedule = (index) => setSelectedSchedule(schedules[index])
+
   const scrollX = useSharedValue(0)
   // const ref = React.useRef(null)
   const ref = useAnimatedRef()
-  const scrollHandler = useAnimatedScrollHandler((event) => {
-    // /3
-    scrollX.value = event.contentOffset.x // why can't we use schedules.length here?
-  })
+  const scrollHandler = useAnimatedScrollHandler(
+    {
+      onScroll: (event) => {
+        // /3
+        scrollX.value = event.contentOffset.x // why can't we use schedules.length here?
+      },
+      onMomentumEnd: (event) => {
+        const contentOffset = event.contentOffset
+        const viewSize = event.layoutMeasurement
+
+        // Divide the horizontal offset by the width of the view to see which page is visible
+        const index = Math.floor(contentOffset.x / viewSize.width)
+        // updateSchedule(index)
+      },
+    },
+    // [updateSchedule],
+  )
+
   const onItemPress = React.useCallback(
     (itemIndex) => {
       scrollTo(ref, itemIndex * width, 0, true)
@@ -58,14 +74,6 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
           horizontal
           showsHorizontalScrollIndicator={false}
           pagingEnabled
-          onMomentumScrollEnd={(event) => {
-            const contentOffset = event.nativeEvent.contentOffset
-            const viewSize = event.nativeEvent.layoutMeasurement
-
-            // Divide the horizontal offset by the width of the view to see which page is visible
-            const index = Math.floor(contentOffset.x / viewSize.width)
-            setSelectedSchedule(schedules[index])
-          }}
           onScroll={scrollHandler}
           bounces={false}
           renderItem={({ item: schedule }) => (

@@ -1,3 +1,4 @@
+import { ReactNativeFirebase } from "@react-native-firebase/app"
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
@@ -23,30 +24,49 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
   const wrapperWidth = width - spacing.extraSmall * 2
   const widthSize = wrapperWidth / schedules.length
 
-  const inputRange = schedules.map((_, index) => index * width)
-  console.log({ inputRange, scrollX: scrollX.value })
+  const containerRef = React.useRef()
+  const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
+  const itemRefs = schedules.map((item) => React.createRef<View>())
 
-  const translateX = interpolate(
-    scrollX.value,
-    inputRange,
-    schedules.map((_, index) => widthSize * index),
-  )
+  React.useEffect(() => {
+    const m = []
+    schedules.map((item, index) => {
+      itemRefs[index].current.measureLayout(
+        containerRef.current,
+        (x, y, width, height) => {
+          m.push({ x, y, width, height })
+
+          if (m.length === schedules.length) {
+            setMeasures(m)
+          }
+        },
+        () => {},
+      )
+    })
+  }, [])
+
+  const inputRange = schedules.map((_, index) => index * width)
 
   const $animatedLeftStyle = useAnimatedStyle(() => {
+    const left = interpolate(
+      scrollX.value,
+      inputRange,
+      measures.map((measure) => measure.x - spacing.micro),
+    )
+
     return {
-      // left: clamp(scrollX.value - (spacing.small * index) / 2, 0, widthSize),
-      // left,
-      transform: [{ translateX }],
+      left,
       width: widthSize,
     }
-  })
+  }, [inputRange, scrollX, measures])
 
   return (
-    <View style={$wrapperStyle}>
-      <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />
+    <View ref={containerRef} style={$wrapperStyle}>
+      {measures.length > 0 && <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />}
       {schedules.map((schedule, index) => (
         <Pressable
           key={schedule.date}
+          ref={itemRefs[index]}
           onPress={() => {
             // onItemPress(index)
             // leftValue.value = widthSize * index
