@@ -1,4 +1,3 @@
-import { ReactNativeFirebase } from "@react-native-firebase/app"
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
@@ -68,7 +67,7 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
           key={schedule.date}
           ref={itemRefs[index]}
           onPress={() => {
-            // onItemPress(index)
+            onItemPress(index)
             setSelectedSchedule(schedule)
           }}
           style={$buttonStyle}

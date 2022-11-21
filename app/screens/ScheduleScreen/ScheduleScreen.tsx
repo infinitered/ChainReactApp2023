@@ -12,10 +12,8 @@ import { useStores } from "../../models"
 import { formatDate } from "../../utils/formatDate"
 import { useAppNavigation } from "../../hooks"
 import Animated, {
-  useAnimatedRef,
   useAnimatedScrollHandler,
   useSharedValue,
-  scrollTo,
   runOnJS,
 } from "react-native-reanimated"
 
@@ -34,33 +32,27 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
   const updateSchedule = (index) => setSelectedSchedule(schedules[index])
 
   const scrollX = useSharedValue(0)
-  const ref = useAnimatedRef()
-  const scrollHandler = useAnimatedScrollHandler(
-    {
-      onScroll: (event) => {
-        // /3
-        scrollX.value = event.contentOffset.x // why can't we use schedules.length here?
-      },
-      onMomentumEnd: (event) => {
-        const contentOffset = event.contentOffset
-        const viewSize = event.layoutMeasurement
-
-        // Divide the horizontal offset by the width of the view to see which page is visible
-        const index = Math.floor(contentOffset.x / viewSize.width)
-
-        // ? Why does this work this way with MST?
-        // Just passing runOnJS(setSelectedSchedule)(schedules[index]) here results in an MST error
-        runOnJS(updateSchedule)(index)
-      },
+  const ref = React.useRef(null)
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollX.value = event.contentOffset.x
     },
-    // [updateSchedule],
-  )
+    onMomentumEnd: (event) => {
+      const contentOffset = event.contentOffset
+      const viewSize = event.layoutMeasurement
 
-  // TODO figure out reanimated scrollTo
+      // Divide the horizontal offset by the width of the view to see which page is visible
+      const index = Math.floor(contentOffset.x / viewSize.width)
+
+      // ? Why does this work this way with MST?
+      // Just passing runOnJS(setSelectedSchedule)(schedules[index]) here results in an MST error
+      runOnJS(updateSchedule)(index)
+    },
+  })
+
   const onItemPress = React.useCallback(
     (itemIndex) => {
-      scrollTo(ref, itemIndex * width, 0, true)
-      // ref?.current?.scrollToOffset({ offset: itemIndex * width })
+      ref?.current?.scrollToOffset({ offset: itemIndex * width })
     },
     [ref],
   )
@@ -71,6 +63,7 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
     <>
       <View style={$root}>
         <Animated.FlatList
+          ref={ref}
           data={schedules}
           keyExtractor={(item) => item.date}
           horizontal
