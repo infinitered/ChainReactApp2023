@@ -26,11 +26,11 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
 
   const containerRef = React.useRef()
   const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
-  const itemRefs = schedules.map((item) => React.createRef<View>())
+  const itemRefs = schedules.map((_) => React.createRef<View>())
 
   React.useEffect(() => {
     const m = []
-    schedules.map((item, index) => {
+    schedules.map((_, index) => {
       itemRefs[index].current.measureLayout(
         containerRef.current,
         (x, y, width, height) => {
@@ -48,14 +48,14 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
   const inputRange = schedules.map((_, index) => index * width)
 
   const $animatedLeftStyle = useAnimatedStyle(() => {
-    const left = interpolate(
+    const translateX = interpolate(
       scrollX.value,
       inputRange,
       measures.map((measure) => measure.x - spacing.micro),
     )
 
     return {
-      left,
+      transform: [{ translateX }],
       width: widthSize,
     }
   }, [inputRange, scrollX, measures])
@@ -69,8 +69,6 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
           ref={itemRefs[index]}
           onPress={() => {
             // onItemPress(index)
-            // leftValue.value = widthSize * index
-            // setTimeout(() => setSelectedSchedule(schedule), 250)
             setSelectedSchedule(schedule)
           }}
           style={$buttonStyle}
