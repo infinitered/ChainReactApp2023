@@ -56,7 +56,7 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
     const translateX = interpolate(
       scrollX.value,
       inputRange,
-      measures.map((measure) => measure.x - spacing.micro),
+      measures.map((measure) => measure.x + (index - spacing.micro)),
     )
 
     return {
