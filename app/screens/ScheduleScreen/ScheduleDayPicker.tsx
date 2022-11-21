@@ -1,10 +1,15 @@
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
 import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
-import Animated, { useAnimatedStyle, SharedValue, interpolate } from "react-native-reanimated"
+import Animated, {
+  useAnimatedStyle,
+  SharedValue,
+  interpolate,
+  interpolateColor,
+} from "react-native-reanimated"
 import { Text } from "../../components"
 import { useStores } from "../../models"
-import { colors, spacing } from "../../theme"
+import { colors, spacing, typography } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
 
 type Props = {
@@ -22,6 +27,7 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
   const { setSelectedSchedule, schedules, selectedSchedule } = schedulesStore
   const wrapperWidth = width - spacing.extraSmall * 2
   const widthSize = wrapperWidth / schedules.length
+  const index = schedules.findIndex((s) => s.date === selectedSchedule.date)
 
   const containerRef = React.useRef()
   const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
@@ -59,6 +65,36 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
     }
   }, [inputRange, scrollX, measures])
 
+  const $animatedTextStyle0 = useAnimatedStyle(() => {
+    const color = interpolateColor(scrollX.value, inputRange, [
+      colors.palette.neutral900,
+      colors.palette.neutral100,
+      colors.palette.neutral100,
+    ])
+
+    return { color }
+  })
+
+  const $animatedTextStyle1 = useAnimatedStyle(() => {
+    const color = interpolateColor(scrollX.value, inputRange, [
+      colors.palette.neutral100,
+      colors.palette.neutral900,
+      colors.palette.neutral100,
+    ])
+
+    return { color }
+  })
+
+  const $animatedTextStyle2 = useAnimatedStyle(() => {
+    const color = interpolateColor(scrollX.value, inputRange, [
+      colors.palette.neutral100,
+      colors.palette.neutral100,
+      colors.palette.neutral900,
+    ])
+
+    return { color }
+  })
+
   return (
     <View ref={containerRef} style={$wrapperStyle}>
       {measures.length > 0 && <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />}
@@ -72,12 +108,16 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
           }}
           style={$buttonStyle}
         >
-          <Text
-            preset="companionHeading"
-            style={[$textStyle, selectedSchedule.date === schedule.date && $textSelectedStyle]}
+          <Animated.Text
+            style={[
+              $textStyle,
+              index === 0 && $animatedTextStyle0,
+              index === 1 && $animatedTextStyle1,
+              index === 2 && $animatedTextStyle2,
+            ]}
           >
             {formatDate(schedule.date, "EE")}
-          </Text>
+          </Animated.Text>
         </Pressable>
       ))}
     </View>
@@ -100,12 +140,9 @@ const $buttonBaseStyle: ViewStyle = {
 
 const $textStyle: TextStyle = {
   color: colors.palette.neutral100,
+  fontFamily: typography.primary.medium,
   fontSize: 16,
   lineHeight: 22.4,
-}
-
-const $textSelectedStyle: TextStyle = {
-  color: colors.palette.neutral900,
 }
 
 const $wrapperStyle: ViewStyle[] = [
