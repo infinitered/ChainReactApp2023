@@ -16,6 +16,7 @@ import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
   scrollTo,
+  runOnJS,
 } from "react-native-reanimated"
 
 const { width } = Dimensions.get("screen")
@@ -33,7 +34,6 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
   const updateSchedule = (index) => setSelectedSchedule(schedules[index])
 
   const scrollX = useSharedValue(0)
-  // const ref = React.useRef(null)
   const ref = useAnimatedRef()
   const scrollHandler = useAnimatedScrollHandler(
     {
@@ -47,12 +47,16 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
 
         // Divide the horizontal offset by the width of the view to see which page is visible
         const index = Math.floor(contentOffset.x / viewSize.width)
-        // updateSchedule(index)
+
+        // ? Why does this work this way with MST?
+        // Just passing runOnJS(setSelectedSchedule)(schedules[index]) here results in an MST error
+        runOnJS(updateSchedule)(index)
       },
     },
     // [updateSchedule],
   )
 
+  // TODO figure out reanimated scrollTo
   const onItemPress = React.useCallback(
     (itemIndex) => {
       scrollTo(ref, itemIndex * width, 0, true)
@@ -67,8 +71,6 @@ export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function 
     <>
       <View style={$root}>
         <Animated.FlatList
-          // contentContainerStyle={{ height: 200 }}
-          // ref={ref}
           data={schedules}
           keyExtractor={(item) => item.date}
           horizontal
