@@ -7,9 +7,9 @@ import Animated, {
   interpolate,
   interpolateColor,
 } from "react-native-reanimated"
-import { Text } from "../../components"
 import { useStores } from "../../models"
 import { colors, spacing, typography } from "../../theme"
+import { reportCrash } from "../../utils/crashReporting"
 import { formatDate } from "../../utils/formatDate"
 
 type Props = {
@@ -33,9 +33,9 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
   const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
   const itemRefs = schedules.map((_) => React.createRef<View>())
 
-  React.useEffect(() => {
+  const onLayout = React.useCallback(() => {
     const m = []
-    schedules.map((_, index) => {
+    schedules.every((_, index) => {
       itemRefs[index].current.measureLayout(
         containerRef.current,
         (x, y, width, height) => {
@@ -45,10 +45,13 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
             setMeasures(m)
           }
         },
-        () => {},
+        () => {
+          reportCrash("ScheduleDayPicker-unable to measureLayout")
+        },
       )
+      return true
     })
-  }, [])
+  }, [itemRefs])
 
   const inputRange = schedules.map((_, index) => index * width)
 
@@ -96,7 +99,7 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
   })
 
   return (
-    <View ref={containerRef} style={$wrapperStyle}>
+    <View ref={containerRef} style={$wrapperStyle} onLayout={onLayout}>
       {measures.length > 0 && <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />}
       {schedules.map((schedule, index) => (
         <Pressable
