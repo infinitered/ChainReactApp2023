@@ -141,10 +141,6 @@ const $cardContainer: ViewStyle = {
   paddingBottom: spacing.large,
 }
 
-const $listContainer: ViewStyle = {
-  height: "100%",
-}
-
 const $headingContainer: ViewStyle = {
   paddingBottom: spacing.large,
 }

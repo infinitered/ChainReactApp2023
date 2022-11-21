@@ -199,7 +199,7 @@ export function Card(props: CardProps) {
         setCardWidth(e.nativeEvent.layout.width)
       }}
     >
-      <View style={[$offsetContainer]}>
+      <View style={$offsetContainer}>
         <Image
           style={[$offsetStyle, { height: cardHeight, width: cardWidth - spacing.tiny }]}
           resizeMode="stretch"
