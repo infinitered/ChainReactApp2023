@@ -17,7 +17,7 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated"
 
-const { width } = Dimensions.get("screen")
+const { width } = Dimensions.get("window")
 
 export const ScheduleScreen: FC<TabScreenProps<"Schedule">> = observer(function ScheduleScreen() {
   useHeader({ title: "Schedule" })
