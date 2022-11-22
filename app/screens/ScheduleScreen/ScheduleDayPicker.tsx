@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import React, { FC } from "react"
+import React, { FC, MutableRefObject } from "react"
 import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
 import Animated, {
   useAnimatedStyle,
@@ -12,14 +12,50 @@ import { colors, spacing, typography } from "../../theme"
 import { reportCrash } from "../../utils/crashReporting"
 import { formatDate } from "../../utils/formatDate"
 
-type Props = {
+const { width } = Dimensions.get("window")
+
+type AnimatedDayButtonProps = {
+  onPress: () => void
+  index: number
+  text: string
+  scrollX: SharedValue<number>
+  inputRange: number[]
+}
+
+const AnimatedDayButton = observer(
+  React.forwardRef(
+    (
+      { onPress, index, text, scrollX, inputRange }: AnimatedDayButtonProps,
+      ref: MutableRefObject<View>,
+    ) => {
+      const { schedulesStore } = useStores()
+      const { schedules } = schedulesStore
+
+      const outputRange = schedules.map((_, scheduleIndex) =>
+        index === scheduleIndex ? colors.palette.neutral900 : colors.palette.neutral100,
+      )
+
+      const $animatedTextStyle = useAnimatedStyle(() => {
+        const color = interpolateColor(scrollX.value, inputRange, outputRange)
+
+        return { color }
+      })
+
+      return (
+        <Pressable {...{ ref, onPress }} style={$buttonStyle}>
+          <Animated.Text style={[$textStyle, $animatedTextStyle]}>{text}</Animated.Text>
+        </Pressable>
+      )
+    },
+  ),
+)
+
+type ScheduleDayPickerProps = {
   scrollX: SharedValue<number>
   onItemPress: (itemIndex) => void
 }
 
-const { width } = Dimensions.get("window")
-
-export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker({
+export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = observer(function ScheduleDayPicker({
   scrollX,
   onItemPress,
 }) {
@@ -68,60 +104,20 @@ export const ScheduleDayPicker: FC<Props> = observer(function ScheduleDayPicker(
     }
   }, [inputRange, scrollX, measures])
 
-  const $animatedTextStyle0 = useAnimatedStyle(() => {
-    const color = interpolateColor(scrollX.value, inputRange, [
-      colors.palette.neutral900,
-      colors.palette.neutral100,
-      colors.palette.neutral100,
-    ])
-
-    return { color }
-  })
-
-  const $animatedTextStyle1 = useAnimatedStyle(() => {
-    const color = interpolateColor(scrollX.value, inputRange, [
-      colors.palette.neutral100,
-      colors.palette.neutral900,
-      colors.palette.neutral100,
-    ])
-
-    return { color }
-  })
-
-  const $animatedTextStyle2 = useAnimatedStyle(() => {
-    const color = interpolateColor(scrollX.value, inputRange, [
-      colors.palette.neutral100,
-      colors.palette.neutral100,
-      colors.palette.neutral900,
-    ])
-
-    return { color }
-  })
-
   return (
     <View ref={containerRef} style={$wrapperStyle} onLayout={onLayout}>
       {measures.length > 0 && <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />}
       {schedules.map((schedule, index) => (
-        <Pressable
+        <AnimatedDayButton
           key={schedule.date}
           ref={itemRefs[index]}
           onPress={() => {
             onItemPress(index)
             setSelectedSchedule(schedule)
           }}
-          style={$buttonStyle}
-        >
-          <Animated.Text
-            style={[
-              $textStyle,
-              index === 0 && $animatedTextStyle0,
-              index === 1 && $animatedTextStyle1,
-              index === 2 && $animatedTextStyle2,
-            ]}
-          >
-            {formatDate(schedule.date, "EE")}
-          </Animated.Text>
-        </Pressable>
+          text={formatDate(schedule.date, "EE")}
+          {...{ index, scrollX, inputRange }}
+        />
       ))}
     </View>
   )
