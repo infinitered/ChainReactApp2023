@@ -190,16 +190,18 @@ export function Card(props: CardProps) {
   const $offsetStyle = [$offsetPresets[preset]]
 
   const [cardHeight, setCardHeight] = React.useState(null)
+  const [cardWidth, setCardWidth] = React.useState(null)
 
   return (
     <View
       onLayout={(e) => {
         setCardHeight(e.nativeEvent.layout.height)
+        setCardWidth(e.nativeEvent.layout.width)
       }}
     >
       <View style={$offsetContainer}>
         <Image
-          style={[$offsetStyle, { height: cardHeight }]}
+          style={[$offsetStyle, { height: cardHeight, width: cardWidth - spacing.tiny }]}
           resizeMode="stretch"
           source={cardOffset}
         />
@@ -265,7 +267,6 @@ const $containerBase: ViewStyle = {
   borderWidth: 1,
   flexDirection: "row",
   zIndex: 2,
-  elevation: 2,
   marginRight: spacing.tiny,
 }
 
@@ -302,7 +303,6 @@ const $offsetContainer: ViewStyle = {
   position: "absolute",
   left: spacing.tiny,
   top: spacing.tiny,
-  elevation: 1,
   zIndex: 1,
 }
 

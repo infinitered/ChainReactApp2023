@@ -191,7 +191,7 @@ const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
 }
 
 const $baseShadowStyle: ViewStyle = {
-  paddingBottom: 4,
+  paddingBottom: spacing.tiny,
   borderRadius: 100,
   borderColor: colors.palette.neutral500,
 }

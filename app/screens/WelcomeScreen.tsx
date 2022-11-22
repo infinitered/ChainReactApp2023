@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite"
 import React from "react"
-import { Dimensions, Image, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { Dimensions, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Button, Screen, Text } from "../components"
 import { useAppNavigation } from "../hooks"
@@ -8,6 +8,7 @@ import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
 
 const welcomeLogo = require("../../assets/images/welcome-shapes.png")
+const { width: screenWidth } = Dimensions.get("screen")
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
@@ -76,12 +77,21 @@ const $bottomContainer: ViewStyle = {
   borderTopRightRadius: 16,
 }
 
-const $bottomContentContainer: ViewStyle = {
-  flex: 1,
-  paddingHorizontal: Dimensions.get("screen").width * 0.25,
-  paddingBottom: spacing.large,
-  justifyContent: "flex-end",
-}
+const $bottomContentContainer: ViewStyle = Platform.select({
+  ios: {
+    flex: 1,
+    paddingHorizontal: screenWidth * 0.25,
+    paddingBottom: spacing.large,
+    justifyContent: "flex-end",
+  },
+  android: {
+    flex: 1,
+    width: screenWidth * 0.5,
+    paddingBottom: spacing.large,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+})
 
 const $welcomeLogo: ImageStyle = {
   width: "100%",

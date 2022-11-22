@@ -12,14 +12,14 @@
       {
         "variant": "workshop",
         "time": "6:00 — 8:00 am",
-        "eventTitle": "Check-in & Registration",
-        "heading": "Gant Laborde",
-        "subheading": "Leveling up on the new architecture"
+        "eventTitle": "Advanced Workshop",
+        "subheading": "Gant Laborde",
+        "heading": "Leveling up on the new architecture"
       },
       {
         "variant": "talk",
         "time": "6:00 — 8:00 am",
-        "eventTitle": "Check-in & Registration",
+        "eventTitle": "talk",
         "heading": "Ferran Negre Pizarro",
         "subheading": "React Native case study: from an idea to market"
       }
