@@ -22,33 +22,31 @@ type AnimatedDayButtonProps = {
   inputRange: number[]
 }
 
-const AnimatedDayButton = observer(
-  React.forwardRef(
-    (
-      { onPress, index, text, scrollX, inputRange }: AnimatedDayButtonProps,
-      ref: MutableRefObject<View>,
-    ) => {
-      const { schedulesStore } = useStores()
-      const { schedules } = schedulesStore
+const AnimatedDayButtonRef = React.forwardRef(
+  (props: AnimatedDayButtonProps, ref: MutableRefObject<View>) => {
+    const { onPress, index, text, scrollX, inputRange } = props
+    const { schedulesStore } = useStores()
+    const { schedules } = schedulesStore
+    const outputRange = schedules.map((_, scheduleIndex) =>
+      index === scheduleIndex ? colors.palette.neutral900 : colors.palette.neutral100,
+    )
 
-      const outputRange = schedules.map((_, scheduleIndex) =>
-        index === scheduleIndex ? colors.palette.neutral900 : colors.palette.neutral100,
-      )
+    const $animatedTextStyle = useAnimatedStyle(() => {
+      const color = interpolateColor(scrollX.value, inputRange, outputRange)
 
-      const $animatedTextStyle = useAnimatedStyle(() => {
-        const color = interpolateColor(scrollX.value, inputRange, outputRange)
+      return { color }
+    })
 
-        return { color }
-      })
-
-      return (
-        <Pressable {...{ ref, onPress }} style={$buttonStyle}>
-          <Animated.Text style={[$textStyle, $animatedTextStyle]}>{text}</Animated.Text>
-        </Pressable>
-      )
-    },
-  ),
+    return (
+      <Pressable {...{ ref, onPress }} style={$buttonStyle}>
+        <Animated.Text style={[$textStyle, $animatedTextStyle]}>{text}</Animated.Text>
+      </Pressable>
+    )
+  },
 )
+
+AnimatedDayButtonRef.displayName = "AnimatedDayButton"
+const AnimatedDayButton = observer(AnimatedDayButtonRef)
 
 type ScheduleDayPickerProps = {
   scrollX: SharedValue<number>
