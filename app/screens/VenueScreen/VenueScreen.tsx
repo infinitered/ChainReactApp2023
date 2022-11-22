@@ -1,16 +1,22 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, ViewStyle } from "react-native"
-import { Screen, Text } from "../../components"
+import { CarouselCard, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
-import { VenueCard } from "./VenueCard"
+import { useOpenMap } from "../../utils/useOpenMap"
 
 export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(
   function VenueScreen() {
     useHeader({ title: translate("VenueScreen.title") })
+
+    const openMap = useOpenMap()
+
+    const openLink = async () => {
+      await openMap("11134 Washington St #302", "97006", "Portland")
+    }
 
     return (
       <Screen style={$root} preset="scroll" contentContainerStyle={$container}>
@@ -18,14 +24,14 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(
           {translate("VenueScreen.conferenceAndWorkshopVenues")}
         </Text>
 
-        <VenueCard
+        <CarouselCard
           coverImage={{ uri: "https://placekitten.com/g/358/274" }}
-          eventTitle="Conference • May 18-19"
-          place="The Armory"
-          address="11134 Washington St #302"
-          city="Portland"
-          zipCode="97006"
-          state="OR"
+          meta="Conference • May 18-19"
+          title="The Armory"
+          description="11134 Washington St #302, Portland, OR 97006"
+          leftButton={
+            <CarouselCard.Link text="Open in Maps" openLink={openLink} />
+          }
         />
       </Screen>
     )
