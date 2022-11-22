@@ -122,6 +122,8 @@ const $presets = {
   formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.book] as StyleProp<TextStyle>,
 
   eventTitle: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
+
+  tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}

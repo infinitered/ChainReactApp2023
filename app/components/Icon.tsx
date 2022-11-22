@@ -12,7 +12,7 @@ import {
 
 export type IconTypes = keyof typeof iconRegistry
 
-interface IconProps extends TouchableOpacityProps {
+export interface IconProps extends TouchableOpacityProps {
   /**
    * The name of the icon
    */
@@ -91,9 +91,12 @@ export const iconRegistry = {
   caretRight: require("../../assets/icons/caretRight.png"),
   check: require("../../assets/icons/check.png"),
   explore: require("../../assets/icons/explore.png"),
+  github: require("../../assets/icons/github.png"),
   info: require("../../assets/icons/info.png"),
   ladybug: require("../../assets/icons/ladybug.png"),
+  link: require("../../assets/icons/link.png"),
   schedule: require("../../assets/icons/schedule.png"),
+  twitter: require("../../assets/icons/twitter.png"),
   venue: require("../../assets/icons/venue.png"),
 }
 
