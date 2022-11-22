@@ -107,8 +107,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce(
 const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
   $fontWeightStyles.book,
-  { color: colors.text },
-  { lineHeight: 22.4 },
+  { color: colors.text, lineHeight: 22.4 },
 ]
 
 const $secondaryFontWeightStyles = Object.entries(typography.secondary).reduce(
@@ -155,12 +154,6 @@ const $presets = {
     $fontWeightStyles.book,
   ] as StyleProp<TextStyle>,
 
-  eventTitle: [
-    $baseSecondaryStyle,
-    $sizeStyles.xxs,
-    $secondaryFontWeightStyles.medium,
-  ],
-
   link: [
     $baseSecondaryStyle,
     $sizeStyles.xxs,
@@ -172,7 +165,15 @@ const $presets = {
     $sizeStyles.xxs,
     $secondaryFontWeightStyles.medium,
     { color: colors.palette.primary500, textTransform: "uppercase" },
+  ] as StyleProp<TextStyle>,
+
+  eventTitle: [
+    $baseSecondaryStyle,
+    $sizeStyles.xxs,
+    $secondaryFontWeightStyles.medium,
   ],
+
+  tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
