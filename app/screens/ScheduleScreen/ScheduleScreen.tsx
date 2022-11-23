@@ -17,6 +17,7 @@ import ScheduleCard, { ScheduleCardProps, Variants } from "./ScheduleCard"
 import { useStores } from "../../models"
 import { formatDate } from "../../utils/formatDate"
 import { useAppNavigation, useAppState } from "../../hooks"
+import { format } from "date-fns"
 
 const { width } = Dimensions.get("window")
 
@@ -26,17 +27,18 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = observer(
 
     const navigation = useAppNavigation()
     const { schedulesStore } = useStores()
-    const { fetchData, setSelectedSchedule, selectedSchedule, schedules } = schedulesStore
+    const { fetchData, setSelectedSchedule, selectedSchedule, schedules, getScheduleIndex } =
+      schedulesStore
     const hScrollRef = React.useRef(null)
     const scheduleListRefs = React.useMemo(() => {
       return Object.fromEntries(
         schedules.map((s) => [s.date, React.createRef<FlashList<ScheduleCardProps>>()]),
       )
     }, [])
+
+    const currentDate = format(new Date(), "yyyy-MM-dd")
+
     const scrollX = useSharedValue(0)
-    const currentScheduleIndex = schedules.findIndex(
-      (schedule) => schedule.date === selectedSchedule.date,
-    )
     const isFocused = useIsFocused()
 
     React.useLayoutEffect(() => {
@@ -45,40 +47,33 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = observer(
 
     const updateSchedule = React.useCallback(
       (index) => {
-        console.tron.log("running update schedule", index, currentScheduleIndex)
-        if (index !== currentScheduleIndex) {
-          setSelectedSchedule(schedules[index])
-        }
+        setSelectedSchedule(schedules[index])
       },
-      [schedules, currentScheduleIndex],
+      [schedules],
     )
 
     const onItemPress = React.useCallback(
       (itemIndex) => {
-        // TODO already on this index? scrollToTop
-        // console.tron.log({ currentScheduleIndex, itemIndex })
-        // if (currentScheduleIndex === itemIndex) {
-        //   scheduleListRefs[schedules[currentScheduleIndex].date]?.current?.scrollToOffset({
-        //     animated: true,
-        //     offset: 0,
-        //   })
-        //   updateSchedule(itemIndex)
-        // } else {
-        hScrollRef?.current?.scrollToOffset({ offset: itemIndex * width })
-        // }
+        const currentIndex = getScheduleIndex()
+        if (currentIndex === itemIndex) {
+          scheduleListRefs[schedules[currentIndex].date]?.current?.scrollToOffset({
+            animated: true,
+            offset: 0,
+          })
+        } else {
+          hScrollRef?.current?.scrollToOffset({ offset: itemIndex * width })
+        }
       },
-      // [hScrollRef, currentScheduleIndex],
-      [hScrollRef],
+      [hScrollRef, getScheduleIndex],
     )
 
     const navigateToCurrentDay = React.useCallback(() => {
       // Check if current date is in list of conference days
       // If it is, navigate to that schedule's day
       // If not, just skip and pick up where the user left off
-      const currentDate = "2023-05-19"
       const conferenceDates = schedules.map((x) => x.date)
-      console.tron.log({ currentDate, conferenceDates })
       const scheduleIndex = conferenceDates.findIndex((date) => date === currentDate)
+
       if (scheduleIndex > -1) {
         setTimeout(() => {
           onItemPress(scheduleIndex)
@@ -89,7 +84,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = observer(
       // setTimeout(() => {
       //   scheduleListRefs[schedules[0].date]?.current?.scrollToIndex({ animated: true, index: 2 })
       // }, 100)
-    }, [navigation, onItemPress, scheduleListRefs])
+    }, [onItemPress, scheduleListRefs, schedules, currentDate])
 
     // When app comes from the background to the foreground, focus on the current day in the schedule
     useAppState({
@@ -109,10 +104,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = observer(
         },
         onMomentumEnd: (event) => {
           const contentOffset = event.contentOffset
-          const viewSize = event.layoutMeasurement
 
           // Divide the horizontal offset by the width of the view to see which page is visible
-          const index = Math.floor(contentOffset.x / viewSize.width)
+          const index = Math.floor(contentOffset.x / width)
 
           // ! isFocused check for iOS, see details here: https://github.com/software-mansion/react-native-screens/issues/1183
           if (isFocused) {

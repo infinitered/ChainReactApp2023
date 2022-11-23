@@ -22,6 +22,11 @@ export const SchedulesStoreModel = types
       }
     },
   }))
+  .views((self) => ({
+    getScheduleIndex() {
+      return self.schedules.findIndex((schedule) => schedule.date === self.selectedSchedule.date)
+    },
+  }))
 
 export interface SchedulesStore extends Instance<typeof SchedulesStoreModel> {}
 export interface SchedulesStoreSnapshot extends SnapshotOut<typeof SchedulesStoreModel> {}

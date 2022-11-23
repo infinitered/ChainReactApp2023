@@ -9,7 +9,7 @@ type UseAppStateProps = {
 
 export function useAppState({ match, nextAppState, callback }: UseAppStateProps) {
   const appState = React.useRef(AppState.currentState)
-  const [appStateVisible, setAppStateVisible] = React.useState(appState.current)
+  const [_, setAppStateVisible] = React.useState(appState.current)
 
   React.useEffect(() => {
     // First time check (opening App from a killed state)
@@ -25,8 +25,9 @@ export function useAppState({ match, nextAppState, callback }: UseAppStateProps)
   }, [])
 
   const _handleAppStateChange = (newAppState) => {
+    // If the state we're coming from matches and
+    // the next state is the desired one, fire callback
     if (appState.current.match(match) && newAppState === nextAppState) {
-      console.tron.log(`App has changed state to ${nextAppState} from ${appStateVisible}`)
       callback()
     }
 
