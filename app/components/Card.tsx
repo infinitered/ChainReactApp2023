@@ -202,7 +202,6 @@ export function Card(props: CardProps) {
       <View style={$offsetContainer}>
         <Image
           style={[$offsetStyle, { height: cardHeight, width: cardWidth - spacing.tiny }]}
-          resizeMode="stretch"
           source={cardOffset}
         />
       </View>
@@ -294,6 +293,8 @@ const $offsetPresets = {
 
   reversed: [
     {
+      borderColor: colors.palette.primary500,
+      borderWidth: 1,
       tintColor: colors.palette.primary500,
     },
   ] as StyleProp<ImageStyle>,
