@@ -30,7 +30,7 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(
           title="The Armory"
           description="11134 Washington St #302, Portland, OR 97006"
           leftButton={
-            <CarouselCard.Link text="Open in Maps" openLink={openLink} />
+            <CarouselCard.Link text="Open in maps" openLink={openLink} />
           }
         />
       </Screen>
