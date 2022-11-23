@@ -171,7 +171,6 @@ const $baseTextStyle: TextStyle = {
 const $linkTextStyle: TextStyle = {
   color: colors.palette.primary500,
   fontSize: 16,
-  lineHeight: 22.4,
   fontFamily: typography.primary.medium,
   textAlign: "center",
 }

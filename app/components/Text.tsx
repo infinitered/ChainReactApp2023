@@ -107,7 +107,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce(
 const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
   $fontWeightStyles.book,
-  { color: colors.text, lineHeight: 22.4 },
+  { color: colors.text, lineHeight: 22 },
 ]
 
 const $secondaryFontWeightStyles = Object.entries(typography.secondary).reduce(

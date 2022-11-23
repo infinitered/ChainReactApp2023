@@ -115,7 +115,6 @@ const $avatar: ViewStyle = {
 
 const $footerSubheading: TextStyle = {
   color: colors.palette.neutral900,
-  lineHeight: 22.4,
 }
 
 const $timeText: TextStyle = {
