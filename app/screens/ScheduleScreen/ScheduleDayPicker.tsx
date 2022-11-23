@@ -58,7 +58,7 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = observer(function S
   onItemPress,
 }) {
   const { schedulesStore } = useStores()
-  const { setSelectedSchedule, schedules, selectedSchedule } = schedulesStore
+  const { schedules, selectedSchedule } = schedulesStore
   const wrapperWidth = width - spacing.extraSmall * 2
   const widthSize = wrapperWidth / schedules.length
   const index = schedules.findIndex((s) => s.date === selectedSchedule.date)
@@ -111,7 +111,6 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = observer(function S
           ref={itemRefs[index]}
           onPress={() => {
             onItemPress(index)
-            setSelectedSchedule(schedule)
           }}
           text={formatDate(schedule.date, "EE")}
           {...{ index, scrollX, inputRange }}

@@ -17,7 +17,9 @@ export const SchedulesStoreModel = types
   .actions((self) => ({
     fetchData() {
       self.schedules.replace(data as any)
-      self.setSelectedSchedule(self.schedules[0])
+      if (!self.selectedSchedule) {
+        self.setSelectedSchedule(self.schedules[0])
+      }
     },
   }))
 
