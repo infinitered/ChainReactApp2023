@@ -30,15 +30,15 @@ export const CarouselCard: FC<CarouselCardProps> & SubComponents = ({
 }) => {
   return (
     <>
-      <AutoImage style={$venueImageStyles} source={coverImage}></AutoImage>
-      <Text preset="primaryLabel" style={$eventDetailsStyles}>
+      <AutoImage style={$venueImage} source={coverImage}></AutoImage>
+      <Text preset="primaryLabel" style={$eventDetails}>
         {meta}
       </Text>
-      <Text preset="bold" style={$placeStyles}>
+      <Text preset="bold" style={$place}>
         {title}
       </Text>
       {typeof description === "function" ? { description } : <Text>{description}</Text>}
-      <View style={$ctaContainerStyles}>
+      <View style={$ctaContainer}>
         {leftButton}
         {rightButton}
       </View>
@@ -61,21 +61,21 @@ const Link: VFC<LinkProps> = ({ openLink, text }) => {
 
 CarouselCard.Link = Link
 
-const $venueImageStyles: ImageStyle = {
+const $venueImage: ImageStyle = {
   borderRadius: 4,
   maxHeight: 274,
   maxWidth: 358,
 }
 
-const $eventDetailsStyles: TextStyle = {
+const $eventDetails: TextStyle = {
   marginVertical: spacing.medium,
 }
 
-const $placeStyles: TextStyle = {
+const $place: TextStyle = {
   marginBottom: spacing.extraSmall,
 }
 
-const $ctaContainerStyles: ViewStyle = {
+const $ctaContainer: ViewStyle = {
   flexDirection: "row",
   marginTop: spacing.large,
 }
