@@ -6,12 +6,10 @@ import { TabScreenProps } from "../../navigators/TabNavigator"
 import { spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
-import { useOpenMap } from "../../utils/useOpenMap"
+import { openMap } from "../../utils/openMap"
 
 export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueScreen() {
   useHeader({ title: translate("VenueScreen.title") })
-
-  const openMap = useOpenMap()
 
   const openLink = async () => {
     await openMap("11134 Washington St #302", "97006", "Portland")
