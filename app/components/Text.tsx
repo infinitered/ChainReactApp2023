@@ -90,7 +90,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weigh
 const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
   $fontWeightStyles.book,
-  { color: colors.text },
+  { color: colors.text, lineHeight: 22 },
 ]
 
 const $secondaryFontWeightStyles = Object.entries(typography.secondary).reduce(
@@ -120,6 +120,15 @@ const $presets = {
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.book] as StyleProp<TextStyle>,
+
+  link: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
+
+  primaryLabel: [
+    $baseSecondaryStyle,
+    $sizeStyles.xxs,
+    $secondaryFontWeightStyles.medium,
+    { color: colors.palette.primary500, textTransform: "uppercase" },
+  ] as StyleProp<TextStyle>,
 
   eventTitle: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
 

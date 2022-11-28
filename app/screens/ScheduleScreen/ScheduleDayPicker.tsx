@@ -138,7 +138,6 @@ const $textStyle: TextStyle = {
   color: colors.palette.neutral100,
   fontFamily: typography.primary.medium,
   fontSize: 16,
-  lineHeight: 22.4,
 }
 
 const $wrapperStyle: ViewStyle[] = [
