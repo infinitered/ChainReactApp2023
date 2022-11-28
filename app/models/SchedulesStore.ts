@@ -17,7 +17,14 @@ export const SchedulesStoreModel = types
   .actions((self) => ({
     fetchData() {
       self.schedules.replace(data as any)
-      self.setSelectedSchedule(self.schedules[0])
+      if (!self.selectedSchedule) {
+        self.setSelectedSchedule(self.schedules[0])
+      }
+    },
+  }))
+  .views((self) => ({
+    getScheduleIndex() {
+      return self.schedules.findIndex((schedule) => schedule.date === self.selectedSchedule.date)
     },
   }))
 
