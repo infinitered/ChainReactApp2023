@@ -32,9 +32,9 @@ const en = {
   },
   VenueScreen: {
     title: "Venue",
-    conferenceAndWorkshopVenues: 'Conference and workshop venues',
-    thanksToThisYearsSponsors: 'Thanks to this year\'s sponsors'
-  }
+    conferenceAndWorkshopVenues: "Conference and workshop venues",
+    thanksToThisYearsSponsors: "Thanks to this year's sponsors",
+  },
 }
 
 export default en

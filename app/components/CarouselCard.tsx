@@ -1,11 +1,5 @@
 import React, { FC, VFC } from "react"
-import {
-  GestureResponderEvent,
-  ImageStyle,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native"
+import { GestureResponderEvent, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { AutoImage } from "./AutoImage"
 import { Text } from "./Text"
 import { ButtonLink } from "./ButtonLink"
@@ -43,11 +37,7 @@ export const CarouselCard: FC<CarouselCardProps> & SubComponents = ({
       <Text preset="bold" style={$placeStyles}>
         {title}
       </Text>
-      {typeof description === "function" ? (
-        { description }
-      ) : (
-        <Text>{description}</Text>
-      )}
+      {typeof description === "function" ? { description } : <Text>{description}</Text>}
       <View style={$ctaContainerStyles}>
         {leftButton}
         {rightButton}

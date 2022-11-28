@@ -1,11 +1,6 @@
 import i18n from "i18n-js"
 import React from "react"
-import {
-  StyleProp,
-  Text as RNText,
-  TextProps as RNTextProps,
-  TextStyle,
-} from "react-native"
+import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
 import { isRTL, translate, TxKeyPath } from "../i18n"
 import { colors, typography } from "../theme"
 
@@ -56,16 +51,7 @@ export interface TextProps extends RNTextProps {
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Text.md)
  */
 export function Text(props: TextProps) {
-  const {
-    weight,
-    size,
-    tx,
-    txOptions,
-    text,
-    children,
-    style: $styleOverride,
-    ...rest
-  } = props
+  const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
 
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
@@ -97,12 +83,9 @@ const $sizeStyles = {
   xxs: { fontSize: 12, lineHeight: 13.2 } as TextStyle,
 }
 
-const $fontWeightStyles = Object.entries(typography.primary).reduce(
-  (acc, [weight, fontFamily]) => {
-    return { ...acc, [weight]: { fontFamily } }
-  },
-  {}
-) as Record<Weights, TextStyle>
+const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weight, fontFamily]) => {
+  return { ...acc, [weight]: { fontFamily } }
+}, {}) as Record<Weights, TextStyle>
 
 const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
@@ -114,7 +97,7 @@ const $secondaryFontWeightStyles = Object.entries(typography.secondary).reduce(
   (acc, [weight, fontFamily]) => {
     return { ...acc, [weight]: { fontFamily } }
   },
-  {}
+  {},
 ) as Record<Weights, TextStyle>
 
 const $baseSecondaryStyle: StyleProp<TextStyle> = [
@@ -128,37 +111,17 @@ const $presets = {
 
   bold: [$baseStyle, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
-  heading: [
-    $baseStyle,
-    $sizeStyles.xxxl,
-    $fontWeightStyles.bold,
-  ] as StyleProp<TextStyle>,
+  heading: [$baseStyle, $sizeStyles.xxxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
-  companionHeading: [
-    $baseStyle,
-    $sizeStyles.md,
-    $fontWeightStyles.medium,
-  ] as StyleProp<TextStyle>,
+  companionHeading: [$baseStyle, $sizeStyles.md, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
-  subheading: [
-    $baseStyle,
-    $sizeStyles.lg,
-    $fontWeightStyles.medium,
-  ] as StyleProp<TextStyle>,
+  subheading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
-  formHelper: [
-    $baseStyle,
-    $sizeStyles.sm,
-    $fontWeightStyles.book,
-  ] as StyleProp<TextStyle>,
+  formHelper: [$baseStyle, $sizeStyles.sm, $fontWeightStyles.book] as StyleProp<TextStyle>,
 
-  link: [
-    $baseSecondaryStyle,
-    $sizeStyles.xxs,
-    $secondaryFontWeightStyles.medium,
-  ],
+  link: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
 
   primaryLabel: [
     $baseSecondaryStyle,
@@ -167,11 +130,7 @@ const $presets = {
     { color: colors.palette.primary500, textTransform: "uppercase" },
   ] as StyleProp<TextStyle>,
 
-  eventTitle: [
-    $baseSecondaryStyle,
-    $sizeStyles.xxs,
-    $secondaryFontWeightStyles.medium,
-  ],
+  eventTitle: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
 
   tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
 }

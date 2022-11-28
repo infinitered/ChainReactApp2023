@@ -25,10 +25,7 @@ export const ButtonLink: FC<Props> = ({ children, style, ...props }) => {
       accessibilityRole="link"
       style={style}
       RightAccessory={() => (
-        <AutoImage
-          source={require("../../assets/icons/arrows.png")}
-          style={$arrow}
-        />
+        <AutoImage source={require("../../assets/icons/arrows.png")} style={$arrow} />
       )}
     >
       {children}
