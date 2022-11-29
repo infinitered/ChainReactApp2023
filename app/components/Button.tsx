@@ -140,6 +140,12 @@ const $baseViewStyle: ViewStyle = {
   overflow: "hidden",
 }
 
+const $linkStyle: ViewStyle = {
+  alignItems: "center",
+  flexDirection: "row",
+  overflow: "hidden",
+}
+
 const $baseTextStyle: TextStyle = {
   color: colors.palette.neutral500,
   fontSize: 16,
@@ -151,8 +157,21 @@ const $baseTextStyle: TextStyle = {
   zIndex: 2,
 }
 
-const $rightAccessoryStyle: ViewStyle = { marginStart: spacing.extraSmall, zIndex: 1 }
-const $leftAccessoryStyle: ViewStyle = { marginEnd: spacing.extraSmall, zIndex: 1 }
+const $linkTextStyle: TextStyle = {
+  color: colors.palette.primary500,
+  fontSize: 16,
+  fontFamily: typography.primary.medium,
+  textAlign: "center",
+}
+
+const $rightAccessoryStyle: ViewStyle = {
+  marginStart: spacing.extraSmall,
+  zIndex: 1,
+}
+const $leftAccessoryStyle: ViewStyle = {
+  marginEnd: spacing.extraSmall,
+  zIndex: 1,
+}
 
 const $viewPresets = {
   default: [
@@ -170,24 +189,30 @@ const $viewPresets = {
   //   $baseViewStyle,
   //   { backgroundColor: colors.palette.neutral100 },
   // ] as StyleProp<ViewStyle>,
+
+  link: [$linkStyle] as StyleProp<ViewStyle>,
 }
 
 const $textPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: $baseTextStyle,
   // filled: $baseTextStyle,
   // reversed: [$baseTextStyle, { color: colors.palette.neutral100 }],
+
+  link: $linkTextStyle,
 }
 
 const $pressedViewPresets: Record<Presets, StyleProp<ViewStyle>> = {
   default: { backgroundColor: colors.palette.neutral100, opacity: 0.65 },
   // filled: { backgroundColor: colors.palette.neutral300 },
   // reversed: { backgroundColor: colors.palette.neutral500 },
+  link: null,
 }
 
 const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: { opacity: 0.9 },
   // filled: { opacity: 0.9 },
   // reversed: { opacity: 0.9 },
+  link: null,
 }
 
 const $baseShadowStyle: ViewStyle = {
@@ -203,4 +228,5 @@ const $shadowPresets = {
       backgroundColor: colors.palette.primary500,
     },
   ] as StyleProp<ViewStyle>,
+  link: null,
 }
