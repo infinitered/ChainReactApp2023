@@ -226,7 +226,6 @@ const $shadowPresets = {
     $baseShadowStyle,
     {
       backgroundColor: colors.palette.primary500,
-      flexGrow: 1,
     },
   ] as StyleProp<ViewStyle>,
   link: null,
