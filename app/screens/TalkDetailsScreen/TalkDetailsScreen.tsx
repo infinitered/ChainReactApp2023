@@ -41,12 +41,14 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           onPress={navigation.goBack}
           scrollY={scrollY}
         />
+
         <Animated.ScrollView
           style={[$scrollView, { paddingBottom }]}
           // preset="scroll"
           scrollEventThrottle={16}
           // safeAreaEdges={["bottom"]}
           onScroll={scrollHandler}
+          contentContainerStyle={$scrollContainer}
         >
           <View style={$container}>
             <View style={$containerSpacing}>
@@ -84,9 +86,14 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   },
 )
 
+// TODO: replace 50 with height of the title height + spacing + subtitle height from onLayout in child
 const $scrollView: ViewStyle = {
   paddingTop: MIN_HEADER_HEIGHT + spacing.large + 50,
   backgroundColor: colors.background,
+}
+
+const $scrollContainer: ViewStyle = {
+  paddingBottom: MIN_HEADER_HEIGHT + spacing.extraLarge + 50,
 }
 
 const $container = {
