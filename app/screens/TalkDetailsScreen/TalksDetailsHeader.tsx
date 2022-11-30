@@ -27,7 +27,6 @@ interface TalkDetailsHeaderProps {
 }
 
 const { width } = Dimensions.get("screen")
-console.log(width, width / 2)
 
 export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> =
   function TalkDetailsHeader({ onPress, title, subtitle, scrollY }) {
