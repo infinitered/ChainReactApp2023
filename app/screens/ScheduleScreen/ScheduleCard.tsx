@@ -146,11 +146,10 @@ const $footerContainer: ViewStyle = {
 
 const $rightContainer: ViewStyle = {
   position: "absolute",
-  right: spacing.extraSmall,
+  right: -spacing.extraSmall,
   top: 0,
   bottom: 0,
   width: 200,
-  marginRight: -spacing.medium,
 }
 
 const $arrowContainer: ViewStyle = {

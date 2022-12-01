@@ -1,7 +1,5 @@
 import React, { ComponentType, Fragment, ReactElement } from "react"
 import {
-  Image,
-  ImageStyle,
   StyleProp,
   TextStyle,
   TouchableOpacity,
@@ -10,9 +8,8 @@ import {
   ViewStyle,
 } from "react-native"
 import { colors, spacing } from "../theme"
+import { BoxShadow } from "./BoxShadow"
 import { Text, TextProps } from "./Text"
-
-const cardOffset = require("../../assets/images/card-offset.png")
 
 type Presets = keyof typeof $containerPresets
 
@@ -187,24 +184,9 @@ export function Card(props: CardProps) {
     LeftComponent && { marginLeft: spacing.medium },
     RightComponent && { marginRight: spacing.medium },
   ]
-  const $offsetStyle = [$offsetPresets[preset]]
-
-  const [cardHeight, setCardHeight] = React.useState(null)
-  const [cardWidth, setCardWidth] = React.useState(null)
 
   return (
-    <View
-      onLayout={(e) => {
-        setCardHeight(e.nativeEvent.layout.height)
-        setCardWidth(e.nativeEvent.layout.width)
-      }}
-    >
-      <View style={$offsetContainer}>
-        <Image
-          style={[$offsetStyle, { height: cardHeight, width: cardWidth - spacing.tiny }]}
-          source={cardOffset}
-        />
-      </View>
+    <BoxShadow preset={preset === "default" ? "primary" : "default"}>
       <Wrapper
         style={$containerStyle}
         activeOpacity={0.8}
@@ -256,7 +238,7 @@ export function Card(props: CardProps) {
 
         {RightComponent}
       </Wrapper>
-    </View>
+    </BoxShadow>
   )
 }
 
@@ -265,8 +247,6 @@ const $containerBase: ViewStyle = {
   paddingHorizontal: spacing.large,
   borderWidth: 1,
   flexDirection: "row",
-  zIndex: 2,
-  marginRight: spacing.tiny,
 }
 
 const $alignmentWrapper: ViewStyle = {
@@ -280,32 +260,6 @@ const $alignmentWrapperFlexOptions = {
   "space-between": "space-between",
   "force-footer-bottom": "space-between",
 } as const
-
-const $offsetPresets = {
-  default: [
-    {
-      tintColor: colors.palette.secondary500,
-      backgroundColor: colors.palette.primary500,
-      borderColor: colors.palette.neutral500,
-      borderWidth: 1,
-    },
-  ] as StyleProp<ImageStyle>,
-
-  reversed: [
-    {
-      borderColor: colors.palette.primary500,
-      borderWidth: 1,
-      tintColor: colors.palette.primary500,
-    },
-  ] as StyleProp<ImageStyle>,
-}
-
-const $offsetContainer: ViewStyle = {
-  position: "absolute",
-  left: spacing.tiny,
-  top: spacing.tiny,
-  zIndex: 1,
-}
 
 const $containerPresets = {
   default: [
