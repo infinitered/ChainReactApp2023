@@ -86,7 +86,6 @@ const $bottomContentContainer: ViewStyle = Platform.select({
   },
   android: {
     flex: 1,
-    width: screenWidth * 0.5,
     paddingBottom: spacing.large,
     justifyContent: "center",
     alignItems: "center",
