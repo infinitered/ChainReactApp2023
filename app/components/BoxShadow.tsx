@@ -6,7 +6,7 @@ const cardOffset = require("../../assets/images/card-offset.png")
 
 type Presets = keyof typeof $offsetPresets
 
-interface PatternShadowProps {
+interface BoxShadowProps {
   /**
    * The children node(s) to build the box under
    */
@@ -25,7 +25,7 @@ interface PatternShadowProps {
   offset?: number
 }
 
-export function BoxShadow(props: PatternShadowProps): React.ReactElement {
+export function BoxShadow(props: BoxShadowProps): React.ReactElement {
   const [height, setHeight] = React.useState(null)
   const [width, setWidth] = React.useState(null)
   const preset: Presets = $offsetPresets[props.preset] ? props.preset : "default"
