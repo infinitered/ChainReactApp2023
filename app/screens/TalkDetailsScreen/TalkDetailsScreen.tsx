@@ -1,27 +1,24 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { ViewStyle, View, TextStyle, ImageStyle, Image, StyleSheet } from "react-native"
+import { ViewStyle, View, TextStyle, ImageStyle, Image } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Screen, Text, Tag, IconButton, MIN_HEADER_HEIGHT } from "../../components"
+import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow } from "../../components"
 import { colors, spacing } from "../../theme"
-import { useAppNavigation, useHeader } from "../../hooks"
+import { useAppNavigation } from "../../hooks"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalksDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+
+const talkBlob = require("../../../assets/images/talk-shape.png")
+const workshopBlob = require("../../../assets/images/workshop-shape.png")
+const workshopCurve = require("../../../assets/images/workshop-curve.png")
+const talkCurve = require("../../../assets/images/talk-curve.png")
 
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = observer(
   function TalkDetailsScreen() {
     const navigation = useAppNavigation()
-    // useHeader(
-    //   {
-    //     title: "Talk Title",
-    //     leftIcon: "back",
-    //     onLeftPress: navigation.goBack,
-    //   },
-    //   [navigation],
-    // )
     const scrollY = useSharedValue(0)
     const onPress = () => openLinkInBrowser("https://infinite.red")
 
@@ -33,8 +30,10 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
     const { bottom: paddingBottom } = useSafeAreaInsets()
 
+    const isWorkshop = true
+
     return (
-      <View style={{ flex: 1 }}>
+      <View>
         <TalkDetailsHeader
           title="Talk Title"
           subtitle="Subtitle"
@@ -44,15 +43,29 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
         <Animated.ScrollView
           style={[$scrollView, { paddingBottom }]}
-          // preset="scroll"
           scrollEventThrottle={16}
-          // safeAreaEdges={["bottom"]}
           onScroll={scrollHandler}
           contentContainerStyle={$scrollContainer}
+          showsVerticalScrollIndicator={false}
         >
           <View style={$container}>
             <View style={$containerSpacing}>
-              <Image source={{ uri: "https://picsum.photos/315" }} style={$speakerImage} />
+              <Image
+                source={isWorkshop ? workshopBlob : talkBlob}
+                style={isWorkshop ? $workshopBlob : $talkBlob}
+              />
+              <Image
+                source={isWorkshop ? workshopCurve : talkCurve}
+                style={isWorkshop ? $workshopCurve : $talkCurve}
+              />
+              <BoxShadow
+                preset={isWorkshop ? "bold" : "primary"}
+                style={$containerSpacing}
+                offset={6}
+              >
+                <Image source={{ uri: "https://picsum.photos/315" }} style={$speakerImage} />
+              </BoxShadow>
+
               <Text preset="bold" style={$nameText} text="First Last" />
               <Text style={$companyNameText} text="Company, Inc" />
             </View>
@@ -102,6 +115,7 @@ const $container = {
 
 const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
+  position: "relative",
 }
 
 const $linksContainer: ViewStyle = {
@@ -126,7 +140,6 @@ const $detailsContainer: ViewStyle = {
 
 const $speakerImage: ImageStyle = {
   height: 315,
-  marginBottom: spacing.medium,
 }
 
 const $companyNameText: TextStyle = {
@@ -150,4 +163,29 @@ const $aboutHeading: TextStyle = {
 const $bodyText: TextStyle = {
   fontSize: 16,
   lineHeight: 22.4,
+}
+
+const $workshopBlob: ImageStyle = {
+  position: "absolute",
+  top: spacing.extraLarge,
+  left: -spacing.large + spacing.tiny,
+  zIndex: 5,
+}
+
+const $workshopCurve: ImageStyle = {
+  position: "absolute",
+  left: -spacing.large,
+  top: spacing.huge - spacing.tiny,
+}
+
+const $talkBlob: ImageStyle = {
+  bottom: spacing.extraLarge * 2.25,
+  right: -spacing.extraLarge + spacing.extraSmall,
+  position: "absolute",
+  zIndex: 5,
+}
+
+const $talkCurve: ImageStyle = {
+  position: "absolute",
+  left: -spacing.large,
 }

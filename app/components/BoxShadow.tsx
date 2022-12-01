@@ -51,7 +51,7 @@ export function BoxShadow(props: BoxShadowProps): React.ReactElement {
 
 const $offsetContainer: ViewStyle = {
   position: "absolute",
-  zIndex: 1,
+  zIndex: 9,
 }
 
 const $offsetPresets = {
@@ -83,5 +83,5 @@ const $offsetPresets = {
 }
 
 const $childrenContainer: ViewStyle = {
-  zIndex: 2,
+  zIndex: 10,
 }
