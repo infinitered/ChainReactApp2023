@@ -34,6 +34,10 @@ const en = {
     title: "Venue",
     conferenceAndWorkshopVenues: "Conference and workshop venues",
     thanksToThisYearsSponsors: "Thanks to this year's sponsors",
+    platinumSponsor: "Platinum Sponsor",
+    goldSponsor: "Gold Sponsor",
+    silverSponsor: "Silver Sponsors",
+    bronzeSponsor: "Bronze Sponsors",
   },
 }
 

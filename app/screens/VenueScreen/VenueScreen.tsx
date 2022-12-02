@@ -1,32 +1,114 @@
 import React, { FC } from "react"
 import { observer } from "mobx-react-lite"
-import { TextStyle, ViewStyle } from "react-native"
+import { SectionList, TextStyle, View, ViewStyle } from "react-native"
 import { CarouselCard, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { spacing } from "../../theme"
+import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { openMap } from "../../utils/openMap"
+import { SponsorCard } from "./SponsorCard"
 
-export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueScreen() {
-  useHeader({ title: translate("VenueScreen.title") })
-
+const Workshops = () => {
   const openLink = async () => {
     await openMap("11134 Washington St #302", "97006", "Portland")
   }
-
   return (
-    <Screen style={$root} preset="scroll" contentContainerStyle={$container}>
-      <Text preset="heading" style={$heading}>
-        {translate("VenueScreen.conferenceAndWorkshopVenues")}
-      </Text>
-
+    <View style={$carousel}>
+      {/* test carousel card */}
       <CarouselCard
         coverImage={{ uri: "https://placekitten.com/g/358/274" }}
         meta="Conference • May 18-19"
         title="The Armory"
         description="11134 Washington St #302, Portland, OR 97006"
         leftButton={<CarouselCard.Link text="Open in maps" openLink={openLink} />}
+      />
+    </View>
+  )
+}
+
+const SponsorSection = ({ item }) => {
+  return <SponsorCard {...item} />
+}
+
+const SECTIONS = [
+  {
+    title: translate("VenueScreen.conferenceAndWorkshopVenues"),
+    renderItem: Workshops,
+    data: [{}],
+  },
+  {
+    title: translate("VenueScreen.thanksToThisYearsSponsors"),
+    renderItem: SponsorSection,
+    data: [
+      {
+        sponsor: "Sponsor 1",
+        tier: "platinum",
+        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
+        openURL: "https://placekitten.com",
+        sponsorImage: {
+          uri: "https://placekitten.com/g/280/60",
+        },
+      },
+      {
+        sponsor: "Sponsor 2",
+        tier: "gold",
+        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
+        openURL: "https://placekitten.com",
+        sponsorImage: {
+          uri: "https://placekitten.com/g/280/60",
+        },
+      },
+      {
+        sponsor: "Sponsor 3",
+        tier: "gold",
+        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
+        openURL: "https://placekitten.com",
+        sponsorImage: {
+          uri: "https://placekitten.com/g/280/60",
+        },
+      },
+      {
+        tier: "silver",
+        sponsorImages: [
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
+        ],
+      },
+      {
+        tier: "bronze",
+        sponsorImages: [
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
+        ],
+      },
+    ],
+  },
+]
+
+export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueScreen() {
+  useHeader({ title: translate("VenueScreen.title") })
+
+  return (
+    <Screen style={$root} preset="fixed" contentContainerStyle={$container}>
+      <SectionList
+        stickySectionHeadersEnabled
+        sections={SECTIONS}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text preset="heading" style={$heading}>
+            {title}
+          </Text>
+        )}
       />
     </Screen>
   )
@@ -43,4 +125,9 @@ const $container: ViewStyle = {
 const $heading: TextStyle = {
   fontSize: 32,
   lineHeight: 45.2,
+  backgroundColor: colors.palette.neutral500,
+}
+
+const $carousel: ViewStyle = {
+  marginVertical: spacing.large,
 }
