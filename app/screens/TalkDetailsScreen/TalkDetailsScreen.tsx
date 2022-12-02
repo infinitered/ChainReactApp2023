@@ -5,22 +5,24 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
 import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow } from "../../components"
 import { colors, spacing } from "../../theme"
-import { useAppNavigation } from "../../hooks"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalksDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
 const workshopBlob = require("../../../assets/images/workshop-shape.png")
 const workshopCurve = require("../../../assets/images/workshop-curve.png")
 const talkCurve = require("../../../assets/images/talk-curve.png")
 
+const title = "React Native essentials"
+const subtitle = "Hotel, Conference Room 1"
+
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = observer(
   function TalkDetailsScreen() {
-    const navigation = useAppNavigation()
     const scrollY = useSharedValue(0)
     const onPress = () => openLinkInBrowser("https://infinite.red")
+    const [headingHeight, setHeadingHeight] = React.useState(0)
 
     const scrollHandler = useAnimatedScrollHandler({
       onScroll: (event) => {
@@ -33,22 +35,29 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     const isWorkshop = true
 
     return (
-      <View>
-        <TalkDetailsHeader
-          title="Talk Title"
-          subtitle="Subtitle"
-          onPress={navigation.goBack}
-          scrollY={scrollY}
-        />
+      <SafeAreaView edges={["top", "bottom"]} style={$root}>
+        <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
 
         <Animated.ScrollView
           style={[$scrollView, { paddingBottom }]}
           scrollEventThrottle={16}
           onScroll={scrollHandler}
-          contentContainerStyle={$scrollContainer}
           showsVerticalScrollIndicator={false}
         >
           <View style={$container}>
+            <View
+              style={$headingContainer}
+              onLayout={({
+                nativeEvent: {
+                  layout: { height },
+                },
+              }) => {
+                setHeadingHeight(height)
+              }}
+            >
+              <Text preset="heading" style={$title} text={title} />
+              <Text preset="companionHeading" style={$subtitle} text={subtitle} />
+            </View>
             <View style={$containerSpacing}>
               <Image
                 source={isWorkshop ? workshopBlob : talkBlob}
@@ -94,28 +103,26 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             </View>
           </View>
         </Animated.ScrollView>
-      </View>
+      </SafeAreaView>
     )
   },
 )
 
-// TODO: replace 50 with height of the title height + spacing + subtitle height from onLayout in child
-const $scrollView: ViewStyle = {
-  paddingTop: MIN_HEADER_HEIGHT + spacing.large + 50,
+const $root: ViewStyle = {
   backgroundColor: colors.background,
 }
 
-const $scrollContainer: ViewStyle = {
-  paddingBottom: MIN_HEADER_HEIGHT + spacing.extraLarge + 50,
+const $scrollView: ViewStyle = {
+  marginBottom: MIN_HEADER_HEIGHT,
 }
 
 const $container = {
-  padding: spacing.large,
+  paddingHorizontal: spacing.large,
+  paddingBottom: spacing.large,
 }
 
 const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
-  position: "relative",
 }
 
 const $linksContainer: ViewStyle = {
@@ -188,4 +195,18 @@ const $talkBlob: ImageStyle = {
 const $talkCurve: ImageStyle = {
   position: "absolute",
   left: -spacing.large,
+}
+
+const $title: TextStyle = {
+  fontSize: 32,
+  lineHeight: 35.2,
+  marginBottom: spacing.extraSmall,
+}
+
+const $subtitle: TextStyle = {
+  color: colors.palette.primary500,
+}
+
+const $headingContainer: ViewStyle = {
+  marginBottom: spacing.extraLarge,
 }

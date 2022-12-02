@@ -1,110 +1,63 @@
 import React from "react"
-import { Dimensions, TextStyle, TouchableOpacityProps, View, ViewStyle } from "react-native"
-import Animated, {
-  Extrapolate,
-  interpolate,
-  SharedValue,
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { TextStyle, View, ViewStyle } from "react-native"
+import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
 import { HeaderAction, MIN_HEADER_HEIGHT } from "../../components"
+import { useAppNavigation } from "../../hooks"
 import { colors, spacing, typography } from "../../theme"
 
 interface TalkDetailsHeaderProps {
-  onPress?: TouchableOpacityProps["onPress"]
+  /**
+   * Title of workshop/talk
+   */
   title: string
+  /**
+   * Workshop location or talk date/time
+   */
   subtitle: string
+  /**
+   * The Y position from the <ScrollView />
+   */
   scrollY: SharedValue<number>
+  /**
+   * The container height from the <ScrollView /> details page
+   * title + spacing + subtitle
+   */
+  headingHeight: number
 }
 
-const { width } = Dimensions.get("screen")
-
 export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> =
-  function TalkDetailsHeader({ onPress, title, scrollY }) {
-    const { top } = useSafeAreaInsets()
-    const titleHeight = useSharedValue(0)
-    const titleWidth = useSharedValue(0)
+  function TalkDetailsHeader({ title, scrollY, headingHeight }) {
+    const navigation = useAppNavigation()
 
     const $animatedTitle = useAnimatedStyle(() => {
-      const translateY = interpolate(
-        scrollY.value,
-        [0, MIN_HEADER_HEIGHT],
-        [MIN_HEADER_HEIGHT, 0],
-        Extrapolate.CLAMP,
-      )
+      const opacity = interpolate(scrollY.value, [headingHeight - 10, headingHeight], [0, 1])
 
-      // output range, second param
-      // -spacing.large due to wrapper view (can adjust header action button with override to get rid of this)
-      // -12 for half of back arrow
-      // half screen width
-      // half title label width
-      const translateX = interpolate(
-        scrollY.value,
-        [0, MIN_HEADER_HEIGHT],
-        [-spacing.extraSmall, -spacing.large - 12 + width / 2 - titleWidth.value / 2],
-        Extrapolate.CLAMP,
-      )
-
-      const fontSize = interpolate(
-        scrollY.value,
-        [0, MIN_HEADER_HEIGHT],
-        [32, 16],
-        Extrapolate.CLAMP,
-      )
-
-      return { transform: [{ translateX }, { translateY }], fontSize }
-    })
+      return { opacity }
+    }, [headingHeight])
 
     return (
-      <Animated.View style={[$safeArea, { paddingTop: top }]}>
-        <View style={$rowContainer}>
-          <View style={{ marginHorizontal: -spacing.large }}>
-            <HeaderAction icon="back" {...{ onPress }} />
-          </View>
-
-          <Animated.Text
-            style={[$title, $animatedTitle]}
-            onLayout={({
-              nativeEvent: {
-                layout: { width, height },
-              },
-            }) => {
-              titleHeight.value = height
-              titleWidth.value = width
-            }}
-          >
-            {title}
-          </Animated.Text>
-        </View>
-        {/* <Text preset="companionHeading" style={$subtitle} text={subtitle} /> */}
-      </Animated.View>
+      <View style={$rowContainer}>
+        <HeaderAction icon="back" onPress={navigation.goBack} />
+        <Animated.Text style={[$centerTitle, $animatedTitle]}>{title}</Animated.Text>
+      </View>
     )
   }
 
-const $safeArea: ViewStyle = {
-  backgroundColor: colors.background,
-  position: "absolute",
-  zIndex: 2,
-  top: 0,
-  right: 0,
-  left: 0,
-  paddingLeft: spacing.large,
-  paddingBottom: spacing.extraLarge,
-}
-
 const $rowContainer: ViewStyle = {
+  height: MIN_HEADER_HEIGHT,
   flexDirection: "row",
   alignItems: "center",
+  justifyContent: "space-between",
 }
 
-const $title: TextStyle = {
-  fontSize: 32,
-  lineHeight: 35.2,
-  fontFamily: typography.primary.bold,
+const $centerTitle: TextStyle = {
+  position: "absolute",
+  width: "100%",
+  textAlign: "center",
+  paddingHorizontal: spacing.huge,
+  zIndex: 1,
+  fontSize: 16,
+  lineHeight: 17.6,
+  fontFamily: typography.secondary.medium,
   color: colors.text,
 }
-
-// const $subtitle: TextStyle = {
-//   color: colors.palette.primary500,
-// }
