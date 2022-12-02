@@ -62,7 +62,7 @@ export const SponsorCard = ({
               }[tier]
             }
           </Text>
-          <Text style={$sponsorBio}>{bio}</Text>
+          <Text>{bio}</Text>
         </View>
       )
     case "silver":
@@ -109,8 +109,6 @@ const $sponsorImage: ImageStyle = {
 const $sponsorType: TextStyle = {
   marginVertical: spacing.medium,
 }
-
-const $sponsorBio: TextStyle = {}
 
 const $sponsorContainer: ViewStyle = {
   marginVertical: spacing.large,
