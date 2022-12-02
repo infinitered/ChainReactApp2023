@@ -21,7 +21,7 @@ const subtitle = "Hotel, Conference Room 1"
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = observer(
   function TalkDetailsScreen() {
     const scrollY = useSharedValue(0)
-    const onPress = () => openLinkInBrowser("https://infinite.red")
+    const onPress = (url) => openLinkInBrowser(url)
     const [headingHeight, setHeadingHeight] = React.useState(0)
 
     const scrollHandler = useAnimatedScrollHandler({
@@ -32,6 +32,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
     const { bottom: paddingBottom } = useSafeAreaInsets()
 
+    // TODO: wire this up to the event type
     const isWorkshop = true
 
     return (
@@ -97,9 +98,9 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             </View>
 
             <View style={$linksContainer}>
-              <IconButton icon="twitter" onPress={onPress} />
-              <IconButton icon="github" onPress={onPress} />
-              <IconButton icon="link" onPress={onPress} />
+              <IconButton icon="twitter" onPress={() => onPress("https://cr.infinite.red")} />
+              <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
+              <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
             </View>
           </View>
         </Animated.ScrollView>
