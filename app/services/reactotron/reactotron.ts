@@ -16,9 +16,6 @@ import { Platform } from "react-native"
 import { Reactotron } from "./reactotronClient"
 import { ArgType } from "reactotron-core-client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { onSnapshot } from "mobx-state-tree"
-import { mst } from "reactotron-mst"
-import { RootStore } from "../../models/RootStore"
 import { clear } from "../../utils/storage"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotronConfig"
 import { goBack, resetRoot, navigate } from "../../navigators/navigationUtilities"
@@ -54,33 +51,6 @@ if (__DEV__) {
 
 const config = DEFAULT_REACTOTRON_CONFIG
 
-/**
- * Hook into the root store for doing awesome state-related things.
- *
- * @param rootStore The root store
- */
-export function setReactotronRootStore(rootStore: RootStore, initialData: any) {
-  if (__DEV__) {
-    const { logInitialState, logSnapshots } = config
-    const name = "ROOT STORE"
-
-    // logging features
-    if (logInitialState) {
-      Reactotron.display({ name, value: initialData, preview: "Initial State" })
-    }
-
-    // log state changes?
-    if (logSnapshots) {
-      onSnapshot(rootStore, (snapshot) => {
-        Reactotron.display({ name, value: snapshot, preview: "New State" })
-      })
-    }
-
-    // tracks the current MobX-State-Tree tree in Reactotron's "State" tab
-    Reactotron.trackMstNode(rootStore)
-  }
-}
-
 // Avoid setting up Reactotron multiple times with Fast Refresh
 let _reactotronIsSetUp = false
 
@@ -111,16 +81,6 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
         asyncStorage: config.useAsyncStorage ? undefined : false,
       })
     }
-
-    // ignore some chatty `mobx-state-tree` actions
-    const RX = /postProcessSnapshot|@APPLY_SNAPSHOT/
-
-    // hookup mobx-state-tree middleware
-    Reactotron.use(
-      mst({
-        filter: (event) => RX.test(event.name) === false,
-      }),
-    )
 
     // connect to the app
     Reactotron.connect()
