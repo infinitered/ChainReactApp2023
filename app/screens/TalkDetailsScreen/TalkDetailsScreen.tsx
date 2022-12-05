@@ -61,10 +61,6 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             </View>
             <View style={$containerSpacing}>
               <Image
-                source={isWorkshop ? workshopBlob : talkBlob}
-                style={isWorkshop ? $workshopBlob : $talkBlob}
-              />
-              <Image
                 source={isWorkshop ? workshopCurve : talkCurve}
                 style={isWorkshop ? $workshopCurve : $talkCurve}
               />
@@ -75,6 +71,10 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
               >
                 <Image source={{ uri: "https://picsum.photos/315" }} style={$speakerImage} />
               </BoxShadow>
+              <Image
+                source={isWorkshop ? workshopBlob : talkBlob}
+                style={isWorkshop ? $workshopBlob : $talkBlob}
+              />
 
               <Text preset="bold" style={$nameText} text="First Last" />
               <Text style={$companyNameText} text="Company, Inc" />
@@ -177,7 +177,6 @@ const $workshopBlob: ImageStyle = {
   position: "absolute",
   top: spacing.extraLarge,
   left: -spacing.large + spacing.tiny,
-  zIndex: 5,
 }
 
 const $workshopCurve: ImageStyle = {
@@ -190,7 +189,6 @@ const $talkBlob: ImageStyle = {
   bottom: spacing.extraLarge * 2.25,
   right: -spacing.extraLarge + spacing.extraSmall,
   position: "absolute",
-  zIndex: 5,
 }
 
 const $talkCurve: ImageStyle = {
