@@ -191,8 +191,7 @@ export function Header(props: HeaderProps) {
 
         {!!titleContent && (
           <Text
-            weight="medium"
-            size="md"
+            preset="navHeader"
             text={titleContent}
             style={[
               titleMode === "center" && $centerTitle,
