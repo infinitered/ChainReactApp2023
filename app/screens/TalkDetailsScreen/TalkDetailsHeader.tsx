@@ -40,7 +40,9 @@ export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> 
     return (
       <View style={$rowContainer}>
         <HeaderAction icon="back" onPress={navigation.goBack} />
-        <AnimatedText style={[$centerTitle, $animatedTitle]}>{title}</AnimatedText>
+        <AnimatedText preset="navHeader" style={[$centerTitle, $animatedTitle]}>
+          {title}
+        </AnimatedText>
       </View>
     )
   }
