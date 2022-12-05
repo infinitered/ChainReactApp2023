@@ -3,12 +3,12 @@ import { observer } from "mobx-react-lite"
 import { ViewStyle, View, TextStyle, ImageStyle, Image } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow } from "../../components"
+import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow, Screen } from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalksDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
 const workshopBlob = require("../../../assets/images/workshop-shape.png")
@@ -36,7 +36,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     const isWorkshop = true
 
     return (
-      <SafeAreaView edges={["top", "bottom"]} style={$root}>
+      <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
         <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
 
         <Animated.ScrollView
@@ -104,7 +104,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             </View>
           </View>
         </Animated.ScrollView>
-      </SafeAreaView>
+      </Screen>
     )
   },
 )
