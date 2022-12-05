@@ -107,7 +107,8 @@ const $sponsorImage: ImageStyle = {
 }
 
 const $sponsorType: TextStyle = {
-  marginVertical: spacing.medium,
+  marginTop: spacing.extraSmall,
+  marginBottom: spacing.large,
 }
 
 const $sponsorContainer: ViewStyle = {
