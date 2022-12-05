@@ -1,5 +1,5 @@
 import i18n from "i18n-js"
-import React from "react"
+import React, { forwardRef, Ref } from "react"
 import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
 import { isRTL, translate, TxKeyPath } from "../i18n"
 import { colors, typography } from "../theme"
@@ -50,7 +50,7 @@ export interface TextProps extends RNTextProps {
  *
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Text.md)
  */
-export function Text(props: TextProps) {
+export const Text = forwardRef(function Text(props: TextProps, ref: Ref<Text>) {
   const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
 
   const i18nText = tx && translate(tx, txOptions)
@@ -66,11 +66,11 @@ export function Text(props: TextProps) {
   ]
 
   return (
-    <RNText {...rest} style={$styles}>
+    <RNText ref={ref} {...rest} style={$styles}>
       {content}
     </RNText>
   )
-}
+})
 
 const $sizeStyles = {
   xxxl: { fontSize: 42, lineHeight: 46.2 } as TextStyle,
@@ -133,6 +133,8 @@ const $presets = {
   eventTitle: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
 
   tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
+
+  navHeader: [$baseSecondaryStyle, $sizeStyles.sm, $secondaryFontWeightStyles.medium],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
