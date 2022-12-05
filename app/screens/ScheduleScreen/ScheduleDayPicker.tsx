@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite"
 import React, { FC, MutableRefObject } from "react"
 import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
 import Animated, {
@@ -7,10 +6,10 @@ import Animated, {
   interpolate,
   interpolateColor,
 } from "react-native-reanimated"
-import { useStores } from "../../models"
 import { colors, spacing, typography } from "../../theme"
 import { reportCrash } from "../../utils/crashReporting"
 import { formatDate } from "../../utils/formatDate"
+import { Schedule } from "./ScheduleScreen"
 
 const { width } = Dimensions.get("window")
 
@@ -20,13 +19,12 @@ type AnimatedDayButtonProps = {
   text: string
   scrollX: SharedValue<number>
   inputRange: number[]
+  schedules: Schedule[]
 }
 
-const AnimatedDayButtonRef = React.forwardRef(
+const AnimatedDayButton = React.forwardRef(
   (props: AnimatedDayButtonProps, ref: MutableRefObject<View>) => {
-    const { onPress, index, text, scrollX, inputRange } = props
-    const { schedulesStore } = useStores()
-    const { schedules } = schedulesStore
+    const { onPress, index, text, scrollX, inputRange, schedules } = props
     const outputRange = schedules.map((_, scheduleIndex) =>
       index === scheduleIndex ? colors.palette.neutral900 : colors.palette.neutral100,
     )
@@ -45,20 +43,21 @@ const AnimatedDayButtonRef = React.forwardRef(
   },
 )
 
-AnimatedDayButtonRef.displayName = "AnimatedDayButton"
-const AnimatedDayButton = observer(AnimatedDayButtonRef)
+AnimatedDayButton.displayName = "AnimatedDayButton"
 
 type ScheduleDayPickerProps = {
   scrollX: SharedValue<number>
   onItemPress: (itemIndex) => void
+  schedules: Schedule[]
+  selectedSchedule: Schedule
 }
 
-export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = observer(function ScheduleDayPicker({
+export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   scrollX,
   onItemPress,
-}) {
-  const { schedulesStore } = useStores()
-  const { schedules, selectedSchedule } = schedulesStore
+  schedules,
+  selectedSchedule,
+}) => {
   const wrapperWidth = width - spacing.extraSmall * 2
   const widthSize = wrapperWidth / schedules.length
   const index = schedules.findIndex((s) => s.date === selectedSchedule.date)
@@ -113,12 +112,12 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = observer(function S
             onItemPress(index)
           }}
           text={formatDate(schedule.date, "EE")}
-          {...{ index, scrollX, inputRange }}
+          {...{ index, scrollX, inputRange, schedules }}
         />
       ))}
     </View>
   )
-})
+}
 
 const $animatedViewStyle: ViewStyle = {
   backgroundColor: colors.palette.primary500,
