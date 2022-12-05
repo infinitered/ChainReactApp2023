@@ -1,13 +1,9 @@
 name: ci
 
-on:
-  workflow_dispatch:
-  push:
-    branches-ignore:
-      - main
+on: [workflow_dispatch, push]
 
 jobs:
-  build-and-test:
+  lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
@@ -27,7 +23,11 @@ jobs:
 
       - name: Run linter
         run: yarn lint
-
+  build:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: [lint-and-test]
+    runs-on: ubuntu-latest
+    steps:
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v7
         with:
