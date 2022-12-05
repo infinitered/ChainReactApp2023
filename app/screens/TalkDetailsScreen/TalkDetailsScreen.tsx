@@ -6,7 +6,7 @@ import { AppStackParamList } from "../../navigators"
 import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow, Screen } from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
-import { TalkDetailsHeader } from "./TalksDetailsHeader"
+import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 

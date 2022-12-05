@@ -1,9 +1,9 @@
 import React from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { HeaderAction, MIN_HEADER_HEIGHT } from "../../components"
+import { HeaderAction, MIN_HEADER_HEIGHT, Text } from "../../components"
 import { useAppNavigation } from "../../hooks"
-import { colors, spacing, typography } from "../../theme"
+import { colors, spacing } from "../../theme"
 
 interface TalkDetailsHeaderProps {
   /**
@@ -25,6 +25,8 @@ interface TalkDetailsHeaderProps {
   headingHeight: number
 }
 
+const AnimatedText = Animated.createAnimatedComponent(Text)
+
 export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> =
   function TalkDetailsHeader({ title, scrollY, headingHeight }) {
     const navigation = useAppNavigation()
@@ -38,7 +40,7 @@ export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> 
     return (
       <View style={$rowContainer}>
         <HeaderAction icon="back" onPress={navigation.goBack} />
-        <Animated.Text style={[$centerTitle, $animatedTitle]}>{title}</Animated.Text>
+        <AnimatedText style={[$centerTitle, $animatedTitle]}>{title}</AnimatedText>
       </View>
     )
   }
@@ -56,8 +58,5 @@ const $centerTitle: TextStyle = {
   textAlign: "center",
   paddingHorizontal: spacing.huge,
   zIndex: 1,
-  fontSize: 16,
-  lineHeight: 17.6,
-  fontFamily: typography.secondary.medium,
   color: colors.text,
 }
