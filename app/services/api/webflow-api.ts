@@ -17,7 +17,7 @@ const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
     queryKey: [key],
     queryFn: async () => {
       const data = await webflowAPI.items({ collectionId })
-      return data as unknown as T[]
+      return data as T[]
     },
     enabled,
   })
