@@ -5,7 +5,7 @@ import { Text } from "./Text"
 import { ButtonLink } from "./ButtonLink"
 import { spacing } from "../theme/spacing"
 
-type CarouselCardProps = {
+export type CarouselCardProps = {
   coverImage: {
     uri: string
   }
