@@ -1,5 +1,4 @@
 import React, { FC } from "react"
-import { observer } from "mobx-react-lite"
 import { SectionList, TextStyle, View, ViewStyle } from "react-native"
 import { CarouselCard, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
@@ -96,7 +95,7 @@ const SECTIONS = [
   },
 ]
 
-export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueScreen() {
+export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
   useHeader({ title: translate("VenueScreen.title") })
 
   return (
@@ -112,7 +111,7 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueS
       />
     </Screen>
   )
-})
+}
 
 const $root: ViewStyle = {
   flex: 1,

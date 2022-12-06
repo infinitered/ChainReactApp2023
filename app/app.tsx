@@ -12,9 +12,8 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React from "react"
+import React, { useLayoutEffect } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
-import { useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
@@ -56,13 +55,7 @@ function App(props: AppProps) {
 
   const [areFontsLoaded] = useFonts(customFontsToLoad)
 
-  const { rehydrated } = useInitialRootStore(() => {
-    // This runs after the root store has been initialized and rehydrated.
-
-    // If your initialization scripts run very fast, it's good to show the splash screen for just a bit longer to prevent flicker.
-    // Slightly delaying splash screen hiding for better UX; can be customized or removed as needed,
-    // Note: (vanilla Android) The splash-screen will not appear if you launch your app via the terminal or Android Studio. Kill the app and launch it normally by tapping on the launcher icon. https://stackoverflow.com/a/69831106
-    // Note: (vanilla iOS) You might notice the splash-screen logo change size. This happens in debug/development mode. Try building the app for release.
+  useLayoutEffect(() => {
     setTimeout(hideSplashScreen, 500)
   })
 
@@ -72,7 +65,7 @@ function App(props: AppProps) {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
-  if (!rehydrated || !isNavigationStateRestored || !areFontsLoaded) return null
+  if (!isNavigationStateRestored || !areFontsLoaded) return null
 
   // otherwise, we're ready to render the app
   return (

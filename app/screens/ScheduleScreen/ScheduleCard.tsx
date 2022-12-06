@@ -1,5 +1,4 @@
 import React, { FC } from "react"
-import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { Avatar, AvatarPresets, AvatarProps, Card, Icon, Text } from "../../components"
 import { colors, spacing } from "../../theme"
@@ -87,7 +86,7 @@ const baseSpeakingEventProps = (heading: string, subheading: string, eventTitle:
   }
 }
 
-const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props) {
+const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const { variant = "event", time, eventTitle, heading, subheading } = props
   const navigation = useAppNavigation()
   const onPress =
@@ -105,7 +104,7 @@ const ScheduleCard: FC<ScheduleCardProps> = observer(function ScheduleCard(props
       {...{ ...cardProps, ...variantProps, onPress }}
     />
   )
-})
+}
 
 const $avatar: ViewStyle = {
   position: "absolute",
@@ -146,11 +145,10 @@ const $footerContainer: ViewStyle = {
 
 const $rightContainer: ViewStyle = {
   position: "absolute",
-  right: spacing.extraSmall,
+  right: -spacing.extraSmall,
   top: 0,
   bottom: 0,
   width: 200,
-  marginRight: -spacing.medium,
 }
 
 const $arrowContainer: ViewStyle = {
