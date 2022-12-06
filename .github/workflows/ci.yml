@@ -3,7 +3,7 @@ name: ci
 on: [workflow_dispatch, push]
 
 jobs:
-  lint-and-test:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
@@ -23,11 +23,7 @@ jobs:
 
       - name: Run linter
         run: yarn lint
-  build:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    needs: [lint-and-test]
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v7
         with:
@@ -36,4 +32,5 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build on EAS
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: eas build --platform all --non-interactive
