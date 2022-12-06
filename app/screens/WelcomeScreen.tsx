@@ -1,4 +1,3 @@
-import { observer } from "mobx-react-lite"
 import React from "react"
 import { Dimensions, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -12,7 +11,7 @@ const { width: screenWidth } = Dimensions.get("screen")
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
-export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(function WelcomeScreen(_props) {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   const navigation = useAppNavigation()
 
   function goNext() {
@@ -46,7 +45,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = observer(function Wel
       </SafeAreaView>
     </Screen>
   )
-})
+}
 
 const $container: ViewStyle = {
   flex: 1,

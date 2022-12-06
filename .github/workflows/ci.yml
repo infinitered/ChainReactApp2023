@@ -1,10 +1,6 @@
 name: ci
 
-on:
-  workflow_dispatch:
-  push:
-    branches-ignore:
-      - main
+on: [workflow_dispatch, push]
 
 jobs:
   build-and-test:
@@ -36,4 +32,5 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build on EAS
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: eas build --platform all --non-interactive

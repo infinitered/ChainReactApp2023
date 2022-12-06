@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Image, StyleProp, View, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native"
-import { observer } from "mobx-react-lite"
 import { spacing } from "../theme"
 
 export type AvatarPresets = keyof typeof $viewPresets
@@ -37,7 +36,7 @@ export type AvatarProps = SingleAvatarProps | PanelAvatarProps
 /**
  * Displays an avatar for a workshop, talk or speaker panel
  */
-export const Avatar: React.FC<AvatarProps> = observer(function Avatar(props) {
+export const Avatar: React.FC<AvatarProps> = (props) => {
   const { style: $styleOverride, imageStyle } = props
   const preset: AvatarPresets = $viewPresets[props.preset] ? props.preset : "workshop"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
@@ -68,7 +67,7 @@ export const Avatar: React.FC<AvatarProps> = observer(function Avatar(props) {
       </View>
     )
   }
-})
+}
 
 const $baseContainerStyle: ViewStyle = {
   flex: 1,

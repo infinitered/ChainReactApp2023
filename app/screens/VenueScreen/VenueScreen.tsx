@@ -1,5 +1,4 @@
 import React, { FC } from "react"
-import { observer } from "mobx-react-lite"
 import { TextStyle, ViewStyle } from "react-native"
 import { CarouselCard, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
@@ -8,7 +7,7 @@ import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { openMap } from "../../utils/openMap"
 
-export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueScreen() {
+export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
   useHeader({ title: translate("VenueScreen.title") })
 
   const openLink = async () => {
@@ -30,7 +29,7 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = observer(function VenueS
       />
     </Screen>
   )
-})
+}
 
 const $root: ViewStyle = {
   flex: 1,
