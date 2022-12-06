@@ -13,6 +13,8 @@ import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
 import { isRTL, translate } from "../i18n"
 
+export const MIN_HEADER_HEIGHT = 56
+
 export interface HeaderProps {
   /**
    * The layout of the title relative to the action components.
@@ -189,8 +191,7 @@ export function Header(props: HeaderProps) {
 
         {!!titleContent && (
           <Text
-            weight="medium"
-            size="md"
+            preset="navHeader"
             text={titleContent}
             style={[
               titleMode === "center" && $centerTitle,
@@ -215,7 +216,7 @@ export function Header(props: HeaderProps) {
   )
 }
 
-function HeaderAction(props: HeaderActionProps) {
+export function HeaderAction(props: HeaderActionProps) {
   const { backgroundColor, icon, text, tx, txOptions, onPress, ActionComponent, iconColor } = props
 
   const content = tx ? translate(tx, txOptions) : text
@@ -256,7 +257,7 @@ const $safeArea: ViewStyle = {
 }
 
 const $container: ViewStyle = {
-  height: 56,
+  height: MIN_HEADER_HEIGHT,
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",

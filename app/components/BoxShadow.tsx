@@ -41,17 +41,16 @@ export function BoxShadow(props: BoxShadowProps): React.ReactElement {
       }}
       style={props.style}
     >
-      <View style={[$childrenContainer, { marginRight: offsetAmount }]}>{props.children}</View>
       <View style={[$offsetContainer, $offsetContainerSpacing]}>
         <Image style={[$offset, { height, width: width - offsetAmount }]} source={cardOffset} />
       </View>
+      <View style={{ marginRight: offsetAmount }}>{props.children}</View>
     </View>
   )
 }
 
 const $offsetContainer: ViewStyle = {
   position: "absolute",
-  zIndex: 1,
 }
 
 const $offsetPresets = {
@@ -80,8 +79,4 @@ const $offsetPresets = {
       borderWidth: 1,
     },
   ] as StyleProp<ImageStyle>,
-}
-
-const $childrenContainer: ViewStyle = {
-  zIndex: 2,
 }

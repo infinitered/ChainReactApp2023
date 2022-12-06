@@ -30,19 +30,19 @@ export interface TagProps {
 export function Tag(props: TagProps) {
   const { tx, text, txOptions, style: $viewStyleOverride, textStyle: $textStyleOverride } = props
 
-  const $viewStyle = [$baseViewStyle, $viewStyleOverride]
-  const $textStyle = [$baseTextStyle, $textStyleOverride]
+  const $shadow = [$baseShadow, $viewStyleOverride]
+  const $text = [$baseText, $textStyleOverride]
 
   return (
-    <View style={$baseShadowStyle}>
-      <View style={$viewStyle}>
-        <Text preset="tag" tx={tx} text={text} txOptions={txOptions} style={$textStyle} />
+    <View style={$shadow}>
+      <View style={$innerContainer}>
+        <Text preset="tag" tx={tx} text={text} txOptions={txOptions} style={$text} />
       </View>
     </View>
   )
 }
 
-const $baseViewStyle: ViewStyle = {
+const $innerContainer: ViewStyle = {
   minHeight: 31,
   borderRadius: 100,
   borderWidth: 1,
@@ -55,7 +55,7 @@ const $baseViewStyle: ViewStyle = {
   overflow: "hidden",
 }
 
-const $baseTextStyle: TextStyle = {
+const $baseText: TextStyle = {
   color: colors.palette.neutral500,
   textAlign: "center",
   flexShrink: 1,
@@ -63,9 +63,10 @@ const $baseTextStyle: TextStyle = {
   zIndex: 2,
 }
 
-const $baseShadowStyle: ViewStyle = {
+const $baseShadow: ViewStyle = {
   paddingBottom: spacing.micro,
   borderRadius: 100,
   borderColor: colors.palette.neutral900,
   backgroundColor: colors.palette.secondary500,
+  width: "50%",
 }
