@@ -1,5 +1,5 @@
 import React from "react"
-import { View, TextStyle, ViewStyle, Dimensions, Platform } from "react-native"
+import { View, TextStyle, ViewStyle, Dimensions } from "react-native"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
