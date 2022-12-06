@@ -32,7 +32,7 @@ export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> 
     const navigation = useAppNavigation()
 
     const $animatedTitle = useAnimatedStyle(() => {
-      const opacity = interpolate(scrollY.value, [headingHeight - 10, headingHeight], [0, 1])
+      const opacity = interpolate(scrollY.value, [headingHeight * 0.5, headingHeight], [0, 1])
 
       return { opacity }
     }, [headingHeight])

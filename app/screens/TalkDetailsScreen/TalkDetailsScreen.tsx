@@ -46,17 +46,19 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           showsVerticalScrollIndicator={false}
         >
           <View style={$container}>
-            <View
-              style={$headingContainer}
-              onLayout={({
-                nativeEvent: {
-                  layout: { height },
-                },
-              }) => {
-                setHeadingHeight(height)
-              }}
-            >
-              <Text preset="heading" style={$title} text={title} />
+            <View style={$headingContainer}>
+              <Text
+                preset="heading"
+                style={$title}
+                text={title}
+                onLayout={({
+                  nativeEvent: {
+                    layout: { height },
+                  },
+                }) => {
+                  setHeadingHeight(height)
+                }}
+              />
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
             <View style={$containerSpacing}>
