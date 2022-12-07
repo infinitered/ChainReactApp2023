@@ -96,5 +96,5 @@ const $viewPresets = {
 
 const $panelImageStyle: ImageStyle = {
   marginTop: spacing.small,
-  marginLeft: -spacing.small,
+  marginStart: -spacing.small,
 }

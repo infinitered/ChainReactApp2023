@@ -101,7 +101,7 @@ const $root: ViewStyle = {
 }
 
 const $cardWrapper: ViewStyle = {
-  marginRight: spacing.extraSmall,
+  marginEnd: spacing.extraSmall,
   width: IMAGE_WIDTH,
 }
 
@@ -116,12 +116,12 @@ const $ctaContainer: ViewStyle = {
 }
 
 const $carousel: ViewStyle = {
-  paddingLeft: spacing.extraSmall,
+  paddingStart: spacing.extraSmall,
   marginVertical: spacing.medium,
 }
 
 const $carouselContent: ViewStyle = {
-  paddingRight: spacing.extraSmall,
+  paddingEnd: spacing.extraSmall,
 }
 
 const $content: ViewStyle = {
