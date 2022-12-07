@@ -30,7 +30,7 @@ const en = {
     exploreTab: "Explore",
     infoTab: "Info",
   },
-  VenueScreen: {
+  venueScreen: {
     title: "Venue",
     conferenceAndWorkshopVenues: "Conference and workshop venues",
     thanksToThisYearsSponsors: "Thanks to this year's sponsors",

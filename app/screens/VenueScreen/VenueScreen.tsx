@@ -32,12 +32,12 @@ const SponsorSection = ({ item }) => {
 
 const SECTIONS = [
   {
-    title: translate("VenueScreen.conferenceAndWorkshopVenues"),
+    title: translate("venueScreen.conferenceAndWorkshopVenues"),
     renderItem: Workshops,
     data: [{}],
   },
   {
-    title: translate("VenueScreen.thanksToThisYearsSponsors"),
+    title: translate("venueScreen.thanksToThisYearsSponsors"),
     renderItem: SponsorSection,
     data: [
       {
@@ -96,7 +96,7 @@ const SECTIONS = [
 ]
 
 export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
-  useHeader({ title: translate("VenueScreen.title") })
+  useHeader({ title: translate("venueScreen.title") })
 
   return (
     <Screen style={$root} preset="fixed" contentContainerStyle={$container}>
@@ -104,7 +104,7 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
         stickySectionHeadersEnabled
         sections={SECTIONS}
         renderSectionHeader={({ section: { title } }) => (
-          <Text preset="heading" style={$heading}>
+          <Text preset="screenHeading" style={$heading}>
             {title}
           </Text>
         )}
