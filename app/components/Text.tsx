@@ -74,7 +74,7 @@ export const Text = forwardRef(function Text(props: TextProps, ref: Ref<Text>) {
 
 const $sizeStyles = {
   xxxl: { fontSize: 42, lineHeight: 46.2 } as TextStyle,
-  xxl: { fontSize: 32, lineHeight: 45.2 } as TextStyle,
+  xxl: { fontSize: 32, lineHeight: 35.2 } as TextStyle,
   xl: { fontSize: 26, lineHeight: 28.6 } as TextStyle,
   lg: { fontSize: 22, lineHeight: 24.2 } as TextStyle,
   md: { fontSize: 18, lineHeight: 19.8 } as TextStyle,
@@ -111,11 +111,22 @@ const $presets = {
 
   bold: [$baseStyle, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
-  heading: [$baseStyle, $sizeStyles.xxxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+  welcomeHeading: [$baseStyle, $sizeStyles.xxxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+
+  screenHeading: [$baseStyle, $sizeStyles.xxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+
+  cardFooterHeading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
   companionHeading: [$baseStyle, $sizeStyles.md, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   subheading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.medium] as StyleProp<TextStyle>,
+
+  infoText: [
+    $baseStyle,
+    $sizeStyles.xs,
+    $fontWeightStyles.book,
+    { lineHeight: 22 },
+  ] as StyleProp<TextStyle>,
 
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 

@@ -57,8 +57,8 @@ export const SponsorCard = ({
           <Text preset="primaryLabel" style={$sponsorType}>
             {
               {
-                platinum: translate("VenueScreen.platinumSponsor"),
-                gold: translate("VenueScreen.goldSponsor"),
+                platinum: translate("venueScreen.platinumSponsor"),
+                gold: translate("venueScreen.goldSponsor"),
               }[tier]
             }
           </Text>
@@ -72,8 +72,8 @@ export const SponsorCard = ({
           <Text preset="primaryLabel" style={$sponsorType}>
             {
               {
-                silver: translate("VenueScreen.silverSponsor"),
-                bronze: translate("VenueScreen.bronzeSponsor"),
+                silver: translate("venueScreen.silverSponsor"),
+                bronze: translate("venueScreen.bronzeSponsor"),
               }[tier]
             }
           </Text>

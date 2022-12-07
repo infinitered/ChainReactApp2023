@@ -46,7 +46,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
         <View style={$container}>
           <View style={$headingContainer}>
             <Text
-              preset="heading"
+              preset="screenHeading"
               style={$title}
               text={title}
               onLayout={({
@@ -196,8 +196,6 @@ const $talkCurve: ImageStyle = {
 }
 
 const $title: TextStyle = {
-  fontSize: 32,
-  lineHeight: 35.2,
   marginBottom: spacing.extraSmall,
 }
 

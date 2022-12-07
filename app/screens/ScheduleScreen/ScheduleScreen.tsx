@@ -138,15 +138,14 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           onScroll={scrollHandler}
           bounces={false}
           scrollEventThrottle={16}
+          decelerationRate="fast"
           renderItem={({ item: schedule }) => (
             <View style={[$container, { width }]}>
               <FlashList
                 ref={scheduleListRefs[schedule.date]}
                 ListHeaderComponent={
                   <View style={$headingContainer}>
-                    <Text preset="heading" style={$heading}>
-                      {formatDate(schedule.date, "EE, MMMM dd")}
-                    </Text>
+                    <Text preset="screenHeading">{formatDate(schedule.date, "EE, MMMM dd")}</Text>
                     <Text style={$subheading}>{schedule.title}</Text>
                   </View>
                 }
@@ -189,11 +188,6 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   flex: 1,
   paddingHorizontal: spacing.large,
-}
-
-const $heading: TextStyle = {
-  fontSize: 32,
-  lineHeight: 45.2,
 }
 
 const $subheading: TextStyle = {

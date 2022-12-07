@@ -28,7 +28,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
           testID="welcome-heading"
           style={$welcomeHeading}
           tx="welcomeScreen.heading"
-          preset="heading"
+          preset="welcomeHeading"
         />
         <Text tx="welcomeScreen.topBlurb" preset="companionHeading" style={$topBlurb} />
         <Text tx="welcomeScreen.bottomBlurb" preset="companionHeading" />
