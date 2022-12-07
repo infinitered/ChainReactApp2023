@@ -44,7 +44,7 @@ const en = {
     screenHeading: "Hosted by the Infinite Red team",
     aboutTitle: "About Chain React",
     about:
-      "Sometimes called the “Fifth Quadrant,” North Portland encompasses a range of neighborhoods and commercial districts. Some places to visit or things to see include: St John’s Bridge, Cathedral Park, or shopping and dining on Mississippi",
+      "Sometimes called the \"Fifth Quadrant\", North Portland encompasses a range of neighborhoods and commercial districts. Some places to visit or things to see include: St John’s Bridge, Cathedral Park, or shopping and dining on Mississippi",
     emailLink: "Email our team",
     conductWarning:
       "All attendees, speakers, sponsors and volunteers at our conference are required to agree with the following code of conduct. Organizers will enforce this code throughout the event. We expect cooperation from all participants to help ensure a safe environment for everybody.",
