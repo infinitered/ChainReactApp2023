@@ -6,7 +6,6 @@ patch:
 ---
 import * as React from "react"
 import { StyleProp, TextStyle, View, ViewStyle } from "react-native"
-import { observer } from "mobx-react-lite"
 import { colors, typography } from "../theme"
 import { Text } from "./Text"
 
@@ -20,7 +19,7 @@ export interface <%= props.pascalCaseName %>Props {
 /**
  * Describe your component here
  */
-export const <%= props.pascalCaseName %> = observer(function <%= props.pascalCaseName %>(props: <%= props.pascalCaseName %>Props) {
+export function <%= props.pascalCaseName %>(props: <%= props.pascalCaseName %>Props) {
   const { style } = props
   const $styles = Object.assign({}, $container, style)
 
@@ -29,7 +28,7 @@ export const <%= props.pascalCaseName %> = observer(function <%= props.pascalCas
       <Text style={$text}>Hello</Text>
     </View>
   )
-})
+}
 
 const $container: ViewStyle = {
   justifyContent: "center",
