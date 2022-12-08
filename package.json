@@ -48,9 +48,10 @@
     "expo-device": "~5.0.0",
     "expo-file-system": "~15.1.1",
     "expo-font": "~11.0.1",
-    "expo-linear-gradient": "~12.0.1",
+    "expo-linking": "~3.2.3",
     "expo-localization": "~14.0.0",
     "expo-modules-core": "~1.0.3",
+    "expo-router": "^0.0.36",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "i18n-js": "3.9.2",
@@ -72,8 +73,6 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/runtime": "^7.18.3",
     "@react-native-community/cli-platform-ios": "^8.0.2",
-    "@rnx-kit/metro-config": "^1.2.32",
-    "@rnx-kit/metro-resolver-symlinks": "0.1.21",
     "@types/i18n-js": "3.8.2",
     "@types/jest": "26.0.19",
     "@types/react": "~18.0.24",
@@ -99,7 +98,6 @@
     "jest-circus": "26",
     "jest-environment-node": "26",
     "jest-expo": "^47.0.0",
-    "metro-config": "0.71.1",
     "metro-react-native-babel-preset": "0.71.1",
     "metro-source-map": "0.71.1",
     "mocha": "6",
@@ -116,7 +114,9 @@
   },
   "resolutions": {
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "metro": "0.73.1",
+    "metro-resolver": "0.73.1"
   },
   "prettier": {
     "printWidth": 100,

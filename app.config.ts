@@ -7,6 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Chain React App 2023',
   slug: 'ChainReactApp2023',
+  scheme: 'chainreactapp',
   version,
   orientation: 'portrait',
   icon: './assets/images/app-icon-all.png',

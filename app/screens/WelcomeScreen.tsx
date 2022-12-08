@@ -9,7 +9,7 @@ import { colors, spacing } from "../theme"
 const welcomeLogo = require("../../assets/images/welcome-shapes.png")
 const { width: screenWidth } = Dimensions.get("screen")
 
-interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+interface WelcomeScreenProps {}
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   const navigation = useAppNavigation()
