@@ -1,6 +1,7 @@
+import { Link } from "expo-router"
 import { Text, View } from "react-native"
 
-export default function TalkDetailsScreen() {
+export default function TalkDetailsScreen({ navigation }) {
   return (
     <View
       style={{
@@ -9,7 +10,7 @@ export default function TalkDetailsScreen() {
         flex: 1,
       }}
     >
-      <Text>talk details</Text>
+      <Text onPress={() => navigation.goBack()}>talk details</Text>
     </View>
   )
 }

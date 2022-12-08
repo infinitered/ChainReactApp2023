@@ -24,7 +24,7 @@ export function useBackButtonHandler(canExit: (routeName: string) => boolean) {
   useEffect(() => {
     // We'll fire this when the back button is pressed on Android.
     const onBackPress = () => {
-      if (!navigationRef.isReady()) {
+      if (!navigationRef) {
         return false
       }
 
