@@ -32,6 +32,7 @@ const irImage3 = require("../../assets/images/info-ir3.png")
 
 const carouselImages: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
 
+// ! https://github.com/software-mansion/react-native-reanimated/issues/457
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 const CarouselItem = ({ item, index, scrollX }) => {
