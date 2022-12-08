@@ -6,8 +6,7 @@ import {
   ViewStyle,
   ImageSourcePropType,
   Image,
-  Animated,
-  StyleSheet,
+  FlatList,
 } from "react-native"
 import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
@@ -15,6 +14,12 @@ import { TabScreenProps } from "../navigators/TabNavigator"
 import { colors, spacing } from "../theme"
 import { translate } from "../i18n"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
+import Animated, {
+  interpolate,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+} from "react-native-reanimated"
 
 const IMAGE_WIDTH = 358
 
@@ -26,6 +31,24 @@ const irImage2 = require("../../assets/images/info-ir2.png")
 const irImage3 = require("../../assets/images/info-ir3.png")
 
 const carouselImages: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
+
+const CarouselItem = ({ item, index, scrollX }) => {
+  const $animatedImage = useAnimatedStyle(() => {
+    const inputRange = [(index - 1) * IMAGE_WIDTH, index * IMAGE_WIDTH, (index + 1) * IMAGE_WIDTH]
+
+    const scale = interpolate(scrollX.value, inputRange, [1, 1.1, 1])
+
+    return { transform: [{ scale }] }
+  })
+
+  return (
+    <View style={$cardWrapper}>
+      <Animated.Image source={item} style={$animatedImage} />
+    </View>
+  )
+}
 
 export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () => {
   // NOTE: this only works on a device, warning in sim
@@ -39,7 +62,8 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
     ),
   })
 
-  const scrollX = React.useRef(new Animated.Value(0)).current
+  const scrollX = useSharedValue(0)
+  const scrollHandler = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
 
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
@@ -47,38 +71,20 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
         <Text preset="screenHeading" tx="infoScreen.screenHeading" />
       </View>
 
-      <Animated.FlatList
+      <AnimatedFlatList
         data={carouselImages}
-        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-          useNativeDriver: true,
-        })}
+        onScroll={scrollHandler}
         keyExtractor={(_, index) => `info-image-${index}`}
         bounces={false}
         showsHorizontalScrollIndicator={false}
         horizontal
         pagingEnabled
         decelerationRate="fast"
+        scrollEventThrottle={16}
         snapToInterval={IMAGE_WIDTH}
         style={$carousel}
         contentContainerStyle={$carouselContent}
-        renderItem={({ item, index }) => {
-          const inputRange = [
-            (index - 1) * IMAGE_WIDTH,
-            index * IMAGE_WIDTH,
-            (index + 1) * IMAGE_WIDTH,
-          ]
-
-          const scale = scrollX.interpolate({ inputRange, outputRange: [1, 1.1, 1] })
-
-          return (
-            <View style={{ overflow: "hidden", borderRadius: 4, marginEnd: spacing.extraSmall }}>
-              <Animated.Image
-                source={item}
-                style={[{ resizeMode: "cover", transform: [{ scale }] }]}
-              />
-            </View>
-          )
-        }}
+        renderItem={({ item, index }) => <CarouselItem {...{ item, index, scrollX }} />}
       />
 
       <View style={$content}>
@@ -121,8 +127,9 @@ const $root: ViewStyle = {
 }
 
 const $cardWrapper: ViewStyle = {
+  overflow: "hidden",
+  borderRadius: 4,
   marginEnd: spacing.extraSmall,
-  width: IMAGE_WIDTH,
 }
 
 const $heading: TextStyle = {
@@ -147,7 +154,6 @@ const $imageContainer: ViewStyle = {
 }
 
 const $infoImage: ImageStyle = {
-  borderRadius: 4,
   marginHorizontal: spacing.extraSmall,
 }
 
