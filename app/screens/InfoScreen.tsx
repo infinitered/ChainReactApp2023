@@ -8,7 +8,7 @@ import {
   ImageSourcePropType,
   Image,
 } from "react-native"
-import { CarouselCard, Screen, Text } from "../components"
+import { Button, CarouselCard, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
 import { TabScreenProps } from "../navigators/TabNavigator"
 import { colors, spacing } from "../theme"
@@ -27,10 +27,16 @@ const irImage3 = require("../../assets/images/info-ir3.png")
 const carouselImages: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
 
 export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () => {
-  useHeader({ title: translate("infoScreen.title") })
-
   // NOTE: this only works on a device, warning in sim
   const callPhoneNumber = () => openLinkInBrowser(`tel:${phoneNumber}`)
+  const contactByEmail = () => openLinkInBrowser("mailto:conf@infinite.red")
+
+  useHeader({
+    title: translate("infoScreen.title"),
+    RightActionComponent: (
+      <Button preset="link" text="Contact" onPress={contactByEmail} style={$emailButton} />
+    ),
+  })
 
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
@@ -62,10 +68,7 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
         <Text preset="subheading" tx="infoScreen.aboutTitle" style={$heading} />
         <Text preset="infoText" tx="infoScreen.about" />
 
-        <View style={$ctaContainer}>
-          <CarouselCard.Link text="Email our team" openLink={() => console.log("email team")} />
-        </View>
-
+        <Text preset="screenHeading" text="Code of conduct" style={$codeOfConductHeading} />
         <Text preset="infoText" tx="infoScreen.conductWarning" />
       </View>
 
@@ -109,12 +112,6 @@ const $heading: TextStyle = {
   marginBottom: spacing.extraSmall,
 }
 
-const $ctaContainer: ViewStyle = {
-  flexDirection: "row",
-  marginTop: spacing.extraSmall,
-  marginBottom: spacing.large,
-}
-
 const $carousel: ViewStyle = {
   paddingStart: spacing.extraSmall,
   marginVertical: spacing.medium,
@@ -144,4 +141,13 @@ const $mb: ViewStyle = {
 const $phoneNumber: TextStyle = {
   textDecorationLine: "underline",
   textDecorationColor: colors.text,
+}
+
+const $codeOfConductHeading: TextStyle = {
+  marginTop: spacing.extraLarge * 2,
+  marginBottom: spacing.extraSmall,
+}
+
+const $emailButton: ViewStyle = {
+  marginEnd: spacing.medium,
 }
