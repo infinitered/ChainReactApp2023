@@ -4,11 +4,12 @@ import {
   TextStyle,
   View,
   ViewStyle,
-  FlatList,
   ImageSourcePropType,
   Image,
+  Animated,
+  StyleSheet,
 } from "react-native"
-import { Button, CarouselCard, Screen, Text } from "../components"
+import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
 import { TabScreenProps } from "../navigators/TabNavigator"
 import { colors, spacing } from "../theme"
@@ -38,14 +39,19 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
     ),
   })
 
+  const scrollX = React.useRef(new Animated.Value(0)).current
+
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
       <View style={$content}>
         <Text preset="screenHeading" tx="infoScreen.screenHeading" />
       </View>
 
-      <FlatList
+      <Animated.FlatList
         data={carouselImages}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
+          useNativeDriver: true,
+        })}
         keyExtractor={(_, index) => `info-image-${index}`}
         bounces={false}
         showsHorizontalScrollIndicator={false}
@@ -55,10 +61,21 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
         snapToInterval={IMAGE_WIDTH}
         style={$carousel}
         contentContainerStyle={$carouselContent}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
+          const inputRange = [
+            (index - 1) * IMAGE_WIDTH,
+            index * IMAGE_WIDTH,
+            (index + 1) * IMAGE_WIDTH,
+          ]
+
+          const scale = scrollX.interpolate({ inputRange, outputRange: [1, 1.1, 1] })
+
           return (
-            <View style={$cardWrapper}>
-              <Image source={item} />
+            <View style={{ overflow: "hidden", borderRadius: 4, marginEnd: spacing.extraSmall }}>
+              <Animated.Image
+                source={item}
+                style={[{ resizeMode: "cover", transform: [{ scale }] }]}
+              />
             </View>
           )
         }}
