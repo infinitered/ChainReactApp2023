@@ -49,42 +49,26 @@ export interface ScheduleCardProps {
    * Card subheading beneath heading
    */
   subheading: string
-  /**
-   * Array of strings for the card's images
-   */
-  sources: { uri: string }[]
-  /**
-   * String for the card's image
-   */
-  source: { uri: string }
 }
 
 interface SpeakingEventProps {
   heading: string
   subheading: string
   eventTitle: AvatarPresets
-  sources?: { uri: string }[]
-  source?: { uri: string }
 }
 
 const baseEventProps = (time: string, title: string) => ({
   HeadingComponent: <Header {...{ time, title }} />,
 })
 
-const baseSpeakingEventProps = ({
-  heading,
-  subheading,
-  eventTitle,
-  sources,
-  source,
-}: SpeakingEventProps) => {
+const baseSpeakingEventProps = ({ heading, subheading, eventTitle }: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
   } as AvatarProps
   if (props.preset === "speaker-panel") {
-    props.sources = sources
+    props.sources = []
   } else {
-    props.source = source
+    props.source = {}
   }
   return {
     RightComponent: (
@@ -103,7 +87,7 @@ const baseSpeakingEventProps = ({
 }
 
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
-  const { variant = "event", time, eventTitle, heading, subheading, sources, source } = props
+  const { variant = "event", time, eventTitle, heading, subheading } = props
   const navigation = useAppNavigation()
   const onPress =
     ["talk", "workshop"].includes(variant) && (() => navigation.navigate("TalkDetails"))
@@ -112,7 +96,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const variantProps =
     variant === "event"
       ? { content: subheading, contentStyle: $contentText }
-      : baseSpeakingEventProps({ heading, subheading, eventTitle, sources, source })
+      : baseSpeakingEventProps({ heading, subheading, eventTitle })
 
   return (
     <Card
