@@ -108,7 +108,6 @@ export const cleanedSchedule = (
 export const createScheduleScreenData = (): Schedule[] => {
   const { data: workshopsData } = useWorkshops()
   const { data: scheduleData } = useSchedule()
-  console.tron.log({ scheduleData })
   return [
     {
       date: "2023-05-17",

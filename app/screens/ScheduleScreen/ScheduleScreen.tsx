@@ -31,7 +31,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   useHeader({ title: "Schedule" })
 
   const schedules = createScheduleScreenData()
-  console.tron.log({ schedules })
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),

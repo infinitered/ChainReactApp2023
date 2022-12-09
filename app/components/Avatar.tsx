@@ -4,7 +4,7 @@ import { spacing } from "../theme"
 
 export type AvatarPresets = keyof typeof $viewPresets
 
-type CommonProps = {
+export type AvatarProps = {
   /**
    * An optional style override useful for padding & margin.
    */
@@ -23,14 +23,17 @@ type CommonProps = {
   preset?: "workshop" | "talk" | "speaker-panel"
 }
 
-export type AvatarProps = CommonProps
-
 /**
  * Displays an avatar for a workshop, talk or speaker panel
  */
 export const Avatar: React.FC<AvatarProps> = (props) => {
   const { style: $styleOverride, imageStyle } = props
-  const preset: AvatarPresets = $viewPresets[props.preset] ? props.preset : "workshop"
+  const preset: AvatarPresets =
+    props.sources.length > 1
+      ? "multiple-images"
+      : $viewPresets[props.preset]
+      ? props.preset
+      : "workshop"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
   const $containerStyle = [$baseContainerStyle, $styleOverride]
 
@@ -46,31 +49,6 @@ export const Avatar: React.FC<AvatarProps> = (props) => {
       ))}
     </View>
   )
-  // if (preset !== "speaker-panel") {
-  //   return (
-  //     <View style={$containerStyle}>
-  //       <Image
-  //         source={(props as SingleAvatarProps).source}
-  //         style={$imageStyle}
-  //         resizeMode="contain"
-  //       />
-  //     </View>
-  //   )
-  // } else {
-  //   const sources = (props as PanelAvatarProps).sources
-  //   return (
-  //     <View style={$containerStyle}>
-  //       {sources.map((source, index) => (
-  //         <Image
-  //           key={`panel-${index}-${source}`}
-  //           source={source}
-  //           style={[$imageStyle, $panelImageStyle]}
-  //           resizeMode="contain"
-  //         />
-  //       ))}
-  //     </View>
-  //   )
-  // }
 }
 
 const $baseContainerStyle: ViewStyle = {
@@ -92,6 +70,12 @@ const $viewPresets = {
   } as StyleProp<ImageStyle>,
 
   "speaker-panel": {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+  } as StyleProp<ImageStyle>,
+
+  "multiple-images": {
     width: 42,
     height: 42,
     borderRadius: 21,
