@@ -1,3 +1,4 @@
+import Constants from "expo-constants"
 import axios from "axios"
 import { CustomScheduleProps } from "./webflow-api.types"
 import { SCHEDULE } from "./webflow-conts"
@@ -18,7 +19,7 @@ export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     "User-Agent": "Webflow Javascript SDK / 1.0",
-    Authorization: "Bearer 63eb6ae43b109a57f2f18438a50a2a91887f53dc238c700b332b0379e74cf616",
+    Authorization: `Bearer ${Constants.expoConfig.extra.webflowToken}`,
   },
 })
 
