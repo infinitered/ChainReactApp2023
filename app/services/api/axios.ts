@@ -38,6 +38,7 @@ axiosInstance.interceptors.response.use(
             "Check-in for attendees with a workshop ticket begins at 6:00 am.",
           name: "Check-in & Registration",
           slug: "registration-day-1",
+          "speaker-2": "637823e1faa8742f7dd8686d",
           // random data
           _archived: false,
           _draft: false,
@@ -58,6 +59,7 @@ axiosInstance.interceptors.response.use(
           "break-party-description": "Gant Laborde",
           "break-card-color": "hsla(244.28571428571433, 91.30%, 90.98%, 1.00)",
           type: "976a2eee2ab173440affe93d0a20bf4d",
+          "speaker-2": "637823e1faa8742f7dd8686d",
           // random data
           _archived: false,
           _draft: false,
@@ -78,6 +80,7 @@ axiosInstance.interceptors.response.use(
           "break-party-description": "Ferran Negre Pizarro",
           "break-card-color": "hsla(244.28571428571433, 91.30%, 90.98%, 1.00)",
           type: "976a2eee2ab173440affe93d0a20bf4d",
+          "speaker-2": "637823e1faa8742f7dd8686d",
           // random data
           _archived: false,
           _draft: false,
@@ -100,6 +103,7 @@ axiosInstance.interceptors.response.use(
             "Check-in for attendees with a workshop ticket begins at 6:00 am.",
           name: "Check-in & Registration",
           slug: "morning-break-day-2",
+          "speaker-2": "637c0437faeaa766e0b15eac",
           // random data
           _archived: false,
           _draft: false,
@@ -120,6 +124,7 @@ axiosInstance.interceptors.response.use(
           name: "Leveling up on the new architecture",
           "break-party-description": "Gant Laborde",
           slug: "registration-day-2",
+          "speaker-2": "637c0437faeaa766e0b15eac",
           // random data
           _archived: false,
           _draft: false,
@@ -140,6 +145,7 @@ axiosInstance.interceptors.response.use(
           name: "React Native case study: from an idea to market",
           "break-party-description": "Ferran Negre Pizarro",
           slug: "registration-day-2",
+          "speaker-2": "637c0437faeaa766e0b15eac",
           // random data
           _archived: false,
           _draft: false,

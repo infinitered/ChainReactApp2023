@@ -57,7 +57,7 @@ export interface WorkshopProps extends IItem {
 
 export interface CustomSpeakerProps extends IItem {
   "speaker-type": string
-  "speaker-photo": string
+  "speaker-photo": IImageRef
   title?: string
   company?: string
   "second-title"?: string

@@ -49,27 +49,46 @@ export interface ScheduleCardProps {
    * Card subheading beneath heading
    */
   subheading: string
+  /**
+   * Card sources for avatars
+   */
+  sources: string[]
+  /**
+   * Card workshop level
+   */
+  level?: string
 }
 
 interface SpeakingEventProps {
   heading: string
   subheading: string
   eventTitle: AvatarPresets
+  sources: string[]
 }
 
-const baseEventProps = (time: string, title: string) => ({
-  HeadingComponent: <Header {...{ time, title }} />,
-})
+interface BaseEventProps {
+  time: string
+  eventTitle: AvatarPresets
+  level?: string
+}
 
-const baseSpeakingEventProps = ({ heading, subheading, eventTitle }: SpeakingEventProps) => {
+const baseEventProps = ({ time, eventTitle, level }: BaseEventProps) => {
+  const title = `${level ? `${level} ` : ""}${eventTitle}`
+  return {
+    HeadingComponent: <Header {...{ time, title }} />,
+  }
+}
+
+const baseSpeakingEventProps = ({
+  heading,
+  subheading,
+  eventTitle,
+  sources = [],
+}: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
+    sources: sources.map((source) => ({ uri: source })),
   } as AvatarProps
-  if (props.preset === "speaker-panel") {
-    props.sources = []
-  } else {
-    props.source = {}
-  }
   return {
     RightComponent: (
       <View style={$rightContainer}>
@@ -87,16 +106,16 @@ const baseSpeakingEventProps = ({ heading, subheading, eventTitle }: SpeakingEve
 }
 
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
-  const { variant = "event", time, eventTitle, heading, subheading } = props
+  const { variant = "event", time, eventTitle, heading, subheading, sources, level } = props
   const navigation = useAppNavigation()
   const onPress =
     ["talk", "workshop"].includes(variant) && (() => navigation.navigate("TalkDetails"))
 
-  const cardProps = { ...baseEventProps(time, eventTitle) }
+  const cardProps = { ...baseEventProps({ time, eventTitle, level }) }
   const variantProps =
     variant === "event"
       ? { content: subheading, contentStyle: $contentText }
-      : baseSpeakingEventProps({ heading, subheading, eventTitle })
+      : baseSpeakingEventProps({ heading, subheading, eventTitle, sources })
 
   return (
     <Card

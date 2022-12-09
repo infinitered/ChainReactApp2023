@@ -108,6 +108,7 @@ export const cleanedSchedule = (
 export const createScheduleScreenData = (): Schedule[] => {
   const { data: workshopsData } = useWorkshops()
   const { data: scheduleData } = useSchedule()
+  console.tron.log({ scheduleData })
   return [
     {
       date: "2023-05-17",
@@ -130,13 +131,21 @@ export const createScheduleScreenData = (): Schedule[] => {
 export const convertWorkshopToScheduleCard = (
   workshopData?: WorkshopProps[],
 ): ScheduleCardProps[] => {
-  return workshopData?.map((workshop) => ({
-    variant: "workshop",
-    time: "00:00",
-    eventTitle: `${workshop.level} workshop`,
-    heading: workshop.name,
-    subheading: workshop["instructor-info"].name,
-  }))
+  return workshopData?.map((workshop) => {
+    const sources = [workshop["instructor-info"]["speaker-photo"].url]
+    if (workshop["second-instructor-2"]) {
+      sources.push(workshop["second-instructor-2"]["speaker-photo"].url)
+    }
+    return {
+      variant: "workshop",
+      time: "00:00",
+      eventTitle: "workshop",
+      heading: workshop.name,
+      subheading: workshop["instructor-info"].name,
+      sources,
+      level: workshop.level,
+    }
+  })
 }
 
 // [NOTE] util function that might be needed in the future
@@ -156,6 +165,7 @@ const convertScheduleToScheduleCard = (
         : undefined,
     heading: schedule.name,
     subheading: schedule["break-party-description"],
+    sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
   }))
 }
 
