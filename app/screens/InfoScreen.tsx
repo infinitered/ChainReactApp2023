@@ -7,6 +7,7 @@ import {
   ImageSourcePropType,
   Image,
   FlatList,
+  Dimensions,
 } from "react-native"
 import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
@@ -21,7 +22,7 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated"
 
-const IMAGE_WIDTH = 358
+const IMAGE_WIDTH = Dimensions.get("screen").width - spacing.medium
 
 const phoneNumber = "360-450-4752"
 
@@ -44,9 +45,11 @@ const CarouselItem = ({ item, index, scrollX }) => {
     return { transform: [{ scale }] }
   })
 
+  const $imageStyle = { width: IMAGE_WIDTH - spacing.medium }
+
   return (
     <View style={$cardWrapper}>
-      <Animated.Image source={item} style={$animatedImage} />
+      <Animated.Image source={item} style={[$imageStyle, $animatedImage]} />
     </View>
   )
 }
@@ -82,7 +85,7 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
         pagingEnabled
         decelerationRate="fast"
         scrollEventThrottle={16}
-        snapToInterval={IMAGE_WIDTH}
+        snapToInterval={IMAGE_WIDTH - spacing.medium}
         style={$carousel}
         contentContainerStyle={$carouselContent}
         renderItem={({ item, index }) => <CarouselItem {...{ item, index, scrollX }} />}
