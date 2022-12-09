@@ -10,6 +10,9 @@ import {
   WorkshopProps,
 } from "./webflow-api.types"
 
+/*
+ * Converting workshop data from "type ids" to "type names"
+ */
 export const cleanedWorkshops = (
   workshopsData?: CustomWorkshopProps[],
   speakersData?: SpeakerProps[],
@@ -41,18 +44,9 @@ export const cleanedWorkshops = (
     }))
 }
 
-export const convertWorkshopToScheduleCard = (
-  workshopData?: WorkshopProps[],
-): ScheduleCardProps[] => {
-  return workshopData?.map((workshop) => ({
-    variant: "workshop",
-    time: "00:00",
-    eventTitle: `${workshop.level} workshop`,
-    heading: workshop.name,
-    subheading: workshop["instructor-info"].name,
-  }))
-}
-
+/*
+ * Converting speakers data from "type ids" to "type names"
+ */
 export const cleanedSpeakers = (speakersData?: CustomSpeakerProps[]): SpeakerProps[] => {
   return speakersData?.map((speaker) => ({
     ...speaker,
@@ -77,6 +71,9 @@ export const cleanedSpeakers = (speakersData?: CustomSpeakerProps[]): SpeakerPro
   }))
 }
 
+/*
+ * Converting schedule data from "type ids" to "type names"
+ */
 export const cleanedSchedule = (
   scheduleData?: CustomScheduleProps[],
   speakersData?: SpeakerProps[],
@@ -105,10 +102,50 @@ export const cleanedSchedule = (
     }))
 }
 
-export const convertScheduleToScheduleCard = (
-  scheduleData: ScheduleProps[],
+/*
+ * Converting workshop data from "type ids" to "type names"
+ */
+export const createScheduleScreenData = (): Schedule[] => {
+  const { data: workshopsData } = useWorkshops()
+  const { data: scheduleData } = useSchedule()
+  return [
+    {
+      date: "2023-05-17",
+      title: "React Native Workshops",
+      events: convertWorkshopToScheduleCard(workshopsData),
+    },
+    {
+      date: "2023-05-18",
+      title: "Conference Day 1",
+      events: convertScheduleToScheduleCard(scheduleData, "2023-05-18"),
+    },
+    {
+      date: "2023-05-19",
+      title: "Conference Day 2",
+      events: convertScheduleToScheduleCard(scheduleData, "2023-05-19"),
+    },
+  ]
+}
+
+export const convertWorkshopToScheduleCard = (
+  workshopData?: WorkshopProps[],
 ): ScheduleCardProps[] => {
-  return scheduleData?.map((schedule) => ({
+  return workshopData?.map((workshop) => ({
+    variant: "workshop",
+    time: "00:00",
+    eventTitle: `${workshop.level} workshop`,
+    heading: workshop.name,
+    subheading: workshop["instructor-info"].name,
+  }))
+}
+
+// [NOTE] util function that might be needed in the future
+const convertScheduleToScheduleCard = (
+  scheduleData: ScheduleProps[],
+  key: string,
+): ScheduleCardProps[] => {
+  const groupScheduleData: ScheduleProps[] = groupBy("day-time")(scheduleData ?? [])?.[key] ?? []
+  return groupScheduleData.map((schedule) => ({
     variant: schedule.type === "Talk" || schedule.type === "Lightning Talk" ? "talk" : "event",
     time: "00:00",
     eventTitle:
@@ -122,6 +159,7 @@ export const convertScheduleToScheduleCard = (
   }))
 }
 
+// [NOTE] util function that might be needed in the future
 const groupBy =
   (key: string) =>
   <T>(array: T[]) =>
@@ -132,26 +170,3 @@ const groupBy =
       }),
       {},
     )
-
-export const createScheduleScreenData = (): Schedule[] => {
-  const { data: workshopsData } = useWorkshops()
-  const { data: scheduleData } = useSchedule()
-  const groupScheduleData = groupBy("day-time")(scheduleData ?? [])
-  return [
-    {
-      date: "2023-05-17",
-      title: "React Native Workshops",
-      events: convertWorkshopToScheduleCard(workshopsData),
-    },
-    {
-      date: "2023-05-18",
-      title: "Conference Day 1",
-      events: convertScheduleToScheduleCard(groupScheduleData["2023-05-18"]),
-    },
-    {
-      date: "2023-05-19",
-      title: "Conference Day 2",
-      events: convertScheduleToScheduleCard(groupScheduleData["2023-05-19"]),
-    },
-  ]
-}
