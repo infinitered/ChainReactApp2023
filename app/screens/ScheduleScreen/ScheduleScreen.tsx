@@ -31,7 +31,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   useHeader({ title: "Schedule" })
 
   const schedules = createScheduleScreenData()
-  console.tron.log({ schedules })
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
@@ -107,12 +106,13 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     {
       onScroll: (event) => {
         scrollX.value = event.contentOffset.x
-      },
-      onMomentumEnd: (event) => {
+
+        // ! The below code would have been written in onMomentumEnd, but there is an Android issue: https://github.com/facebook/react-native/issues/21718
         const contentOffset = event.contentOffset
 
         // Divide the horizontal offset by the width of the view to see which page is visible
-        const index = Math.floor(contentOffset.x / width)
+        const adjustedWidth = width - spacing.large * 2
+        const index = Math.floor(contentOffset.x / adjustedWidth)
 
         // ! isFocused check for iOS, see details here: https://github.com/software-mansion/react-native-screens/issues/1183
         if (isFocused) {
@@ -138,15 +138,14 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           onScroll={scrollHandler}
           bounces={false}
           scrollEventThrottle={16}
+          decelerationRate="fast"
           renderItem={({ item: schedule }) => (
             <View style={[$container, { width }]}>
               <FlashList
                 ref={scheduleListRefs[schedule.date]}
                 ListHeaderComponent={
                   <View style={$headingContainer}>
-                    <Text preset="heading" style={$heading}>
-                      {formatDate(schedule.date, "EE, MMMM dd")}
-                    </Text>
+                    <Text preset="screenHeading">{formatDate(schedule.date, "EE, MMMM dd")}</Text>
                     <Text style={$subheading}>{schedule.title}</Text>
                   </View>
                 }
@@ -189,11 +188,6 @@ const $root: ViewStyle = {
 const $container: ViewStyle = {
   flex: 1,
   paddingHorizontal: spacing.large,
-}
-
-const $heading: TextStyle = {
-  fontSize: 32,
-  lineHeight: 45.2,
 }
 
 const $subheading: TextStyle = {

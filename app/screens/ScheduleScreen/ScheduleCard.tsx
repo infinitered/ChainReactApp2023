@@ -15,7 +15,7 @@ const Header = ({ time, title }) => (
 
 const Footer = ({ heading, subheading }) => (
   <View style={$footerContainer}>
-    <Text preset="heading" style={$footerHeading}>
+    <Text preset="cardFooterHeading" style={$footerHeading}>
       {heading}
     </Text>
     <Text style={$footerSubheading}>{subheading}</Text>
@@ -133,8 +133,6 @@ const $contentText: TextStyle = {
 
 const $footerHeading: TextStyle = {
   color: colors.palette.neutral900,
-  fontSize: 22,
-  lineHeight: 24.2,
   marginBottom: spacing.extraSmall,
 }
 

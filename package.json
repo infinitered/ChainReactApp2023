@@ -52,7 +52,6 @@
     "expo-font": "~11.0.1",
     "expo-linear-gradient": "~12.0.1",
     "expo-localization": "~14.0.0",
-    "expo-modules-core": "~1.0.3",
     "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
     "i18n-js": "3.9.2",

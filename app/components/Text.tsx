@@ -1,5 +1,5 @@
 import i18n from "i18n-js"
-import React from "react"
+import React, { forwardRef, Ref } from "react"
 import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
 import { isRTL, translate, TxKeyPath } from "../i18n"
 import { colors, typography } from "../theme"
@@ -50,7 +50,7 @@ export interface TextProps extends RNTextProps {
  *
  * - [Documentation and Examples](https://github.com/infinitered/ignite/blob/master/docs/Components-Text.md)
  */
-export function Text(props: TextProps) {
+export const Text = forwardRef(function Text(props: TextProps, ref: Ref<Text>) {
   const { weight, size, tx, txOptions, text, children, style: $styleOverride, ...rest } = props
 
   const i18nText = tx && translate(tx, txOptions)
@@ -66,15 +66,15 @@ export function Text(props: TextProps) {
   ]
 
   return (
-    <RNText {...rest} style={$styles}>
+    <RNText ref={ref} {...rest} style={$styles}>
       {content}
     </RNText>
   )
-}
+})
 
 const $sizeStyles = {
   xxxl: { fontSize: 42, lineHeight: 46.2 } as TextStyle,
-  xxl: { fontSize: 32, lineHeight: 45.2 } as TextStyle,
+  xxl: { fontSize: 32, lineHeight: 35.2 } as TextStyle,
   xl: { fontSize: 26, lineHeight: 28.6 } as TextStyle,
   lg: { fontSize: 22, lineHeight: 24.2 } as TextStyle,
   md: { fontSize: 18, lineHeight: 19.8 } as TextStyle,
@@ -111,11 +111,22 @@ const $presets = {
 
   bold: [$baseStyle, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
-  heading: [$baseStyle, $sizeStyles.xxxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+  welcomeHeading: [$baseStyle, $sizeStyles.xxxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+
+  screenHeading: [$baseStyle, $sizeStyles.xxl, $fontWeightStyles.bold] as StyleProp<TextStyle>,
+
+  cardFooterHeading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.bold] as StyleProp<TextStyle>,
 
   companionHeading: [$baseStyle, $sizeStyles.md, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
   subheading: [$baseStyle, $sizeStyles.lg, $fontWeightStyles.medium] as StyleProp<TextStyle>,
+
+  infoText: [
+    $baseStyle,
+    $sizeStyles.xs,
+    $fontWeightStyles.book,
+    { lineHeight: 22 },
+  ] as StyleProp<TextStyle>,
 
   formLabel: [$baseStyle, $fontWeightStyles.medium] as StyleProp<TextStyle>,
 
@@ -133,6 +144,8 @@ const $presets = {
   eventTitle: [$baseSecondaryStyle, $sizeStyles.xxs, $secondaryFontWeightStyles.medium],
 
   tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
+
+  navHeader: [$baseSecondaryStyle, $sizeStyles.sm, $secondaryFontWeightStyles.medium],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
