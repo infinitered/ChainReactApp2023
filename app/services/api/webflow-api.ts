@@ -1,44 +1,49 @@
 import { useQuery } from "@tanstack/react-query"
-import Webflow from "webflow-api"
+import { axiosInstance, PaginatedItems } from "./axios"
 import {
   CustomScheduleProps,
+  CustomSpeakerNamesProps,
   CustomSpeakerProps,
   CustomSponsorProps,
   CustomWorkshopProps,
 } from "./webflow-api.types"
+import { SCHEDULE, SPEAKERS, SPEAKER_NAMES, SPONSORS, WORKSHOPS } from "./webflow-conts"
 import { cleanedSchedule, cleanedSpeakers, cleanedWorkshops } from "./webflow-helpers"
-
-const webflowAPI = new Webflow({
-  token: "63eb6ae43b109a57f2f18438a50a2a91887f53dc238c700b332b0379e74cf616",
-})
 
 const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
   useQuery({
     queryKey: [key],
     queryFn: async () => {
-      const data = await webflowAPI.items({ collectionId })
-      return data as T[]
+      const { data } = await axiosInstance.get<PaginatedItems<T>>(
+        `/collections/${collectionId}/items`,
+      )
+      return data.items
     },
     enabled,
   })
 
 export const useSponsors = () => {
-  return useWebflowAPI<CustomSponsorProps>("sponsors", "6362b046e69e80645c361104")
+  return useWebflowAPI<CustomSponsorProps>(SPONSORS.key, SPONSORS.collectionId)
 }
 
 export const useSpeakers = () => {
-  const { data, ...rest } = useWebflowAPI<CustomSpeakerProps>(
-    "speakers",
-    "6362b046e69e802c58361103",
-  )
+  const { data, ...rest } = useWebflowAPI<CustomSpeakerProps>(SPEAKERS.key, SPEAKERS.collectionId)
   return { data: cleanedSpeakers(data), ...rest }
+}
+
+export const useSpeakerNames = () => {
+  const { data, ...rest } = useWebflowAPI<CustomSpeakerNamesProps>(
+    SPEAKER_NAMES.key,
+    SPEAKER_NAMES.collectionId,
+  )
+  return { data, ...rest }
 }
 
 export const useWorkshops = () => {
   const { data: speakersData, isLoading } = useSpeakers()
   const { data: workshopsData, ...rest } = useWebflowAPI<CustomWorkshopProps>(
-    "workshops",
-    "6362b046e69e800c2c361100",
+    WORKSHOPS.key,
+    WORKSHOPS.collectionId,
     !isLoading && !!speakersData,
   )
   return { data: cleanedWorkshops(workshopsData, cleanedSpeakers(speakersData)), ...rest }
@@ -47,20 +52,23 @@ export const useWorkshops = () => {
 export const useSchedule = () => {
   const { data: speakersData, isLoading } = useSpeakers()
   const { data: schedulesData, ...rest } = useWebflowAPI<CustomScheduleProps>(
-    "schedule",
-    "6362b046e69e80096f361102",
+    SCHEDULE.key,
+    SCHEDULE.collectionId,
     !isLoading && !!speakersData,
   )
   return { data: cleanedSchedule(schedulesData, cleanedSpeakers(speakersData)), ...rest }
 }
 
 // [NOTE] JUST FOR REFERENCE
-// webflowAPI.site({ siteId: "5ca38f35db5d2ea94aea469d" }).then((site) => {
+// webflowAPI.site({ siteId: SITE_ID }).then((site) => {
 //   console.tron.log({ site })
 // })
-// webflowAPI.collections({ siteId: "5ca38f35db5d2ea94aea469d" }).then((collections) => {
+// webflowAPI.collections({ siteId: SITE_ID }).then((collections) => {
 //   console.tron.log({ collections })
 // })
-// webflowAPI.collection({ collectionId: "6362b046e69e8079f9361101" }).then((speakerNames) => {
+// webflowAPI.collection({ collectionId: SPEAKER_NAMES.collectionId }).then((speakerNames) => {
 //   console.tron.log({ speakerNames })
+// })
+// webflowAPI.collection({ collectionId: PAST_TALKS.collectionId }).then((pastTalks) => {
+//   console.tron.log({ pastTalks })
 // })
