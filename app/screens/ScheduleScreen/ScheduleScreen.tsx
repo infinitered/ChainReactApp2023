@@ -17,7 +17,7 @@ import { formatDate } from "../../utils/formatDate"
 import { useAppNavigation, useAppState } from "../../hooks"
 import { format } from "date-fns"
 
-import data from "../../../assets/mock-data.json"
+import { createScheduleScreenData } from "../../services/api/webflow-helpers"
 
 export interface Schedule {
   date: string
@@ -30,7 +30,8 @@ const { width } = Dimensions.get("window")
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   useHeader({ title: "Schedule" })
 
-  const schedules = data as Schedule[]
+  const schedules = createScheduleScreenData()
+  console.tron.log({ schedules })
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
