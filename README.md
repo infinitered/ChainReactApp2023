@@ -16,7 +16,7 @@ Note: The steps below will have to be run when either of the following happen:
 
 ### iOS Simulator
 
-1. `yarn build:ios`
+1. `yarn build:local:ios`
 2. double click newly created `*.tar.gz` file in `build\` directory of project
 3. you'll now see a `ChainReactApp2023.app` file in the root of your project > drag and drop this file to your simulator
 4. `yarn start`
@@ -24,7 +24,7 @@ Note: The steps below will have to be run when either of the following happen:
 
 ### Android Emulator
 
-1. `yarn build:android`
+1. `yarn build:local:android`
 2. APK will be generated in the `build\` directory of the project
 3. Drag and drop this file to your emulator or sideload to Android device of choice
 4. `yarn start`
@@ -45,7 +45,7 @@ _Note: we'll get this more automated with a script in the future_
 
 1. Skip to step 5 if you've already built the latest dev client and extracted `ChainReactApp2023.app` to `build/`
 2. `rm build/build-*tar.gz; rm -rf build/ChainReactApp2023.app`
-3. `yarn build:ios`
+3. `yarn build:local:ios`
 4. `tar zxvf build/build-*.tar.gz -C build/`
 5. `yarn start`
 6. Open iOS simulator if you want to watch tests in action
