@@ -16,6 +16,11 @@ const irImage2 = require("../../assets/images/info-ir2.png")
 const irImage3 = require("../../assets/images/info-ir3.png")
 
 const carouselData: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
+// const carouselData = [
+//   { image: irImage1, subtitle: "testing title", meta: "meta text", body: "body content here!" },
+//   { image: irImage2, subtitle: "my subtitle", meta: "more meta", body: "body content here!" },
+//   { image: irImage3, subtitle: "heard you like titles", body: "body content here!" },
+// ]
 
 export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () => {
   // NOTE: this only works on a device, warning in sim

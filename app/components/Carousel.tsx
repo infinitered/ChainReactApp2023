@@ -60,8 +60,15 @@ function CarouselItem(props: CarouselItemProps) {
   const $imageStyle = { width: IMAGE_WIDTH - spacing.medium }
 
   const $animatedText = useAnimatedStyle(() => {
-    const translateX = interpolate(scrollX.value, inputRange, [IMAGE_WIDTH, -0, -IMAGE_WIDTH])
-    return { transform: [{ translateX }] }
+    const translateX = interpolate(scrollX.value, inputRange, [
+      IMAGE_WIDTH,
+      0 - index * spacing.medium,
+      -IMAGE_WIDTH,
+    ])
+    return {
+      transform: [{ translateX }],
+      marginLeft: spacing.medium - index * spacing.extraSmall,
+    }
   })
 
   return (
@@ -72,7 +79,7 @@ function CarouselItem(props: CarouselItemProps) {
       {!!image && (
         <View style={[{ width: IMAGE_WIDTH - spacing.medium }, $mt]}>
           {!!meta && (
-            <AnimatedText preset="primaryLabel" text={meta} style={[$mb, $animatedText]} />
+            <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedText]} />
           )}
           <AnimatedText preset="subheading" text={subtitle} style={[$mb, $animatedText]} />
           <AnimatedText text={body} style={$animatedText} />
@@ -113,10 +120,10 @@ export function Carousel(props: CarouselProps) {
         renderItem={({ item, index }) => <CarouselItem {...{ item, index, scrollX }} />}
       />
 
-      {!subtitle && (
+      {!!subtitle && (
         <View style={$content}>
-          {!meta && <Text preset="primaryLabel" text={meta} style={$mb} />}
-          <Text preset="subheading" text={subtitle} style={$mb} />
+          {!!meta && <Text preset="primaryLabel" text={meta} style={$meta} />}
+          <Text preset="subheading" text={subtitle} style={[!meta ? $mt : undefined, $mb]} />
           <Text text={body} />
         </View>
       )}
@@ -132,7 +139,7 @@ const $cardWrapper: ViewStyle = {
 
 const $carousel: ViewStyle = {
   paddingStart: spacing.extraSmall,
-  marginVertical: spacing.medium,
+  marginTop: spacing.medium,
 }
 
 const $carouselContent: ViewStyle = {
@@ -148,5 +155,13 @@ const $mb: TextStyle = {
 }
 
 const $mt: ViewStyle = {
-  marginTop: spacing.extraSmall,
+  marginTop: spacing.medium,
+}
+
+const $subtitleWithoutMeta: ViewStyle = {
+  marginTop: spacing.medium,
+}
+
+const $meta: ViewStyle = {
+  marginBottom: spacing.medium,
 }
