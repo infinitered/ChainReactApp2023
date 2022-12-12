@@ -16,7 +16,7 @@ Note: The steps below will have to be run when either of the following happen:
 
 ### iOS Simulator
 
-1. `yarn build:ios`
+1. `yarn build:local:ios`
 2. double click newly created `*.tar.gz` file in `build\` directory of project
 3. you'll now see a `ChainReactApp2023.app` file in the root of your project > drag and drop this file to your simulator
 4. `yarn start`
@@ -24,11 +24,50 @@ Note: The steps below will have to be run when either of the following happen:
 
 ### Android Emulator
 
-1. `yarn build:android`
+1. `yarn build:local:android`
 2. APK will be generated in the `build\` directory of the project
 3. Drag and drop this file to your emulator or sideload to Android device of choice
 4. `yarn start`
 5. `a` > app will open on the emulator or connected device (use `adb devices` to see if properly connected)
+
+### Running on devices
+
+In order to run on an iOS device, you'll need to add your device to EAS.
+
+1. Run `eas device:create` and follow the prompts.
+2. Enter your UDID or use the web URL option
+3. Make sure to give the device a descriptive name (e.g. Jamon's iPhone 12)
+
+#### Running on device in development mode
+
+Great for developing on device for testing features like screenreader support
+
+Android
+
+1. Follow emulator directions above
+2. Instead of dragging build to emulator, use `adb install` to install on connected device
+
+iOS
+
+1. Run `yarn build:dev:device`
+2. Select iOS (you don't need to run the build through EAS server for Android, just follow the steps above)
+3. Make sure your device is included in the provisioning profile when asked.
+4. Wait for EAS build to complete. Find you build at https://expo.dev/accounts/infinitered/projects/ChainReactApp2023/builds
+5. Install via QR Code
+6. Run `yarn start` in your terminal.
+7. Scan the QR code that comes up in the terminal output with your device. This should connect your phone app installation to the metro server running on your computer.
+8. Good to go!
+
+#### Internal Distribution
+
+This is for distributing the app to internal testers to run on their devices. The app is in release mode, so this isn't ideal for active development
+
+1. Run `yarn build:preview:device`
+2. Choose "All" or a specific platform
+3. If iOS or All is chosen, make sure your iOS device is included in the provisioning profile when asked.
+4. Wait for EAS build to complete. Find you build at https://expo.dev/accounts/infinitered/projects/ChainReactApp2023/builds
+5. Install via QR Code (make sure you don't have any development builds already installed)
+6. You're good to go!
 
 ## E2E Tests
 

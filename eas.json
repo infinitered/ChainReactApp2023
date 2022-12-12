@@ -20,7 +20,11 @@
       "extends": "development",
       "channel": "development-device",
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "ios": {
+        "buildConfiguration": "Debug",
+        "simulator": false
+      }
     },
     "preview": {
       "extends": "production",
@@ -33,7 +37,7 @@
     "preview:device": {
       "extends": "preview",
       "channel": "preview-device",
-      "developmentClient": true
+      "ios": { "simulator": false }
     },
     "production": {
       "channel": "production",
