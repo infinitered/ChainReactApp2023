@@ -30,7 +30,7 @@ export const Avatar: React.FC<AvatarProps> = (props) => {
   const { style: $styleOverride, imageStyle } = props
   const preset: AvatarPresets =
     props.sources.length > 1
-      ? "multiple-images"
+      ? "speaker-panel"
       : $viewPresets[props.preset]
       ? props.preset
       : "workshop"
@@ -70,12 +70,6 @@ const $viewPresets = {
   } as StyleProp<ImageStyle>,
 
   "speaker-panel": {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-  } as StyleProp<ImageStyle>,
-
-  "multiple-images": {
     width: 42,
     height: 42,
     borderRadius: 21,
