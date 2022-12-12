@@ -29,3 +29,40 @@ export const PAST_TALKS = {
   collectionId: "6362b046e69e8009ce361105",
   key: "pastTalks",
 }
+
+export const WORKSHOP_LEVEL_MAP = {
+  bcb33aac3cd85ef6f2e7a97cf23c9771: "Beginner",
+  e9d1df0d23f4049bd9d1a6fe83c5db01: "Intermediate",
+  "860319fadc9cd03654561fba21490285": "Advanced",
+}
+
+export const WORKSHOP_TYPE_MAP = {
+  d9770c43cd59f01f2d60b288d65c1f90: "New",
+  c8af4236d64f5c25c09e61e4633badb0: "Top Seller",
+}
+
+export const SPEAKERS_TYPE_MAP = {
+  "97dae28f90a767132ee88e80a8537af8": "Speaker",
+  "079e51435c82a91426f9c3acc7b0343a": "Panelist",
+  f23ef92d0cef6be6fd60654d54770c96: "Workshop",
+  "07948ce9361d13f707fdb4e663cbe9a5": "Emcee",
+}
+
+export const SPEAKERS_TALK_LEVEL_MAP = {
+  "2f3097a3529a99ed4d688e9ce05034d6": "Beginner",
+  "33984dd1db455114d65e3bd9989f4fad": "Intermediate",
+  ce1ba34575f5a7e30ba9c4f3c33c8211: "Advanced",
+}
+
+export const SCHEDULE_DAY_MAP = {
+  "63ac4ade8b2d5a981780570e01bed34d": "Wednesday",
+  ed2cfa99e27dce5d1a425a419f170eb3: "Thursday",
+  "2e399bc3": "Friday",
+}
+
+export const SCHEDULE_TYPE_MAP = {
+  "976a2eee2ab173440affe93d0a20bf4d": "Talk",
+  c728019fbbce26cc72918695f31e7d4d: "Lightning Talk",
+  "2e399bc3e027ec007832e20e47c5b83b": "Break",
+  b2f17244cf6bd0782c2a099568169219: "Party",
+}
