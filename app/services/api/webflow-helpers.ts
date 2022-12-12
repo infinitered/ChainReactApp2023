@@ -62,10 +62,10 @@ export const cleanedSchedule = (
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => ({
       ...schedule,
-      day: SCHEDULE_DAY_MAP[schedule.day] ?? SCHeDULE_DAY_MAP["2e399bc3"],
+      day: SCHEDULE_DAY_MAP[schedule.day] ?? SCHEDULE_DAY_MAP["2e399bc3"],
       type: SCHEDULE_TYPE_MAP[schedule.type],
       "speaker-2": speakersData?.find((speaker) => speaker._id === schedule["speaker-2"]),
-    }))
+    })) as ScheduleProps[]
 }
 
 /*
