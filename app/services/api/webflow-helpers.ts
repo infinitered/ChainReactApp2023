@@ -9,14 +9,7 @@ import {
   SpeakerProps,
   WorkshopProps,
 } from "./webflow-api.types"
-import {
-  SCHEDULE_DAY_MAP,
-  SCHEDULE_TYPE_MAP,
-  SPEAKERS_TALK_LEVEL_MAP,
-  SPEAKERS_TYPE_MAP,
-  WORKSHOP_LEVEL_MAP,
-  WORKSHOP_TYPE_MAP,
-} from "./webflow-conts"
+import { WEBFLOW_MAP } from "./webflow-conts"
 
 /*
  * Converting workshop data from "type ids" to "type names"
@@ -29,8 +22,8 @@ export const cleanedWorkshops = (
     ?.filter((workshop) => !workshop._archived && !workshop._draft)
     .map((workshop) => ({
       ...workshop,
-      level: WORKSHOP_LEVEL_MAP[workshop.level],
-      type: WORKSHOP_TYPE_MAP[workshop.type],
+      level: WEBFLOW_MAP.workshopLevel[workshop.level],
+      type: WEBFLOW_MAP.workshopType[workshop.type],
       "instructor-info": speakersData?.find(
         (speaker) => speaker._id === workshop["instructor-info"],
       ),
@@ -46,8 +39,8 @@ export const cleanedWorkshops = (
 export const cleanedSpeakers = (speakersData?: CustomSpeakerProps[]): SpeakerProps[] => {
   return speakersData?.map((speaker) => ({
     ...speaker,
-    "speaker-type": SPEAKERS_TYPE_MAP[speaker["speaker-type"]],
-    "talk-level": SPEAKERS_TALK_LEVEL_MAP[speaker["talk-level"]],
+    "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
+    "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
   }))
 }
 
@@ -62,8 +55,8 @@ export const cleanedSchedule = (
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => ({
       ...schedule,
-      day: SCHEDULE_DAY_MAP[schedule.day] ?? SCHEDULE_DAY_MAP["2e399bc3"],
-      type: SCHEDULE_TYPE_MAP[schedule.type],
+      day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
+      type: WEBFLOW_MAP.scheduleType[schedule.type],
       "speaker-2": speakersData?.find((speaker) => speaker._id === schedule["speaker-2"]),
     })) as ScheduleProps[]
 }
