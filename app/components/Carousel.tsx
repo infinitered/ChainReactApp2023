@@ -10,31 +10,30 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated"
 
-interface StaticCarouselItem {
-  subtitle?: string
+interface StaticCarouselProps {
+  preset: "static"
+  data: ImageSourcePropType[]
+  subtitle: string
   meta?: string
   body: string
 }
 
-interface BaseCarouselProps {
-  title: string
-}
-
-interface StaticCarouselProps extends BaseCarouselProps, StaticCarouselItem {
-  preset: "static"
-  data: ImageSourcePropType[]
-}
-
-interface DynamicCarouselItem extends StaticCarouselItem {
+export interface DynamicCarouselItem {
   image: ImageSourcePropType
+  subtitle: string
+  meta?: string
+  body: string
 }
 
-interface DynamicCarouselProps extends BaseCarouselProps {
+interface DynamicCarouselProps {
   preset: "dynamic"
   data: DynamicCarouselItem[]
 }
 
-type CarouselProps = StaticCarouselProps | DynamicCarouselProps
+type CarouselProps =
+  | (StaticCarouselProps | DynamicCarouselProps) & {
+      title: string
+    }
 
 interface CarouselItemProps {
   item: ImageSourcePropType | DynamicCarouselItem
@@ -94,7 +93,6 @@ const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 export function Carousel(props: CarouselProps) {
   const { title, data } = props
-  const { subtitle, meta, body } = props as StaticCarouselProps
 
   const scrollX = useSharedValue(0)
   const onScroll = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
@@ -120,11 +118,15 @@ export function Carousel(props: CarouselProps) {
         renderItem={({ item, index }) => <CarouselItem {...{ item, index, scrollX }} />}
       />
 
-      {!!subtitle && (
+      {props.preset === "static" && (
         <View style={$content}>
-          {!!meta && <Text preset="primaryLabel" text={meta} style={$meta} />}
-          <Text preset="subheading" text={subtitle} style={[!meta ? $mt : undefined, $mb]} />
-          <Text text={body} />
+          {!!props.meta && <Text preset="primaryLabel" text={props.meta} style={$meta} />}
+          <Text
+            preset="subheading"
+            text={props.subtitle}
+            style={[!props.meta ? $mt : undefined, $mb]}
+          />
+          <Text text={props.body} />
         </View>
       )}
     </>
@@ -155,10 +157,6 @@ const $mb: TextStyle = {
 }
 
 const $mt: ViewStyle = {
-  marginTop: spacing.medium,
-}
-
-const $subtitleWithoutMeta: ViewStyle = {
   marginTop: spacing.medium,
 }
 
