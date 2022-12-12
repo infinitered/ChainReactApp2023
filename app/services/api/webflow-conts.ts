@@ -30,6 +30,8 @@ export const PAST_TALKS = {
   key: "pastTalks",
 }
 
+// [NOTE] these keys probably have to change when webflow is updated
+// `/collections/${collectionId}` api will the keys
 export const WEBFLOW_MAP = {
   workshopLevel: {
     bcb33aac3cd85ef6f2e7a97cf23c9771: "Beginner",
