@@ -20,7 +20,7 @@ export type AvatarProps = {
   /**
    * Preset for the avatar
    */
-  preset?: "workshop" | "talk" | "speaker-panel"
+  preset?: AvatarPresets
 }
 
 /**
