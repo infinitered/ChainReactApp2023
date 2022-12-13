@@ -17,6 +17,7 @@ export type CarouselCardProps = {
   scrollX: SharedValue<number>
   leftButton?: React.ReactNode
   rightButton?: React.ReactNode
+  totalCardCount: number
 }
 
 type SubComponents = {
@@ -31,6 +32,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   scrollX,
   leftButton,
   rightButton,
+  totalCardCount,
 }) => {
   const { subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
@@ -54,10 +56,14 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
       0 - index * spacing.medium,
       -CAROUSEL_IMAGE_WIDTH,
     ])
+
+    // * To get the text container underneath to line up correctly, we have to do some
+    // * margin fixing based on first, middle or last slides
+    const marginEndAdjustment =
+      index > 0 ? (index === totalCardCount - 1 ? spacing.medium : spacing.extraSmall) : 0
+
     return {
-      // TODO: ask Jenna/Justin about the -index*spacing.medium here
-      transform: [{ translateX: translateX - index * spacing.medium }],
-      marginLeft: spacing.medium - index * spacing.extraSmall,
+      transform: [{ translateX: translateX - marginEndAdjustment }],
     }
   })
 
@@ -67,7 +73,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
         <Animated.Image source={source} style={[$imageStyle, $animatedImage]} />
       </View>
       {!!subtitle && (
-        <View style={[{ width: CAROUSEL_IMAGE_WIDTH - spacing.medium }, $mt]}>
+        <View style={[{ width: CAROUSEL_IMAGE_WIDTH - spacing.medium }, $slideWrapper]}>
           {!!meta && (
             <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
           )}
@@ -111,10 +117,6 @@ const $mb: TextStyle = {
   marginBottom: spacing.extraSmall,
 }
 
-const $mt: ViewStyle = {
-  marginTop: spacing.medium,
-}
-
 const $meta: ViewStyle = {
   marginBottom: spacing.medium,
 }
@@ -126,4 +128,9 @@ const $ctaContainer: ViewStyle = {
 
 const $carouselCardLink: ViewStyle = {
   marginEnd: spacing.large,
+}
+
+const $slideWrapper: ViewStyle = {
+  marginTop: spacing.medium,
+  paddingStart: spacing.medium,
 }

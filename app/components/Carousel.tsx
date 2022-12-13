@@ -66,19 +66,21 @@ export function Carousel(props: CarouselProps) {
         snapToInterval={CAROUSEL_IMAGE_WIDTH - spacing.medium}
         style={$carousel}
         contentContainerStyle={$carouselContent}
-        renderItem={({ item, index }) => (
-          <CarouselCard
-            {...{ item, index, scrollX }}
-            leftButton={
-              props.preset === "dynamic" && (
-                <CarouselCard.Link
-                  text={(item as DynamicCarouselItem).leftButton?.text}
-                  openLink={() => console.log("open link")}
-                />
-              )
-            }
-          />
-        )}
+        renderItem={({ item, index }) => {
+          let leftButton = null
+          if (props.preset === "dynamic") {
+            const { leftButton: leftButtonData } = item as DynamicCarouselItem
+            leftButton = leftButtonData && (
+              <CarouselCard.Link
+                text={leftButtonData.text}
+                openLink={() => console.log("open link")}
+              />
+            )
+          }
+          return (
+            <CarouselCard {...{ item, index, scrollX, leftButton, totalCardCount: data.length }} />
+          )
+        }}
       />
 
       {props.preset === "static" && (
