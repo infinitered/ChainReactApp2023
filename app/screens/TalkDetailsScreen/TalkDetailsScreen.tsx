@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { ViewStyle, View, TextStyle, ImageStyle, Image } from "react-native"
+import { ViewStyle, View, TextStyle, ImageStyle, Image, Dimensions } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
 import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow, Screen } from "../../components"
@@ -17,6 +17,8 @@ const talkCurve = require("../../../assets/images/talk-curve.png")
 const title = "React Native essentials"
 const subtitle = "Hotel, Conference Room 1"
 
+const SCREEN_WIDTH = Dimensions.get("screen").width
+
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = () => {
   const scrollY = useSharedValue(0)
   const onPress = (url) => openLinkInBrowser(url)
@@ -31,7 +33,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { bottom: paddingBottom } = useSafeAreaInsets()
 
   // TODO: wire this up to the event type
-  const isWorkshop = true
+  const isWorkshop = false
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
@@ -182,6 +184,8 @@ const $workshopCurve: ImageStyle = {
   position: "absolute",
   left: -spacing.large,
   top: spacing.huge - spacing.tiny,
+  width: SCREEN_WIDTH,
+  resizeMode: "stretch",
 }
 
 const $talkBlob: ImageStyle = {
@@ -193,6 +197,8 @@ const $talkBlob: ImageStyle = {
 const $talkCurve: ImageStyle = {
   position: "absolute",
   left: -spacing.large,
+  width: SCREEN_WIDTH,
+  resizeMode: "stretch",
 }
 
 const $title: TextStyle = {
