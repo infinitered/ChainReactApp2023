@@ -3,6 +3,8 @@ import { View, FlatList, Dimensions, ViewStyle, ImageSourcePropType, TextStyle }
 import { CarouselCard, Text } from "../components"
 import { spacing } from "../theme"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
+import { openLinkInBrowser } from "../utils/openLinkInBrowser"
+import { openMap } from "../utils/openMap"
 
 interface StaticCarouselProps {
   preset: "static"
@@ -33,6 +35,7 @@ interface DynamicCarouselProps {
 type CarouselProps =
   | (StaticCarouselProps | DynamicCarouselProps) & {
       title: string
+      openLink?: () => void
     }
 
 export const CAROUSEL_IMAGE_WIDTH = Dimensions.get("screen").width - spacing.medium
@@ -40,7 +43,8 @@ export const CAROUSEL_IMAGE_WIDTH = Dimensions.get("screen").width - spacing.med
 // ! https://github.com/software-mansion/react-native-reanimated/issues/457
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
-const openLink = (destination: string) => destination.startsWith("")
+const openLink = (destination: string) =>
+  destination.startsWith("https") ? openLinkInBrowser(destination) : openMap(destination)
 
 export function Carousel(props: CarouselProps) {
   const { title, data } = props
@@ -73,7 +77,7 @@ export function Carousel(props: CarouselProps) {
             leftButton = leftButtonData && (
               <CarouselCard.Link
                 text={leftButtonData.text}
-                openLink={() => console.log("open link")}
+                openLink={() => openLink(leftButtonData.link)}
               />
             )
           }
