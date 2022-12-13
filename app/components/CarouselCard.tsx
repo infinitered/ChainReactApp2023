@@ -1,18 +1,21 @@
-import React, { FC, VFC } from "react"
-import { GestureResponderEvent, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { AutoImage } from "./AutoImage"
-import { Text } from "./Text"
-import { ButtonLink } from "./ButtonLink"
-import { spacing } from "../theme/spacing"
+import React from "react"
+import {
+  GestureResponderEvent,
+  ImageSourcePropType,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
+import { ButtonLink, Text } from "../components"
+import { spacing } from "../theme"
+import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
+import { CAROUSEL_IMAGE_WIDTH, DynamicCarouselItem } from "./Carousel"
 
 export type CarouselCardProps = {
-  coverImage: {
-    uri: string
-  }
-  meta: string
-  title: string
-  description: React.ReactNode | string
-  leftButton: React.ReactNode
+  item: ImageSourcePropType | DynamicCarouselItem
+  index: number
+  scrollX: SharedValue<number>
+  leftButton?: React.ReactNode
   rightButton?: React.ReactNode
 }
 
@@ -20,29 +23,66 @@ type SubComponents = {
   Link: typeof Link
 }
 
-export const CarouselCard: FC<CarouselCardProps> & SubComponents = ({
-  coverImage,
-  meta,
-  title,
-  description,
+const AnimatedText = Animated.createAnimatedComponent(Text)
+
+export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubComponents = ({
+  item,
+  index,
+  scrollX,
   leftButton,
   rightButton,
 }) => {
+  const { subtitle, meta, body, image } = item as DynamicCarouselItem
+  const source = subtitle ? image : item
+
+  const inputRange = [
+    (index - 1) * CAROUSEL_IMAGE_WIDTH,
+    index * CAROUSEL_IMAGE_WIDTH,
+    (index + 1) * CAROUSEL_IMAGE_WIDTH,
+  ]
+
+  const $animatedImage = useAnimatedStyle(() => {
+    const scale = interpolate(scrollX.value, inputRange, [1, 1.1, 1])
+    return { transform: [{ scale }] }
+  })
+
+  const $imageStyle = { width: CAROUSEL_IMAGE_WIDTH - spacing.medium }
+
+  const $animatedSlideData = useAnimatedStyle(() => {
+    const translateX = interpolate(scrollX.value, inputRange, [
+      CAROUSEL_IMAGE_WIDTH,
+      0 - index * spacing.medium,
+      -CAROUSEL_IMAGE_WIDTH,
+    ])
+    return {
+      // TODO: ask Jenna/Justin about the -index*spacing.medium here
+      transform: [{ translateX: translateX - index * spacing.medium }],
+      marginLeft: spacing.medium - index * spacing.extraSmall,
+    }
+  })
+
   return (
-    <>
-      <AutoImage style={$venueImage} source={coverImage}></AutoImage>
-      <Text preset="primaryLabel" style={$eventDetails}>
-        {meta}
-      </Text>
-      <Text preset="bold" style={$place}>
-        {title}
-      </Text>
-      {typeof description === "function" ? { description } : <Text>{description}</Text>}
-      <View style={$ctaContainer}>
-        {leftButton}
-        {rightButton}
+    <View>
+      <View style={$cardWrapper}>
+        <Animated.Image source={source} style={[$imageStyle, $animatedImage]} />
       </View>
-    </>
+      {!!subtitle && (
+        <View style={[{ width: CAROUSEL_IMAGE_WIDTH - spacing.medium }, $mt]}>
+          {!!meta && (
+            <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
+          )}
+          <AnimatedText preset="subheading" text={subtitle} style={[$mb, $animatedSlideData]} />
+          <AnimatedText text={body} style={$animatedSlideData} />
+          {!leftButton ||
+            (!rightButton && (
+              <Animated.View style={[$ctaContainer, $animatedSlideData]}>
+                {leftButton}
+                {rightButton}
+              </Animated.View>
+            ))}
+        </View>
+      )}
+    </View>
   )
 }
 
@@ -51,7 +91,7 @@ type LinkProps = {
   openLink: string | ((event: GestureResponderEvent) => void)
 }
 
-const Link: VFC<LinkProps> = ({ openLink, text }) => {
+const Link: React.FunctionComponent<LinkProps> = ({ openLink, text }) => {
   return (
     <ButtonLink openLink={openLink} style={$carouselCardLink}>
       {text}
@@ -61,23 +101,27 @@ const Link: VFC<LinkProps> = ({ openLink, text }) => {
 
 CarouselCard.Link = Link
 
-const $venueImage: ImageStyle = {
+const $cardWrapper: ViewStyle = {
+  overflow: "hidden",
   borderRadius: 4,
-  maxHeight: 274,
-  maxWidth: 358,
+  marginEnd: spacing.extraSmall,
 }
 
-const $eventDetails: TextStyle = {
-  marginVertical: spacing.medium,
-}
-
-const $place: TextStyle = {
+const $mb: TextStyle = {
   marginBottom: spacing.extraSmall,
+}
+
+const $mt: ViewStyle = {
+  marginTop: spacing.medium,
+}
+
+const $meta: ViewStyle = {
+  marginBottom: spacing.medium,
 }
 
 const $ctaContainer: ViewStyle = {
   flexDirection: "row",
-  marginTop: spacing.large,
+  marginTop: spacing.medium,
 }
 
 const $carouselCardLink: ViewStyle = {
