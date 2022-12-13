@@ -31,13 +31,15 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
 
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
-      <Carousel
-        preset="static"
-        data={carouselData}
-        title={translate("infoScreen.screenHeading")}
-        subtitle={translate("infoScreen.aboutTitle")}
-        body={translate("infoScreen.about")}
-      />
+      <View style={$carouselContainer}>
+        <Carousel
+          preset="static"
+          data={carouselData}
+          title={translate("infoScreen.screenHeading")}
+          subtitle={translate("infoScreen.aboutTitle")}
+          body={translate("infoScreen.about")}
+        />
+      </View>
 
       <View style={$content}>
         <Text preset="screenHeading" text="Code of conduct" style={$codeOfConductHeading} />
@@ -98,4 +100,8 @@ const $codeOfConductHeading: TextStyle = {
 
 const $emailButton: ViewStyle = {
   marginEnd: spacing.medium,
+}
+
+const $carouselContainer: ViewStyle = {
+  marginTop: spacing.extraLarge,
 }

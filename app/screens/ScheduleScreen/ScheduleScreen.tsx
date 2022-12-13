@@ -195,7 +195,7 @@ const $subheading: TextStyle = {
 }
 
 const $list: ContentStyle = {
-  paddingTop: spacing.medium,
+  paddingTop: spacing.extraLarge,
   paddingBottom: 48 + spacing.medium,
 }
 
