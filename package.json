@@ -9,6 +9,8 @@
     "build:dev": "eas build --profile development",
     "build:dev:ios": "eas build --profile development -p ios",
     "build:dev:android": "eas build --profile development -p android",
+    "build:dev:device": "eas build --profile development:device",
+    "build:dev:device:local": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development:device --local",
     "build:preview": "eas build --profile preview:device",
     "build:preview:ios": "eas build --profile preview:device -p ios",
     "build:preview:android": "eas build --profile preview:device -p android",
