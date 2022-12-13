@@ -4,7 +4,7 @@ import { spacing } from "../theme"
 
 export type AvatarPresets = keyof typeof $viewPresets
 
-type CommonProps = {
+export type AvatarProps = {
   /**
    * An optional style override useful for padding & margin.
    */
@@ -13,60 +13,42 @@ type CommonProps = {
    * An optional style to override the Image
    */
   imageStyle?: StyleProp<ImageStyle>
-}
-
-interface SingleAvatarProps extends CommonProps {
-  preset?: "workshop" | "talk"
-  /**
-   * The avatar to display
-   */
-  source: ImageSourcePropType
-}
-
-interface PanelAvatarProps extends CommonProps {
-  preset: "speaker-panel"
   /**
    * Multiple avatars to display
    */
   sources: ImageSourcePropType[]
+  /**
+   * Preset for the avatar
+   */
+  preset?: AvatarPresets
 }
-
-export type AvatarProps = SingleAvatarProps | PanelAvatarProps
 
 /**
  * Displays an avatar for a workshop, talk or speaker panel
  */
 export const Avatar: React.FC<AvatarProps> = (props) => {
   const { style: $styleOverride, imageStyle } = props
-  const preset: AvatarPresets = $viewPresets[props.preset] ? props.preset : "workshop"
+  const preset: AvatarPresets =
+    props.sources.length > 1
+      ? "speaker-panel"
+      : $viewPresets[props.preset]
+      ? props.preset
+      : "workshop"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
   const $containerStyle = [$baseContainerStyle, $styleOverride]
 
-  if (preset !== "speaker-panel") {
-    return (
-      <View style={$containerStyle}>
+  return (
+    <View style={$containerStyle}>
+      {props.sources.map((source, index) => (
         <Image
-          source={(props as SingleAvatarProps).source}
-          style={$imageStyle}
+          key={`panel-${index}-${source}`}
+          source={source}
+          style={[$imageStyle, $panelImageStyle]}
           resizeMode="contain"
         />
-      </View>
-    )
-  } else {
-    const sources = (props as PanelAvatarProps).sources
-    return (
-      <View style={$containerStyle}>
-        {sources.map((source, index) => (
-          <Image
-            key={`panel-${index}-${source}`}
-            source={source}
-            style={[$imageStyle, $panelImageStyle]}
-            resizeMode="contain"
-          />
-        ))}
-      </View>
-    )
-  }
+      ))}
+    </View>
+  )
 }
 
 const $baseContainerStyle: ViewStyle = {

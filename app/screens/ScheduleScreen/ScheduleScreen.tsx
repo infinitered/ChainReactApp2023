@@ -17,7 +17,7 @@ import { formatDate } from "../../utils/formatDate"
 import { useAppNavigation, useAppState } from "../../hooks"
 import { format } from "date-fns"
 
-import data from "../../../assets/mock-data.json"
+import { createScheduleScreenData } from "../../services/api/webflow-helpers"
 
 export interface Schedule {
   date: string
@@ -30,7 +30,7 @@ const { width } = Dimensions.get("window")
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   useHeader({ title: "Schedule" })
 
-  const schedules = data as Schedule[]
+  const schedules = createScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
@@ -151,14 +151,14 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                 }
                 data={schedule.events}
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
-                  const { time, eventTitle, heading, subheading } = item
+                  const { time, eventTitle, heading, subheading, sources, level } = item
                   const onPress =
                     item.variant !== "event" ? () => navigation.navigate("TalkDetails") : undefined
                   return (
                     <View style={$cardContainer}>
                       <ScheduleCard
                         variant={item.variant as Variants}
-                        {...{ time, eventTitle, heading, subheading, onPress }}
+                        {...{ time, eventTitle, heading, subheading, onPress, sources, level }}
                       />
                     </View>
                   )

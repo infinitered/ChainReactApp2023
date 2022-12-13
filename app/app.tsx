@@ -20,6 +20,7 @@ import * as storage from "./utils/storage"
 import { customFontsToLoad } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -41,6 +42,9 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 interface AppProps {
   hideSplashScreen: () => Promise<void>
 }
+
+// Creating a react-query client with the stale time set to "Infinity" so that its never stale
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
 
 /**
  * This is the root component of our app.
@@ -71,10 +75,12 @@ function App(props: AppProps) {
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary catchErrors={Config.catchErrors}>
-        <AppNavigator
-          initialState={initialNavigationState}
-          onStateChange={onNavigationStateChange}
-        />
+        <QueryClientProvider client={queryClient}>
+          <AppNavigator
+            initialState={initialNavigationState}
+            onStateChange={onNavigationStateChange}
+          />
+        </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   )
