@@ -33,7 +33,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { bottom: paddingBottom } = useSafeAreaInsets()
 
   // TODO: wire this up to the event type
-  const isWorkshop = false
+  const isWorkshop = true
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
