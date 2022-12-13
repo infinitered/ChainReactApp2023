@@ -66,7 +66,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     '@react-native-firebase/app',
     '@react-native-firebase/crashlytics',
-    '@react-native-firebase/messaging',
     ['expo-build-properties', { ios: { useFrameworks: 'static' } }]
   ]
 });
