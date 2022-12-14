@@ -34,7 +34,6 @@ interface DynamicCarouselProps {
 
 type CarouselProps =
   | (StaticCarouselProps | DynamicCarouselProps) & {
-      title: string
       openLink?: () => void
     }
 
@@ -47,17 +46,13 @@ const openLink = (destination: string) =>
   destination.startsWith("https") ? openLinkInBrowser(destination) : openMap(destination)
 
 export function Carousel(props: CarouselProps) {
-  const { title, data } = props
+  const { data } = props
 
   const scrollX = useSharedValue(0)
   const onScroll = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
 
   return (
     <>
-      <View style={$content}>
-        <Text preset="screenHeading" text={title} />
-      </View>
-
       <AnimatedFlatList
         {...{ data, onScroll }}
         horizontal
