@@ -7,6 +7,7 @@ export const openMap = async (address: string) => {
 
   try {
     // TODO come back here for canOpenURL and properly implement AndroidManifest.xml
+    // https://github.com/facebook/react-native/pull/31263
     // https://developer.android.com/training/package-visibility
     // https://github.com/facebook/react-native/issues/32311
     Linking.openURL(link)
