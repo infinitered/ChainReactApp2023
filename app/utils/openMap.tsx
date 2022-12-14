@@ -6,9 +6,10 @@ export const openMap = async (address: string) => {
   const link = `http://maps.${provider}.com/?daddr=${destination}`
 
   try {
-    const supported = await Linking.canOpenURL(link)
-
-    if (supported) Linking.openURL(link)
+    // TODO come back here for canOpenURL and properly implement AndroidManifest.xml
+    // https://developer.android.com/training/package-visibility
+    // https://github.com/facebook/react-native/issues/32311
+    Linking.openURL(link)
   } catch (error) {
     console.error(error)
   }
