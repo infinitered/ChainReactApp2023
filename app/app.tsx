@@ -21,6 +21,7 @@ import { customFontsToLoad } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import messaging from "@react-native-firebase/messaging"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -60,7 +61,14 @@ function App(props: AppProps) {
   const [areFontsLoaded] = useFonts(customFontsToLoad)
 
   useLayoutEffect(() => {
+    // hide splash screen after 500ms
     setTimeout(hideSplashScreen, 500)
+    // handle a new push notification received while the app is in "foreground" state
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      // Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage))
+      console.tron.log({ fcmMessage: JSON.stringify(remoteMessage) })
+    })
+    return unsubscribe
   })
 
   // Before we show the app, we have to wait for our state to be ready.
