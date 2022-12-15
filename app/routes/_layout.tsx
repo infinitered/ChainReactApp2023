@@ -51,7 +51,6 @@ export default function Layout(props: AppProps) {
 
   React.useLayoutEffect(() => {
     setTimeout(() => {
-      console.log("here")
       setIsReady(true)
     }, 500)
   }, [])
