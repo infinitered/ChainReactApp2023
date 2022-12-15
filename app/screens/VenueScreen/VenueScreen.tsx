@@ -1,40 +1,59 @@
 import React, { FC } from "react"
 import { SectionList, TextStyle, View, ViewStyle } from "react-native"
-import { CarouselCard, Screen, Text } from "../../components"
+import { Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
-import { openMap } from "../../utils/openMap"
 import { SponsorCard } from "./SponsorCard"
 
-const Workshops = () => {
-  const openLink = async () => {
-    await openMap("11134 Washington St #302", "97006", "Portland")
-  }
+const irImage1 = require("../../../assets/images/info-ir1.png")
+const irImage2 = require("../../../assets/images/info-ir2.png")
+
+const Workshops = ({ item }) => {
   return (
     <View style={$carousel}>
-      {/* test carousel card */}
-      <CarouselCard
-        coverImage={{ uri: "https://placekitten.com/g/358/274" }}
-        meta="Conference • May 18-19"
-        title="The Armory"
-        description="11134 Washington St #302, Portland, OR 97006"
-        leftButton={<CarouselCard.Link text="Open in maps" openLink={openLink} />}
-      />
+      <Carousel preset="dynamic" data={item} />
     </View>
   )
 }
 
 const SponsorSection = ({ item }) => {
-  return <SponsorCard {...item} />
+  return (
+    <View style={$container}>
+      <SponsorCard {...item} />
+    </View>
+  )
 }
 
 const SECTIONS = [
   {
     title: translate("venueScreen.conferenceAndWorkshopVenues"),
     renderItem: Workshops,
-    data: [{}],
+    data: [
+      [
+        {
+          image: irImage1,
+          subtitle: "The Armory",
+          meta: "Conference • May 18-19",
+          body: "11134 Washington St #302\nPortland, OR 97006",
+          leftButton: {
+            text: "Open in maps",
+            link: "11134 Washington St #302, Portland, OR 97006",
+          },
+        },
+        {
+          image: irImage2,
+          subtitle: "Workshops • May 17",
+          meta: "Marriott Portland City Center",
+          body: "550 SW Oak Street\nPortland, OR 97204",
+          leftButton: {
+            text: "Open in maps",
+            link: "550 SW Oak Street, Portland, OR 97204",
+          },
+        },
+      ],
+    ],
   },
   {
     title: translate("venueScreen.thanksToThisYearsSponsors"),
@@ -99,9 +118,9 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
   useHeader({ title: translate("venueScreen.title") })
 
   return (
-    <Screen style={$root} preset="fixed" contentContainerStyle={$container}>
+    <Screen style={$root} preset="fixed">
       <SectionList
-        stickySectionHeadersEnabled
+        stickySectionHeadersEnabled={false}
         sections={SECTIONS}
         renderSectionHeader={({ section: { title } }) => (
           <Text preset="screenHeading" style={$heading}>
@@ -122,11 +141,11 @@ const $container: ViewStyle = {
 }
 
 const $heading: TextStyle = {
-  fontSize: 32,
-  lineHeight: 45.2,
   backgroundColor: colors.palette.neutral500,
+  marginTop: spacing.extraLarge,
+  paddingHorizontal: spacing.large,
 }
 
 const $carousel: ViewStyle = {
-  marginVertical: spacing.large,
+  marginBottom: spacing.extraLarge,
 }

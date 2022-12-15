@@ -1,27 +1,12 @@
 import React from "react"
-import {
-  ImageStyle,
-  TextStyle,
-  View,
-  ViewStyle,
-  ImageSourcePropType,
-  Image,
-  FlatList,
-} from "react-native"
+import { ImageStyle, TextStyle, View, ViewStyle, ImageSourcePropType, Image } from "react-native"
 import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
 import { TabScreenProps } from "../navigators/TabNavigator"
 import { colors, spacing } from "../theme"
 import { translate } from "../i18n"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
-import Animated, {
-  interpolate,
-  useAnimatedScrollHandler,
-  useAnimatedStyle,
-  useSharedValue,
-} from "react-native-reanimated"
-
-const IMAGE_WIDTH = 358
+import { Carousel } from "../components/Carousel"
 
 const phoneNumber = "360-450-4752"
 
@@ -30,26 +15,7 @@ const irImage1 = require("../../assets/images/info-ir1.png")
 const irImage2 = require("../../assets/images/info-ir2.png")
 const irImage3 = require("../../assets/images/info-ir3.png")
 
-const carouselImages: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
-
-// ! https://github.com/software-mansion/react-native-reanimated/issues/457
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
-
-const CarouselItem = ({ item, index, scrollX }) => {
-  const $animatedImage = useAnimatedStyle(() => {
-    const inputRange = [(index - 1) * IMAGE_WIDTH, index * IMAGE_WIDTH, (index + 1) * IMAGE_WIDTH]
-
-    const scale = interpolate(scrollX.value, inputRange, [1, 1.1, 1])
-
-    return { transform: [{ scale }] }
-  })
-
-  return (
-    <View style={$cardWrapper}>
-      <Animated.Image source={item} style={$animatedImage} />
-    </View>
-  )
-}
+const carouselData: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
 
 export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () => {
   // NOTE: this only works on a device, warning in sim
@@ -63,37 +29,20 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
     ),
   })
 
-  const scrollX = useSharedValue(0)
-  const scrollHandler = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
-
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
-      <View style={$content}>
-        <Text preset="screenHeading" tx="infoScreen.screenHeading" />
-      </View>
+      <Text preset="screenHeading" tx="infoScreen.screenHeading" style={$screenHeading} />
 
-      <AnimatedFlatList
-        data={carouselImages}
-        onScroll={scrollHandler}
-        keyExtractor={(_, index) => `info-image-${index}`}
-        bounces={false}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        pagingEnabled
-        decelerationRate="fast"
-        scrollEventThrottle={16}
-        snapToInterval={IMAGE_WIDTH}
-        style={$carousel}
-        contentContainerStyle={$carouselContent}
-        renderItem={({ item, index }) => <CarouselItem {...{ item, index, scrollX }} />}
+      <Carousel
+        preset="static"
+        data={carouselData}
+        subtitle={translate("infoScreen.aboutTitle")}
+        body={translate("infoScreen.about")}
       />
 
       <View style={$content}>
-        <Text preset="subheading" tx="infoScreen.aboutTitle" style={$heading} />
-        <Text preset="infoText" tx="infoScreen.about" />
-
         <Text preset="screenHeading" text="Code of conduct" style={$codeOfConductHeading} />
-        <Text preset="infoText" tx="infoScreen.conductWarning" />
+        <Text tx="infoScreen.conductWarning" />
       </View>
 
       <View style={$imageContainer}>
@@ -102,20 +51,15 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
 
       <View style={$content}>
         <Text preset="primaryLabel" tx="infoScreen.codeOfConductTitle" style={$mb} />
-        <Text preset="infoText" tx="infoScreen.codeOfConduct" style={$mb} />
+        <Text tx="infoScreen.codeOfConduct" style={$mb} />
 
         <Text preset="primaryLabel" tx="infoScreen.extraDetailsTitle" style={$mb} />
-        <Text preset="infoText" tx="infoScreen.extraDetails" style={$mb} />
+        <Text tx="infoScreen.extraDetails" style={$mb} />
 
         <Text preset="primaryLabel" tx="infoScreen.reportingIncidentTitle" style={$mb} />
-        <Text preset="infoText">
+        <Text>
           {translate("infoScreen.reportingIncidentPart1")}
-          <Text
-            preset="infoText"
-            style={$phoneNumber}
-            onPress={callPhoneNumber}
-            text={phoneNumber}
-          />
+          <Text style={$phoneNumber} onPress={callPhoneNumber} text={phoneNumber} />
           {translate("infoScreen.reportingIncidentPart2")}
         </Text>
       </View>
@@ -125,25 +69,6 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
 
 const $root: ViewStyle = {
   flex: 1,
-}
-
-const $cardWrapper: ViewStyle = {
-  overflow: "hidden",
-  borderRadius: 4,
-  marginEnd: spacing.extraSmall,
-}
-
-const $heading: TextStyle = {
-  marginBottom: spacing.extraSmall,
-}
-
-const $carousel: ViewStyle = {
-  paddingStart: spacing.extraSmall,
-  marginVertical: spacing.medium,
-}
-
-const $carouselContent: ViewStyle = {
-  paddingEnd: spacing.extraSmall,
 }
 
 const $content: ViewStyle = {
@@ -174,4 +99,9 @@ const $codeOfConductHeading: TextStyle = {
 
 const $emailButton: ViewStyle = {
   marginEnd: spacing.medium,
+}
+
+const $screenHeading: ViewStyle = {
+  marginTop: spacing.extraLarge,
+  paddingHorizontal: spacing.large,
 }
