@@ -89,14 +89,15 @@ export const createScheduleScreenData = (): Schedule[] => {
 export const convertWorkshopToScheduleCard = (
   workshopData?: WorkshopProps[],
 ): ScheduleCardProps[] => {
-  return workshopData?.map((workshop) => {
+  return workshopData?.map((workshop, index) => {
     const sources = [workshop["instructor-info"]["speaker-photo"].url]
     if (workshop["second-instructor-2"]) {
       sources.push(workshop["second-instructor-2"]["speaker-photo"].url)
     }
     return {
       variant: "workshop",
-      time: "00:00",
+      // Temporary solution for workshop time for testing centering the card on the screen
+      time: `${index}:00`,
       eventTitle: "workshop",
       heading: workshop.name,
       subheading: workshop["instructor-info"].name,
@@ -112,9 +113,10 @@ const convertScheduleToScheduleCard = (
   key: string,
 ): ScheduleCardProps[] => {
   const groupScheduleData: ScheduleProps[] = groupBy("day-time")(scheduleData ?? [])?.[key] ?? []
-  return groupScheduleData.map((schedule) => ({
+  return groupScheduleData.map((schedule, index) => ({
     variant: schedule.type === "Talk" || schedule.type === "Lightning Talk" ? "talk" : "event",
-    time: "00:00",
+    // Temporary solution for workshop time for testing centering the card on the screen
+    time: `${index}:00`,
     eventTitle:
       schedule.type === "Talk"
         ? "talk"
