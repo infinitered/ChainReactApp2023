@@ -46,6 +46,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   }, [])
 
   const currentDate = format(new Date(), "yyyy-MM-dd")
+  const currentHour = new Date().getHours().toString()
 
   const scrollX = useSharedValue(0)
   const isFocused = useIsFocused()
@@ -85,11 +86,18 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
       }, 100)
     }
 
-    // TODO: Scroll to the proper time of day talk in the FlashList
-    // setTimeout(() => {
-    //   scheduleListRefs[schedules[0].date]?.current?.scrollToIndex({ animated: true, index: 2 })
-    // }, 100)
-  }, [onItemPress, scheduleListRefs, schedules, currentDate])
+    // Scroll to the proper time of day talk
+    setTimeout(() => {
+      const schedule = schedules[scheduleIndex]
+      const eventIndex = schedule?.events?.findIndex((e) => e.time.startsWith(currentHour))
+      if (eventIndex > -1) {
+        scheduleListRefs[schedule?.date]?.current?.scrollToIndex({
+          animated: true,
+          index: eventIndex,
+        })
+      }
+    }, 200)
+  }, [onItemPress, scheduleListRefs, schedules, currentDate, currentHour])
 
   // When app comes from the background to the foreground, focus on the current day in the schedule
   useAppState({
