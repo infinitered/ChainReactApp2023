@@ -94,7 +94,7 @@ _Note: we'll get this more automated with a script in the future_
 
 1. Skip to step 5 if you've already built the latest dev client and extracted `ChainReactApp2023.app` to `build/`
 2. `rm build/build-*tar.gz; rm -rf build/ChainReactApp2023.app`
-3. `yarn build:ios`
+3. `yarn build:local:ios`
 4. `tar zxvf build/build-*.tar.gz -C build/`
 5. `yarn start`
 6. Open iOS simulator if you want to watch tests in action
