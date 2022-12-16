@@ -99,3 +99,10 @@ _Note: we'll get this more automated with a script in the future_
 5. `yarn start`
 6. Open iOS simulator if you want to watch tests in action
 7. `yarn e2e:ios` (separate terminal, do not stop step 3)
+
+# Publishing updates OTA
+
+1. Create the update branch `eas update --branch [update branch name] --message "info about the update"`
+2. Determine channel where update should be applied. By default, any profile name in `eas.json` is created as a channel in addition to the specified `channel` property
+3. Publish the update branch to the release channel `eas channel:edit [channel name] --branch [branch name]`
+4. Restart the app twice to receive the update (on the first, the app will download any available updates - then apply it on the second)
