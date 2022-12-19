@@ -37,7 +37,9 @@ const AnimatedDayButton = React.forwardRef(
 
     return (
       <Pressable {...{ ref, onPress }} style={$buttonStyle}>
-        <Animated.Text style={[$textStyle, $animatedTextStyle]}>{text}</Animated.Text>
+        <Animated.Text maxFontSizeMultiplier={2} style={[$textStyle, $animatedTextStyle]}>
+          {text}
+        </Animated.Text>
       </Pressable>
     )
   },

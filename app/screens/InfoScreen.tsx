@@ -1,5 +1,13 @@
 import React from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, ImageSourcePropType, Image } from "react-native"
+import {
+  ImageStyle,
+  TextStyle,
+  View,
+  ViewStyle,
+  ImageSourcePropType,
+  Image,
+  Text as RNText,
+} from "react-native"
 import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
 import { TabScreenProps } from "../navigators/TabNavigator"
@@ -25,7 +33,9 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
   useHeader({
     title: translate("infoScreen.title"),
     RightActionComponent: (
-      <Button preset="link" text="Contact" onPress={contactByEmail} style={$emailButton} />
+      <Button preset="link" onPress={contactByEmail} style={$emailButton}>
+        <RNText maxFontSizeMultiplier={1.8}>Contact</RNText>
+      </Button>
     ),
   })
 

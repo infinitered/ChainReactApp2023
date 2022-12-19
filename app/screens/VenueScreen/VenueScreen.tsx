@@ -120,6 +120,7 @@ export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
   return (
     <Screen style={$root} preset="fixed">
       <SectionList
+        showsVerticalScrollIndicator={false}
         stickySectionHeadersEnabled={false}
         sections={SECTIONS}
         renderSectionHeader={({ section: { title } }) => (
