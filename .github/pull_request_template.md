@@ -1,18 +1,17 @@
 # Description
 
-[Trello Card]()
+[Trello Card]() # NOTE: Please remove our Trello "ID" from the link. i.e. the "link" would look something like `123-feature-ticket`
 
-Summary of the changes and any helpful notes for reviewers and testers. 
-
+Summary of the changes and any helpful notes for reviewers and testers.
 
 # Graphics
 
-| iOS | Android |
-| ------ | ------- |
+| iOS            | Android            |
+| -------------- | ------------------ |
 | ios_screenshot | android_screenshot |
 
 # Checklist:
 
 - [ ] I have done a thorough self-review of my code
-- [ ] I have tested with a screen reader and font-scaling turned on and added necessary accessibility features 
+- [ ] I have tested with a screen reader and font-scaling turned on and added necessary accessibility features
 - [ ] I have run tests and linter
