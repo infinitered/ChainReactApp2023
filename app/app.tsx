@@ -17,12 +17,14 @@ import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-c
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
-import { customFontsToLoad } from "./theme"
+import { colors, customFontsToLoad, spacing } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import messaging from "@react-native-firebase/messaging"
-import { Alert } from "react-native"
+import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
+import { $baseSecondaryStyle, $baseStyle } from "./components"
+import { Dimensions, ViewStyle } from "react-native"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -66,10 +68,27 @@ function App(props: AppProps) {
     setTimeout(hideSplashScreen, 500)
     // handle a new push notification received while the app is in "foreground" state
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage))
+      if (remoteMessage.notification) {
+        Toast.show({
+          text1: remoteMessage.notification.title,
+          text2: remoteMessage.notification.body,
+        })
+      }
     })
     return unsubscribe
   })
+
+  const toastConfig: ToastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        contentContainerStyle={$toastContainer}
+        style={$toast}
+        text1Style={$baseStyle}
+        text2Style={$baseSecondaryStyle}
+      />
+    ),
+  }
 
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
@@ -88,6 +107,7 @@ function App(props: AppProps) {
             initialState={initialNavigationState}
             onStateChange={onNavigationStateChange}
           />
+          <Toast config={toastConfig} />
         </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
@@ -95,3 +115,15 @@ function App(props: AppProps) {
 }
 
 export default App
+
+const $toast: ViewStyle = {
+  backgroundColor: colors.palette.neutral300,
+  borderLeftWidth: 0,
+  borderRadius: spacing.extraSmall,
+  width: Dimensions.get("window").width - spacing.extraSmall * 2,
+}
+
+const $toastContainer: ViewStyle = {
+  paddingHorizontal: spacing.large,
+  paddingVertical: spacing.medium,
+}
