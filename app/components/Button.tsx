@@ -7,6 +7,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
+  TextProps as RNTextProps,
 } from "react-native"
 import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
@@ -27,6 +28,10 @@ export interface ButtonProps extends PressableProps {
    * The text to display if not using `tx` or nested components.
    */
   text?: TextProps["text"]
+  /**
+   * Optional props to pass to the Text
+   */
+  textProps?: RNTextProps
   /**
    * Optional options to pass to i18n. Useful for interpolation
    * as well as explicitly setting locale or translation fallbacks.
@@ -78,6 +83,7 @@ export function Button(props: ButtonProps) {
   const {
     tx,
     text,
+    textProps,
     txOptions,
     style: $viewStyleOverride,
     pressedStyle: $pressedViewStyleOverride,
@@ -114,7 +120,13 @@ export function Button(props: ButtonProps) {
               <LeftAccessory style={$leftAccessoryStyle} pressableState={state} />
             )}
 
-            <Text tx={tx} text={text} txOptions={txOptions} style={$textStyle(state)}>
+            <Text
+              tx={tx}
+              text={text}
+              txOptions={txOptions}
+              style={$textStyle(state)}
+              {...textProps}
+            >
               {children}
             </Text>
 
