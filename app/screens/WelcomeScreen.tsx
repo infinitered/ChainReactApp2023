@@ -50,7 +50,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
           <Button
             testID="see-the-schedule-button"
             tx="welcomeScreen.scheduleButton"
-            textProps={{ allowFontScaling: false }}
+            TextProps={{ allowFontScaling: false }}
             onPress={goNext}
           />
         </View>

@@ -30,7 +30,7 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
         text="Contact"
         onPress={contactByEmail}
         style={$emailButton}
-        textProps={{ maxFontSizeMultiplier: 1.8 }}
+        TextProps={{ maxFontSizeMultiplier: 1.8 }}
       />
     ),
   })

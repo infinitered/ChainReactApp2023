@@ -31,7 +31,7 @@ export interface ButtonProps extends PressableProps {
   /**
    * Optional props to pass to the Text
    */
-  textProps?: RNTextProps
+  TextProps?: RNTextProps
   /**
    * Optional options to pass to i18n. Useful for interpolation
    * as well as explicitly setting locale or translation fallbacks.
@@ -83,7 +83,7 @@ export function Button(props: ButtonProps) {
   const {
     tx,
     text,
-    textProps,
+    TextProps,
     txOptions,
     style: $viewStyleOverride,
     pressedStyle: $pressedViewStyleOverride,
@@ -125,7 +125,7 @@ export function Button(props: ButtonProps) {
               text={text}
               txOptions={txOptions}
               style={$textStyle(state)}
-              {...textProps}
+              {...TextProps}
             >
               {children}
             </Text>
