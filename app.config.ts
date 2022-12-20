@@ -46,7 +46,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       resizeMode: 'contain',
       backgroundColor: '#081828'
     },
-    googleServicesFile: `./GoogleService-Info.plist`
+    googleServicesFile: `./GoogleService-Info.plist`,
+    infoPlist: { UIStatusBarHidden: true },
   },
   web: {
     favicon: './assets/images/app-icon-web-favicon.png',
