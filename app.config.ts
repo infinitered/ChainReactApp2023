@@ -1,39 +1,13 @@
 import { ExpoConfig, ConfigContext } from "@expo/config"
-import { ConfigPlugin, withDangerousMod } from "expo/config-plugins"
-import { mergeContents } from "@expo/config-plugins/build/utils/generateCode"
-import * as fs from "fs"
-import * as path from "path"
 import { version } from "./package.json"
 
 const BUILD_NUMBER = 2
-
-const withReactNativeFirebase: ConfigPlugin = (config) => {
-  return withDangerousMod(config, [
-    "ios",
-    async (config) => {
-      const filePath = path.join(config.modRequest.platformProjectRoot, "Podfile")
-      const contents = fs.readFileSync(filePath, "utf-8")
-
-      const firebaseOverride = mergeContents({
-        tag: "IR-Firebase-SDK-Version-Override",
-        src: contents,
-        newSrc: "# Override Firebase SDK Version\n$FirebaseSDKVersion = '10.3.0'",
-        anchor: /scripts\/autolinking/gm,
-        offset: 0,
-        comment: "#",
-      })
-
-      fs.writeFileSync(filePath, firebaseOverride.contents)
-
-      return config
-    },
-  ])
-}
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Chain React App 2023",
   slug: "ChainReactApp2023",
+  scheme: "chainreactapp",
   version,
   orientation: "portrait",
   icon: "./assets/images/app-icon-all.png",
@@ -74,6 +48,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#081828",
     },
     googleServicesFile: `./GoogleService-Info.plist`,
+    infoPlist: {
+      UIBackgroundModes: ["fetch", "remote-notification"],
+    },
   },
   web: {
     favicon: "./assets/images/app-icon-web-favicon.png",
@@ -94,6 +71,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
     ["expo-build-properties", { ios: { useFrameworks: "static" } }],
-    withReactNativeFirebase,
   ],
 })
