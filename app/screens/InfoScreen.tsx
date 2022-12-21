@@ -25,7 +25,13 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
   useHeader({
     title: translate("infoScreen.title"),
     RightActionComponent: (
-      <Button preset="link" text="Contact" onPress={contactByEmail} style={$emailButton} />
+      <Button
+        preset="link"
+        text="Contact"
+        onPress={contactByEmail}
+        style={$emailButton}
+        TextProps={{ maxFontSizeMultiplier: 1.8 }}
+      />
     ),
   })
 

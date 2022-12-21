@@ -191,6 +191,7 @@ export function Header(props: HeaderProps) {
 
         {!!titleContent && (
           <Text
+            maxFontSizeMultiplier={3}
             preset="navHeader"
             text={titleContent}
             style={[

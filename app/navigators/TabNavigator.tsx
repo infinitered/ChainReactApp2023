@@ -75,6 +75,7 @@ export function TabNavigator() {
         tabBarInactiveTintColor: colors.text,
         tabBarLabelStyle: $tabBarLabel,
         tabBarItemStyle: $tabBarItem,
+        tabBarAllowFontScaling: false,
       }}
     >
       {screens.map((screen) => (
