@@ -1,15 +1,26 @@
-import React from "react"
+import React, { useLayoutEffect } from "react"
 import { Dimensions, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Button, Screen, Text } from "../components"
 import { useAppNavigation } from "../hooks"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import messaging from "@react-native-firebase/messaging"
 
 const welcomeLogo = require("../../assets/images/welcome-shapes.png")
 const { width: screenWidth } = Dimensions.get("screen")
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
+
+const requestUserPermission = async () => {
+  const authStatus = await messaging().requestPermission()
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL
+  if (enabled) {
+    // handle enabled state
+  }
+}
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   const navigation = useAppNavigation()
@@ -18,6 +29,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
     navigation.navigate("Tabs", { screen: "Schedule" })
   }
 
+  useLayoutEffect(() => {
+    requestUserPermission()
+  }, [])
+
   return (
     <Screen style={$container}>
       <View style={$topContainer}>
@@ -25,13 +40,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
       </View>
       <View style={$middleContainer}>
         <Text
+          maxFontSizeMultiplier={1.2}
           testID="welcome-heading"
           style={$welcomeHeading}
           tx="welcomeScreen.heading"
           preset="welcomeHeading"
         />
-        <Text tx="welcomeScreen.topBlurb" preset="companionHeading" style={$topBlurb} />
-        <Text tx="welcomeScreen.bottomBlurb" preset="companionHeading" />
+        <Text
+          maxFontSizeMultiplier={1.2}
+          tx="welcomeScreen.topBlurb"
+          preset="companionHeading"
+          style={$topBlurb}
+        />
+
+        <Text
+          maxFontSizeMultiplier={1.2}
+          tx="welcomeScreen.bottomBlurb"
+          preset="companionHeading"
+        />
       </View>
 
       <SafeAreaView style={$bottomContainer} edges={["bottom"]}>
@@ -39,6 +65,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
           <Button
             testID="see-the-schedule-button"
             tx="welcomeScreen.scheduleButton"
+            TextProps={{ allowFontScaling: false }}
             onPress={goNext}
           />
         </View>

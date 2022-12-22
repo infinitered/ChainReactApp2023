@@ -7,6 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Chain React App 2023",
   slug: "ChainReactApp2023",
+  scheme: "chainreactapp",
   version,
   orientation: "portrait",
   icon: "./assets/images/app-icon-all.png",
@@ -52,6 +53,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#081828",
     },
     googleServicesFile: `./GoogleService-Info.plist`,
+    infoPlist: {
+      UIBackgroundModes: ["fetch", "remote-notification"],
+      UIStatusBarHidden: true,
+    },
   },
   web: {
     favicon: "./assets/images/app-icon-web-favicon.png",
