@@ -1,5 +1,13 @@
 import React from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, ImageSourcePropType, Image } from "react-native"
+import {
+  ImageStyle,
+  TextStyle,
+  View,
+  ViewStyle,
+  ImageSourcePropType,
+  Image,
+  Alert,
+} from "react-native"
 import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
 import { TabScreenProps } from "../navigators/TabNavigator"
@@ -7,6 +15,7 @@ import { colors, spacing } from "../theme"
 import { translate } from "../i18n"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import { Carousel } from "../components/Carousel"
+import messaging from "@react-native-firebase/messaging"
 
 const phoneNumber = "360-450-4752"
 
@@ -30,6 +39,17 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
         text="Contact"
         onPress={contactByEmail}
         style={$emailButton}
+        TextProps={{ maxFontSizeMultiplier: 1.8 }}
+      />
+    ),
+    LeftActionComponent: (
+      <Button
+        onPress={async () => {
+          const token = await messaging().getToken()
+          Alert.alert("PN Token", token)
+        }}
+        preset="link"
+        style={$hiddenButton}
         TextProps={{ maxFontSizeMultiplier: 1.8 }}
       />
     ),
@@ -110,4 +130,10 @@ const $emailButton: ViewStyle = {
 const $screenHeading: ViewStyle = {
   marginTop: spacing.extraLarge,
   paddingHorizontal: spacing.large,
+}
+
+const $hiddenButton: ViewStyle = {
+  height: 48,
+  marginStart: spacing.medium,
+  width: 50,
 }
