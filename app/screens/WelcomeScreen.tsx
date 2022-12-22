@@ -40,13 +40,24 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
       </View>
       <View style={$middleContainer}>
         <Text
+          maxFontSizeMultiplier={1.2}
           testID="welcome-heading"
           style={$welcomeHeading}
           tx="welcomeScreen.heading"
           preset="welcomeHeading"
         />
-        <Text tx="welcomeScreen.topBlurb" preset="companionHeading" style={$topBlurb} />
-        <Text tx="welcomeScreen.bottomBlurb" preset="companionHeading" />
+        <Text
+          maxFontSizeMultiplier={1.2}
+          tx="welcomeScreen.topBlurb"
+          preset="companionHeading"
+          style={$topBlurb}
+        />
+
+        <Text
+          maxFontSizeMultiplier={1.2}
+          tx="welcomeScreen.bottomBlurb"
+          preset="companionHeading"
+        />
       </View>
 
       <SafeAreaView style={$bottomContainer} edges={["bottom"]}>
@@ -54,6 +65,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
           <Button
             testID="see-the-schedule-button"
             tx="welcomeScreen.scheduleButton"
+            TextProps={{ allowFontScaling: false }}
             onPress={goNext}
           />
         </View>

@@ -50,6 +50,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     googleServicesFile: `./GoogleService-Info.plist`,
     infoPlist: {
       UIBackgroundModes: ["fetch", "remote-notification"],
+      UIStatusBarHidden: true,
     },
   },
   web: {
@@ -57,7 +58,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     splash: {
       image: "./assets/images/splash-logo-web.png",
       resizeMode: "contain",
-      backgroundColor: "#081828",
+      backfgroundColor: "#081828",
     },
   },
   owner: "infinitered",
