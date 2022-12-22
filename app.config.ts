@@ -17,7 +17,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#081828",
   },
   updates: {
+    enabled: true,
     fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/b72c79d7-7c87-4aa7-b964-998dcff69e07",
+  },
+  runtimeVersion: {
+    policy: "sdkVersion",
   },
   jsEngine: "hermes",
   assetBundlePatterns: ["**/*"],
@@ -58,7 +63,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     splash: {
       image: "./assets/images/splash-logo-web.png",
       resizeMode: "contain",
-      backfgroundColor: "#081828",
+      backgroundColor: "#081828",
     },
   },
   owner: "infinitered",
