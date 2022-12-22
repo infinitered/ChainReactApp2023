@@ -136,3 +136,7 @@ eas update --branch preview-1.1 --message "added new feature"
 eas channel:update preview --branch preview-1.1
 # from a device with the preview build, open the app to grab the update, and reload it to use the new feature
 ```
+
+## Dev Testing
+
+From an expo-dev-client, you can open the `Extensions` tab and load any published update to QA the package that would be published OTA.
