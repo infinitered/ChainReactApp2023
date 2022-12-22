@@ -13,7 +13,11 @@ import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
 import React, { useLayoutEffect } from "react"
-import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
@@ -50,22 +54,11 @@ interface AppProps {
 // Creating a react-query client with the stale time set to "Infinity" so that its never stale
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
 
-/**
- * This is the root component of our app.
- */
-function App(props: AppProps) {
-  const { hideSplashScreen } = props
-  const {
-    initialNavigationState,
-    onNavigationStateChange,
-    isRestored: isNavigationStateRestored,
-  } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
-
-  const [areFontsLoaded] = useFonts(customFontsToLoad)
+// Setting up our custom Toast component
+const CustomToast = () => {
+  const insets = useSafeAreaInsets()
 
   useLayoutEffect(() => {
-    // hide splash screen after 500ms
-    setTimeout(hideSplashScreen, 500)
     // handle a new push notification received while the app is in "foreground" state
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
       if (remoteMessage.notification) {
@@ -90,6 +83,27 @@ function App(props: AppProps) {
     ),
   }
 
+  return <Toast config={toastConfig} topOffset={insets.top} />
+}
+
+/**
+ * This is the root component of our app.
+ */
+function App(props: AppProps) {
+  const { hideSplashScreen } = props
+  const {
+    initialNavigationState,
+    onNavigationStateChange,
+    isRestored: isNavigationStateRestored,
+  } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
+
+  const [areFontsLoaded] = useFonts(customFontsToLoad)
+
+  useLayoutEffect(() => {
+    // hide splash screen after 500ms
+    setTimeout(hideSplashScreen, 500)
+  })
+
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
   // color set in native by rootView's background color.
@@ -107,7 +121,7 @@ function App(props: AppProps) {
             initialState={initialNavigationState}
             onStateChange={onNavigationStateChange}
           />
-          <Toast config={toastConfig} />
+          <CustomToast />
         </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
