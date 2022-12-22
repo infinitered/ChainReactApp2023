@@ -87,7 +87,7 @@ const $fontWeightStyles = Object.entries(typography.primary).reduce((acc, [weigh
   return { ...acc, [weight]: { fontFamily } }
 }, {}) as Record<Weights, TextStyle>
 
-const $baseStyle: StyleProp<TextStyle> = [
+export const $baseStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
   $fontWeightStyles.book,
   { color: colors.text, lineHeight: 22 },
@@ -100,7 +100,7 @@ const $secondaryFontWeightStyles = Object.entries(typography.secondary).reduce(
   {},
 ) as Record<Weights, TextStyle>
 
-const $baseSecondaryStyle: StyleProp<TextStyle> = [
+export const $baseSecondaryStyle: StyleProp<TextStyle> = [
   $sizeStyles.sm,
   $secondaryFontWeightStyles.book,
   { color: colors.text },

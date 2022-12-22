@@ -13,14 +13,22 @@ import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
 import React, { useLayoutEffect } from "react"
-import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
-import { customFontsToLoad } from "./theme"
+import { colors, customFontsToLoad, spacing } from "./theme"
 import { setupReactotron } from "./services/reactotron"
 import Config from "./config"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import messaging from "@react-native-firebase/messaging"
+import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
+import { $baseSecondaryStyle, $baseStyle } from "./components"
+import { Dimensions, ViewStyle } from "react-native"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -46,6 +54,41 @@ interface AppProps {
 // Creating a react-query client with the stale time set to "Infinity" so that its never stale
 const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
 
+// Setting up our custom Toast component
+const CustomToast = () => {
+  const insets = useSafeAreaInsets()
+
+  useLayoutEffect(() => {
+    // handle a new push notification received while the app is in "foreground" state
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if (
+        remoteMessage.notification &&
+        (remoteMessage.notification.title || remoteMessage.notification.body)
+      ) {
+        Toast.show({
+          text1: remoteMessage.notification.title,
+          text2: remoteMessage.notification.body,
+        })
+      }
+    })
+    return unsubscribe
+  })
+
+  const toastConfig: ToastConfig = {
+    success: (props) => (
+      <BaseToast
+        {...props}
+        contentContainerStyle={$toastContainer}
+        style={$toast}
+        text1Style={$baseStyle}
+        text2Style={$baseSecondaryStyle}
+      />
+    ),
+  }
+
+  return <Toast config={toastConfig} topOffset={insets.top} />
+}
+
 /**
  * This is the root component of our app.
  */
@@ -60,6 +103,7 @@ function App(props: AppProps) {
   const [areFontsLoaded] = useFonts(customFontsToLoad)
 
   useLayoutEffect(() => {
+    // hide splash screen after 500ms
     setTimeout(hideSplashScreen, 500)
   })
 
@@ -80,6 +124,7 @@ function App(props: AppProps) {
             initialState={initialNavigationState}
             onStateChange={onNavigationStateChange}
           />
+          <CustomToast />
         </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
@@ -87,3 +132,15 @@ function App(props: AppProps) {
 }
 
 export default App
+
+const $toast: ViewStyle = {
+  backgroundColor: colors.palette.neutral300,
+  borderLeftWidth: 0,
+  borderRadius: spacing.extraSmall,
+  width: Dimensions.get("window").width - spacing.extraSmall * 2,
+}
+
+const $toastContainer: ViewStyle = {
+  paddingHorizontal: spacing.large,
+  paddingVertical: spacing.medium,
+}
