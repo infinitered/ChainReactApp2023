@@ -61,7 +61,10 @@ const CustomToast = () => {
   useLayoutEffect(() => {
     // handle a new push notification received while the app is in "foreground" state
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      if (remoteMessage.notification) {
+      if (
+        remoteMessage.notification &&
+        (remoteMessage.notification.title || remoteMessage.notification.body)
+      ) {
         Toast.show({
           text1: remoteMessage.notification.title,
           text2: remoteMessage.notification.body,
