@@ -7,7 +7,9 @@ import * as SplashScreen from "expo-splash-screen"
 import messaging from "@react-native-firebase/messaging"
 
 // Register background handler
-messaging().setBackgroundMessageHandler(async _remoteMessage => {});
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.tron.log('Message handled in the background!', remoteMessage);
+});
 
 SplashScreen.preventAutoHideAsync()
 
