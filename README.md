@@ -102,7 +102,37 @@ _Note: we'll get this more automated with a script in the future_
 
 # Publishing updates OTA
 
-1. Create the update branch `eas update --branch [update branch name] --message "info about the update"`
-2. Determine channel where update should be applied. By default, any profile name in `eas.json` is created as a channel in addition to the specified `channel` property
-3. Publish the update branch to the release channel `eas channel:edit [channel name] --branch [branch name]`
-4. Restart the app twice to receive the update (on the first, the app will download any available updates - then apply it on the second)
+## Pre-reqs
+
+- A `preview` or `production` build of the application on a device
+
+## Notes
+
+- Only make JavaScript changes OTA
+- Any native code changes, app.config.ts or Expo SDK update will require a store publish
+
+## Steps
+
+1. Make the necessary JavaScript changes
+   a. For a `preview` build, this can just be done locally (with uncommitted changes) or from another git branch
+   b. For a `production`, you'll likely be in some release candidate branch or `main` branch after things have been QA'd
+2. Create the EAS update branch `eas update --branch [update branch name] --message "info about the update"`
+   - _This packages up the current project code and uploads it as a package to EAS as an update_
+3. Determine the update channel where the update branch should be applied. By default, any build profile name in `eas.json` is created as a channel in addition to the specified `channel` property
+   a. For a `preview` build, you can use the `preview` channel
+4. Point the update channel to the specific update branch `eas channel:edit [channel name] --branch [branch name]`
+   - _This tells a build on that update channel to now look for updates available on that branch name_
+5. Restart the app twice to receive the update (on the first, the app will download any available updates - then apply it on the second)
+
+## Example
+
+There is a `preview` build of version 1.0 out in the wild, lacking a new feature or bug fix.
+
+```bash
+git checkout -b feat/my-new-feature
+# make some changes to code
+git commit -a -m "feature complete"
+eas update --branch preview-1.1 --message "added new feature"
+eas channel:update preview --branch preview-1.1
+# from a device with the preview build, open the app to grab the update, and reload it to use the new feature
+```
