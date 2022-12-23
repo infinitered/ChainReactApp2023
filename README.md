@@ -83,35 +83,22 @@ This is for distributing the app to internal testers to run on their devices. Th
 
 ## Maestro Installation
 
-The easiest way to install Maestro is via homebrew, `brew install meastro`
+The easiest way to install Maestro is via homebrew:
+
+```bash
+brew install maestro
+brew tap facebook/fb
+brew install facebook/fb/idb-companion
+```
 
 See [Maestro's documentation](https://maestro.mobile.dev/getting-started/installing-maestro) for other installation instructions.
 
 ## Run flows
 
-_Flows currenly run against an **iOS 15.5** simulator dev client_
+_Flows currently run against an **iOS 15.5** simulator dev client_
 
 1. yarn start
 2. In a separate terminal, execute a flow `maestro test .maestro/`
-
-## Pre-reqs
-
-1. `brew install applesimutils`
-2. Make sure you have an iPhone simulator named `iPhone 14`, if not add one:
-   a. Open Simulator
-   b. File > New Simulator
-
-_Note: we'll get this more automated with a script in the future_
-
-## iOS Simulator
-
-1. Skip to step 5 if you've already built the latest dev client and extracted `ChainReactApp2023.app` to `build/`
-2. `rm build/build-*tar.gz; rm -rf build/ChainReactApp2023.app`
-3. `yarn build:local:ios`
-4. `tar zxvf build/build-*.tar.gz -C build/`
-5. `yarn start`
-6. Open iOS simulator if you want to watch tests in action
-7. `yarn e2e:ios` (separate terminal, do not stop step 3)
 
 # Publishing updates OTA
 
