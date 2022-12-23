@@ -81,6 +81,19 @@ This is for distributing the app to internal testers to run on their devices. Th
 
 # E2E Tests
 
+## Maestro Installation
+
+The easiest way to install Maestro is via homebrew, `brew install meastro`
+
+See [Maestro's documentation](https://maestro.mobile.dev/getting-started/installing-maestro) for other installation instructions.
+
+## Run flows
+
+_Flows currenly run against an **iOS 15.5** simulator dev client_
+
+1. yarn start
+2. In a separate terminal, execute a flow `maestro test .maestro/Welcome.yaml`
+
 ## Pre-reqs
 
 1. `brew install applesimutils`
