@@ -33,4 +33,4 @@ jobs:
 
       - name: Build on EAS
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: eas build --platform all --non-interactive
+        run: eas build --platform all --non-interactive --clear-cache
