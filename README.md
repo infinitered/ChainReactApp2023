@@ -92,7 +92,7 @@ See [Maestro's documentation](https://maestro.mobile.dev/getting-started/install
 _Flows currenly run against an **iOS 15.5** simulator dev client_
 
 1. yarn start
-2. In a separate terminal, execute a flow `maestro test .maestro/Welcome.yaml`
+2. In a separate terminal, execute a flow `maestro test .maestro/`
 
 ## Pre-reqs
 
