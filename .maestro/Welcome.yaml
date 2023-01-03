@@ -1,0 +1,9 @@
+# flow: Test the Welcome Screen appears and transitions to schedule
+
+appId: infinitered.stage.ChainReactConf
+---
+- runFlow: subflows/ExpoDevClient.yaml
+- assertVisible: "Welcome to Chain React.*"
+- tapOn: "See the schedule"
+- assertVisible: "Schedule"
+- assertVisible: "Wed, May 17"

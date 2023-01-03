@@ -1,0 +1,16 @@
+# flow: ExpoDevClient
+# intent:
+#   Open up Expo's dev client menu and connect to
+#   the locally running dev server, getting to the Welcome screen
+
+appId: infinitered.stage.ChainReactConf
+---
+- launchApp:
+    clearState: true # Will clear our saved navigation state, we may not always want this
+- tapOn: "Enter URL manually"
+- inputText: "http://localhost:8081/?disableOnboarding=1"
+- tapOn: "Connect"
+#
+# alternative method
+# use deep link and press open?
+# exp+chainreactapp2023://expo-development-client/?url=http%3A%2F%2F192.168.5.29%3A8081
