@@ -141,7 +141,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
               icon="arrow"
               size={24}
               color={colors.palette.primary500}
-              containerStyle={[$arrowContainer, {}]}
+              containerStyle={$partyArrowContainer}
             />
           ),
         }
@@ -201,6 +201,12 @@ const $rightContainer: ViewStyle = {
 const $arrowContainer: ViewStyle = {
   bottom: spacing.extraSmall,
   right: spacing.medium,
+  position: "absolute",
+}
+
+const $partyArrowContainer: ViewStyle = {
+  bottom: -spacing.large,
+  right: -spacing.medium,
   position: "absolute",
 }
 
