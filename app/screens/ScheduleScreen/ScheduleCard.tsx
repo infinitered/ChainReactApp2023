@@ -4,7 +4,17 @@ import { Avatar, AvatarPresets, AvatarProps, Card, Icon, Text } from "../../comp
 import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
 
-const Header = ({ time, title }) => (
+interface HeaderProps {
+  time: string
+  title: string
+}
+
+interface FooterProps {
+  heading: string
+  subheading: string
+}
+
+const Header = ({ time, title }: HeaderProps) => (
   <View style={$headerContainer}>
     <Text style={$timeText}>{time}</Text>
     <Text preset="eventTitle" style={$titleText}>
@@ -13,7 +23,7 @@ const Header = ({ time, title }) => (
   </View>
 )
 
-const Footer = ({ heading, subheading }) => (
+const Footer = ({ heading, subheading }: FooterProps) => (
   <View style={$footerContainer}>
     <Text preset="cardFooterHeading" style={$footerHeading}>
       {heading}
@@ -22,12 +32,12 @@ const Footer = ({ heading, subheading }) => (
   </View>
 )
 
-export type Variants = "event" | "workshop" | "talk"
+export type Variants = "event" | "workshop" | "talk" | "party"
 
 export interface ScheduleCardProps {
   /**
    * The variant of the card.
-   * Options: "event", "workshop", "talk"
+   * Options: "event", "workshop", "talk", "party"
    * Default: "event"
    */
   variant?: Variants
@@ -57,6 +67,10 @@ export interface ScheduleCardProps {
    * Card workshop level
    */
   level?: string
+  /**
+   * Card ID
+   */
+  id: string
 }
 
 interface SpeakingEventProps {
@@ -106,20 +120,36 @@ const baseSpeakingEventProps = ({
 }
 
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
-  const { variant = "event", time, eventTitle, heading, subheading, sources, level } = props
+  const { variant = "event", time, eventTitle, heading, subheading, sources, level, id } = props
   const navigation = useAppNavigation()
-  const onPress =
-    ["talk", "workshop"].includes(variant) && (() => navigation.navigate("TalkDetails"))
+  const onPress = ["talk", "workshop"].includes(variant)
+    ? () => navigation.navigate("TalkDetails")
+    : ["party"].includes(variant)
+    ? () => navigation.navigate("PartyDetails", { scheduleId: id })
+    : undefined
 
   const cardProps = { ...baseEventProps({ time, eventTitle, level }) }
   const variantProps =
     variant === "event"
       ? { content: subheading, contentStyle: $contentText }
+      : variant === "party"
+      ? {
+          content: subheading,
+          contentStyle: $contentText,
+          FooterComponent: (
+            <Icon
+              icon="arrow"
+              size={24}
+              color={colors.palette.primary500}
+              containerStyle={$partyArrowContainer}
+            />
+          ),
+        }
       : baseSpeakingEventProps({ heading, subheading, eventTitle, sources })
 
   return (
     <Card
-      preset={variant === "event" ? "reversed" : "default"}
+      preset={variant === "event" || variant === "party" ? "reversed" : "default"}
       {...{ ...cardProps, ...variantProps, onPress }}
     />
   )
@@ -171,6 +201,12 @@ const $rightContainer: ViewStyle = {
 const $arrowContainer: ViewStyle = {
   bottom: spacing.extraSmall,
   right: spacing.medium,
+  position: "absolute",
+}
+
+const $partyArrowContainer: ViewStyle = {
+  bottom: -spacing.large,
+  right: -spacing.medium,
   position: "absolute",
 }
 

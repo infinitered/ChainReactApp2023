@@ -93,6 +93,28 @@ axiosInstance.interceptors.response.use(
           _cid: "6362b046e69e80096f361102",
           _id: "6362b046e69e80541f361139",
         },
+        {
+          "day-time": "2023-05-18",
+          day: "ed2cfa99e27dce5d1a425a419f170eb3",
+          name: "Sponsor AfterParty",
+          slug: "sponsor-after-party",
+          "break-party-description":
+            "Join us after day 1 talks in the lobby for food and drinks provided by This Sponsor’s Name as an example here.",
+          "break-card-color": "hsla(244.28571428571433, 91.30%, 90.98%, 1.00)",
+          type: "b2f17244cf6bd0782c2a099568169219",
+          // "speaker-2": "637823e1faa8742f7dd8686d",
+          // random data
+          _archived: false,
+          _draft: false,
+          "updated-on": "2020-02-22T00:58:42.476Z",
+          "updated-by": "Person_5ca77d28397726353bf26f69",
+          "created-on": "2020-01-17T23:01:40.706Z",
+          "created-by": "Person_5ca77d28397726353bf26f69",
+          "published-on": "2022-11-21T23:24:43.625Z",
+          "published-by": "Person_57fc009927a6922a35903a0b",
+          _cid: "6362b046e69e80096f361102",
+          _id: "6362b046e69asdf1324asdf",
+        },
         // Friday
         {
           "break-card-color": "hsla(244.28571428571433, 91.30%, 90.98%, 1.00)",
