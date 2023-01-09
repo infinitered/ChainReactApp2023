@@ -159,14 +159,14 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                 }
                 data={schedule.events}
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
-                  const { time, eventTitle, heading, subheading, sources, level } = item
+                  const { time, eventTitle, heading, subheading, sources, level, id } = item
                   const onPress =
                     item.variant !== "event" ? () => navigation.navigate("TalkDetails") : undefined
                   return (
                     <View style={$cardContainer}>
                       <ScheduleCard
                         variant={item.variant as Variants}
-                        {...{ time, eventTitle, heading, subheading, onPress, sources, level }}
+                        {...{ time, eventTitle, heading, subheading, onPress, sources, level, id }}
                       />
                     </View>
                   )
