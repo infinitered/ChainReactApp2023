@@ -74,6 +74,8 @@ const $viewPresets = {
     height: 42,
     borderRadius: 21,
   } as StyleProp<ImageStyle>,
+
+  party: {} as StyleProp<ImageStyle>,
 }
 
 const $panelImageStyle: ImageStyle = {
