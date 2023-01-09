@@ -87,7 +87,7 @@ export const PartyDetailsScreen: FC<StackScreenProps<AppStackParamList, "PartyDe
 
           <View style={$containerSpacing}>
             <Text preset="eventTitle" style={$aboutHeading} text="Location" />
-            <Text style={[$bodyText, $boldText]} text="The Armory" />
+            <Text preset="bold" style={$bodyText} text="The Armory" />
             <Text style={$bodyText} text="11134 Washington St #302" />
             <Text style={$bodyText} text="Portland, OR 97006" />
 
@@ -139,10 +139,6 @@ const $aboutHeading: TextStyle = {
 const $bodyText: TextStyle = {
   fontSize: 16,
   lineHeight: 22.4,
-}
-
-const $boldText: TextStyle = {
-  fontWeight: "400",
 }
 
 const $partyBlob: ImageStyle = {
