@@ -103,6 +103,7 @@ export const convertWorkshopToScheduleCard = (
       subheading: workshop["instructor-info"].name,
       sources,
       level: workshop.level,
+      id: workshop._id,
     }
   })
 }
@@ -114,7 +115,12 @@ const convertScheduleToScheduleCard = (
 ): ScheduleCardProps[] => {
   const groupScheduleData: ScheduleProps[] = groupBy("day-time")(scheduleData ?? [])?.[key] ?? []
   return groupScheduleData.map((schedule, index) => ({
-    variant: schedule.type === "Talk" || schedule.type === "Lightning Talk" ? "talk" : "event",
+    variant:
+      schedule.type === "Talk" || schedule.type === "Lightning Talk"
+        ? "talk"
+        : schedule.type === "Party"
+        ? "party"
+        : "event",
     // Temporary solution for workshop time for testing centering the card on the screen
     time: `${index}:00`,
     eventTitle:
@@ -122,10 +128,13 @@ const convertScheduleToScheduleCard = (
         ? "talk"
         : schedule.type === "Lightning Talk"
         ? "speaker-panel"
+        : schedule.type === "Party"
+        ? "party"
         : undefined,
     heading: schedule.name,
     subheading: schedule["break-party-description"],
     sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
+    id: schedule._id,
   }))
 }
 
