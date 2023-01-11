@@ -46,6 +46,7 @@ export const useWorkshops = () => {
     WORKSHOPS.collectionId,
     !isLoading && !!speakersData,
   )
+  console.tron.log({ apiWorkshop: workshopsData })
   return { data: cleanedWorkshops(workshopsData, cleanedSpeakers(speakersData)), ...rest }
 }
 
@@ -57,7 +58,7 @@ export const useSchedule = () => {
     SCHEDULE.collectionId,
     !isLoading && !!speakersData,
   )
-  console.tron.log({ api: schedulesData })
+  console.tron.log({ api: schedulesData, workshopData })
   return {
     data: cleanedSchedule(schedulesData, cleanedSpeakers(speakersData), workshopData),
     ...rest,

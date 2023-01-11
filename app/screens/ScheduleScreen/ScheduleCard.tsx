@@ -32,13 +32,13 @@ const Footer = ({ heading, subheading }: FooterProps) => (
   </View>
 )
 
-export type Variants = "event" | "workshop" | "talk" | "party"
+export type Variants = "workshop" | "talk" | "party" | "recurring"
 
 export interface ScheduleCardProps {
   /**
    * The variant of the card.
-   * Options: "event", "workshop", "talk", "party"
-   * Default: "event"
+   * Options: "recurring", "workshop", "talk", "party"
+   * Default: "recurring"
    */
   variant?: Variants
   /**
@@ -120,7 +120,7 @@ const baseSpeakingEventProps = ({
 }
 
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
-  const { variant = "event", time, eventTitle, heading, subheading, sources, level, id } = props
+  const { variant = "recurring", time, eventTitle, heading, subheading, sources, level, id } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
     ? () => navigation.navigate("TalkDetails")
@@ -130,7 +130,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
 
   const cardProps = { ...baseEventProps({ time, eventTitle, level }) }
   const variantProps =
-    variant === "event"
+    variant === "recurring"
       ? { content: subheading, contentStyle: $contentText }
       : variant === "party"
       ? {
@@ -149,7 +149,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
 
   return (
     <Card
-      preset={variant === "event" || variant === "party" ? "reversed" : "default"}
+      preset={variant === "recurring" || variant === "party" ? "reversed" : "default"}
       {...{ ...cardProps, ...variantProps, onPress }}
     />
   )

@@ -1,6 +1,6 @@
 import { Schedule } from "../../screens"
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
-import { formatDate } from "../../utils/formatDate"
+import { formatDate, sortByTime } from "../../utils/formatDate"
 import { useSchedule } from "./webflow-api"
 import {
   CustomScheduleProps,
@@ -27,8 +27,8 @@ export const cleanedWorkshops = (
       "instructor-info": speakersData?.find(
         (speaker) => speaker._id === workshop["instructor-info"],
       ),
-      "second-instructor-2": speakersData?.find(
-        (speaker) => speaker._id === workshop["second-instructor-2"],
+      assistants: workshop?.assistants?.map((id) =>
+        speakersData?.find((speaker) => speaker._id === id),
       ),
     }))
 }
@@ -68,6 +68,7 @@ export const cleanedSchedule = (
  */
 export const createScheduleScreenData = (): Schedule[] => {
   const { data: scheduleData } = useSchedule()
+
   return [
     {
       date: "2023-05-17",
@@ -108,42 +109,63 @@ export const createScheduleScreenData = (): Schedule[] => {
 //   })
 // }
 
+const convertScheduleToCardProps = (schedule: ScheduleProps): ScheduleCardProps => {
+  switch (schedule.type) {
+    case "Recurring":
+      return {
+        variant: "recurring",
+        time: formatDate(schedule["day-time"], "h:mm a"),
+        eventTitle: "recurring",
+        heading: schedule.name,
+        subheading: schedule["break-party-description"],
+        sources: [],
+        id: schedule._id,
+      }
+    case "Party":
+      return {
+        variant: "party",
+        time: formatDate(schedule["day-time"], "h:mm a"),
+        eventTitle: "party",
+        heading: schedule.name,
+        subheading: schedule["break-party-description"],
+        sources: [],
+        id: schedule._id,
+      }
+    case "Talk":
+    case "Speaker Panel":
+      return {
+        variant: "talk",
+        time: formatDate(schedule["day-time"], "h:mm a"),
+        eventTitle: "talk",
+        heading: schedule.name,
+        subheading: schedule["break-party-description"],
+        sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
+        id: schedule._id,
+      }
+    case "Workshop":
+      return {
+        variant: "workshop",
+        time: formatDate(schedule["day-time"], "h:mm a"),
+        eventTitle: "workshop",
+        heading: schedule.workshop.name,
+        subheading: schedule.workshop["instructor-info"]?.name,
+        sources: [
+          schedule.workshop["instructor-info"]?.["speaker-photo"].url,
+          ...(schedule.workshop.assistants?.map((a) => a["speaker-photo"].url) ?? []),
+        ].filter(Boolean),
+        level: schedule.workshop.level,
+        id: schedule._id,
+      }
+  }
+}
+
 // [NOTE] util function that might be needed in the future
 const convertScheduleToScheduleCard = (
   scheduleData: ScheduleProps[],
-  key: string,
+  day: string,
 ): ScheduleCardProps[] => {
-  const groupScheduleData: ScheduleProps[] = groupBy("day")(scheduleData ?? [])?.[key] ?? []
-  console.tron.log({ groupScheduleData })
-  return groupScheduleData.map((schedule) => ({
-    variant:
-      schedule.type === "Talk" || schedule.type === "Lightning Talk"
-        ? "talk"
-        : schedule.type === "Party"
-        ? "party"
-        : schedule.type === "Workshop"
-        ? "workshop"
-        : "event",
-    time: formatDate(schedule["day-time"], "h:mm a"),
-    eventTitle:
-      schedule.type === "Talk"
-        ? "talk"
-        : schedule.type === "Lightning Talk"
-        ? "speaker-panel"
-        : schedule.type === "Party"
-        ? "party"
-        : schedule.type === "Workshop"
-        ? "workshop"
-        : undefined,
-    heading: schedule.name,
-    subheading:
-      schedule.type === "Workshop"
-        ? schedule.workshop["instructor-info"]?.name
-        : schedule["break-party-description"],
-    sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
-    level: schedule.workshop?.level,
-    id: schedule._id,
-  }))
+  const daySchedule: ScheduleProps[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
+  return daySchedule.sort(sortByTime).map(convertScheduleToCardProps)
 }
 
 // [NOTE] util function that might be needed in the future

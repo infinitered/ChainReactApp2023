@@ -161,7 +161,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
                   const { time, eventTitle, heading, subheading, sources, level, id } = item
                   const onPress =
-                    item.variant !== "event" ? () => navigation.navigate("TalkDetails") : undefined
+                    item.variant !== "recurring"
+                      ? () => navigation.navigate("TalkDetails")
+                      : undefined
                   return (
                     <View style={$cardContainer}>
                       <ScheduleCard

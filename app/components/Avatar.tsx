@@ -76,6 +76,8 @@ const $viewPresets = {
   } as StyleProp<ImageStyle>,
 
   party: {} as StyleProp<ImageStyle>,
+
+  recurring: {} as StyleProp<ImageStyle>,
 }
 
 const $panelImageStyle: ImageStyle = {

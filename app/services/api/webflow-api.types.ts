@@ -26,7 +26,7 @@ export interface CustomScheduleProps extends IItem {
 
 export interface ScheduleProps extends IItem {
   day: "Wednesday" | "Thursday" | "Friday"
-  type?: "Talk" | "Lightning Talk" | "Workshop" | "Party" | "Event"
+  type?: "Talk" | "Speaker Panel" | "Workshop" | "Party" | "Recurring"
   "speaker-2"?: SpeakerProps | CustomSpeakerNamesProps
   "break-card-color"?: string
   "break-party-description"?: string
@@ -41,14 +41,14 @@ export interface CustomWorkshopProps extends IItem {
   prerequisites: string
   "instructor-info"?: string
   "has-more-than-one-instructor"?: boolean
-  "second-instructor-2"?: string
+  assistants?: string[]
   "ticket-link": string
   "day-time": string
 }
 
 export interface WorkshopProps extends IItem {
   "instructor-info": SpeakerProps
-  "second-instructor-2": SpeakerProps
+  assistants?: SpeakerProps[]
   level: "Beginner" | "Intermediate" | "Advanced"
   abstract: string
   prerequisites: string
@@ -104,7 +104,7 @@ export interface CustomSpeakerNamesProps extends IItem {
   "talk-abstract-3": string
   "medium-url-2"?: string
   "close-anchor"?: string
-  "session-type"?: "Lightning Talk"
+  "session-type"?: "Speaker Panel"
   "speaker-photo-png": SpeakerPhotoPngProps
 }
 
