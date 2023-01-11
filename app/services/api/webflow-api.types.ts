@@ -17,42 +17,44 @@ export interface CustomScheduleProps extends IItem {
   "break-card-color"?: string
   "break-party-description"?: string
   day: string
-  "day-time": Date | string
+  "day-time": string
   "is-a-talk"?: boolean
   "speaker-2"?: string
   type: string
+  workshop?: string
 }
 
 export interface ScheduleProps extends IItem {
   day: "Wednesday" | "Thursday" | "Friday"
-  type?: "Talk" | "Lightning Talk" | "Break" | "Party"
+  type?: "Talk" | "Lightning Talk" | "Workshop" | "Party" | "Event"
   "speaker-2"?: SpeakerProps | CustomSpeakerNamesProps
   "break-card-color"?: string
   "break-party-description"?: string
-  "day-time": Date
+  "day-time": string
   "is-a-talk"?: boolean
+  workshop?: WorkshopProps
 }
 
 export interface CustomWorkshopProps extends IItem {
   level: string
-  type: string
   abstract: string
   prerequisites: string
   "instructor-info"?: string
   "has-more-than-one-instructor"?: boolean
   "second-instructor-2"?: string
   "ticket-link": string
+  "day-time": string
 }
 
 export interface WorkshopProps extends IItem {
   "instructor-info": SpeakerProps
   "second-instructor-2": SpeakerProps
-  level?: "Beginner" | "Intermediate" | "Advanced"
-  type?: "New" | "Top Seller"
+  level: "Beginner" | "Intermediate" | "Advanced"
   abstract: string
   prerequisites: string
   "has-more-than-one-instructor"?: boolean
   "ticket-link": string
+  "day-time": string
 }
 
 export interface CustomSpeakerProps extends IItem {

@@ -51,12 +51,17 @@ export const useWorkshops = () => {
 
 export const useSchedule = () => {
   const { data: speakersData, isLoading } = useSpeakers()
+  const { data: workshopData } = useWorkshops()
   const { data: schedulesData, ...rest } = useWebflowAPI<CustomScheduleProps>(
     SCHEDULE.key,
     SCHEDULE.collectionId,
     !isLoading && !!speakersData,
   )
-  return { data: cleanedSchedule(schedulesData, cleanedSpeakers(speakersData)), ...rest }
+  console.tron.log({ api: schedulesData })
+  return {
+    data: cleanedSchedule(schedulesData, cleanedSpeakers(speakersData), workshopData),
+    ...rest,
+  }
 }
 
 // [NOTE] JUST FOR REFERENCE

@@ -1,6 +1,7 @@
 import { Schedule } from "../../screens"
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
-import { useSchedule, useWorkshops } from "./webflow-api"
+import { formatDate } from "../../utils/formatDate"
+import { useSchedule } from "./webflow-api"
 import {
   CustomScheduleProps,
   CustomSpeakerProps,
@@ -23,7 +24,6 @@ export const cleanedWorkshops = (
     .map((workshop) => ({
       ...workshop,
       level: WEBFLOW_MAP.workshopLevel[workshop.level],
-      type: WEBFLOW_MAP.workshopType[workshop.type],
       "instructor-info": speakersData?.find(
         (speaker) => speaker._id === workshop["instructor-info"],
       ),
@@ -50,14 +50,16 @@ export const cleanedSpeakers = (speakersData?: CustomSpeakerProps[]): SpeakerPro
 export const cleanedSchedule = (
   scheduleData?: CustomScheduleProps[],
   speakersData?: SpeakerProps[],
+  workshopData?: WorkshopProps[],
 ): ScheduleProps[] => {
   return scheduleData
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => ({
       ...schedule,
       day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
-      type: WEBFLOW_MAP.scheduleType[schedule.type],
+      type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
       "speaker-2": speakersData?.find((speaker) => speaker._id === schedule["speaker-2"]),
+      workshop: workshopData?.find((workshop) => workshop._id === schedule.workshop),
     })) as ScheduleProps[]
 }
 
@@ -65,64 +67,64 @@ export const cleanedSchedule = (
  * Converting workshop data from "type ids" to "type names"
  */
 export const createScheduleScreenData = (): Schedule[] => {
-  const { data: workshopsData } = useWorkshops()
   const { data: scheduleData } = useSchedule()
   return [
     {
       date: "2023-05-17",
       title: "React Native Workshops",
-      events: convertWorkshopToScheduleCard(workshopsData),
+      events: convertScheduleToScheduleCard(scheduleData, "Wednesday"),
     },
     {
       date: "2023-05-18",
       title: "Conference Day 1",
-      events: convertScheduleToScheduleCard(scheduleData, "2023-05-18"),
+      events: convertScheduleToScheduleCard(scheduleData, "Thursday"),
     },
     {
       date: "2023-05-19",
       title: "Conference Day 2",
-      events: convertScheduleToScheduleCard(scheduleData, "2023-05-19"),
+      events: convertScheduleToScheduleCard(scheduleData, "Friday"),
     },
   ]
 }
 
-export const convertWorkshopToScheduleCard = (
-  workshopData?: WorkshopProps[],
-): ScheduleCardProps[] => {
-  return workshopData?.map((workshop, index) => {
-    const sources = [workshop["instructor-info"]["speaker-photo"].url]
-    if (workshop["second-instructor-2"]) {
-      sources.push(workshop["second-instructor-2"]["speaker-photo"].url)
-    }
-    return {
-      variant: "workshop",
-      // Temporary solution for workshop time for testing centering the card on the screen
-      time: `${index}:00`,
-      eventTitle: "workshop",
-      heading: workshop.name,
-      subheading: workshop["instructor-info"].name,
-      sources,
-      level: workshop.level,
-      id: workshop._id,
-    }
-  })
-}
+// export const convertWorkshopToScheduleCard = (
+//   workshopData?: WorkshopProps[],
+// ): ScheduleCardProps[] => {
+//   return workshopData?.map((workshop) => {
+//     const sources = [workshop["instructor-info"]["speaker-photo"].url]
+//     if (workshop["second-instructor-2"]) {
+//       sources.push(workshop["second-instructor-2"]["speaker-photo"].url)
+//     }
+//     return {
+//       variant: "workshop",
+//       time: formatDate(workshop["day-time"], "MMM d, h:mm a"),
+//       eventTitle: "workshop",
+//       heading: workshop.name,
+//       subheading: workshop["instructor-info"].name,
+//       sources,
+//       level: workshop.level,
+//       id: workshop._id,
+//     }
+//   })
+// }
 
 // [NOTE] util function that might be needed in the future
 const convertScheduleToScheduleCard = (
   scheduleData: ScheduleProps[],
   key: string,
 ): ScheduleCardProps[] => {
-  const groupScheduleData: ScheduleProps[] = groupBy("day-time")(scheduleData ?? [])?.[key] ?? []
-  return groupScheduleData.map((schedule, index) => ({
+  const groupScheduleData: ScheduleProps[] = groupBy("day")(scheduleData ?? [])?.[key] ?? []
+  console.tron.log({ groupScheduleData })
+  return groupScheduleData.map((schedule) => ({
     variant:
       schedule.type === "Talk" || schedule.type === "Lightning Talk"
         ? "talk"
         : schedule.type === "Party"
         ? "party"
+        : schedule.type === "Workshop"
+        ? "workshop"
         : "event",
-    // Temporary solution for workshop time for testing centering the card on the screen
-    time: `${index}:00`,
+    time: formatDate(schedule["day-time"], "h:mm a"),
     eventTitle:
       schedule.type === "Talk"
         ? "talk"
@@ -130,10 +132,16 @@ const convertScheduleToScheduleCard = (
         ? "speaker-panel"
         : schedule.type === "Party"
         ? "party"
+        : schedule.type === "Workshop"
+        ? "workshop"
         : undefined,
     heading: schedule.name,
-    subheading: schedule["break-party-description"],
+    subheading:
+      schedule.type === "Workshop"
+        ? schedule.workshop["instructor-info"]?.name
+        : schedule["break-party-description"],
     sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
+    level: schedule.workshop?.level,
     id: schedule._id,
   }))
 }
