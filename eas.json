@@ -49,8 +49,7 @@
     "production": {
       "ios": {
         "ascAppId": "1239112816",
-        "appleTeamId": "L7YNDPLSEB",
-        "resourceClass": "m1-experimental"
+        "appleTeamId": "L7YNDPLSEB"
       }
     }
   }
