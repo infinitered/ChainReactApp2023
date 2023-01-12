@@ -23,8 +23,7 @@
       "distribution": "internal",
       "ios": {
         "buildConfiguration": "Debug",
-        "simulator": false,
-        "resourceClass": "m1-experimental"
+        "simulator": false
       }
     },
     "preview": {
@@ -38,11 +37,14 @@
     "preview:device": {
       "extends": "preview",
       "channel": "preview-device",
-      "ios": { "simulator": false, "resourceClass": "m1-experimental" }
+      "ios": { "simulator": false }
     },
     "production": {
       "channel": "production",
-      "env": {}
+      "env": {},
+      "ios": {
+        "resourceClass": "m1-medium"
+      }
     }
   },
   "submit": {
