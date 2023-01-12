@@ -41,7 +41,10 @@
     },
     "production": {
       "channel": "production",
-      "env": {}
+      "env": {},
+      "ios": {
+        "resourceClass": "m1-medium"
+      }
     }
   },
   "submit": {
