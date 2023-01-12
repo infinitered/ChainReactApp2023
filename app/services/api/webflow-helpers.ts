@@ -6,6 +6,7 @@ import {
   CustomScheduleProps,
   CustomSpeakerProps,
   CustomWorkshopProps,
+  RecurringEventsProps,
   ScheduleProps,
   SpeakerProps,
   WorkshopProps,
@@ -51,6 +52,7 @@ export const cleanedSchedule = (
   scheduleData?: CustomScheduleProps[],
   speakersData?: SpeakerProps[],
   workshopData?: WorkshopProps[],
+  recurringEventsData?: RecurringEventsProps[],
 ): ScheduleProps[] => {
   return scheduleData
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
@@ -60,6 +62,9 @@ export const cleanedSchedule = (
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
       "speaker-2": speakersData?.find((speaker) => speaker._id === schedule["speaker-2"]),
       workshop: workshopData?.find((workshop) => workshop._id === schedule.workshop),
+      "recurring-event": recurringEventsData.find(
+        (recurring) => recurring._id === schedule["recurring-event"],
+      ),
     })) as ScheduleProps[]
 }
 
@@ -112,12 +117,13 @@ export const createScheduleScreenData = (): Schedule[] => {
 const convertScheduleToCardProps = (schedule: ScheduleProps): ScheduleCardProps => {
   switch (schedule.type) {
     case "Recurring":
+      console.tron.log({ schedule })
       return {
         variant: "recurring",
         time: formatDate(schedule["day-time"], "h:mm a"),
-        eventTitle: "recurring",
-        heading: schedule.name,
-        subheading: schedule["break-party-description"],
+        eventTitle: schedule["recurring-event"].name,
+        heading: "",
+        subheading: schedule["recurring-event"]["event-description"],
         sources: [],
         id: schedule._id,
       }

@@ -1,6 +1,6 @@
 import React, { FC } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
-import { Avatar, AvatarPresets, AvatarProps, Card, Icon, Text } from "../../components"
+import { Avatar, AvatarProps, Card, Icon, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
 
@@ -50,7 +50,7 @@ export interface ScheduleCardProps {
   /**
    * The event title
    */
-  eventTitle: AvatarPresets
+  eventTitle: string
   /**
    * Card bold heading
    */
@@ -76,13 +76,13 @@ export interface ScheduleCardProps {
 interface SpeakingEventProps {
   heading: string
   subheading: string
-  eventTitle: AvatarPresets
+  eventTitle: string
   sources: string[]
 }
 
 interface BaseEventProps {
   time: string
-  eventTitle: AvatarPresets
+  eventTitle: string
   level?: string
 }
 

@@ -30,6 +30,11 @@ export const PAST_TALKS = {
   key: "pastTalks",
 }
 
+export const RECURRING_EVENTS = {
+  collectionId: "63b5c3c8dd1e3b1bb59ec141",
+  key: "recurringEvents",
+}
+
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys
 export const WEBFLOW_MAP = {
@@ -65,5 +70,11 @@ export const WEBFLOW_MAP = {
     b2f17244cf6bd0782c2a099568169219: "Party",
     "7ccbd551ac994b4489c4fe31ad985120": "Workshop",
     // add sponsored here
+  },
+  recurringEventType: {
+    "63b8a530a5f15f0d26539f07": "Check-in & Registration",
+    "63b8a5a76623c60c4e72db89": "Morning Break",
+    "63b8a5e54f99644c1c457253": "Lunch Break",
+    "63b8a62fcfc084793e4d5b60": "Afternoon Break",
   },
 }

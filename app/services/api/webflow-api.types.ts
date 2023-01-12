@@ -22,6 +22,7 @@ export interface CustomScheduleProps extends IItem {
   "speaker-2"?: string
   type: string
   workshop?: string
+  "recurring-event"?: string
 }
 
 export interface ScheduleProps extends IItem {
@@ -33,6 +34,7 @@ export interface ScheduleProps extends IItem {
   "day-time": string
   "is-a-talk"?: boolean
   workshop?: WorkshopProps
+  "recurring-event"?: RecurringEventsProps
 }
 
 export interface CustomWorkshopProps extends IItem {
@@ -55,6 +57,18 @@ export interface WorkshopProps extends IItem {
   "has-more-than-one-instructor"?: boolean
   "ticket-link": string
   "day-time": string
+}
+
+export interface CustomRecurringEventsProps extends IItem {
+  "day-time": string
+  "event-description"?: string
+  type: string
+}
+
+export interface RecurringEventsProps extends IItem {
+  "day-time": string
+  "event-description"?: string
+  type: "Check-in & Registration" | "Morning Break" | "Lunch Break" | "Afternoon Break"
 }
 
 export interface CustomSpeakerProps extends IItem {

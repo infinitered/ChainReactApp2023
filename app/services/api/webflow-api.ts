@@ -1,13 +1,22 @@
 import { useQuery } from "@tanstack/react-query"
 import { axiosInstance, PaginatedItems } from "./axios"
 import {
+  CustomRecurringEventsProps,
   CustomScheduleProps,
   CustomSpeakerNamesProps,
   CustomSpeakerProps,
   CustomSponsorProps,
   CustomWorkshopProps,
+  RecurringEventsProps,
 } from "./webflow-api.types"
-import { SCHEDULE, SPEAKERS, SPEAKER_NAMES, SPONSORS, WORKSHOPS } from "./webflow-conts"
+import {
+  RECURRING_EVENTS,
+  SCHEDULE,
+  SPEAKERS,
+  SPEAKER_NAMES,
+  SPONSORS,
+  WORKSHOPS,
+} from "./webflow-conts"
 import { cleanedSchedule, cleanedSpeakers, cleanedWorkshops } from "./webflow-helpers"
 
 const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
@@ -50,17 +59,31 @@ export const useWorkshops = () => {
   return { data: cleanedWorkshops(workshopsData, cleanedSpeakers(speakersData)), ...rest }
 }
 
+export const useRecuringEvents = () => {
+  const { data: recurringEventsData, ...rest } = useWebflowAPI<CustomRecurringEventsProps>(
+    RECURRING_EVENTS.key,
+    RECURRING_EVENTS.collectionId,
+  )
+  return { data: recurringEventsData as RecurringEventsProps[], ...rest }
+}
+
 export const useSchedule = () => {
   const { data: speakersData, isLoading } = useSpeakers()
   const { data: workshopData } = useWorkshops()
+  const { data: recurringEventsData } = useRecuringEvents()
   const { data: schedulesData, ...rest } = useWebflowAPI<CustomScheduleProps>(
     SCHEDULE.key,
     SCHEDULE.collectionId,
     !isLoading && !!speakersData,
   )
-  console.tron.log({ api: schedulesData, workshopData })
+  console.tron.log({ api: schedulesData, workshopData, recurringEventsData })
   return {
-    data: cleanedSchedule(schedulesData, cleanedSpeakers(speakersData), workshopData),
+    data: cleanedSchedule(
+      schedulesData,
+      cleanedSpeakers(speakersData),
+      workshopData,
+      recurringEventsData,
+    ),
     ...rest,
   }
 }
