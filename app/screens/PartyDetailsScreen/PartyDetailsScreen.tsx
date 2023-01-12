@@ -8,7 +8,7 @@ import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "../TalkDetailsScreen/TalkDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useSchedule } from "../../services/api"
+import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { openMap } from "../../utils/openMap"
 
@@ -22,7 +22,7 @@ export const PartyDetailsScreen: FC<StackScreenProps<AppStackParamList, "PartyDe
   route: { params },
 }) => {
   const { scheduleId } = params
-  const { data: scheduleData } = useSchedule()
+  const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === scheduleId)
 
   const scrollY = useSharedValue(0)

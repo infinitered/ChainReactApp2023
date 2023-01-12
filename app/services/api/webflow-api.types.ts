@@ -1,129 +1,139 @@
-interface IItem {
+interface Item {
   _archived: boolean
+  _cid: string
   _draft: boolean
   _id: string
-  _cid: string
+  "created-by": string
+  "created-on": string
+  "published-by"?: string | null
+  "published-on"?: string | null
+  "updated-by": string
+  "updated-on": string
   name: string
   slug: string
-  "updated-on": string
-  "created-on": string
-  "updated-by": string
-  "created-by": string
-  "published-on"?: string | null
-  "published-by"?: string | null
 }
 
-export interface CustomScheduleProps extends IItem {
+export interface RawScheduledEvent extends Item {
   "break-card-color"?: string
   "break-party-description"?: string
-  day: string
   "day-time": string
   "is-a-talk"?: boolean
+  "recurring-event"?: string
   "speaker-2"?: string
+  day: string
+  talk?: string
   type: string
   workshop?: string
-  "recurring-event"?: string
 }
 
-export interface ScheduleProps extends IItem {
-  day: "Wednesday" | "Thursday" | "Friday"
-  type?: "Talk" | "Speaker Panel" | "Workshop" | "Party" | "Recurring"
-  "speaker-2"?: SpeakerProps | CustomSpeakerNamesProps
+export interface ScheduledEvent extends Item {
   "break-card-color"?: string
   "break-party-description"?: string
   "day-time": string
   "is-a-talk"?: boolean
-  workshop?: WorkshopProps
-  "recurring-event"?: RecurringEventsProps
+  "recurring-event"?: RecurringEvents
+  "speaker-2"?: Speaker | RawSpeakerName
+  day: "Wednesday" | "Thursday" | "Friday"
+  talk?: Talk
+  type?: "Talk" | "Speaker Panel" | "Workshop" | "Party" | "Recurring"
+  workshop?: Workshop
 }
 
-export interface CustomWorkshopProps extends IItem {
-  level: string
-  abstract: string
-  prerequisites: string
+export interface RawWorkshop extends Item {
+  "day-time": string
+  "has-more-than-one-instructor"?: boolean
   "instructor-info"?: string
-  "has-more-than-one-instructor"?: boolean
-  assistants?: string[]
   "ticket-link": string
-  "day-time": string
-}
-
-export interface WorkshopProps extends IItem {
-  "instructor-info": SpeakerProps
-  assistants?: SpeakerProps[]
-  level: "Beginner" | "Intermediate" | "Advanced"
   abstract: string
+  assistants?: string[]
+  level: string
   prerequisites: string
+  talk?: string
+}
+
+export interface Workshop extends Item {
+  "day-time": string
   "has-more-than-one-instructor"?: boolean
+  "instructor-info": Speaker
   "ticket-link": string
-  "day-time": string
+  abstract: string
+  assistants?: Speaker[]
+  level: "Beginner" | "Intermediate" | "Advanced"
+  prerequisites: string
 }
 
-export interface CustomRecurringEventsProps extends IItem {
-  "day-time": string
+export interface RawTalk extends Item {
+  "speaker-s": string[]
+  "talk-type": string
+  description?: string
+  year: string
+}
+
+export interface Talk extends Item {
+  "speaker-s": Speaker[]
+  "talk-type"?: "Talk" | "Speaker Panel" | "Emcee"
+  description?: string
+}
+
+export interface RawRecurringEvents extends Item {
   "event-description"?: string
-  type: string
 }
 
-export interface RecurringEventsProps extends IItem {
-  "day-time": string
-  "event-description"?: string
-  type: "Check-in & Registration" | "Morning Break" | "Lunch Break" | "Afternoon Break"
-}
+export interface RecurringEvents extends RawRecurringEvents {}
 
-export interface CustomSpeakerProps extends IItem {
-  "speaker-type": string
-  "speaker-photo": IImageRef
-  title?: string
-  company?: string
-  "second-title"?: string
-  "second-company"?: string
-  twitter?: string
-  github?: string
-  website?: string
-  "speaker-first-name"?: string
-  "speaker-bio"?: string
-  "talk-title"?: string
-  "talk-level"?: string
-  "is-a-workshop"?: boolean
+export interface RawSpeaker extends Item {
   "abstract-2"?: string
-  "talk-details-url"?: string
+  "is-a-workshop"?: boolean
+  "second-company"?: string
+  "second-title"?: string
+  "speaker-bio"?: string
+  "speaker-first-name"?: string
   "speaker-name": string
+  "speaker-photo": ImageRef
+  "speaker-type": string
+  "talk-details-url"?: string
+  "talk-level"?: string
+  "talk-title"?: string
+  company?: string
+  github?: string
+  title?: string
+  twitter?: string
+  website?: string
 }
 
-export type SpeakerProps = CustomSpeakerProps & {
+export type Speaker = RawSpeaker & {
   "speaker-type"?: "Speaker" | "Panelist" | "Workshop" | "Emcee"
   "talk-level"?: "Beginner" | "Intermediate" | "Advanced"
 }
 
-export interface CustomSponsorProps extends IItem {
-  logo: IImageRef
+export interface RawSponsor extends Item {
   "2020-sponsor"?: boolean
+  logo: ImageRef
 }
 
-interface IImageRef {
+interface ImageRef {
+  alt: string | null
   field: string
   url: string
-  alt: string | null
 }
 
-export interface CustomSpeakerNamesProps extends IItem {
-  "talk-title": string
-  title: string
-  "github-url": string
-  "twitter-url": string
-  "previous-url": string
-  bio: string
-  "next-url": string
-  "talk-abstract-3": string
-  "medium-url-2"?: string
+export interface RawSpeakerName extends Item {
   "close-anchor"?: string
+  "github-url": string
+  "medium-url-2"?: string
+  "next-url": string
+  "previous-url": string
   "session-type"?: "Speaker Panel"
-  "speaker-photo-png": SpeakerPhotoPngProps
+  "speaker-photo-png": SpeakerPhotoPNG
+  "talk-abstract-3": string
+  "talk-title": string
+  "twitter-url": string
+  bio: string
+  title: string
 }
 
-interface SpeakerPhotoPngProps {
+interface SpeakerPhotoPNG {
+  alt?: string | null
   fieldId: string
   url: string
-  alt?: string | null
 }

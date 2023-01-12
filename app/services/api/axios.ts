@@ -1,6 +1,6 @@
 import Constants from "expo-constants"
 import axios from "axios"
-import { CustomScheduleProps } from "./webflow-api.types"
+import { RawScheduledEvent } from "./webflow-api.types"
 import { SCHEDULE } from "./webflow-conts"
 
 interface PaginatedData {

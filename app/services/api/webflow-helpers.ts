@@ -1,15 +1,17 @@
 import { Schedule } from "../../screens"
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
 import { formatDate, sortByTime } from "../../utils/formatDate"
-import { useSchedule } from "./webflow-api"
-import {
-  CustomScheduleProps,
-  CustomSpeakerProps,
-  CustomWorkshopProps,
-  RecurringEventsProps,
-  ScheduleProps,
-  SpeakerProps,
-  WorkshopProps,
+import { useScheduledEvents } from "./webflow-api"
+import type {
+  RawScheduledEvent,
+  RawSpeaker,
+  RawTalk,
+  RawWorkshop,
+  RecurringEvents,
+  ScheduledEvent,
+  Speaker,
+  Talk,
+  Workshop,
 } from "./webflow-api.types"
 import { WEBFLOW_MAP } from "./webflow-conts"
 
@@ -17,9 +19,9 @@ import { WEBFLOW_MAP } from "./webflow-conts"
  * Converting workshop data from "type ids" to "type names"
  */
 export const cleanedWorkshops = (
-  workshopsData?: CustomWorkshopProps[],
-  speakersData?: SpeakerProps[],
-): WorkshopProps[] => {
+  workshopsData?: RawWorkshop[],
+  speakersData?: Speaker[],
+): Workshop[] => {
   return workshopsData
     ?.filter((workshop) => !workshop._archived && !workshop._draft)
     .map((workshop) => ({
@@ -37,58 +39,83 @@ export const cleanedWorkshops = (
 /*
  * Converting speakers data from "type ids" to "type names"
  */
-export const cleanedSpeakers = (speakersData?: CustomSpeakerProps[]): SpeakerProps[] => {
-  return speakersData?.map((speaker) => ({
+export const cleanedSpeakers = (speakersData?: RawSpeaker[]): Speaker[] => {
+  return speakersData?.map(cleanedSpeaker)
+}
+
+export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker => {
+  return {
     ...speaker,
     "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
     "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
+  }
+}
+
+export const cleanedTalks = ({
+  speakers,
+  talks,
+}: {
+  speakers?: RawSpeaker[]
+  talks?: RawTalk[]
+}): Talk[] => {
+  return talks?.map((talk) => ({
+    ...talk,
+    "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
+    "speaker-s": talk["speaker-s"].map((speakerId) =>
+      cleanedSpeaker(speakers.find(({ _id }) => _id === speakerId)),
+    ),
   }))
 }
 
 /*
  * Converting schedule data from "type ids" to "type names"
  */
-export const cleanedSchedule = (
-  scheduleData?: CustomScheduleProps[],
-  speakersData?: SpeakerProps[],
-  workshopData?: WorkshopProps[],
-  recurringEventsData?: RecurringEventsProps[],
-): ScheduleProps[] => {
-  return scheduleData
+export const cleanedSchedule = ({
+  scheduledEvents,
+  speakers,
+  workshops,
+  talks,
+  recurringEvents,
+}: {
+  scheduledEvents?: RawScheduledEvent[]
+  speakers?: Speaker[]
+  workshops?: Workshop[]
+  talks?: Talk[]
+  recurringEvents?: RecurringEvents[]
+}): ScheduledEvent[] => {
+  return scheduledEvents
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => ({
       ...schedule,
+      "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+      "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
       day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
+      talk: talks?.find((talk) => talk._id === schedule.talk),
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
-      "speaker-2": speakersData?.find((speaker) => speaker._id === schedule["speaker-2"]),
-      workshop: workshopData?.find((workshop) => workshop._id === schedule.workshop),
-      "recurring-event": recurringEventsData.find(
-        (recurring) => recurring._id === schedule["recurring-event"],
-      ),
-    })) as ScheduleProps[]
+      workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+    }))
 }
 
 /*
  * Converting workshop data from "type ids" to "type names"
  */
 export const createScheduleScreenData = (): Schedule[] => {
-  const { data: scheduleData } = useSchedule()
-
+  const { data: events } = useScheduledEvents()
   return [
     {
       date: "2023-05-17",
       title: "React Native Workshops",
-      events: convertScheduleToScheduleCard(scheduleData, "Wednesday"),
+      events: convertScheduleToScheduleCard(events, "Wednesday"),
     },
     {
       date: "2023-05-18",
       title: "Conference Day 1",
-      events: convertScheduleToScheduleCard(scheduleData, "Thursday"),
+      events: convertScheduleToScheduleCard(events, "Thursday"),
     },
     {
       date: "2023-05-19",
       title: "Conference Day 2",
-      events: convertScheduleToScheduleCard(scheduleData, "Friday"),
+      events: convertScheduleToScheduleCard(events, "Friday"),
     },
   ]
 }
@@ -114,16 +141,15 @@ export const createScheduleScreenData = (): Schedule[] => {
 //   })
 // }
 
-const convertScheduleToCardProps = (schedule: ScheduleProps): ScheduleCardProps => {
+const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps => {
   switch (schedule.type) {
     case "Recurring":
-      console.tron.log({ schedule })
       return {
         variant: "recurring",
         time: formatDate(schedule["day-time"], "h:mm a"),
-        eventTitle: schedule["recurring-event"].name,
+        eventTitle: schedule["recurring-event"]?.name,
         heading: "",
-        subheading: schedule["recurring-event"]["event-description"],
+        subheading: schedule["recurring-event"]?.["event-description"],
         sources: [],
         id: schedule._id,
       }
@@ -143,34 +169,39 @@ const convertScheduleToCardProps = (schedule: ScheduleProps): ScheduleCardProps 
         variant: "talk",
         time: formatDate(schedule["day-time"], "h:mm a"),
         eventTitle: "talk",
-        heading: schedule.name,
-        subheading: schedule["break-party-description"],
-        sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
+        heading: schedule.talk.name,
+        subheading: schedule.talk.description,
+        // sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
+        sources: schedule.talk["speaker-s"]?.["speaker-photo"].url,
         id: schedule._id,
       }
     case "Workshop":
+      // eslint-disable-next-line no-case-declarations
+      const workshop = schedule.workshop
       return {
         variant: "workshop",
         time: formatDate(schedule["day-time"], "h:mm a"),
         eventTitle: "workshop",
-        heading: schedule.workshop.name,
-        subheading: schedule.workshop["instructor-info"]?.name,
+        heading: workshop?.name,
+        subheading: workshop?.["instructor-info"]?.name,
         sources: [
-          schedule.workshop["instructor-info"]?.["speaker-photo"].url,
-          ...(schedule.workshop.assistants?.map((a) => a["speaker-photo"].url) ?? []),
+          workshop?.["instructor-info"]?.["speaker-photo"].url,
+          ...(workshop?.assistants?.map((a) => a["speaker-photo"].url) ?? []),
         ].filter(Boolean),
-        level: schedule.workshop.level,
+        level: workshop?.level,
         id: schedule._id,
       }
+    default:
+      console.tron.logImportant("Unknown schedule type", schedule)
   }
 }
 
 // [NOTE] util function that might be needed in the future
 const convertScheduleToScheduleCard = (
-  scheduleData: ScheduleProps[],
+  scheduleData: ScheduledEvent[],
   day: string,
 ): ScheduleCardProps[] => {
-  const daySchedule: ScheduleProps[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
+  const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
   return daySchedule.sort(sortByTime).map(convertScheduleToCardProps)
 }
 
