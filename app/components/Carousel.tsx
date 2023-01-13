@@ -57,6 +57,7 @@ export function Carousel(props: CarouselProps) {
         {...{ data, onScroll }}
         horizontal
         pagingEnabled
+        overScrollMode="never"
         keyExtractor={(_, index) => `info-image-${index}`}
         bounces={false}
         showsHorizontalScrollIndicator={false}
