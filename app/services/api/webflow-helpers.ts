@@ -120,27 +120,6 @@ export const createScheduleScreenData = (): Schedule[] => {
   ]
 }
 
-// export const convertWorkshopToScheduleCard = (
-//   workshopData?: WorkshopProps[],
-// ): ScheduleCardProps[] => {
-//   return workshopData?.map((workshop) => {
-//     const sources = [workshop["instructor-info"]["speaker-photo"].url]
-//     if (workshop["second-instructor-2"]) {
-//       sources.push(workshop["second-instructor-2"]["speaker-photo"].url)
-//     }
-//     return {
-//       variant: "workshop",
-//       time: formatDate(workshop["day-time"], "MMM d, h:mm a"),
-//       eventTitle: "workshop",
-//       heading: workshop.name,
-//       subheading: workshop["instructor-info"].name,
-//       sources,
-//       level: workshop.level,
-//       id: workshop._id,
-//     }
-//   })
-// }
-
 const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps => {
   switch (schedule.type) {
     case "Recurring":
@@ -199,8 +178,6 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         level: workshop?.level,
         id: schedule._id,
       }
-    default:
-      console.tron.logImportant("Unknown schedule type", schedule)
   }
 }
 

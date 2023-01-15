@@ -82,7 +82,7 @@ export const WEBFLOW_MAP = {
     "63b8a62fcfc084793e4d5b60": "Afternoon Break",
   },
   talkType: {
-    "4206976061fcd6327bd12ce6aac856eb": "Talk",
+    "38ba1361ae664a13e4a03f20ae153dc8": "Talk",
     e66d50161e7027f9c8646ac4ec9c02a9: "Speaker Panel",
     "3aa9ece8012afed5d4e548180b2713e0": "Emcee",
   },
