@@ -90,7 +90,7 @@ export const cleanedSchedule = ({
       "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
       "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
       day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
-      talk: talks?.find((talk) => talk._id === schedule.talk),
+      talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
       workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
     }))
@@ -164,15 +164,23 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         id: schedule._id,
       }
     case "Talk":
+      return {
+        variant: "talk",
+        time: formatDate(schedule["day-time"], "h:mm a"),
+        eventTitle: schedule.type,
+        heading: schedule.talk?.name,
+        subheading: schedule.talk?.description,
+        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
+        id: schedule._id,
+      }
     case "Speaker Panel":
       return {
         variant: "talk",
         time: formatDate(schedule["day-time"], "h:mm a"),
-        eventTitle: "talk",
-        heading: schedule.talk.name,
-        subheading: schedule.talk.description,
-        // sources: schedule["speaker-2"] ? [schedule["speaker-2"]["speaker-photo"].url] : [],
-        sources: schedule.talk["speaker-s"]?.["speaker-photo"].url,
+        eventTitle: schedule.type,
+        heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
+        subheading: "",
+        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
         id: schedule._id,
       }
     case "Workshop":
@@ -186,7 +194,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         subheading: workshop?.["instructor-info"]?.name,
         sources: [
           workshop?.["instructor-info"]?.["speaker-photo"].url,
-          ...(workshop?.assistants?.map((a) => a["speaker-photo"].url) ?? []),
+          // ...(workshop?.assistants?.map((a) => a["speaker-photo"].url) ?? []),
         ].filter(Boolean),
         level: workshop?.level,
         id: schedule._id,

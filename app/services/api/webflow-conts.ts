@@ -69,8 +69,8 @@ export const WEBFLOW_MAP = {
     "2e399bc3": "Friday",
   },
   scheduleType: {
-    "976a2eee2ab173440affe93d0a20bf4d": "Talk",
-    c728019fbbce26cc72918695f31e7d4d: "Speaker Panel",
+    "4206976061fcd6327bd12ce6aac856eb": "Talk",
+    "8fc8810c6c61b7e3939280149fc5f84e": "Speaker Panel",
     dd977a70188a93af399ad496d6cf2785: "Recurring",
     b2f17244cf6bd0782c2a099568169219: "Party",
     "7ccbd551ac994b4489c4fe31ad985120": "Workshop",
