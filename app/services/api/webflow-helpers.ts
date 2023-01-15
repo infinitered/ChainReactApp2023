@@ -13,7 +13,7 @@ import type {
   Talk,
   Workshop,
 } from "./webflow-api.types"
-import { WEBFLOW_MAP } from "./webflow-conts"
+import { WEBFLOW_MAP } from "./webflow-consts"
 
 /*
  * Converting workshop data from "type ids" to "type names"

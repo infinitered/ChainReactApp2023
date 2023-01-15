@@ -17,7 +17,7 @@ import {
   SPONSORS,
   TALKS,
   WORKSHOPS,
-} from "./webflow-conts"
+} from "./webflow-consts"
 import { cleanedSchedule, cleanedSpeakers, cleanedTalks, cleanedWorkshops } from "./webflow-helpers"
 
 const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
