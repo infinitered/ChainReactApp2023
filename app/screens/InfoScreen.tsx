@@ -7,6 +7,7 @@ import {
   ImageSourcePropType,
   Image,
   Alert,
+  Platform,
 } from "react-native"
 import { Button, Screen, Text } from "../components"
 import { useHeader } from "../hooks"
@@ -46,7 +47,9 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () =>
       <Button
         onPress={async () => {
           const token = await messaging().getToken()
-          Alert.alert("PN Token", token)
+          Platform.OS === "ios"
+            ? Alert.prompt("PN Token", undefined, undefined, undefined, token)
+            : Alert.alert("PN Token", token)
         }}
         preset="link"
         style={$hiddenButton}
