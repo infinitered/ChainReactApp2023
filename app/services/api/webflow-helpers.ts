@@ -171,10 +171,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         eventTitle: "workshop",
         heading: workshop?.name,
         subheading: workshop?.["instructor-info"]?.name,
-        sources: [
-          workshop?.["instructor-info"]?.["speaker-photo"].url,
-          // ...(workshop?.assistants?.map((a) => a["speaker-photo"].url) ?? []),
-        ].filter(Boolean),
+        sources: [workshop?.["instructor-info"]?.["speaker-photo"].url],
         level: workshop?.level,
         id: schedule._id,
       }

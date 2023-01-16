@@ -64,7 +64,7 @@ export const useScheduledEvents = () => {
   const { data: scheduledEvents, ...rest } = useWebflowAPI<RawScheduledEvent>(
     SCHEDULE.key,
     SCHEDULE.collectionId,
-    !isLoading && !!speakers,
+    !isLoading && !!speakers && !!workshops && !!recurringEvents && !!talks,
   )
   return {
     data: cleanedSchedule({
