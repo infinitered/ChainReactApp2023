@@ -62,7 +62,7 @@ export const cleanedTalks = ({
     ...talk,
     "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
     "speaker-s": talk["speaker-s"].map((speakerId) =>
-      cleanedSpeaker(speakers.find(({ _id }) => _id === speakerId)),
+      cleanedSpeaker(speakers?.find(({ _id }) => _id === speakerId)),
     ),
   }))
 }
