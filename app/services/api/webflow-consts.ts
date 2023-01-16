@@ -30,6 +30,16 @@ export const PAST_TALKS = {
   key: "pastTalks",
 }
 
+export const RECURRING_EVENTS = {
+  collectionId: "63b5c3c8dd1e3b1bb59ec141",
+  key: "recurringEvents",
+}
+
+export const TALKS = {
+  collectionId: "63b897d591a301c0bf96b457",
+  key: "talks",
+}
+
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys
 export const WEBFLOW_MAP = {
@@ -59,9 +69,21 @@ export const WEBFLOW_MAP = {
     "2e399bc3": "Friday",
   },
   scheduleType: {
-    "976a2eee2ab173440affe93d0a20bf4d": "Talk",
-    c728019fbbce26cc72918695f31e7d4d: "Lightning Talk",
-    "2e399bc3e027ec007832e20e47c5b83b": "Break",
+    "4206976061fcd6327bd12ce6aac856eb": "Talk",
+    "8fc8810c6c61b7e3939280149fc5f84e": "Speaker Panel",
+    dd977a70188a93af399ad496d6cf2785: "Recurring",
     b2f17244cf6bd0782c2a099568169219: "Party",
+    "7ccbd551ac994b4489c4fe31ad985120": "Workshop",
+  },
+  recurringEventType: {
+    "63b8a530a5f15f0d26539f07": "Check-in & Registration",
+    "63b8a5a76623c60c4e72db89": "Morning Break",
+    "63b8a5e54f99644c1c457253": "Lunch Break",
+    "63b8a62fcfc084793e4d5b60": "Afternoon Break",
+  },
+  talkType: {
+    "38ba1361ae664a13e4a03f20ae153dc8": "Talk",
+    e66d50161e7027f9c8646ac4ec9c02a9: "Speaker Panel",
+    "3aa9ece8012afed5d4e548180b2713e0": "Emcee",
   },
 }

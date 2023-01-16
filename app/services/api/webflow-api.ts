@@ -1,14 +1,24 @@
 import { useQuery } from "@tanstack/react-query"
 import { axiosInstance, PaginatedItems } from "./axios"
-import {
-  CustomScheduleProps,
-  CustomSpeakerNamesProps,
-  CustomSpeakerProps,
-  CustomSponsorProps,
-  CustomWorkshopProps,
+import type {
+  RawRecurringEvents,
+  RawScheduledEvent,
+  RawSpeakerName,
+  RawSpeaker,
+  RawSponsor,
+  RawTalk,
+  RawWorkshop,
 } from "./webflow-api.types"
-import { SCHEDULE, SPEAKERS, SPEAKER_NAMES, SPONSORS, WORKSHOPS } from "./webflow-conts"
-import { cleanedSchedule, cleanedSpeakers, cleanedWorkshops } from "./webflow-helpers"
+import {
+  RECURRING_EVENTS,
+  SCHEDULE,
+  SPEAKERS,
+  SPEAKER_NAMES,
+  SPONSORS,
+  TALKS,
+  WORKSHOPS,
+} from "./webflow-consts"
+import { cleanedSchedule, cleanedSpeakers, cleanedTalks, cleanedWorkshops } from "./webflow-helpers"
 
 const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
   useQuery({
@@ -23,40 +33,49 @@ const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
   })
 
 export const useSponsors = () => {
-  return useWebflowAPI<CustomSponsorProps>(SPONSORS.key, SPONSORS.collectionId)
+  return useWebflowAPI<RawSponsor>(SPONSORS.key, SPONSORS.collectionId)
 }
 
 export const useSpeakers = () => {
-  const { data, ...rest } = useWebflowAPI<CustomSpeakerProps>(SPEAKERS.key, SPEAKERS.collectionId)
-  return { data: cleanedSpeakers(data), ...rest }
+  return useWebflowAPI<RawSpeaker>(SPEAKERS.key, SPEAKERS.collectionId)
 }
 
 export const useSpeakerNames = () => {
-  const { data, ...rest } = useWebflowAPI<CustomSpeakerNamesProps>(
-    SPEAKER_NAMES.key,
-    SPEAKER_NAMES.collectionId,
-  )
-  return { data, ...rest }
+  return useWebflowAPI<RawSpeakerName>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
 }
 
 export const useWorkshops = () => {
-  const { data: speakersData, isLoading } = useSpeakers()
-  const { data: workshopsData, ...rest } = useWebflowAPI<CustomWorkshopProps>(
-    WORKSHOPS.key,
-    WORKSHOPS.collectionId,
-    !isLoading && !!speakersData,
-  )
-  return { data: cleanedWorkshops(workshopsData, cleanedSpeakers(speakersData)), ...rest }
+  return useWebflowAPI<RawWorkshop>(WORKSHOPS.key, WORKSHOPS.collectionId)
 }
 
-export const useSchedule = () => {
-  const { data: speakersData, isLoading } = useSpeakers()
-  const { data: schedulesData, ...rest } = useWebflowAPI<CustomScheduleProps>(
+export const useRecurringEvents = () => {
+  return useWebflowAPI<RawRecurringEvents>(RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId)
+}
+
+export const useTalks = () => {
+  return useWebflowAPI<RawTalk>(TALKS.key, TALKS.collectionId)
+}
+
+export const useScheduledEvents = () => {
+  const { data: speakers, isLoading } = useSpeakers()
+  const { data: workshops } = useWorkshops()
+  const { data: recurringEvents } = useRecurringEvents()
+  const { data: talks } = useTalks()
+  const { data: scheduledEvents, ...rest } = useWebflowAPI<RawScheduledEvent>(
     SCHEDULE.key,
     SCHEDULE.collectionId,
-    !isLoading && !!speakersData,
+    !isLoading && !!speakers && !!workshops && !!recurringEvents && !!talks,
   )
-  return { data: cleanedSchedule(schedulesData, cleanedSpeakers(speakersData)), ...rest }
+  return {
+    data: cleanedSchedule({
+      recurringEvents,
+      scheduledEvents,
+      speakers: cleanedSpeakers(speakers),
+      talks: cleanedTalks({ speakers, talks }),
+      workshops: cleanedWorkshops(workshops, cleanedSpeakers(speakers)),
+    }),
+    ...rest,
+  }
 }
 
 // [NOTE] JUST FOR REFERENCE
