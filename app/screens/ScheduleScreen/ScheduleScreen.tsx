@@ -159,7 +159,8 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                 }
                 data={schedule.events}
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
-                  const { time, eventTitle, heading, subheading, sources, level, id } = item
+                  const { time, endTime, eventTitle, heading, subheading, sources, level, id } =
+                    item
                   const onPress =
                     item.variant !== "recurring"
                       ? () => navigation.navigate("TalkDetails")
@@ -168,7 +169,17 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                     <View style={$cardContainer}>
                       <ScheduleCard
                         variant={item.variant as Variants}
-                        {...{ time, eventTitle, heading, subheading, onPress, sources, level, id }}
+                        {...{
+                          time,
+                          endTime,
+                          eventTitle,
+                          heading,
+                          subheading,
+                          onPress,
+                          sources,
+                          level,
+                          id,
+                        }}
                       />
                     </View>
                   )

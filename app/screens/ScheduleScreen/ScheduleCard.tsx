@@ -5,6 +5,7 @@ import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
 
 interface HeaderProps {
+  endTime?: string
   time: string
   title: string
 }
@@ -14,9 +15,12 @@ interface FooterProps {
   subheading: string
 }
 
-const Header = ({ time, title }: HeaderProps) => (
+const Header = ({ endTime, time, title }: HeaderProps) => (
   <View style={$headerContainer}>
-    <Text style={$timeText}>{time}</Text>
+    <Text style={$timeText}>
+      {time}
+      {!!endTime && ` - ${endTime}`}
+    </Text>
     <Text preset="eventTitle" style={$titleText}>
       {title}
     </Text>
@@ -42,11 +46,13 @@ export interface ScheduleCardProps {
    */
   variant?: Variants
   /**
-   * Start time or time range
-   * 8:00 am
-   * 6:00 - 8:00 am
+   * Start time of the event
    */
   time: string
+  /**
+   * End time of the recurring event
+   */
+  endTime?: string
   /**
    * The event title
    */
@@ -82,14 +88,15 @@ interface SpeakingEventProps {
 
 interface BaseEventProps {
   time: string
+  endTime?: string
   eventTitle: string
   level?: string
 }
 
-const baseEventProps = ({ time, eventTitle, level }: BaseEventProps) => {
+const baseEventProps = ({ time, endTime, eventTitle, level }: BaseEventProps) => {
   const title = `${level ? `${level} ` : ""}${eventTitle}`
   return {
-    HeadingComponent: <Header {...{ time, title }} />,
+    HeadingComponent: <Header {...{ time, endTime, title }} />,
   }
 }
 
@@ -120,7 +127,17 @@ const baseSpeakingEventProps = ({
 }
 
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
-  const { variant = "recurring", time, eventTitle, heading, subheading, sources, level, id } = props
+  const {
+    variant = "recurring",
+    time,
+    endTime,
+    eventTitle,
+    heading,
+    subheading,
+    sources,
+    level,
+    id,
+  } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
@@ -128,7 +145,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     ? () => navigation.navigate("PartyDetails", { scheduleId: id })
     : undefined
 
-  const cardProps = { ...baseEventProps({ time, eventTitle, level }) }
+  const cardProps = { ...baseEventProps({ time, endTime, eventTitle, level }) }
   const variantProps =
     variant === "recurring"
       ? { content: subheading, contentStyle: $contentText }
