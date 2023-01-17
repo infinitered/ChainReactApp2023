@@ -8,18 +8,103 @@ import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useScheduledEvents } from "../../services/api"
+import { formatDate } from "../../utils/formatDate"
+import { ScheduledEvent } from "../../services/api/webflow-api.types"
+
+export type Variants = "workshop" | "talk"
+
+export interface TalkDetailsProps {
+  /**
+   * The variant of the talk details screen.
+   * Options: "workshop", "talk"
+   * Default: "workshop"
+   */
+  variant?: Variants
+  /**
+   * The title of the talk
+   */
+  title: string
+  /**
+   * The location or date of the talk
+   */
+  subtitle: string
+  /**
+   * The image of the speaker
+   */
+  imageUrl: string
+  /**
+   * The name of the speaker
+   */
+  fullName: string
+  /**
+   * The company where the speaker works
+   */
+  company: string
+  /**
+   * The description of the talk
+   */
+  description: string
+  /**
+   * The first name of the speaker
+   */
+  firstName: string
+  /**
+   * The bio of the speaker
+   */
+  bio: string
+}
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
 const workshopBlob = require("../../../assets/images/workshop-shape.png")
 const workshopCurve = require("../../../assets/images/workshop-curve.png")
 const talkCurve = require("../../../assets/images/talk-curve.png")
 
-const title = "React Native essentials"
-const subtitle = "Hotel, Conference Room 1"
-
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
-export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = () => {
+const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
+  switch (schedule.type) {
+    case "Talk":
+    case "Speaker Panel":
+      // eslint-disable-next-line no-case-declarations
+      const talk = schedule.talk
+      return {
+        variant: "talk",
+        title: talk?.name,
+        subtitle: formatDate(schedule["day-time"], "MMMM dd, h:mm aaa"),
+        imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
+        fullName: talk?.["speaker-s"][0]?.name,
+        company: talk?.["speaker-s"][0]?.company,
+        description: talk?.description,
+        firstName: talk?.["speaker-s"][0]["speaker-first-name"],
+        bio: talk?.["speaker-s"][0]["speaker-bio"],
+      }
+    case "Workshop":
+    default:
+      // eslint-disable-next-line no-case-declarations
+      const workshop = schedule.workshop
+      return {
+        variant: "workshop",
+        title: workshop?.name,
+        subtitle: schedule.location,
+        imageUrl: workshop?.["instructor-info"]?.["speaker-photo"].url,
+        fullName: workshop?.["instructor-info"].name,
+        company: workshop?.["instructor-info"].company,
+        description: workshop?.abstract,
+        firstName: workshop?.["instructor-info"]["speaker-first-name"],
+        bio: workshop?.["instructor-info"]["speaker-bio"],
+      }
+  }
+}
+
+export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = ({
+  route: { params },
+}) => {
+  const { data: scheduleData } = useScheduledEvents()
+  const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
+  const { bio, company, description, firstName, fullName, imageUrl, subtitle, title, variant } =
+    talkDetailsProps(schedule)
+
   const scrollY = useSharedValue(0)
   const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
@@ -31,9 +116,6 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   })
 
   const { bottom: paddingBottom } = useSafeAreaInsets()
-
-  // TODO: wire this up to the event type
-  const isWorkshop = true
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
@@ -63,40 +145,36 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
           <View style={$containerSpacing}>
             <Image
-              source={isWorkshop ? workshopCurve : talkCurve}
-              style={isWorkshop ? $workshopCurve : $talkCurve}
+              source={variant === "workshop" ? workshopCurve : talkCurve}
+              style={variant === "workshop" ? $workshopCurve : $talkCurve}
             />
             <BoxShadow
-              preset={isWorkshop ? "bold" : "primary"}
+              preset={variant === "workshop" ? "bold" : "primary"}
               style={$containerSpacing}
               offset={6}
             >
-              <Image source={{ uri: "https://picsum.photos/315" }} style={$speakerImage} />
+              <Image source={{ uri: imageUrl }} style={$speakerImage} />
             </BoxShadow>
             <Image
-              source={isWorkshop ? workshopBlob : talkBlob}
-              style={isWorkshop ? $workshopBlob : $talkBlob}
+              source={variant === "workshop" ? workshopBlob : talkBlob}
+              style={variant === "workshop" ? $workshopBlob : $talkBlob}
             />
 
-            <Text preset="bold" style={$nameText} text="First Last" />
-            <Text style={$companyNameText} text="Company, Inc" />
+            <Text preset="bold" style={$nameText} text={fullName} />
+            <Text style={$companyNameText} text={company} />
           </View>
 
           <View style={$detailsContainer}>
-            <Text preset="bold" style={$detailsText} text="Workshop details" />
-            <Tag text="Beginner Workshop" style={$containerSpacing} />
-            <Text
-              style={$bodyText}
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            />
+            <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
+            {variant === "workshop" && (
+              <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
+            )}
+            <Text style={$bodyText} text={description} />
           </View>
 
           <View style={$containerSpacing}>
-            <Text preset="eventTitle" style={$aboutHeading} text="About First" />
-            <Text
-              style={$bodyText}
-              text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-            />
+            <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
+            <Text style={$bodyText} text={bio} />
           </View>
 
           <View style={$linksContainer}>

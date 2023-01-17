@@ -86,4 +86,8 @@ export const WEBFLOW_MAP = {
     e66d50161e7027f9c8646ac4ec9c02a9: "Speaker Panel",
     "3aa9ece8012afed5d4e548180b2713e0": "Emcee",
   },
+  location: {
+    "63b8a958a5f15f379953e0da": "Courtyard Portland City Center",
+    "63b8a865e6b85e71b453fd3d": "The Armory",
+  },
 }

@@ -123,7 +123,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const { variant = "recurring", time, eventTitle, heading, subheading, sources, level, id } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
-    ? () => navigation.navigate("TalkDetails")
+    ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["party"].includes(variant)
     ? () => navigation.navigate("PartyDetails", { scheduleId: id })
     : undefined

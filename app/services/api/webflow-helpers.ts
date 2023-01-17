@@ -93,6 +93,7 @@ export const cleanedSchedule = ({
       talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
       workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+      location: WEBFLOW_MAP.location[schedule.location],
     }))
 }
 
