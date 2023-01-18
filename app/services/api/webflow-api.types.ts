@@ -17,6 +17,7 @@ export interface RawScheduledEvent extends Item {
   "break-card-color"?: string
   "break-party-description"?: string
   "day-time": string
+  "end-time"?: string
   "is-a-talk"?: boolean
   "recurring-event"?: string
   "speaker-2"?: string
@@ -24,12 +25,14 @@ export interface RawScheduledEvent extends Item {
   talk?: string
   type: string
   workshop?: string
+  location?: string
 }
 
 export interface ScheduledEvent extends Item {
   "break-card-color"?: string
   "break-party-description"?: string
   "day-time": string
+  "end-time"?: string
   "is-a-talk"?: boolean
   "recurring-event"?: RecurringEvents
   "speaker-2"?: Speaker | RawSpeakerName
@@ -37,6 +40,7 @@ export interface ScheduledEvent extends Item {
   talk?: Talk
   type?: "Talk" | "Speaker Panel" | "Workshop" | "Party" | "Recurring"
   workshop?: Workshop
+  location?: string
 }
 
 export interface RawWorkshop extends Item {

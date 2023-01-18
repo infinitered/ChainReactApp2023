@@ -35,7 +35,7 @@ import { TabNavigator, TabParamList } from "./TabNavigator"
 export type AppStackParamList = {
   Welcome: undefined
   Tabs: NavigatorScreenParams<TabParamList>
-  TalkDetails: undefined
+  TalkDetails: { scheduleId: string }
   PartyDetails: { scheduleId: string }
 }
 
