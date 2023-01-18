@@ -88,6 +88,7 @@ export const cleanedSchedule = ({
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => ({
       ...schedule,
+      location: WEBFLOW_MAP.location[schedule.location],
       "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
       "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
       day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],

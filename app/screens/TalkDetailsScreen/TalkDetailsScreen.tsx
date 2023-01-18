@@ -100,11 +100,6 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = ({
   route: { params },
 }) => {
-  const { data: scheduleData } = useScheduledEvents()
-  const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
-  const { bio, company, description, firstName, fullName, imageUrl, subtitle, title, variant } =
-    talkDetailsProps(schedule)
-
   const scrollY = useSharedValue(0)
   const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
@@ -116,6 +111,14 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   })
 
   const { bottom: paddingBottom } = useSafeAreaInsets()
+
+  const { data: scheduleData } = useScheduledEvents()
+  const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
+
+  if (!schedule) return null
+
+  const { bio, company, description, firstName, fullName, imageUrl, subtitle, title, variant } =
+    talkDetailsProps(schedule)
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
