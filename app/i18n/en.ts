@@ -12,10 +12,11 @@ const en = {
     scheduleButton: "See the schedule",
   },
   errorScreen: {
-    title: "Something went wrong!",
+    title: "Oh, bother!",
     friendlySubtitle:
-      "This is the screen that your users will see in production when an error is thrown. You'll want to customize this message (located in `app/i18n/en.ts`) and probably the layout as well (`app/screens/ErrorScreen`). If you want to remove this entirely, check `app/app.tsx` for the <ErrorBoundary> component.",
-    reset: "RESET APP",
+      "Bugs happen to the best of us! Try resetting or restarting the app and see if that helps. If not, feel free to file an issue on GitHub and our team of highly-trained llamas will look into it.",
+    reset: "Reset",
+    githubButton: "Go to GitHub",
   },
   emptyStateComponent: {
     generic: {

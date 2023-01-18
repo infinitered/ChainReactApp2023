@@ -2,6 +2,7 @@ import React, { ErrorInfo } from "react"
 import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
 import { Button, Icon, Screen, Text } from "../../components"
 import { colors, spacing } from "../../theme"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 export interface ErrorDetailsProps {
   error: Error
@@ -10,6 +11,14 @@ export interface ErrorDetailsProps {
 }
 
 export function ErrorDetails(props: ErrorDetailsProps) {
+  const { error, errorInfo } = props
+  const errorTitle = `${error}`.trim()
+  // Issue body that is the first 10 lines of the error stack
+  const issueBodyStacktrace = errorInfo.componentStack.split("\n").slice(0, 10).join("\n")
+  const githubURL = encodeURI(
+    `https://github.com/infinitered/ChainReactApp2023/issues/new?title=(CRASH) ${errorTitle}&body=What were you doing when the app crashed?\n\n\nTruncated Stacktrace:\n\`\`\`${issueBodyStacktrace}\`\`\``,
+  )
+
   return (
     <Screen
       preset="fixed"
@@ -22,16 +31,25 @@ export function ErrorDetails(props: ErrorDetailsProps) {
         <Text tx="errorScreen.friendlySubtitle" />
       </View>
 
+      <Button
+        preset="default"
+        style={$githubButton}
+        shadowStyle={$button}
+        tx="errorScreen.githubButton"
+        onPress={() => openLinkInBrowser(githubURL)}
+      />
+
       <ScrollView style={$errorSection} contentContainerStyle={$errorSectionContentContainer}>
-        <Text style={$errorContent} weight="bold" text={`${props.error}`.trim()} />
-        <Text
-          selectable
-          style={$errorBacktrace}
-          text={`${props.errorInfo.componentStack}`.trim()}
-        />
+        <Text weight="bold" text={`${error}`.trim()} />
+        <Text selectable style={$errorBacktrace} text={`${errorInfo.componentStack}`.trim()} />
       </ScrollView>
 
-      <Button style={$resetButton} onPress={props.onReset} tx="errorScreen.reset" />
+      <Button
+        style={$resetButton}
+        shadowStyle={$button}
+        onPress={props.onReset}
+        tx="errorScreen.reset"
+      />
     </Screen>
   )
 }
@@ -44,19 +62,20 @@ const $contentContainer: ViewStyle = {
 }
 
 const $topSection: ViewStyle = {
-  flex: 1,
   alignItems: "center",
+  marginBottom: spacing.large,
 }
 
 const $heading: TextStyle = {
-  color: colors.error,
+  color: colors.errorBackground,
   marginBottom: spacing.medium,
 }
 
 const $errorSection: ViewStyle = {
   flex: 2,
   backgroundColor: colors.separator,
-  marginVertical: spacing.medium,
+  marginBottom: spacing.medium,
+  marginTop: spacing.large,
   borderRadius: 6,
 }
 
@@ -64,16 +83,21 @@ const $errorSectionContentContainer: ViewStyle = {
   padding: spacing.medium,
 }
 
-const $errorContent: TextStyle = {
-  color: colors.error,
-}
-
 const $errorBacktrace: TextStyle = {
   marginTop: spacing.medium,
   color: colors.textDim,
 }
 
-const $resetButton: ViewStyle = {
+const $button: ViewStyle = {
   backgroundColor: colors.error,
+}
+
+const $resetButton: ViewStyle = {
+  ...$button,
+  paddingHorizontal: spacing.huge,
+}
+
+const $githubButton: ViewStyle = {
+  ...$button,
   paddingHorizontal: spacing.huge,
 }
