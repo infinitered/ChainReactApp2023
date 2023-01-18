@@ -120,6 +120,8 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { bio, company, description, firstName, fullName, imageUrl, subtitle, title, variant } =
     talkDetailsProps(schedule)
 
+  const isWorkshop = variant === "workshop"
+
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
       <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
@@ -148,19 +150,19 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
           <View style={$containerSpacing}>
             <Image
-              source={variant === "workshop" ? workshopCurve : talkCurve}
-              style={variant === "workshop" ? $workshopCurve : $talkCurve}
+              source={isWorkshop ? workshopCurve : talkCurve}
+              style={isWorkshop ? $workshopCurve : $talkCurve}
             />
             <BoxShadow
-              preset={variant === "workshop" ? "bold" : "primary"}
+              preset={isWorkshop ? "bold" : "primary"}
               style={$containerSpacing}
               offset={6}
             >
               <Image source={{ uri: imageUrl }} style={$speakerImage} />
             </BoxShadow>
             <Image
-              source={variant === "workshop" ? workshopBlob : talkBlob}
-              style={variant === "workshop" ? $workshopBlob : $talkBlob}
+              source={isWorkshop ? workshopBlob : talkBlob}
+              style={isWorkshop ? $workshopBlob : $talkBlob}
             />
 
             <Text preset="bold" style={$nameText} text={fullName} />
@@ -169,7 +171,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
           <View style={$detailsContainer}>
             <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
-            {variant === "workshop" && (
+            {isWorkshop && (
               <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
             )}
             <Text style={$bodyText} text={description} />
