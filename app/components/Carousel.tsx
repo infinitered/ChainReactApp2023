@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { View, FlatList, Dimensions, ViewStyle, ImageSourcePropType, TextStyle } from "react-native"
 import { CarouselCard, Text } from "../components"
 import { spacing } from "../theme"
@@ -32,12 +32,19 @@ interface DynamicCarouselProps {
   data: DynamicCarouselItem[]
 }
 
+interface Spacer {
+  spacer: boolean
+}
+
 type CarouselProps =
   | (StaticCarouselProps | DynamicCarouselProps) & {
       openLink?: () => void
     }
 
-export const CAROUSEL_IMAGE_WIDTH = Dimensions.get("screen").width - spacing.medium
+const { width } = Dimensions.get("screen")
+export const CAROUSEL_IMAGE_WIDTH = width * 0.9
+export const SPACING = spacing.extraSmall
+export const SPACER_WIDTH = (width - CAROUSEL_IMAGE_WIDTH) / 2
 
 // ! https://github.com/software-mansion/react-native-reanimated/issues/457
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
@@ -51,10 +58,15 @@ export function Carousel(props: CarouselProps) {
   const scrollX = useSharedValue(0)
   const onScroll = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
 
+  const items: Array<ImageSourcePropType | DynamicCarouselItem | Spacer> = useMemo(() => {
+    return [{ spacer: true }, ...data, { spacer: true }]
+  }, [data.length])
+
   return (
     <>
       <AnimatedFlatList
-        {...{ data, onScroll }}
+        {...{ onScroll }}
+        data={items}
         horizontal
         pagingEnabled
         overScrollMode="never"
@@ -63,10 +75,21 @@ export function Carousel(props: CarouselProps) {
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         scrollEventThrottle={16}
-        snapToInterval={CAROUSEL_IMAGE_WIDTH - spacing.medium}
+        snapToInterval={CAROUSEL_IMAGE_WIDTH}
+        snapToAlignment="start"
         style={$carousel}
-        contentContainerStyle={$carouselContent}
         renderItem={({ item, index }) => {
+          const { spacer } = item as Spacer
+          if (spacer) {
+            return (
+              <View
+                style={{
+                  width: SPACER_WIDTH,
+                }}
+              />
+            )
+          }
+
           let leftButton = null
           if (props.preset === "dynamic") {
             const { leftButton: leftButtonData } = item as DynamicCarouselItem
@@ -99,12 +122,7 @@ export function Carousel(props: CarouselProps) {
 }
 
 const $carousel: ViewStyle = {
-  paddingStart: spacing.extraSmall,
   marginTop: spacing.medium,
-}
-
-const $carouselContent: ViewStyle = {
-  paddingEnd: spacing.extraSmall,
 }
 
 const $content: ViewStyle = {

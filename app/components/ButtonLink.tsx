@@ -5,7 +5,7 @@ import { spacing } from "../theme"
 
 type Props = {
   children: string
-  style: ViewStyle
+  style?: ViewStyle
   openLink: string | ((event: GestureResponderEvent) => void)
 }
 
