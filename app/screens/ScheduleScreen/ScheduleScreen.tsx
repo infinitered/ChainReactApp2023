@@ -28,10 +28,9 @@ export interface Schedule {
 const { width } = Dimensions.get("window")
 
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
-  useHeader({ title: "Schedule" })
-
   const schedules = createScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
+  useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
     [schedules, selectedSchedule],
@@ -151,12 +150,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             <View style={[$container, { width }]}>
               <FlashList
                 ref={scheduleListRefs[schedule.date]}
-                ListHeaderComponent={
-                  <View style={$headingContainer}>
-                    <Text preset="screenHeading">{formatDate(schedule.date, "EE, MMMM dd")}</Text>
-                    <Text style={$subheading}>{schedule.title}</Text>
-                  </View>
-                }
                 data={schedule.events}
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
                   const { time, endTime, eventTitle, heading, subheading, sources, level, id } =
