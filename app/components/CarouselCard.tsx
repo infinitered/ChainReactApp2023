@@ -48,7 +48,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
     return { transform: [{ scale }] }
   })
 
-  const $imageStyle = { width: CAROUSEL_IMAGE_WIDTH - spacing.medium }
+  const $imageStyle = { height: 274, width: CAROUSEL_IMAGE_WIDTH - spacing.medium }
 
   const $animatedSlideData = useAnimatedStyle(() => {
     const translateX = interpolate(scrollX.value, inputRange, [
