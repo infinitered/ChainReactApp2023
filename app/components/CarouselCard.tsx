@@ -2,6 +2,7 @@ import React from "react"
 import {
   GestureResponderEvent,
   ImageSourcePropType,
+  ImageStyle,
   TextStyle,
   View,
   ViewStyle,
@@ -9,7 +10,7 @@ import {
 import { ButtonLink, Text } from "../components"
 import { spacing } from "../theme"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { CAROUSEL_IMAGE_WIDTH, DynamicCarouselItem } from "./Carousel"
+import { CAROUSEL_IMAGE_WIDTH, DynamicCarouselItem, SPACING } from "./Carousel"
 
 export type CarouselCardProps = {
   item: ImageSourcePropType | DynamicCarouselItem
@@ -32,15 +33,14 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   scrollX,
   leftButton,
   rightButton,
-  totalCardCount,
 }) => {
   const { subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
 
   const inputRange = [
+    (index - 2) * CAROUSEL_IMAGE_WIDTH,
     (index - 1) * CAROUSEL_IMAGE_WIDTH,
     index * CAROUSEL_IMAGE_WIDTH,
-    (index + 1) * CAROUSEL_IMAGE_WIDTH,
   ]
 
   const $animatedImage = useAnimatedStyle(() => {
@@ -48,32 +48,25 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
     return { transform: [{ scale }] }
   })
 
-  const $imageStyle = { height: 274, width: CAROUSEL_IMAGE_WIDTH - spacing.medium }
-
   const $animatedSlideData = useAnimatedStyle(() => {
     const translateX = interpolate(scrollX.value, inputRange, [
       CAROUSEL_IMAGE_WIDTH,
-      0 - index * spacing.medium,
+      spacing.medium,
       -CAROUSEL_IMAGE_WIDTH,
     ])
 
-    // * To get the text container underneath to line up correctly, we have to do some
-    // * margin fixing based on first, middle or last slides
-    const marginEndAdjustment =
-      index > 0 ? (index === totalCardCount - 1 ? spacing.medium : spacing.extraSmall) : 0
-
     return {
-      transform: [{ translateX: translateX - marginEndAdjustment }],
+      transform: [{ translateX }],
     }
   })
 
   return (
-    <View>
+    <View style={$carouselCard}>
       <View style={$cardWrapper}>
-        <Animated.Image source={source} style={[$imageStyle, $animatedImage]} />
+        <Animated.Image source={source} style={[$image, $animatedImage]} />
       </View>
       {!!subtitle && (
-        <View style={[{ width: CAROUSEL_IMAGE_WIDTH - spacing.medium }, $slideWrapper]}>
+        <View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $slideWrapper]}>
           {!!meta && (
             <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
           )}
@@ -98,19 +91,24 @@ type LinkProps = {
 }
 
 const Link: React.FunctionComponent<LinkProps> = ({ openLink, text }) => {
-  return (
-    <ButtonLink openLink={openLink} style={$carouselCardLink}>
-      {text}
-    </ButtonLink>
-  )
+  return <ButtonLink openLink={openLink}>{text}</ButtonLink>
 }
 
 CarouselCard.Link = Link
 
+const $carouselCard: ViewStyle = {
+  width: CAROUSEL_IMAGE_WIDTH,
+}
+
 const $cardWrapper: ViewStyle = {
   overflow: "hidden",
   borderRadius: 4,
-  marginEnd: spacing.extraSmall,
+  marginHorizontal: SPACING,
+}
+
+const $image: ImageStyle = {
+  height: 274,
+  width: CAROUSEL_IMAGE_WIDTH,
 }
 
 const $mb: TextStyle = {
@@ -126,11 +124,6 @@ const $ctaContainer: ViewStyle = {
   marginTop: spacing.medium,
 }
 
-const $carouselCardLink: ViewStyle = {
-  marginEnd: spacing.large,
-}
-
 const $slideWrapper: ViewStyle = {
   marginTop: spacing.medium,
-  paddingStart: spacing.medium,
 }
