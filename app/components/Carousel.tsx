@@ -53,7 +53,7 @@ const openLink = (destination: string) =>
   destination.startsWith("https") ? openLinkInBrowser(destination) : openMap(destination)
 
 export function Carousel(props: CarouselProps) {
-  const { data } = props
+  const { data = [] } = props
 
   const scrollX = useSharedValue(0)
   const onScroll = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))

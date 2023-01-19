@@ -8,6 +8,7 @@ import type {
   RawSponsor,
   RawTalk,
   RawWorkshop,
+  RawVenue,
 } from "./webflow-api.types"
 import {
   RECURRING_EVENTS,
@@ -16,6 +17,7 @@ import {
   SPEAKER_NAMES,
   SPONSORS,
   TALKS,
+  VENUES,
   WORKSHOPS,
 } from "./webflow-consts"
 import { cleanedSchedule, cleanedSpeakers, cleanedTalks, cleanedWorkshops } from "./webflow-helpers"
@@ -31,6 +33,10 @@ const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
     },
     enabled,
   })
+
+export const useVenues = () => {
+  return useWebflowAPI<RawVenue>(VENUES.key, VENUES.collectionId)
+}
 
 export const useSponsors = () => {
   return useWebflowAPI<RawSponsor>(SPONSORS.key, SPONSORS.collectionId)

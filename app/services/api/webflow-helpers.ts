@@ -191,7 +191,7 @@ const convertScheduleToScheduleCard = (
 }
 
 // [NOTE] util function that might be needed in the future
-const groupBy =
+export const groupBy =
   (key: string) =>
   <T>(array: T[]) =>
     array.reduce(

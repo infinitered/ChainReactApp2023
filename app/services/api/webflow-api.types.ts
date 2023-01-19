@@ -79,6 +79,16 @@ export interface Talk extends Item {
   description?: string
 }
 
+export interface RawVenue extends Item {
+  "city-state-zip": string
+  "dircetions-url"?: string
+  "street-address": string
+  "venue-image-s": ImageRef[]
+  tag: string
+}
+
+export interface Venue extends RawVenue {}
+
 export interface RawRecurringEvents extends Item {
   "event-description"?: string
 }
@@ -111,9 +121,17 @@ export type Speaker = RawSpeaker & {
 }
 
 export interface RawSponsor extends Item {
-  "2020-sponsor"?: boolean
+  "conference-years-2"?: string
+  "external-url"?: string
+  "feature-as-a-past-sponsor"?: boolean
+  "is-a-current-sponsor"?: boolean
+  "promo-summary"?: string
+  "sponsor-tier": string
+  "sponsorship-type"?: string
   logo: ImageRef
 }
+
+export interface Sponsor extends RawSponsor {}
 
 interface ImageRef {
   alt: string | null

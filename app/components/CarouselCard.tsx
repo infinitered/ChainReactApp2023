@@ -107,6 +107,7 @@ const $cardWrapper: ViewStyle = {
 }
 
 const $image: ImageStyle = {
+  height: 274,
   width: CAROUSEL_IMAGE_WIDTH,
 }
 
