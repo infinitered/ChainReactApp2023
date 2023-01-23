@@ -186,7 +186,17 @@ export function Card(props: CardProps) {
   ]
 
   return (
-    <BoxShadow preset={preset === "default" ? "primary" : "default"}>
+    <BoxShadow
+      preset={
+        preset === "default"
+          ? "primary"
+          : preset === "pastDefault"
+          ? "secondary"
+          : preset === "pastReversed"
+          ? "reversed"
+          : "default"
+      }
+    >
       <Wrapper
         style={$containerStyle}
         activeOpacity={0.8}
@@ -274,19 +284,35 @@ const $containerPresets = {
     $containerBase,
     { backgroundColor: colors.palette.primary100, borderColor: colors.palette.primary500 },
   ] as StyleProp<ViewStyle>,
+
+  pastDefault: [
+    $containerBase,
+    { backgroundColor: colors.palette.neutral500, borderColor: colors.palette.neutral300 },
+  ] as StyleProp<ViewStyle>,
+
+  pastReversed: [
+    $containerBase,
+    { backgroundColor: colors.palette.neutral300, borderColor: colors.palette.neutral300 },
+  ] as StyleProp<ViewStyle>,
 }
 
 const $headingPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
+  pastDefault: {},
+  pastReversed: {},
 }
 
 const $contentPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
+  pastDefault: {},
+  pastReversed: {},
 }
 
 const $footerPresets: Record<Presets, TextStyle> = {
   default: {},
   reversed: { color: colors.palette.neutral100 },
+  pastDefault: {},
+  pastReversed: {},
 }

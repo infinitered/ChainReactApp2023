@@ -127,7 +127,11 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Recurring":
       return {
         variant: "recurring",
-        time: formatDate(schedule["day-time"], schedule["end-time"] ? "h:mm" : "h:mm aaa"),
+        formattedStartTime: formatDate(
+          schedule["day-time"],
+          schedule["end-time"] ? "h:mm" : "h:mm aaa",
+        ),
+        startTime: schedule["day-time"],
         endTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mm aaa"),
         eventTitle: schedule["recurring-event"]?.name,
         heading: "",
@@ -138,7 +142,8 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Party":
       return {
         variant: "party",
-        time: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        startTime: schedule["day-time"],
         eventTitle: "party",
         heading: schedule.name,
         subheading: schedule["break-party-description"],
@@ -148,7 +153,8 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Talk":
       return {
         variant: "talk",
-        time: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        startTime: schedule["day-time"],
         eventTitle: schedule.type,
         heading: schedule.talk?.name,
         subheading: schedule.talk?.description,
@@ -158,7 +164,8 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Speaker Panel":
       return {
         variant: "talk",
-        time: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        startTime: schedule["day-time"],
         eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
         subheading: "",
@@ -170,7 +177,8 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
       const workshop = schedule.workshop
       return {
         variant: "workshop",
-        time: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        startTime: schedule["day-time"],
         eventTitle: "workshop",
         heading: workshop?.name,
         subheading: workshop?.["instructor-info"]?.name,
