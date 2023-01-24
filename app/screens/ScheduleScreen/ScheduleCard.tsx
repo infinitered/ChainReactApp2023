@@ -190,20 +190,16 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
         }
       : baseSpeakingEventProps({ heading, subheading, eventTitle, sources, isPast })
 
-  return (
-    <Card
-      preset={
-        isPast
-          ? variant === "recurring" || variant === "party"
-            ? "pastReversed"
-            : "pastDefault"
-          : variant === "recurring" || variant === "party"
-          ? "reversed"
-          : "default"
-      }
-      {...{ ...cardProps, ...variantProps, onPress }}
-    />
-  )
+  const isReversed = variant === "recurring" || variant === "party"
+  const cardPreset = isReversed
+    ? isPast
+      ? "pastReversed"
+      : "reversed"
+    : isPast
+    ? "pastDefault"
+    : "default"
+
+  return <Card preset={cardPreset} {...{ ...cardProps, ...variantProps, onPress }} />
 }
 
 const $avatar: ViewStyle = {

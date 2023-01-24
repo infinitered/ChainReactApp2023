@@ -169,12 +169,8 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                       ? () => navigation.navigate("TalkDetails")
                       : undefined
 
-                  // Temporary time for testing. Without this, the isPast check will always return false since the startTime is in the future
-                  const tempTime = "2023-05-18T20:30:00.000Z"
-                  // TODO: Remove tempTime and the line below after testing
-                  const isPast = isBefore(new Date(startTime), new Date(tempTime))
-                  // TODO: Uncomment the line below after testing
-                  // const isPast = isBefore(new Date(startTime), new Date())
+                  const isPast = isBefore(new Date(startTime), new Date())
+
                   return (
                     <View style={$cardContainer}>
                       <ScheduleCard
