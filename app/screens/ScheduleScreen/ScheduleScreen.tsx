@@ -1,5 +1,5 @@
 import React from "react"
-import { View, TextStyle, ViewStyle, Dimensions } from "react-native"
+import { View, ViewStyle, Dimensions } from "react-native"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
@@ -7,7 +7,6 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated"
 import { useIsFocused } from "@react-navigation/native"
-import { Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
@@ -204,19 +203,11 @@ const $container: ViewStyle = {
   paddingHorizontal: spacing.large,
 }
 
-const $subheading: TextStyle = {
-  color: colors.palette.primary500,
-}
-
 const $list: ContentStyle = {
   paddingTop: spacing.extraLarge,
   paddingBottom: 48 + spacing.medium,
 }
 
 const $cardContainer: ViewStyle = {
-  paddingBottom: spacing.large,
-}
-
-const $headingContainer: ViewStyle = {
   paddingBottom: spacing.large,
 }
