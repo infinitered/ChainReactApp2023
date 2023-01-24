@@ -57,7 +57,7 @@ export function ErrorDetails(props: ErrorDetailsProps) {
 const $contentContainer: ViewStyle = {
   alignItems: "center",
   paddingHorizontal: spacing.large,
-  paddingTop: spacing.extraLarge,
+  paddingVertical: spacing.medium,
   flex: 1,
 }
 
@@ -67,7 +67,6 @@ const $topSection: ViewStyle = {
 }
 
 const $heading: TextStyle = {
-  color: colors.errorBackground,
   marginBottom: spacing.medium,
 }
 

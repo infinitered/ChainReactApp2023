@@ -14,7 +14,7 @@ const en = {
   errorScreen: {
     title: "Oh, bother!",
     friendlySubtitle:
-      "Bugs happen to the best of us! Try resetting or restarting the app and see if that helps. If not, feel free to file an issue on GitHub and our team of highly-trained llamas will look into it.",
+      "Bugs happen to the best of us! Try resetting or restarting the app and see if that helps. If not, feel free to file an issue on GitHub and our team of highly-trained llamas will look into it. Bonus points: Find the bug and open a PR!",
     reset: "Reset",
     githubButton: "Go to GitHub",
   },
