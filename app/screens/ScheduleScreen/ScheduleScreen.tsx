@@ -1,5 +1,5 @@
 import React from "react"
-import { View, TextStyle, ViewStyle, Dimensions } from "react-native"
+import { View, ViewStyle, Dimensions } from "react-native"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
@@ -7,7 +7,6 @@ import Animated, {
   runOnJS,
 } from "react-native-reanimated"
 import { useIsFocused } from "@react-navigation/native"
-import { Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
@@ -28,10 +27,9 @@ export interface Schedule {
 const { width } = Dimensions.get("window")
 
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
-  useHeader({ title: "Schedule" })
-
   const schedules = createScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
+  useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
     [schedules, selectedSchedule],
@@ -151,12 +149,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             <View style={[$container, { width }]}>
               <FlashList
                 ref={scheduleListRefs[schedule.date]}
-                ListHeaderComponent={
-                  <View style={$headingContainer}>
-                    <Text preset="screenHeading">{formatDate(schedule.date, "EE, MMMM dd")}</Text>
-                    <Text style={$subheading}>{schedule.title}</Text>
-                  </View>
-                }
                 data={schedule.events}
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
                   const { time, endTime, eventTitle, heading, subheading, sources, level, id } =
@@ -211,19 +203,11 @@ const $container: ViewStyle = {
   paddingHorizontal: spacing.large,
 }
 
-const $subheading: TextStyle = {
-  color: colors.palette.primary500,
-}
-
 const $list: ContentStyle = {
   paddingTop: spacing.extraLarge,
   paddingBottom: 48 + spacing.medium,
 }
 
 const $cardContainer: ViewStyle = {
-  paddingBottom: spacing.large,
-}
-
-const $headingContainer: ViewStyle = {
   paddingBottom: spacing.large,
 }
