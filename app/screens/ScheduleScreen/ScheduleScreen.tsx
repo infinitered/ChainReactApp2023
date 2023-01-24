@@ -14,7 +14,7 @@ import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard, { ScheduleCardProps, Variants } from "./ScheduleCard"
 import { formatDate } from "../../utils/formatDate"
 import { useAppNavigation, useAppState } from "../../hooks"
-import { format } from "date-fns"
+import { format, isBefore } from "date-fns"
 
 import { createScheduleScreenData } from "../../services/api/webflow-helpers"
 
@@ -87,7 +87,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     // Scroll to the proper time of day talk
     setTimeout(() => {
       const schedule = schedules[scheduleIndex]
-      const eventIndex = schedule?.events?.findIndex((e) => e.time.startsWith(currentHour))
+      const eventIndex = schedule?.events?.findIndex((e) =>
+        e.formattedStartTime.startsWith(currentHour),
+      )
       if (eventIndex > -1) {
         scheduleListRefs[schedule?.date]?.current?.scrollToIndex({
           animated: true,
@@ -151,18 +153,30 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                 ref={scheduleListRefs[schedule.date]}
                 data={schedule.events}
                 renderItem={({ item }: { item: ScheduleCardProps }) => {
-                  const { time, endTime, eventTitle, heading, subheading, sources, level, id } =
-                    item
+                  const {
+                    startTime,
+                    formattedStartTime,
+                    endTime,
+                    eventTitle,
+                    heading,
+                    subheading,
+                    sources,
+                    level,
+                    id,
+                  } = item
                   const onPress =
                     item.variant !== "recurring"
                       ? () => navigation.navigate("TalkDetails")
                       : undefined
+
+                  const isPast = isBefore(new Date(startTime), new Date())
+
                   return (
                     <View style={$cardContainer}>
                       <ScheduleCard
                         variant={item.variant as Variants}
                         {...{
-                          time,
+                          formattedStartTime,
                           endTime,
                           eventTitle,
                           heading,
@@ -171,6 +185,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                           sources,
                           level,
                           id,
+                          isPast,
                         }}
                       />
                     </View>

@@ -6,33 +6,35 @@ import { useAppNavigation } from "../../hooks"
 
 interface HeaderProps {
   endTime?: string
-  time: string
+  formattedStartTime: string
   title: string
+  isPast?: boolean
 }
 
 interface FooterProps {
   heading: string
   subheading: string
+  isPast?: boolean
 }
 
-const Header = ({ endTime, time, title }: HeaderProps) => (
+const Header = ({ endTime, formattedStartTime, title, isPast }: HeaderProps) => (
   <View style={$headerContainer}>
-    <Text style={$timeText}>
-      {time}
+    <Text style={isPast ? $pastTimeText : $timeText}>
+      {formattedStartTime}
       {!!endTime && ` - ${endTime}`}
     </Text>
-    <Text preset="eventTitle" style={$titleText}>
+    <Text preset="eventTitle" style={isPast ? $pastTitleText : $titleText}>
       {title}
     </Text>
   </View>
 )
 
-const Footer = ({ heading, subheading }: FooterProps) => (
+const Footer = ({ heading, subheading, isPast }: FooterProps) => (
   <View style={$footerContainer}>
-    <Text preset="cardFooterHeading" style={$footerHeading}>
+    <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
       {heading}
     </Text>
-    <Text style={$footerSubheading}>{subheading}</Text>
+    <Text style={isPast ? $pastFooterSubheading : $footerSubheading}>{subheading}</Text>
   </View>
 )
 
@@ -46,9 +48,13 @@ export interface ScheduleCardProps {
    */
   variant?: Variants
   /**
+   * Start time of the event formatted as "hh:mm aaa"
+   */
+  formattedStartTime: string
+  /**
    * Start time of the event
    */
-  time: string
+  startTime?: string
   /**
    * End time of the recurring event
    */
@@ -77,6 +83,10 @@ export interface ScheduleCardProps {
    * Card ID
    */
   id: string
+  /**
+   * Whether the event is in the past
+   */
+  isPast?: boolean
 }
 
 interface SpeakingEventProps {
@@ -84,19 +94,30 @@ interface SpeakingEventProps {
   subheading: string
   eventTitle: string
   sources: string[]
+  isPast?: boolean
+  startTime?: string
 }
 
 interface BaseEventProps {
-  time: string
+  formattedStartTime: string
   endTime?: string
   eventTitle: string
   level?: string
+  isPast?: boolean
+  date?: string
 }
 
-const baseEventProps = ({ time, endTime, eventTitle, level }: BaseEventProps) => {
+const baseEventProps = ({
+  formattedStartTime,
+  endTime,
+  eventTitle,
+  level,
+  isPast,
+  date,
+}: BaseEventProps) => {
   const title = `${level ? `${level} ` : ""}${eventTitle}`
   return {
-    HeadingComponent: <Header {...{ time, endTime, title }} />,
+    HeadingComponent: <Header {...{ formattedStartTime, endTime, title, isPast, date }} />,
   }
 }
 
@@ -105,6 +126,8 @@ const baseSpeakingEventProps = ({
   subheading,
   eventTitle,
   sources = [],
+  isPast,
+  startTime,
 }: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
@@ -122,14 +145,14 @@ const baseSpeakingEventProps = ({
         />
       </View>
     ),
-    FooterComponent: <Footer {...{ heading, subheading }} />,
+    FooterComponent: <Footer {...{ heading, subheading, isPast, startTime }} />,
   }
 }
 
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const {
     variant = "recurring",
-    time,
+    formattedStartTime,
     endTime,
     eventTitle,
     heading,
@@ -137,6 +160,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     sources,
     level,
     id,
+    isPast,
   } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
@@ -145,14 +169,16 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     ? () => navigation.navigate("PartyDetails", { scheduleId: id })
     : undefined
 
-  const cardProps = { ...baseEventProps({ time, endTime, eventTitle, level }) }
+  const cardProps = {
+    ...baseEventProps({ formattedStartTime, endTime, eventTitle, level, isPast }),
+  }
   const variantProps =
     variant === "recurring"
-      ? { content: subheading, contentStyle: $contentText }
+      ? { content: subheading, contentStyle: isPast ? $pastContentText : $contentText }
       : variant === "party"
       ? {
           content: subheading,
-          contentStyle: $contentText,
+          contentStyle: isPast ? $pastContentText : $contentText,
           FooterComponent: (
             <Icon
               icon="arrow"
@@ -162,14 +188,18 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
             />
           ),
         }
-      : baseSpeakingEventProps({ heading, subheading, eventTitle, sources })
+      : baseSpeakingEventProps({ heading, subheading, eventTitle, sources, isPast })
 
-  return (
-    <Card
-      preset={variant === "recurring" || variant === "party" ? "reversed" : "default"}
-      {...{ ...cardProps, ...variantProps, onPress }}
-    />
-  )
+  const isReversed = variant === "recurring" || variant === "party"
+  const cardPreset = isReversed
+    ? isPast
+      ? "pastReversed"
+      : "reversed"
+    : isPast
+    ? "pastDefault"
+    : "default"
+
+  return <Card preset={cardPreset} {...{ ...cardProps, ...variantProps, onPress }} />
 }
 
 const $avatar: ViewStyle = {
@@ -182,8 +212,17 @@ const $footerSubheading: TextStyle = {
   color: colors.palette.neutral900,
 }
 
+const $pastFooterSubheading: TextStyle = {
+  color: colors.palette.primary100,
+}
+
 const $timeText: TextStyle = {
   color: colors.palette.neutral900,
+  marginBottom: spacing.large,
+}
+
+const $pastTimeText: TextStyle = {
+  color: colors.palette.primary100,
   marginBottom: spacing.large,
 }
 
@@ -192,13 +231,28 @@ const $titleText: TextStyle = {
   textTransform: "uppercase",
 }
 
+const $pastTitleText: TextStyle = {
+  color: colors.palette.primary100,
+  textTransform: "uppercase",
+}
+
 const $contentText: TextStyle = {
   color: colors.palette.neutral500,
   paddingTop: 10,
 }
 
+const $pastContentText: TextStyle = {
+  color: colors.palette.neutral100,
+  paddingTop: 10,
+}
+
 const $footerHeading: TextStyle = {
   color: colors.palette.neutral900,
+  marginBottom: spacing.extraSmall,
+}
+
+const $pastFooterHeading: TextStyle = {
+  color: colors.palette.primary100,
   marginBottom: spacing.extraSmall,
 }
 
