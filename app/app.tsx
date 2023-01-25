@@ -99,12 +99,18 @@ function App(props: AppProps) {
     onNavigationStateChange,
     isRestored: isNavigationStateRestored,
   } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
-
+  const [recoveredFromError, setRecoveredFromError] = React.useState(false)
   const [areFontsLoaded] = useFonts(customFontsToLoad)
 
   useLayoutEffect(() => {
     // hide splash screen after 500ms
     setTimeout(hideSplashScreen, 500)
+  })
+
+  useLayoutEffect(() => {
+    if (recoveredFromError) {
+      setRecoveredFromError(false)
+    }
   })
 
   // Before we show the app, we have to wait for our state to be ready.
@@ -118,10 +124,10 @@ function App(props: AppProps) {
   // otherwise, we're ready to render the app
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ErrorBoundary catchErrors={Config.catchErrors}>
+      <ErrorBoundary catchErrors={Config.catchErrors} onReset={() => setRecoveredFromError(true)}>
         <QueryClientProvider client={queryClient}>
           <AppNavigator
-            initialState={initialNavigationState}
+            initialState={recoveredFromError ? { index: 0, routes: [] } : initialNavigationState}
             onStateChange={onNavigationStateChange}
           />
           <CustomToast />
