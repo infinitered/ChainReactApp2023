@@ -7,7 +7,7 @@ Coming soon! This will be the home for the app for [Chain React 2023](https://cr
 ## Pre-reqs
 
 1. `brew install fastlane`
-2. `yarn global add eas-cli@2.1.0` or `npm install -g eas-cli@2.1.0`
+2. `yarn global add eas-cli` or `npm install -g eas-cli` (v3.1.1 is the latest as of this edit)
 
 Note: The steps below will have to be run when either of the following happen:
 
