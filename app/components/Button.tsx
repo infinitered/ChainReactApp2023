@@ -71,6 +71,10 @@ export interface ButtonProps extends PressableProps {
    * Children components.
    */
   children?: React.ReactNode
+  /**
+   * Styles override for the shadow.
+   */
+  shadowStyle?: StyleProp<ViewStyle>
 }
 
 /**
@@ -89,6 +93,7 @@ export function Button(props: ButtonProps) {
     pressedStyle: $pressedViewStyleOverride,
     textStyle: $textStyleOverride,
     pressedTextStyle: $pressedTextStyleOverride,
+    shadowStyle: $shadowStyleOverride,
     children,
     RightAccessory,
     LeftAccessory,
@@ -110,9 +115,10 @@ export function Button(props: ButtonProps) {
       !!pressed && [$pressedTextPresets[preset], $pressedTextStyleOverride],
     ]
   }
+  const $shadowStyle = [$shadowPresets[preset], $shadowStyleOverride]
 
   return (
-    <View style={$shadowPresets[preset]}>
+    <View style={$shadowStyle}>
       <Pressable style={$viewStyle} accessibilityRole="button" {...rest}>
         {(state) => (
           <>
