@@ -1,6 +1,6 @@
 import React from "react"
 import { ImageStyle, TextStyle, View, ViewStyle, ImageSourcePropType, Image } from "react-native"
-import { Button, Screen, Text } from "../components"
+import { Screen, Text } from "../components"
 import { useAppNavigation, useHeader } from "../hooks"
 import { TabScreenProps } from "../navigators/TabNavigator"
 import { colors, spacing } from "../theme"
@@ -100,18 +100,7 @@ const $codeOfConductHeading: TextStyle = {
   marginBottom: spacing.extraSmall,
 }
 
-const $emailButton: ViewStyle = {
-  marginEnd: spacing.medium,
-}
-
 const $screenHeading: ViewStyle = {
   marginTop: spacing.extraLarge,
   paddingHorizontal: spacing.large,
-}
-
-const $hiddenButton: ViewStyle = {
-  height: 48,
-  marginStart: spacing.medium,
-  width: 50,
-  backgroundColor: "red",
 }

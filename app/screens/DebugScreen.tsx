@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { ViewStyle } from "react-native"
+import { TextStyle, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../navigators"
 import { HeaderAction, Screen, Text } from "../components"
