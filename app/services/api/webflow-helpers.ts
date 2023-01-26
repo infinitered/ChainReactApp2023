@@ -110,7 +110,6 @@ export const createScheduleScreenData = (): ScheduleList => {
 
   return {
     isLoading,
-
     schedules: [
       {
         date: "2023-05-17",
