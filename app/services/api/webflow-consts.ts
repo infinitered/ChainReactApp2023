@@ -40,6 +40,11 @@ export const TALKS = {
   key: "talks",
 }
 
+export const VENUES = {
+  collectionId: "63b5c4cab48bf69ecee5bec5",
+  key: "venues",
+}
+
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys
 export const WEBFLOW_MAP = {
@@ -90,4 +95,15 @@ export const WEBFLOW_MAP = {
     "63b8a958a5f15f379953e0da": "Courtyard Portland City Center",
     "63b8a865e6b85e71b453fd3d": "The Armory",
   },
-}
+  venueTag: {
+    cf3d319cdaa0e6787b03ab94e74e3b8e: "Workshop",
+    d098b6fc74f6c55c6084ea42c385e7f6: "Conference",
+  },
+  sponsorTier: {
+    fe9c5b4d9fc3b0cf366607646cebcb95: "Platinum",
+    "47d258ed5e5d2fe69d35dc685bd37fb9": "Gold",
+    c1857a23dee35cbfbb7b694b89d16296: "Silver",
+    "44bcdc97a36f741fe7e70aec6a33e936": "Bronze",
+    "73853c318edcbdaebc8d603c9bc1b968": "Other",
+  },
+} as const

@@ -1,14 +1,23 @@
 import React, { FC } from "react"
-import { SectionList, TextStyle, View, ViewStyle } from "react-native"
+import { SectionList, SectionListData, TextStyle, View, ViewStyle } from "react-native"
 import { Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { SponsorCard } from "./SponsorCard"
+import { useSponsors, useVenues } from "../../services/api"
+import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
+import { groupBy } from "../../services/api/webflow-helpers"
+import { RawSponsor } from "../../services/api/webflow-api.types"
 
-const irImage1 = require("../../../assets/images/info-ir1.png")
-const irImage2 = require("../../../assets/images/info-ir2.png")
+const sponsorTiers = Object.values(WEBFLOW_MAP.sponsorTier)
+type Tiers = typeof sponsorTiers[number]
+
+const initialTiers = sponsorTiers.reduce<Record<Tiers, RawSponsor[]>>(
+  (acc, tier) => ({ ...acc, [tier]: [] }),
+  {} as Record<Tiers, RawSponsor[]>,
+)
 
 const Workshops = ({ item }) => {
   return (
@@ -26,103 +35,75 @@ const SponsorSection = ({ item }) => {
   )
 }
 
-const SECTIONS = [
-  {
-    title: translate("venueScreen.conferenceAndWorkshopVenues"),
-    renderItem: Workshops,
-    data: [
-      [
-        {
-          image: irImage1,
-          subtitle: "The Armory",
-          meta: "Conference • May 18-19",
-          body: "11134 Washington St #302\nPortland, OR 97006",
+const useVenueSections = (): SectionListData<any>[] => {
+  const { data: sponsors = [] } = useSponsors()
+  const rawTiers = groupBy("sponsor-tier")(sponsors)
+  const tiers = Object.keys(rawTiers).reduce<Record<Tiers, RawSponsor[]>>(
+    (acc, tier) => ({
+      ...acc,
+      [WEBFLOW_MAP.sponsorTier[tier]]: rawTiers[tier] ?? [],
+    }),
+    initialTiers,
+  )
+  const { data: venues } = useVenues()
+
+  return [
+    {
+      title: translate("venueScreen.conferenceAndWorkshopVenues"),
+      renderItem: Workshops,
+      data: [
+        venues?.map((venue) => ({
+          image: { uri: venue["venue-image-s"][0]?.url },
+          subtitle: venue.name,
+          meta: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${
+            WEBFLOW_MAP.venueTag[venue.tag] === "Workshop" ? "May 17" : "May 18-19"
+          }`,
+          body: `${venue["street-address"]}\n${venue["city-state-zip"]}`,
           leftButton: {
             text: "Open in maps",
-            link: "11134 Washington St #302, Portland, OR 97006",
+            link: `${venue["street-address"]},${venue["city-state-zip"]}`,
           },
-        },
-        {
-          image: irImage2,
-          subtitle: "Workshops • May 17",
-          meta: "Marriott Portland City Center",
-          body: "550 SW Oak Street\nPortland, OR 97204",
-          leftButton: {
-            text: "Open in maps",
-            link: "550 SW Oak Street, Portland, OR 97204",
-          },
-        },
+        })),
       ],
-    ],
-  },
-  {
-    title: translate("venueScreen.thanksToThisYearsSponsors"),
-    renderItem: SponsorSection,
-    data: [
-      {
-        sponsor: "Sponsor 1",
-        tier: "platinum",
-        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
-        openURL: "https://placekitten.com",
-        sponsorImage: {
-          uri: "https://placekitten.com/g/280/60",
-        },
-      },
-      {
-        sponsor: "Sponsor 2",
-        tier: "gold",
-        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
-        openURL: "https://placekitten.com",
-        sponsorImage: {
-          uri: "https://placekitten.com/g/280/60",
-        },
-      },
-      {
-        sponsor: "Sponsor 3",
-        tier: "gold",
-        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
-        openURL: "https://placekitten.com",
-        sponsorImage: {
-          uri: "https://placekitten.com/g/280/60",
-        },
-      },
-      {
-        tier: "silver",
-        sponsorImages: [
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-        ],
-      },
-      {
-        tier: "bronze",
-        sponsorImages: [
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-        ],
-      },
-    ],
-  },
-]
+    },
+    {
+      title: translate("venueScreen.thanksToThisYearsSponsors"),
+      renderItem: SponsorSection,
+      data: [
+        ...(["Platinum", "Gold"] as const).flatMap((tier) =>
+          tiers[tier].map((sponsor) => ({
+            sponsor: sponsor.name,
+            tier,
+            promoSummary: sponsor["promo-summary"],
+            externalURL: sponsor["external-url"],
+            logo: {
+              uri: sponsor.logo.url,
+            },
+          })),
+        ),
+        ...(["Silver", "Bronze", "Other"] as const).map((tier) => ({
+          tier,
+          sponsorImages: tiers[tier].map((sponsor) => ({
+            sponsor: sponsor.name,
+            uri: sponsor.logo.url,
+          })),
+        })),
+      ],
+    },
+  ]
+}
 
 export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
   useHeader({ title: translate("venueScreen.title") })
+
+  const sections = useVenueSections()
 
   return (
     <Screen style={$root} preset="fixed">
       <SectionList
         showsVerticalScrollIndicator={false}
         stickySectionHeadersEnabled={false}
-        sections={SECTIONS}
+        sections={sections}
         renderSectionHeader={({ section: { title } }) => (
           <Text preset="screenHeading" style={$heading}>
             {title}

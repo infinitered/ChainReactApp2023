@@ -10,74 +10,74 @@ export type CommonProps = {
 
 export type TierLevelProps =
   | {
-      tier: "platinum" | "gold"
-      openURL: string
-      bio: string
+      externalURL: string
+      logo: { uri: string }
+      promoSummary: string
       sponsor: string
-      sponsorImage: { uri: string }
       sponsorImages?: never
+      tier: "Platinum" | "Gold"
     }
   | {
-      tier: "silver" | "bronze"
-      sponsorImages: { uri: string; sponsor: string }[]
-      openURL?: never
-      bio?: never
+      externalURL: never
+      logo?: never
+      promoSummary?: never
       sponsor?: never
-      sponsorImage?: never
+      sponsorImages: { uri: string; sponsor: string }[]
+      tier: "Silver" | "Bronze"
     }
 
 export type SponsorCardProps = CommonProps & TierLevelProps
 
 export const SponsorCard = ({
-  openURL,
-  bio,
-  sponsor,
-  sponsorImage,
-  tier = "gold",
   containerStyle,
+  externalURL,
+  logo,
+  promoSummary,
+  sponsor,
   sponsorImages,
+  tier = "Gold",
 }: SponsorCardProps) => {
   const onPress = () => {
-    Linking.openURL(openURL)
+    Linking.openURL(externalURL)
   }
 
   switch (tier) {
-    case "platinum":
-    case "gold":
+    case "Platinum":
+    case "Gold":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <TouchableOpacity style={$sponsorTitle} onPress={onPress}>
             <AutoImage
               accessibilityLabel={sponsor}
-              style={$sponsorImage}
-              source={sponsorImage}
+              style={tier === "Platinum" ? $platinumLogo : $goldLogo}
+              source={logo}
             ></AutoImage>
             <Icon icon="arrow" containerStyle={$iconButton} />
           </TouchableOpacity>
           <Text preset="primaryLabel" style={$sponsorType}>
             {
               {
-                platinum: translate("venueScreen.platinumSponsor"),
-                gold: translate("venueScreen.goldSponsor"),
+                Platinum: translate("venueScreen.platinumSponsor"),
+                Gold: translate("venueScreen.goldSponsor"),
               }[tier]
             }
           </Text>
-          <Text>{bio}</Text>
+          <Text>{promoSummary}</Text>
         </View>
       )
-    case "silver":
-    case "bronze":
+    case "Silver":
+    case "Bronze":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Text preset="primaryLabel" style={$sponsorType}>
             {
               {
-                silver: translate("venueScreen.silverSponsor"),
-                bronze: translate("venueScreen.bronzeSponsor"),
+                Silver: translate("venueScreen.silverSponsor"),
+                Bronze: translate("venueScreen.bronzeSponsor"),
               }[tier]
             }
           </Text>
-          <View style={$sponsorBottomTierImages}>
+          <View style={$sponsorBottomTierLogos}>
             {sponsorImages.map(({ uri, sponsor }, index) => (
               <AutoImage
                 key={index}
@@ -101,9 +101,14 @@ const $sponsorTitle: ViewStyle = {
   alignItems: "center",
 }
 
-const $sponsorImage: ImageStyle = {
+const $platinumLogo: ImageStyle = {
   maxWidth: 280,
   maxHeight: 60,
+}
+
+const $goldLogo: ImageStyle = {
+  maxWidth: 240,
+  maxHeight: 48,
 }
 
 const $sponsorType: TextStyle = {
@@ -119,7 +124,7 @@ const $iconButton: ViewStyle = {
   marginStart: spacing.medium,
 }
 
-const $sponsorBottomTierImages: ViewStyle = {
+const $sponsorBottomTierLogos: ViewStyle = {
   display: "flex",
   flexDirection: "row",
   alignItems: "center",

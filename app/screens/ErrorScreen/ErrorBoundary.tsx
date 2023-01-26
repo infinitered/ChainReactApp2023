@@ -4,6 +4,7 @@ import { ErrorDetails } from "./ErrorDetails"
 interface Props {
   children: ReactNode
   catchErrors: "always" | "dev" | "prod" | "never"
+  onReset(): void
 }
 
 interface State {
@@ -38,6 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   // Reset the error back to null
   resetError = () => {
+    this.props.onReset()
     this.setState({ error: null, errorInfo: null })
   }
 
