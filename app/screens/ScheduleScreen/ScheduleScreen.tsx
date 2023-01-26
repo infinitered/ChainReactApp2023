@@ -133,8 +133,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
   if (!selectedSchedule) return null
 
-  console.tron.log("schedules", schedules)
-
   return (
     <>
       <View style={$root}>
