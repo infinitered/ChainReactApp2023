@@ -20,9 +20,12 @@
     "release": "eas submit",
     "release:ios": "eas submit -p ios",
     "release:android": "eas submit -p android",
+    "prepare": "husky install",
     "compile": "tsc --noEmit -p . --pretty",
     "format": "prettier --write \"app/**/*.{js,jsx,json,md,ts,tsx}\"",
+    "format-warn": "prettier --check \"app/**/*.{js,jsx,json,md,ts,tsx}\"",
     "lint": "eslint App.js app test --fix --ext .js,.ts,.tsx && npm run format",
+    "lint-warn": "eslint App.js app test --ext .js,.ts,.tsx && npm run format-warn",
     "patch": "patch-package",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -99,10 +102,12 @@
     "eslint-plugin-react-native": "4.0.0",
     "expo-modules-autolinking": "~1.0.0",
     "fbjs-scripts": "3.0.1",
+    "husky": "^8.0.0",
     "jest": "^26.6.3",
     "jest-circus": "26",
     "jest-environment-node": "26",
     "jest-expo": "^47.0.0",
+    "lint-staged": "^13.1.0",
     "metro-config": "0.74.0",
     "metro-react-native-babel-preset": "0.73.5",
     "metro-source-map": "0.71.1",
@@ -121,6 +126,11 @@
   "resolutions": {
     "@types/react": "^18",
     "@types/react-dom": "^18"
+  },
+  "lint-staged": {
+    "*.js": "yarn lint",
+    "*.ts": "yarn lint",
+    "*.tsx": "yarn lint"
   },
   "prettier": {
     "printWidth": 100,
