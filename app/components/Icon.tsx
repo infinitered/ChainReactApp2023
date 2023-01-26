@@ -86,6 +86,8 @@ export function Icon(props: IconProps) {
 
 export const iconRegistry = {
   arrow: require("../../assets/icons/arrows.png"),
+  arrowDown: require("../../assets/icons/arrowDown.png"),
+  arrowUp: require("../../assets/icons/arrowUp.png"),
   back: require("../../assets/icons/back.png"),
   caretLeft: require("../../assets/icons/caretLeft.png"),
   caretRight: require("../../assets/icons/caretRight.png"),

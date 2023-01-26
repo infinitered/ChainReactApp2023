@@ -1,5 +1,5 @@
-import React from "react"
-import { View, ViewStyle, Dimensions } from "react-native"
+import React, { useEffect, useRef, useState } from "react"
+import { View, ViewToken as RNViewToken, ViewStyle, Dimensions, TextStyle } from "react-native"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
@@ -14,9 +14,10 @@ import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard, { ScheduleCardProps, Variants } from "./ScheduleCard"
 import { formatDate } from "../../utils/formatDate"
 import { useAppNavigation, useAppState } from "../../hooks"
-import { format, isBefore } from "date-fns"
+import { format, isAfter, isBefore } from "date-fns"
 
 import { createScheduleScreenData } from "../../services/api/webflow-helpers"
+import { Button, Icon } from "../../components"
 
 export interface Schedule {
   date: string
@@ -26,10 +27,26 @@ export interface Schedule {
 
 const { width } = Dimensions.get("window")
 
+/** Get the current time's event index */
+const getCurrentEventIndex = (schedule: Schedule, currentTime = new Date()) => {
+  return schedule?.events?.findIndex((e) => isAfter(new Date(e.startTime), currentTime))
+}
+
+/** Get the current date's schedule list index */
+const getCurrentScheduleIndex = (schedules: Schedule[], currentTime = new Date()) => {
+  const currentDate = format(currentTime, "yyyy-MM-dd")
+  return schedules.map((x) => x.date).findIndex((date) => date === currentDate)
+}
+
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
+  const [currentlyViewingEvents, setCurrentlyViewingEvents] = useState([])
+  const [currentlyViewingScheduleIndex, setCurrentlyViewingScheduleIndex] = useState(0)
+
   const schedules = createScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
+
   useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
+
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
     [schedules, selectedSchedule],
@@ -43,9 +60,13 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     )
   }, [])
 
-  const currentDate = format(new Date(), "yyyy-MM-dd")
-  const currentHour = new Date().getHours().toString()
+  // const date = new Date()
+  const date = new Date("2023-05-18T16:30:00.000Z")
+  const scheduleIndex = getCurrentScheduleIndex(schedules, new Date(date))
+  const schedule = schedules[scheduleIndex]
+  const eventIndex = getCurrentEventIndex(schedule, new Date(date))
 
+  // const scrollButtonOpacity = useSharedValue(0)
   const scrollX = useSharedValue(0)
   const isFocused = useIsFocused()
 
@@ -59,6 +80,8 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const onItemPress = React.useCallback(
     (itemIndex) => {
       const currentIndex = getScheduleIndex()
+      console.tron.log({ currentIndex })
+
       if (currentIndex === itemIndex) {
         scheduleListRefs[schedules[currentIndex].date]?.current?.scrollToOffset({
           animated: true,
@@ -71,13 +94,12 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [hScrollRef, getScheduleIndex],
   )
 
-  const navigateToCurrentDay = React.useCallback(() => {
+  console.tron.log({ schedule, eventIndex })
+
+  const navigateToCurrentEvent = React.useCallback(() => {
     // Check if current date is in list of conference days
     // If it is, navigate to that schedule's day
     // If not, just skip and pick up where the user left off
-    const conferenceDates = schedules.map((x) => x.date)
-    const scheduleIndex = conferenceDates.findIndex((date) => date === currentDate)
-
     if (scheduleIndex > -1) {
       setTimeout(() => {
         onItemPress(scheduleIndex)
@@ -86,10 +108,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
     // Scroll to the proper time of day talk
     setTimeout(() => {
-      const schedule = schedules[scheduleIndex]
-      const eventIndex = schedule?.events?.findIndex((e) =>
-        e.formattedStartTime.startsWith(currentHour),
-      )
       if (eventIndex > -1) {
         scheduleListRefs[schedule?.date]?.current?.scrollToIndex({
           animated: true,
@@ -97,7 +115,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
         })
       }
     }, 200)
-  }, [onItemPress, scheduleListRefs, schedules, currentDate, currentHour])
+  }, [onItemPress, scheduleListRefs, scheduleIndex, eventIndex])
 
   // When app comes from the background to the foreground, focus on the current day in the schedule
   useAppState({
@@ -105,10 +123,18 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     nextAppState: "active",
     callback: () => {
       setTimeout(() => {
-        navigateToCurrentDay()
+        if (eventIndex > -1) {
+          navigateToCurrentEvent()
+        }
       }, 250)
     },
   })
+
+  useEffect(() => {
+    if (eventIndex > -1) {
+      navigateToCurrentEvent()
+    }
+  }, [eventIndex, scheduleIndex])
 
   const scrollHandler = useAnimatedScrollHandler(
     {
@@ -131,6 +157,18 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [isFocused],
   )
 
+  const handleViewableEventIndexChanged = useRef(
+    ({ viewableItems }: { viewableItems: RNViewToken[] }) => {
+      setCurrentlyViewingEvents(viewableItems.map((item) => item.index))
+    },
+  ).current
+
+  const handleViewableScheduleIndexChanged = useRef(
+    ({ viewableItems }: { viewableItems: RNViewToken[] }) => {
+      setCurrentlyViewingScheduleIndex(viewableItems[0]?.index ?? 0)
+    },
+  ).current
+
   if (!selectedSchedule) return null
 
   return (
@@ -144,6 +182,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           showsHorizontalScrollIndicator={false}
           pagingEnabled
           onScroll={scrollHandler}
+          onViewableItemsChanged={handleViewableScheduleIndexChanged}
           bounces={false}
           scrollEventThrottle={16}
           decelerationRate="fast"
@@ -156,7 +195,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                   const {
                     startTime,
                     formattedStartTime,
-                    endTime,
+                    formattedEndTime,
                     eventTitle,
                     heading,
                     subheading,
@@ -164,12 +203,13 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                     level,
                     id,
                   } = item
+
                   const onPress =
                     item.variant !== "recurring"
                       ? () => navigation.navigate("TalkDetails")
                       : undefined
 
-                  const isPast = isBefore(new Date(startTime), new Date())
+                  const isPast = isBefore(new Date(startTime), date)
 
                   return (
                     <View style={$cardContainer}>
@@ -177,7 +217,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                         variant={item.variant as Variants}
                         {...{
                           formattedStartTime,
-                          endTime,
+                          formattedEndTime,
                           eventTitle,
                           heading,
                           subheading,
@@ -191,19 +231,40 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                     </View>
                   )
                 }}
-                getItemType={(item) => {
-                  // To achieve better performance, specify the type based on the item
-                  return item.variant
-                }}
+                // To achieve better performance, specify the type based on the item
+                getItemType={(item) => item.variant}
                 estimatedItemSize={225}
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={$list}
+                contentContainerStyle={
+                  scheduleIndex === currentlyViewingScheduleIndex ? $list : $buttonHidden
+                }
+                scrollEventThrottle={16}
+                onViewableItemsChanged={handleViewableEventIndexChanged}
               />
             </View>
           )}
         />
       </View>
       <ScheduleDayPicker {...{ scrollX, onItemPress, schedules, selectedSchedule }} />
+      <Animated.View style={$scrollButtonContainer}>
+        {scheduleIndex === currentlyViewingScheduleIndex &&
+          eventIndex > -1 &&
+          currentlyViewingEvents[0] !== eventIndex && (
+            <Button
+              LeftAccessory={() => (
+                <Icon
+                  icon={Math.min(...currentlyViewingEvents) > eventIndex ? "arrowUp" : "arrowDown"}
+                  color={colors.palette.primary500}
+                />
+              )}
+              preset="reversed"
+              style={$scrollButton}
+              text="scroll to current"
+              textStyle={$scrollButtonText}
+              onPress={() => navigateToCurrentEvent()}
+            />
+          )}
+      </Animated.View>
     </>
   )
 }
@@ -219,10 +280,32 @@ const $container: ViewStyle = {
 }
 
 const $list: ContentStyle = {
+  paddingTop: 48 + spacing.extraLarge + spacing.extraSmall,
+  paddingBottom: 48 + spacing.medium,
+}
+
+const $buttonHidden: ContentStyle = {
   paddingTop: spacing.extraLarge,
   paddingBottom: 48 + spacing.medium,
 }
 
 const $cardContainer: ViewStyle = {
   paddingBottom: spacing.large,
+}
+
+const $scrollButtonContainer: ViewStyle = {
+  position: "absolute",
+  top: 0,
+  alignSelf: "center",
+}
+
+const $scrollButton: ViewStyle = {
+  borderColor: colors.palette.primary300,
+  marginTop: spacing.extraSmall,
+  paddingVertical: spacing.small,
+}
+
+const $scrollButtonText: TextStyle = {
+  color: colors.palette.primary500,
+  marginLeft: spacing.small + spacing.micro,
 }

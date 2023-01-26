@@ -58,8 +58,16 @@ const AppStack = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Tabs" component={TabNavigator} />
-      <Stack.Screen name="TalkDetails" component={TalkDetailsScreen} />
-      <Stack.Screen name="PartyDetails" component={PartyDetailsScreen} />
+      <Stack.Screen
+        name="TalkDetails"
+        component={TalkDetailsScreen}
+        options={{ fullScreenGestureEnabled: true }}
+      />
+      <Stack.Screen
+        name="PartyDetails"
+        component={PartyDetailsScreen}
+        options={{ fullScreenGestureEnabled: true }}
+      />
     </Stack.Navigator>
   )
 }
