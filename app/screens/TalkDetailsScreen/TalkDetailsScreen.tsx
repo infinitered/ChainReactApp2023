@@ -2,7 +2,15 @@ import React, { FC } from "react"
 import { ViewStyle, View, TextStyle, ImageStyle, Image, Dimensions } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow, Screen } from "../../components"
+import {
+  Text,
+  Tag,
+  IconButton,
+  MIN_HEADER_HEIGHT,
+  BoxShadow,
+  Screen,
+  AutoImage,
+} from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
@@ -10,7 +18,8 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
-import { ScheduledEvent } from "../../services/api/webflow-api.types"
+import { ScheduledEvent, RawSpeaker } from "../../services/api/webflow-api.types"
+import { translate } from "../../i18n"
 
 export type Variants = "workshop" | "talk"
 
@@ -53,6 +62,11 @@ export interface TalkDetailsProps {
    * The bio of the speaker
    */
   bio: string
+  /**
+   * The assistants of the workshop
+   * Only available for workshops
+   */
+  assistants?: RawSpeaker[]
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
@@ -93,6 +107,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         description: workshop?.abstract,
         firstName: workshop?.["instructor-info"]["speaker-first-name"],
         bio: workshop?.["instructor-info"]["speaker-bio"],
+        assistants: workshop?.assistants,
       }
   }
 }
@@ -117,8 +132,20 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   if (!schedule) return null
 
-  const { bio, company, description, firstName, fullName, imageUrl, subtitle, title, variant } =
-    talkDetailsProps(schedule)
+  const {
+    bio,
+    company,
+    description,
+    firstName,
+    fullName,
+    imageUrl,
+    subtitle,
+    title,
+    variant,
+    assistants,
+  } = talkDetailsProps(schedule)
+
+  const assistantsList = [...assistants, ...assistants]
 
   const isWorkshop = variant === "workshop"
 
@@ -187,6 +214,28 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
             <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
           </View>
+
+          {assistants.length && (
+            <View style={$assistantContainer}>
+              <Text
+                preset="listHeading"
+                text={translate("talkDetailsScreen.assistingTheWorkshop")}
+                style={$assistantHeading}
+              />
+              <View style={$assistantsContainer}>
+                {assistantsList.map((assistant) => (
+                  <View style={$assistant} key={assistant._id}>
+                    <AutoImage
+                      source={{ uri: assistant["speaker-photo"].url }}
+                      style={$assistantImage}
+                    />
+                    <Text preset="companionHeading" text={assistant.name} />
+                    <Text preset="label" style={$assistantCompany} text={assistant.company} />
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
       </Animated.ScrollView>
     </Screen>
@@ -294,4 +343,36 @@ const $subtitle: TextStyle = {
 
 const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
+}
+
+const $assistantsContainer: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-around",
+}
+
+const $assistantContainer: ViewStyle = {
+  marginTop: spacing.large,
+  marginBottom: spacing.huge,
+}
+
+const $assistant: ViewStyle = {
+  alignItems: "center",
+}
+
+const $assistantHeading: TextStyle = {
+  marginVertical: spacing.large,
+}
+
+const $assistantImage: ImageStyle = {
+  height: 90,
+  width: 90,
+  aspectRatio: 1,
+  borderRadius: 100,
+  marginBottom: spacing.large,
+}
+
+const $assistantCompany: TextStyle = {
+  marginTop: spacing.tiny,
+  color: colors.palette.primary500,
+  textTransform: "uppercase",
 }

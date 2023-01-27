@@ -66,6 +66,9 @@ const en = {
     reportingIncidentPart2:
       ".\n\nWhen submitting a report, please include as much information as you feel comfortable sharing. We take all reports seriously.",
   },
+  talkDetailsScreen: {
+    assistingTheWorkshop: "Assisting the workshop",
+  },
 }
 
 export default en
