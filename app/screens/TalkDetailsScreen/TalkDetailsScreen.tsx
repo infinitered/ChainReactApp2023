@@ -145,8 +145,6 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     assistants,
   } = talkDetailsProps(schedule)
 
-  const assistantsList = [...assistants, ...assistants]
-
   const isWorkshop = variant === "workshop"
 
   return (
@@ -223,7 +221,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
                 style={$assistantHeading}
               />
               <View style={$assistantsContainer}>
-                {assistantsList.map((assistant) => (
+                {assistants.map((assistant) => (
                   <View style={$assistant} key={assistant._id}>
                     <AutoImage
                       source={{ uri: assistant["speaker-photo"].url }}
