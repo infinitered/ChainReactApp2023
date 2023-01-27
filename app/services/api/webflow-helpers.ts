@@ -98,7 +98,6 @@ export const cleanedSchedule = ({
     }))
 }
 
-
 type ScheduleList = {
   isLoading: boolean
   schedules: Schedule[]

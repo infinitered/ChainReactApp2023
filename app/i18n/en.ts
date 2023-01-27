@@ -21,6 +21,7 @@ const en = {
   debugScreen: {
     title: "Debug Info",
     pushToken: "FCM Token",
+    resetState: "Reset App State",
   },
   emptyStateComponent: {
     generic: {
