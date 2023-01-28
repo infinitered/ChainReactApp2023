@@ -134,8 +134,9 @@ export interface RawSponsor extends Item {
 export interface Sponsor extends RawSponsor {}
 
 export interface RawRecommendations extends Item {
-  "dircetions-url"?: string
+  "city-state-zip"?: string
   "external-url"?: string
+  "street-address"?: string
   description: string
   descriptor: string
   images: ImageRef[]

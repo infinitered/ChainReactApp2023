@@ -28,6 +28,8 @@ const en = {
   exploreScreen: {
     title: "Explore",
     nearbyFoodAndDrink: "Nearby food and drink",
+    downtownArtMurals: "Downtown art murals",
+    exploreNeighborhoods: "Explore neighborhoods",
   },
   tabNavigator: {
     scheduleTab: "Schedule",

@@ -18,6 +18,7 @@ export type CarouselCardProps = {
   scrollX: SharedValue<number>
   leftButton?: React.ReactNode
   rightButton?: React.ReactNode
+  ctaButton?: React.ReactNode
   totalCardCount: number
 }
 
@@ -33,6 +34,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   scrollX,
   leftButton,
   rightButton,
+  ctaButton,
 }) => {
   const { subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
@@ -70,15 +72,21 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           {!!meta && (
             <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
           )}
-          <AnimatedText preset="subheading" text={subtitle} style={[$mb, $animatedSlideData]} />
-          <AnimatedText text={body} style={$animatedSlideData} />
-          {!leftButton ||
-            (!rightButton && (
-              <Animated.View style={[$ctaContainer, $animatedSlideData]}>
-                {leftButton}
-                {rightButton}
-              </Animated.View>
-            ))}
+          <AnimatedText
+            preset="subheading"
+            text={subtitle}
+            style={[$mb, $mr, $animatedSlideData]}
+          />
+          <AnimatedText text={body} style={[$mr, $animatedSlideData]} />
+          <View style={$ctaContainer}>
+            {leftButton && (
+              <Animated.View style={[$mr, $animatedSlideData]}>{leftButton}</Animated.View>
+            )}
+            {rightButton && <Animated.View style={$animatedSlideData}>{rightButton}</Animated.View>}
+            {ctaButton && (
+              <Animated.View style={[$ctaButton, $animatedSlideData]}>{ctaButton}</Animated.View>
+            )}
+          </View>
         </View>
       )}
     </View>
@@ -119,9 +127,19 @@ const $meta: ViewStyle = {
   marginBottom: spacing.medium,
 }
 
+const $mr: TextStyle = {
+  marginRight: spacing.large,
+}
+
 const $ctaContainer: ViewStyle = {
   flexDirection: "row",
   marginTop: spacing.medium,
+}
+
+const $ctaButton: ViewStyle = {
+  flex: 1,
+  marginTop: spacing.large,
+  marginRight: spacing.large,
 }
 
 const $slideWrapper: ViewStyle = {

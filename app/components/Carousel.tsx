@@ -1,17 +1,19 @@
 import React, { useMemo } from "react"
 import { View, FlatList, Dimensions, ViewStyle, ImageSourcePropType, TextStyle } from "react-native"
-import { CarouselCard, Text } from "../components"
+
+import { Button, ButtonProps, CarouselCard, Text } from "../components"
 import { spacing } from "../theme"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import { openMap } from "../utils/openMap"
 
-interface StaticCarouselProps {
+export interface StaticCarouselProps {
   preset: "static"
   data: ImageSourcePropType[]
   subtitle: string
   meta?: string
   body: string
+  ctaButton?: ButtonData & ButtonProps
 }
 
 interface ButtonData {
@@ -25,6 +27,8 @@ export interface DynamicCarouselItem {
   meta?: string
   body: string
   leftButton?: ButtonData
+  rightButton?: ButtonData
+  ctaButton?: ButtonData & ButtonProps
 }
 
 interface DynamicCarouselProps {
@@ -50,7 +54,9 @@ export const SPACER_WIDTH = (width - CAROUSEL_IMAGE_WIDTH) / 2
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 const openLink = (destination: string) =>
-  destination.startsWith("https") ? openLinkInBrowser(destination) : openMap(destination)
+  destination.startsWith("http") || destination.startsWith("https")
+    ? openLinkInBrowser(destination)
+    : openMap(destination)
 
 export function Carousel(props: CarouselProps) {
   const { data = [] } = props
@@ -100,8 +106,36 @@ export function Carousel(props: CarouselProps) {
               />
             )
           }
+
+          let rightButton = null
+          if (props.preset === "dynamic") {
+            const { rightButton: rightButtonData } = item as DynamicCarouselItem
+            rightButton = rightButtonData && (
+              <CarouselCard.Link
+                text={rightButtonData.text}
+                openLink={() => openLink(rightButtonData.link)}
+              />
+            )
+          }
+
+          let ctaButton = null
+          const { ctaButton: ctaButtonData } = item as DynamicCarouselItem
+          ctaButton = ctaButtonData && (
+            <Button text={ctaButtonData.text} onPress={() => openLink(ctaButtonData.link)} />
+          )
+
           return (
-            <CarouselCard {...{ item, index, scrollX, leftButton, totalCardCount: data.length }} />
+            <CarouselCard
+              {...{
+                item,
+                index,
+                scrollX,
+                leftButton,
+                rightButton,
+                ctaButton,
+                totalCardCount: data.length,
+              }}
+            />
           )
         }}
       />
@@ -114,7 +148,10 @@ export function Carousel(props: CarouselProps) {
             text={props.subtitle}
             style={[!props.meta ? $mt : undefined, $mb]}
           />
-          <Text text={props.body} />
+          <Text text={props.body} style={$body} />
+          {props.ctaButton && (
+            <Button text={props.ctaButton.text} onPress={() => openLink(props.ctaButton.link)} />
+          )}
         </View>
       )}
     </>
@@ -138,5 +175,9 @@ const $mt: ViewStyle = {
 }
 
 const $meta: ViewStyle = {
-  marginBottom: spacing.medium,
+  marginVertical: spacing.medium,
+}
+
+const $body: TextStyle = {
+  marginBottom: spacing.large,
 }

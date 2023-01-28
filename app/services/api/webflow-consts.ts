@@ -114,7 +114,7 @@ export const WEBFLOW_MAP = {
   recommendationType: {
     "3541dc4db3502b41c75043518060800d": "Food/Drink",
     a5028d71ed9c315a6e9fa67778f2579d: "SightSee",
-    f42e3ac1a464004c28d91ddf3945b654: "Unique to Portland",
+    // f42e3ac1a464004c28d91ddf3945b654: "Unique to Portland",
     "0e40a1811b85d1f596d891182dffba1a": "Neighborhood",
   },
 } as const

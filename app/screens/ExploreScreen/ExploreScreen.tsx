@@ -1,16 +1,42 @@
 import React, { FC } from "react"
-import { SectionList, TextStyle, View, ViewStyle } from "react-native"
+import {
+  Image,
+  ImageSourcePropType,
+  ImageStyle,
+  SectionList,
+  SectionListData,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import { Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
-import { SponsorCard } from "../VenueScreen/SponsorCard"
+import { useRecommendations } from "../../services/api"
+import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
+import { groupBy } from "../../services/api/webflow-helpers"
+import { RawRecommendations } from "../../services/api/webflow-api.types"
 
-const irImage1 = require("../../../assets/images/info-ir1.png")
-const irImage2 = require("../../../assets/images/info-ir2.png")
+const exploreMap = require("../../../assets/images/exploreMap.png")
 
-const Workshops = ({ item }) => {
+interface ExploreMapProps {
+  image: ImageSourcePropType
+  description: string
+  credit: string
+}
+
+const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
+type RecommendationType = typeof recommendationTypes[number]
+type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
+
+const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
+  (acc, recommendationType) => ({ ...acc, [recommendationType]: [] }),
+  {} as GroupedRecommendations,
+)
+
+const Recommendations = ({ item }) => {
   return (
     <View style={$carousel}>
       <Carousel preset="dynamic" data={item} />
@@ -18,112 +44,138 @@ const Workshops = ({ item }) => {
   )
 }
 
-const SponsorSection = ({ item }) => {
+const Neighborhood = ({ item }) => {
+  console.tron.log({ item })
+
   return (
-    <View style={$container}>
-      <SponsorCard {...item} />
+    <View style={$carousel}>
+      <Carousel
+        preset="static"
+        data={item.images}
+        subtitle={item.subtitle}
+        body={item.body}
+        meta={item.meta}
+        ctaButton={item.ctaButton}
+      />
     </View>
   )
 }
 
-const SECTIONS = [
-  {
-    title: translate("exploreScreen.nearbyFoodAndDrink"),
-    renderItem: Workshops,
-    data: [
-      [
+const ExploreMap = ({ item }: { item: ExploreMapProps }) => {
+  return (
+    <View style={$exploreMapContainer}>
+      <Image source={item.image} style={$exploreMap} />
+      <Text text={translate("exploreScreen.exploreNeighborhoods")} preset="screenHeading" />
+      <Text text={item.description} style={$description} />
+      <Text text={item.credit} />
+    </View>
+  )
+}
+
+const sectionTitle = (type: RecommendationType) => {
+  switch (type) {
+    case "Food/Drink":
+      return translate("exploreScreen.nearbyFoodAndDrink")
+    case "SightSee":
+      return translate("exploreScreen.downtownArtMurals")
+    // case "Unique to Portland":
+    //   return "Unique to Portland"
+    case "Neighborhood":
+      return undefined
+    default:
+      return translate("exploreScreen.nearbyFoodAndDrink")
+  }
+}
+
+const useRecommendationSections = (): SectionListData<any>[] => {
+  const { data: recommendations = [] } = useRecommendations()
+
+  const rawRecs = groupBy("type")(recommendations)
+  const recs = Object.keys(rawRecs).reduce<GroupedRecommendations>(
+    (acc, recommendationType) => ({
+      ...acc,
+      [WEBFLOW_MAP.recommendationType[recommendationType]]: rawRecs[recommendationType] ?? [],
+    }),
+    initialRecs,
+  )
+
+  const notNeighborhoods = recommendationTypes.filter((recType) => recType !== "Neighborhood")
+  const neighborhoods = recs.Neighborhood
+
+  return [
+    ...notNeighborhoods.map((recType) => ({
+      title: sectionTitle(recType),
+      renderItem: Recommendations,
+      data: [
+        recs[recType].map((rec, index) => ({
+          image: { uri: rec.images[0]?.url },
+          subtitle: rec.name,
+          meta: `${rec.descriptor}${recType === "SightSee" ? " • free" : ""}`,
+          body: rec.description,
+          leftButton: rec["external-url"]
+            ? {
+                text: "Website",
+                link: rec["external-url"],
+              }
+            : undefined,
+          rightButton:
+            rec["street-address"] && rec["city-state-zip"]
+              ? {
+                  text: "View on Map",
+                  link: `${rec["street-address"]},${rec["city-state-zip"]}`,
+                }
+              : undefined,
+          ctaButton: recType === "SightSee" &&
+            index === 0 && {
+              text: "Open Google Maps list",
+              link: "https://www.google.com/maps/@45.5222313,-122.6833028,17z/data=!3m1!4b1!4m2!11m1!2sZuep6RPMS_uPvVRGkziJ3w",
+            },
+        })),
+      ],
+    })),
+    {
+      title: sectionTitle("Neighborhood"),
+      renderItem: ExploreMap,
+      data: [
         {
-          image: irImage1,
-          subtitle: "The Armory",
-          meta: "Conference • May 18-19",
-          body: "11134 Washington St #302\nPortland, OR 97006",
-          leftButton: {
-            text: "Open in maps",
-            link: "11134 Washington St #302, Portland, OR 97006",
-          },
+          image: exploreMap,
+          description:
+            "Here’s a quick guide to the areas around the city. Each area has it’s own distinct feel and different things to do!",
+          credit: "map illustration by Subin Yang",
         },
+      ],
+    },
+    ...neighborhoods.map((neighborhood) => ({
+      title: neighborhood.name,
+      renderItem: Neighborhood,
+      data: [
         {
-          image: irImage2,
-          subtitle: "Workshops • May 17",
-          meta: "Marriott Portland City Center",
-          body: "550 SW Oak Street\nPortland, OR 97204",
-          leftButton: {
-            text: "Open in maps",
-            link: "550 SW Oak Street, Portland, OR 97204",
+          images: neighborhood.images.map((image) => ({ uri: image.url })),
+          subtitle: neighborhood.name,
+          meta: neighborhood.descriptor,
+          body: neighborhood.description,
+          ctaButton: {
+            text: "Open our Yelp guide",
+            link: neighborhood["external-url"],
           },
         },
       ],
-    ],
-  },
-  {
-    title: translate("venueScreen.thanksToThisYearsSponsors"),
-    renderItem: SponsorSection,
-    data: [
-      {
-        sponsor: "Sponsor 1",
-        tier: "platinum",
-        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
-        openURL: "https://placekitten.com",
-        sponsorImage: {
-          uri: "https://placekitten.com/g/280/60",
-        },
-      },
-      {
-        sponsor: "Sponsor 2",
-        tier: "gold",
-        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
-        openURL: "https://placekitten.com",
-        sponsorImage: {
-          uri: "https://placekitten.com/g/280/60",
-        },
-      },
-      {
-        sponsor: "Sponsor 3",
-        tier: "gold",
-        bio: "Bio info included with sponsor tier section for website and mobile app. Applies to platinum and gold sponsors.",
-        openURL: "https://placekitten.com",
-        sponsorImage: {
-          uri: "https://placekitten.com/g/280/60",
-        },
-      },
-      {
-        tier: "silver",
-        sponsorImages: [
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats r us" },
-        ],
-      },
-      {
-        tier: "bronze",
-        sponsorImages: [
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-          { uri: "https://placekitten.com/g/155/36", sponsor: "cats rule dog drool" },
-        ],
-      },
-    ],
-  },
-]
+    })),
+  ]
+}
 
 export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
   useHeader({ title: translate("exploreScreen.title") })
+
+  const sections = useRecommendationSections()
 
   return (
     <Screen style={$root} preset="fixed">
       <SectionList
         stickySectionHeadersEnabled={false}
-        sections={SECTIONS}
+        sections={sections}
         renderSectionHeader={({ section: { title } }) => (
-          <Text preset="screenHeading" style={$heading}>
+          <Text preset="screenHeading" style={title && $heading}>
             {title}
           </Text>
         )}
@@ -136,10 +188,6 @@ const $root: ViewStyle = {
   flex: 1,
 }
 
-const $container: ViewStyle = {
-  paddingHorizontal: spacing.large,
-}
-
 const $heading: TextStyle = {
   backgroundColor: colors.palette.neutral500,
   marginTop: spacing.extraLarge,
@@ -148,4 +196,20 @@ const $heading: TextStyle = {
 
 const $carousel: ViewStyle = {
   marginBottom: spacing.extraLarge,
+}
+
+const $exploreMapContainer: ViewStyle = {
+  paddingHorizontal: spacing.large,
+  marginBottom: spacing.extraLarge,
+}
+
+const $exploreMap: ImageStyle = {
+  width: "100%",
+  marginVertical: spacing.large,
+  borderRadius: 4,
+}
+
+const $description: TextStyle = {
+  marginTop: spacing.extraSmall,
+  marginBottom: spacing.large,
 }
