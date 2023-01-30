@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Carousel, Screen, Text } from "../../components"
+import { Button, Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
@@ -18,13 +18,19 @@ import { useRecommendations } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { groupBy } from "../../services/api/webflow-helpers"
 import { RawRecommendations } from "../../services/api/webflow-api.types"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 const exploreMap = require("../../../assets/images/exploreMap.png")
 
+interface CreditData {
+  author: string
+  text: string
+  link: string
+}
 interface ExploreMapProps {
   image: ImageSourcePropType
   description: string
-  credit: string
+  credit: CreditData
 }
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
@@ -36,27 +42,24 @@ const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
   {} as GroupedRecommendations,
 )
 
-const Recommendations = ({ item }) => {
+const FoodAndDrink = ({ item }) => {
+  return <Carousel preset="dynamic" data={item} />
+}
+
+const ArtMurals = ({ item }) => {
   return (
     <View style={$carousel}>
       <Carousel preset="dynamic" data={item} />
-    </View>
-  )
-}
-
-const Neighborhood = ({ item }) => {
-  console.tron.log({ item })
-
-  return (
-    <View style={$carousel}>
-      <Carousel
-        preset="static"
-        data={item.images}
-        subtitle={item.subtitle}
-        body={item.body}
-        meta={item.meta}
-        ctaButton={item.ctaButton}
-      />
+      <View style={$artButtonContainer}>
+        <Button
+          text="Open Google Maps list"
+          onPress={() =>
+            openLinkInBrowser(
+              "https://www.google.com/maps/@45.5222313,-122.6833028,17z/data=!3m1!4b1!4m2!11m1!2sZuep6RPMS_uPvVRGkziJ3w",
+            )
+          }
+        />
+      </View>
     </View>
   )
 }
@@ -67,7 +70,29 @@ const ExploreMap = ({ item }: { item: ExploreMapProps }) => {
       <Image source={item.image} style={$exploreMap} />
       <Text text={translate("exploreScreen.exploreNeighborhoods")} preset="screenHeading" />
       <Text text={item.description} style={$description} />
-      <Text text={item.credit} />
+      <View style={$creditContainer}>
+        <Text text={item.credit.text} />
+        <Text onPress={() => openLinkInBrowser(item.credit.link)} style={$credit}>
+          {" "}
+          {item.credit.author}
+        </Text>
+      </View>
+    </View>
+  )
+}
+
+const Neighborhood = ({ item }) => {
+  console.tron.log("item", item)
+  return (
+    <View style={$carousel}>
+      <Carousel
+        preset="static"
+        data={item.images}
+        subtitle={item.subtitle}
+        body={item.body}
+        meta={item.meta}
+        button={item.button}
+      />
     </View>
   )
 }
@@ -100,18 +125,15 @@ const useRecommendationSections = (): SectionListData<any>[] => {
     initialRecs,
   )
 
-  const notNeighborhoods = recommendationTypes.filter((recType) => recType !== "Neighborhood")
-  const neighborhoods = recs.Neighborhood
-
   return [
-    ...notNeighborhoods.map((recType) => ({
-      title: sectionTitle(recType),
-      renderItem: Recommendations,
+    {
+      title: sectionTitle("Food/Drink"),
+      renderItem: FoodAndDrink,
       data: [
-        recs[recType].map((rec, index) => ({
+        recs["Food/Drink"].map((rec) => ({
           image: { uri: rec.images[0]?.url },
           subtitle: rec.name,
-          meta: `${rec.descriptor}${recType === "SightSee" ? " • free" : ""}`,
+          meta: rec.descriptor,
           body: rec.description,
           leftButton: rec["external-url"]
             ? {
@@ -126,14 +148,21 @@ const useRecommendationSections = (): SectionListData<any>[] => {
                   link: `${rec["street-address"]},${rec["city-state-zip"]}`,
                 }
               : undefined,
-          ctaButton: recType === "SightSee" &&
-            index === 0 && {
-              text: "Open Google Maps list",
-              link: "https://www.google.com/maps/@45.5222313,-122.6833028,17z/data=!3m1!4b1!4m2!11m1!2sZuep6RPMS_uPvVRGkziJ3w",
-            },
         })),
       ],
-    })),
+    },
+    {
+      title: sectionTitle("SightSee"),
+      renderItem: ArtMurals,
+      data: [
+        recs.SightSee.map((rec) => ({
+          image: { uri: rec.images[0]?.url },
+          subtitle: rec.name,
+          meta: `${rec.descriptor} • free`,
+          body: rec.description,
+        })),
+      ],
+    },
     {
       title: sectionTitle("Neighborhood"),
       renderItem: ExploreMap,
@@ -142,26 +171,30 @@ const useRecommendationSections = (): SectionListData<any>[] => {
           image: exploreMap,
           description:
             "Here’s a quick guide to the areas around the city. Each area has it’s own distinct feel and different things to do!",
-          credit: "map illustration by Subin Yang",
-        },
-      ],
-    },
-    ...neighborhoods.map((neighborhood) => ({
-      title: sectionTitle("Neighborhood"),
-      renderItem: Neighborhood,
-      data: [
-        {
-          images: neighborhood.images.map((image) => ({ uri: image.url })),
-          subtitle: neighborhood.name,
-          meta: neighborhood.descriptor,
-          body: neighborhood.description,
-          ctaButton: {
-            text: "Open our Yelp guide",
-            link: neighborhood["external-url"],
+
+          credit: {
+            text: "map illustration by",
+            author: "Subin Yang",
+            link: "https://www.travelportland.com/about-us/meet-our-writers/#subin-yang",
           },
         },
       ],
-    })),
+    },
+    {
+      title: sectionTitle("Neighborhood"),
+      renderItem: Neighborhood,
+      data: recs.Neighborhood.map((rec) => ({
+        images: rec.images.map((image) => ({ uri: image.url })),
+        subtitle: rec.name,
+        meta: rec.descriptor,
+        body: rec.description,
+        button: {
+          text: "Open our Yelp guide",
+          // The external link is not ready in the CMS yet
+          link: rec["external-url"],
+        },
+      })),
+    },
   ]
 }
 
@@ -176,7 +209,7 @@ export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
         stickySectionHeadersEnabled={false}
         sections={sections}
         renderSectionHeader={({ section: { title } }) => (
-          <Text preset="screenHeading" style={title && $heading}>
+          <Text preset="screenHeading" style={!!title && $heading}>
             {title}
           </Text>
         )}
@@ -191,12 +224,17 @@ const $root: ViewStyle = {
 
 const $heading: TextStyle = {
   backgroundColor: colors.palette.neutral500,
-  marginTop: spacing.extraLarge,
+  marginTop: spacing.large,
   paddingHorizontal: spacing.large,
 }
 
 const $carousel: ViewStyle = {
   marginBottom: spacing.extraLarge,
+}
+
+const $artButtonContainer: ViewStyle = {
+  flex: 1,
+  paddingHorizontal: spacing.large,
 }
 
 const $exploreMapContainer: ViewStyle = {
@@ -206,7 +244,6 @@ const $exploreMapContainer: ViewStyle = {
 
 const $exploreMap: ImageStyle = {
   width: "100%",
-  marginTop: spacing.medium,
   marginBottom: spacing.large,
   borderRadius: 4,
 }
@@ -214,4 +251,12 @@ const $exploreMap: ImageStyle = {
 const $description: TextStyle = {
   marginTop: spacing.extraSmall,
   marginBottom: spacing.large,
+}
+
+const $creditContainer: ViewStyle = {
+  flexDirection: "row",
+}
+
+const $credit: TextStyle = {
+  textDecorationLine: "underline",
 }

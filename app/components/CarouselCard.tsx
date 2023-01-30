@@ -18,7 +18,7 @@ export type CarouselCardProps = {
   scrollX: SharedValue<number>
   leftButton?: React.ReactNode
   rightButton?: React.ReactNode
-  ctaButton?: React.ReactNode
+  button?: React.ReactNode
   totalCardCount: number
 }
 
@@ -34,7 +34,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   scrollX,
   leftButton,
   rightButton,
-  ctaButton,
+  button,
 }) => {
   const { subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
@@ -83,8 +83,8 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
               <Animated.View style={[$mr, $animatedSlideData]}>{leftButton}</Animated.View>
             )}
             {rightButton && <Animated.View style={$animatedSlideData}>{rightButton}</Animated.View>}
-            {ctaButton && (
-              <Animated.View style={[$ctaButton, $animatedSlideData]}>{ctaButton}</Animated.View>
+            {button && (
+              <Animated.View style={[$button, $animatedSlideData]}>{button}</Animated.View>
             )}
           </View>
         </View>
@@ -136,7 +136,7 @@ const $ctaContainer: ViewStyle = {
   marginTop: spacing.medium,
 }
 
-const $ctaButton: ViewStyle = {
+const $button: ViewStyle = {
   flex: 1,
   marginTop: spacing.extraLarge,
   marginRight: spacing.large,

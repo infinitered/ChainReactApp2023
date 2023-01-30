@@ -13,7 +13,7 @@ export interface StaticCarouselProps {
   subtitle: string
   meta?: string
   body: string
-  ctaButton?: ButtonData & ButtonProps
+  button?: ButtonData & ButtonProps
 }
 
 interface ButtonData {
@@ -28,7 +28,6 @@ export interface DynamicCarouselItem {
   body: string
   leftButton?: ButtonData
   rightButton?: ButtonData
-  ctaButton?: ButtonData & ButtonProps
 }
 
 interface DynamicCarouselProps {
@@ -118,12 +117,6 @@ export function Carousel(props: CarouselProps) {
             )
           }
 
-          let ctaButton = null
-          const { ctaButton: ctaButtonData } = item as DynamicCarouselItem | StaticCarouselProps
-          ctaButton = ctaButtonData && (
-            <Button text={ctaButtonData.text} onPress={() => openLink(ctaButtonData.link)} />
-          )
-
           return (
             <CarouselCard
               {...{
@@ -132,7 +125,6 @@ export function Carousel(props: CarouselProps) {
                 scrollX,
                 leftButton,
                 rightButton,
-                ctaButton,
                 totalCardCount: data.length,
               }}
             />
@@ -149,8 +141,8 @@ export function Carousel(props: CarouselProps) {
             style={[!props.meta ? $mt : undefined, $mb]}
           />
           <Text text={props.body} style={$body} />
-          {props.ctaButton && (
-            <Button text={props.ctaButton.text} onPress={() => openLink(props.ctaButton.link)} />
+          {props.button && (
+            <Button text={props.button.text} onPress={() => openLink(props.button.link)} />
           )}
         </View>
       )}
@@ -164,7 +156,6 @@ const $carousel: ViewStyle = {
 
 const $content: ViewStyle = {
   paddingHorizontal: spacing.large,
-  marginBottom: -spacing.extraSmall,
 }
 
 const $mb: TextStyle = {
