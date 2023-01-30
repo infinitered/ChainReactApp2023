@@ -18,6 +18,11 @@ const en = {
     reset: "Reset",
     githubButton: "Go to GitHub",
   },
+  debugScreen: {
+    title: "Debug Info",
+    pushToken: "FCM Token",
+    resetState: "Reset App State",
+  },
   emptyStateComponent: {
     generic: {
       heading: "So empty... so sad",
@@ -48,6 +53,7 @@ const en = {
   },
   infoScreen: {
     title: "Info",
+    contact: "Contact",
     screenHeading: "Hosted by the Infinite Red team",
     aboutTitle: "About Chain React",
     about:
