@@ -138,7 +138,7 @@ const $ctaContainer: ViewStyle = {
 
 const $ctaButton: ViewStyle = {
   flex: 1,
-  marginTop: spacing.large,
+  marginTop: spacing.extraLarge,
   marginRight: spacing.large,
 }
 

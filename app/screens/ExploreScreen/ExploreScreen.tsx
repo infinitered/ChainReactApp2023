@@ -78,6 +78,7 @@ const sectionTitle = (type: RecommendationType) => {
       return translate("exploreScreen.nearbyFoodAndDrink")
     case "SightSee":
       return translate("exploreScreen.downtownArtMurals")
+    // Don't show this section for now since it's not in the CMS
     // case "Unique to Portland":
     //   return "Unique to Portland"
     case "Neighborhood":
@@ -146,7 +147,7 @@ const useRecommendationSections = (): SectionListData<any>[] => {
       ],
     },
     ...neighborhoods.map((neighborhood) => ({
-      title: neighborhood.name,
+      title: sectionTitle("Neighborhood"),
       renderItem: Neighborhood,
       data: [
         {
@@ -205,7 +206,8 @@ const $exploreMapContainer: ViewStyle = {
 
 const $exploreMap: ImageStyle = {
   width: "100%",
-  marginVertical: spacing.large,
+  marginTop: spacing.medium,
+  marginBottom: spacing.large,
   borderRadius: 4,
 }
 

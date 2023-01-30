@@ -83,7 +83,7 @@ export function Carousel(props: CarouselProps) {
         scrollEventThrottle={16}
         snapToInterval={CAROUSEL_IMAGE_WIDTH}
         snapToAlignment="start"
-        style={$carousel}
+        style={props.preset === "dynamic" && $carousel}
         renderItem={({ item, index }) => {
           const { spacer } = item as Spacer
           if (spacer) {
@@ -119,7 +119,7 @@ export function Carousel(props: CarouselProps) {
           }
 
           let ctaButton = null
-          const { ctaButton: ctaButtonData } = item as DynamicCarouselItem
+          const { ctaButton: ctaButtonData } = item as DynamicCarouselItem | StaticCarouselProps
           ctaButton = ctaButtonData && (
             <Button text={ctaButtonData.text} onPress={() => openLink(ctaButtonData.link)} />
           )
@@ -164,6 +164,7 @@ const $carousel: ViewStyle = {
 
 const $content: ViewStyle = {
   paddingHorizontal: spacing.large,
+  marginBottom: -spacing.extraSmall,
 }
 
 const $mb: TextStyle = {
