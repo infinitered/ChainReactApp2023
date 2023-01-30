@@ -213,14 +213,16 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
           </View>
 
-          {assistants.length && (
+          {assistants?.length && (
             <View style={$assistantContainer}>
               <Text
                 preset="listHeading"
                 text={translate("talkDetailsScreen.assistingTheWorkshop")}
                 style={$assistantHeading}
               />
-              <View style={$assistantsContainer}>
+              <View
+                style={[$assistantsContainer, assistants.length >= 2 && $assistantsContainerTwo]}
+              >
                 {assistants.map((assistant) => (
                   <View style={$assistant} key={assistant._id}>
                     <AutoImage
@@ -229,6 +231,12 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
                     />
                     <Text preset="companionHeading" text={assistant.name} />
                     <Text preset="label" style={$assistantCompany} text={assistant.company} />
+                    <View style={$assistantLinks}>
+                      <IconButton
+                        icon={assistant.twitter ? "twitter" : "link"}
+                        onPress={() => onPress(assistant.twitter || assistant.website)}
+                      />
+                    </View>
                   </View>
                 ))}
               </View>
@@ -345,6 +353,9 @@ const $headingContainer: ViewStyle = {
 
 const $assistantsContainer: ViewStyle = {
   flexDirection: "row",
+}
+
+const $assistantsContainerTwo: ViewStyle = {
   justifyContent: "space-around",
 }
 
@@ -373,4 +384,9 @@ const $assistantCompany: TextStyle = {
   marginTop: spacing.tiny,
   color: colors.palette.primary500,
   textTransform: "uppercase",
+}
+
+const $assistantLinks: ViewStyle = {
+  flexDirection: "row",
+  marginTop: spacing.large,
 }
