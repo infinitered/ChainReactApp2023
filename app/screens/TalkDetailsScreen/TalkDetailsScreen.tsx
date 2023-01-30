@@ -221,7 +221,9 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
                 style={$assistantHeading}
               />
               <View
-                style={[$assistantsContainer, assistants.length >= 2 && $assistantsContainerTwo]}
+                style={
+                  assistants.length < 2 ? $assistantsContainerWithOne : $assistantsContainerWithMore
+                }
               >
                 {assistants.map((assistant) => (
                   <View style={$assistant} key={assistant._id}>
@@ -351,11 +353,13 @@ const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
 }
 
-const $assistantsContainer: ViewStyle = {
+const $assistantsContainerWithOne: ViewStyle = {
   flexDirection: "row",
+  marginStart: spacing.huge,
 }
 
-const $assistantsContainerTwo: ViewStyle = {
+const $assistantsContainerWithMore: ViewStyle = {
+  flexDirection: "row",
   justifyContent: "space-around",
 }
 
