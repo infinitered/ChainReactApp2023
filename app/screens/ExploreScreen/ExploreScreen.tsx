@@ -1,5 +1,6 @@
 import React, { FC } from "react"
 import {
+  ActivityIndicator,
   Image,
   ImageSourcePropType,
   ImageStyle,
@@ -43,7 +44,11 @@ const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
 )
 
 const FoodAndDrink = ({ item }) => {
-  return <Carousel preset="dynamic" data={item} />
+  return (
+    <View style={$carousel}>
+      <Carousel preset="dynamic" data={item} />
+    </View>
+  )
 }
 
 const ArtMurals = ({ item }) => {
@@ -82,7 +87,6 @@ const ExploreMap = ({ item }: { item: ExploreMapProps }) => {
 }
 
 const Neighborhood = ({ item }) => {
-  console.tron.log("item", item)
   return (
     <View style={$carousel}>
       <Carousel
@@ -113,8 +117,8 @@ const sectionTitle = (type: RecommendationType) => {
   }
 }
 
-const useRecommendationSections = (): SectionListData<any>[] => {
-  const { data: recommendations = [] } = useRecommendations()
+const useRecommendationSections = (): { isLoading: boolean; sections: SectionListData<any>[] } => {
+  const { data: recommendations = [], isLoading } = useRecommendations()
 
   const rawRecs = groupBy("type")(recommendations)
   const recs = Object.keys(rawRecs).reduce<GroupedRecommendations>(
@@ -125,105 +129,117 @@ const useRecommendationSections = (): SectionListData<any>[] => {
     initialRecs,
   )
 
-  return [
-    {
-      title: sectionTitle("Food/Drink"),
-      renderItem: FoodAndDrink,
-      data: [
-        recs["Food/Drink"].map((rec) => ({
-          image: { uri: rec.images[0]?.url },
+  return {
+    isLoading,
+    sections: [
+      {
+        title: sectionTitle("Food/Drink"),
+        renderItem: FoodAndDrink,
+        data: [
+          recs["Food/Drink"].map((rec) => ({
+            image: { uri: rec.images[0]?.url },
+            subtitle: rec.name,
+            meta: rec.descriptor,
+            body: rec.description,
+            leftButton: rec["external-url"]
+              ? {
+                  text: "Website",
+                  link: rec["external-url"],
+                }
+              : undefined,
+            rightButton:
+              rec["street-address"] && rec["city-state-zip"]
+                ? {
+                    text: "View on Map",
+                    link: `${rec["street-address"]},${rec["city-state-zip"]}`,
+                  }
+                : undefined,
+          })),
+        ],
+      },
+      {
+        title: sectionTitle("SightSee"),
+        renderItem: ArtMurals,
+        data: [
+          recs.SightSee.map((rec) => ({
+            image: { uri: rec.images[0]?.url },
+            subtitle: rec.name,
+            meta: `${rec.descriptor} • free`,
+            body: rec.description,
+          })),
+        ],
+      },
+      {
+        title: sectionTitle("Neighborhood"),
+        renderItem: ExploreMap,
+        data: [
+          {
+            image: exploreMap,
+            description:
+              "Here’s a quick guide to the areas around the city. Each area has it’s own distinct feel and different things to do!",
+
+            credit: {
+              text: "map illustration by",
+              author: "Subin Yang",
+              link: "https://www.travelportland.com/about-us/meet-our-writers/#subin-yang",
+            },
+          },
+        ],
+      },
+      {
+        title: sectionTitle("Neighborhood"),
+        renderItem: Neighborhood,
+        data: recs.Neighborhood.map((rec) => ({
+          images: rec.images.map((image) => ({ uri: image.url })),
           subtitle: rec.name,
           meta: rec.descriptor,
           body: rec.description,
-          leftButton: rec["external-url"]
-            ? {
-                text: "Website",
-                link: rec["external-url"],
-              }
-            : undefined,
-          rightButton:
-            rec["street-address"] && rec["city-state-zip"]
-              ? {
-                  text: "View on Map",
-                  link: `${rec["street-address"]},${rec["city-state-zip"]}`,
-                }
-              : undefined,
-        })),
-      ],
-    },
-    {
-      title: sectionTitle("SightSee"),
-      renderItem: ArtMurals,
-      data: [
-        recs.SightSee.map((rec) => ({
-          image: { uri: rec.images[0]?.url },
-          subtitle: rec.name,
-          meta: `${rec.descriptor} • free`,
-          body: rec.description,
-        })),
-      ],
-    },
-    {
-      title: sectionTitle("Neighborhood"),
-      renderItem: ExploreMap,
-      data: [
-        {
-          image: exploreMap,
-          description:
-            "Here’s a quick guide to the areas around the city. Each area has it’s own distinct feel and different things to do!",
-
-          credit: {
-            text: "map illustration by",
-            author: "Subin Yang",
-            link: "https://www.travelportland.com/about-us/meet-our-writers/#subin-yang",
+          button: {
+            text: "Open our Yelp guide",
+            // The external link is not ready in the CMS yet
+            link: rec["external-url"],
           },
-        },
-      ],
-    },
-    {
-      title: sectionTitle("Neighborhood"),
-      renderItem: Neighborhood,
-      data: recs.Neighborhood.map((rec) => ({
-        images: rec.images.map((image) => ({ uri: image.url })),
-        subtitle: rec.name,
-        meta: rec.descriptor,
-        body: rec.description,
-        button: {
-          text: "Open our Yelp guide",
-          // The external link is not ready in the CMS yet
-          link: rec["external-url"],
-        },
-      })),
-    },
-  ]
+        })),
+      },
+    ],
+  }
 }
 
 export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
   useHeader({ title: translate("exploreScreen.title") })
-
-  const sections = useRecommendationSections()
+  const { sections, isLoading } = useRecommendationSections()
 
   return (
     <Screen style={$root} preset="fixed">
-      <SectionList
-        stickySectionHeadersEnabled={false}
-        sections={sections}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text preset="screenHeading" style={!!title && $heading}>
-            {title}
-          </Text>
-        )}
-      />
+      {isLoading && (
+        <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
+      )}
+      {!isLoading && sections.length > 0 && (
+        <SectionList
+          stickySectionHeadersEnabled={false}
+          sections={sections}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text preset="screenHeading" style={!!title && $heading}>
+              {title}
+            </Text>
+          )}
+        />
+      )}
     </Screen>
   )
 }
 
 const $root: ViewStyle = {
   flex: 1,
+  backgroundColor: colors.background,
+  alignItems: "center",
+}
+
+const $activityIndicator: ViewStyle = {
+  flex: 1,
 }
 
 const $heading: TextStyle = {
-  backgroundColor: colors.palette.neutral500,
   marginTop: spacing.large,
   paddingHorizontal: spacing.large,
 }
