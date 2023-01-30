@@ -355,7 +355,7 @@ const $headingContainer: ViewStyle = {
 
 const $assistantsContainerWithOne: ViewStyle = {
   flexDirection: "row",
-  marginStart: spacing.huge,
+  marginStart: spacing.large,
 }
 
 const $assistantsContainerWithMore: ViewStyle = {
