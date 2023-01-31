@@ -22,6 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { ScheduledEvent } from "../../services/api/webflow-api.types"
+import { isFuture, parseISO } from "date-fns"
 
 export type Variants = "workshop" | "talk"
 
@@ -68,6 +69,10 @@ export interface TalkDetailsProps {
    * The url of the talk
    */
   talkUrl?: string
+  /**
+   * The time of the event
+   */
+  eventTime: string
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
@@ -94,6 +99,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         firstName: talk?.["speaker-s"][0]["speaker-first-name"],
         bio: talk?.["speaker-s"][0]["speaker-bio"],
         talkUrl: talk?.["talk-url"],
+        eventTime: schedule["day-time"],
       }
     case "Workshop":
     default:
@@ -109,6 +115,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         description: workshop?.abstract,
         firstName: workshop?.["instructor-info"]["speaker-first-name"],
         bio: workshop?.["instructor-info"]["speaker-bio"],
+        eventTime: schedule["day-time"],
       }
   }
 }
@@ -146,9 +153,12 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     title,
     variant,
     talkUrl,
+    eventTime,
   } = talkDetailsProps(schedule)
 
   const isWorkshop = variant === "workshop"
+
+  const isEventPassed = !isFuture(parseISO(eventTime))
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
@@ -219,7 +229,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
         </View>
       </Animated.ScrollView>
-      {talkUrl && (
+      {talkUrl && isEventPassed && (
         <FloatingButton isScrolling={isScrolling}>
           <Button
             testID="see-the-schedule-button"
