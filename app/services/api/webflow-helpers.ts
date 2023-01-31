@@ -131,6 +131,8 @@ export const createScheduleScreenData = (): ScheduleList => {
 }
 
 const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps => {
+  console.tron.log("scheduleData", schedule)
+
   switch (schedule.type) {
     case "Recurring":
       return {
@@ -165,7 +167,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         startTime: schedule["day-time"],
         eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
-        subheading: schedule.talk?.description,
+        subheading: schedule.talk?.name,
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
         id: schedule._id,
       }
