@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
-import { View, ViewToken as RNViewToken, ViewStyle, Dimensions, TextStyle } from "react-native"
+import {
+  ActivityIndicator,
+  View,
+  ViewToken as RNViewToken,
+  ViewStyle,
+  Dimensions,
+  TextStyle,
+} from "react-native"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
@@ -42,7 +49,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const [currentlyViewingEvents, setCurrentlyViewingEvents] = useState([])
   const [currentlyViewingScheduleIndex, setCurrentlyViewingScheduleIndex] = useState(0)
 
-  const schedules = createScheduleScreenData()
+  const { isLoading, schedules } = createScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
   useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
@@ -174,76 +181,81 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   return (
     <>
       <View style={$root}>
-        <Animated.FlatList
-          ref={hScrollRef}
-          data={schedules}
-          keyExtractor={(item) => item.date}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          onScroll={scrollHandler}
-          onViewableItemsChanged={handleViewableScheduleIndexChanged}
-          bounces={false}
-          scrollEventThrottle={16}
-          decelerationRate="fast"
-          renderItem={({ item: schedule }) => (
-            <View style={[$container, { width }]}>
-              <FlashList
-                ref={scheduleListRefs[schedule.date]}
-                data={schedule.events}
-                renderItem={({ item }: { item: ScheduleCardProps }) => {
-                  const {
-                    startTime,
-                    formattedStartTime,
-                    formattedEndTime,
-                    eventTitle,
-                    heading,
-                    subheading,
-                    sources,
-                    level,
-                    id,
-                  } = item
+        {isLoading && (
+          <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
+        )}
+        {!isLoading && schedules && (
+          <Animated.FlatList
+            ref={hScrollRef}
+            data={schedules}
+            keyExtractor={(item) => item.date}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            onScroll={scrollHandler}
+            onViewableItemsChanged={handleViewableScheduleIndexChanged}
+            bounces={false}
+            scrollEventThrottle={16}
+            decelerationRate="fast"
+            renderItem={({ item: schedule }) => (
+              <View style={[$container, { width }]}>
+                <FlashList
+                  ref={scheduleListRefs[schedule.date]}
+                  data={schedule.events}
+                  renderItem={({ item }: { item: ScheduleCardProps }) => {
+                    const {
+                      startTime,
+                      formattedStartTime,
+                      formattedEndTime,
+                      eventTitle,
+                      heading,
+                      subheading,
+                      sources,
+                      level,
+                      id,
+                    } = item
 
-                  const onPress =
-                    item.variant !== "recurring"
-                      ? () => navigation.navigate("TalkDetails")
-                      : undefined
+                    const onPress =
+                      item.variant !== "recurring"
+                        ? () => navigation.navigate("TalkDetails")
+                        : undefined
 
-                  const isPast = isBefore(new Date(startTime), date)
+                    const isPast = isBefore(new Date(startTime), date)
 
-                  return (
-                    <View style={$cardContainer}>
-                      <ScheduleCard
-                        variant={item.variant as Variants}
-                        {...{
-                          formattedStartTime,
-                          formattedEndTime,
-                          eventTitle,
-                          heading,
-                          subheading,
-                          onPress,
-                          sources,
-                          level,
-                          id,
-                          isPast,
-                        }}
-                      />
-                    </View>
-                  )
-                }}
-                // To achieve better performance, specify the type based on the item
-                getItemType={(item) => item.variant}
-                estimatedItemSize={225}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={
-                  scheduleIndex === currentlyViewingScheduleIndex ? $list : $buttonHidden
-                }
-                scrollEventThrottle={16}
-                onViewableItemsChanged={handleViewableEventIndexChanged}
-              />
-            </View>
-          )}
-        />
+                    return (
+                      <View style={$cardContainer}>
+                        <ScheduleCard
+                          variant={item.variant as Variants}
+                          {...{
+                            formattedStartTime,
+                            formattedEndTime,
+                            eventTitle,
+                            heading,
+                            subheading,
+                            onPress,
+                            sources,
+                            level,
+                            id,
+                            isPast,
+                          }}
+                        />
+                      </View>
+                    )
+                  }}
+                  // To achieve better performance, specify the type based on the item
+                  getItemType={(item) => item.variant}
+                  estimatedItemSize={225}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={
+                    scheduleIndex === currentlyViewingScheduleIndex ? $list : $buttonHidden
+                  }
+                  scrollEventThrottle={16}
+                  onViewableItemsChanged={handleViewableEventIndexChanged}
+                />
+              </View>
+            )}
+          />
+        )}
       </View>
       <ScheduleDayPicker {...{ scrollX, onItemPress, schedules, selectedSchedule }} />
       <Animated.View style={$scrollButtonContainer}>
@@ -272,6 +284,10 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 const $root: ViewStyle = {
   flex: 1,
   backgroundColor: colors.background,
+}
+
+const $activityIndicator: ViewStyle = {
+  flex: 1,
 }
 
 const $container: ViewStyle = {
