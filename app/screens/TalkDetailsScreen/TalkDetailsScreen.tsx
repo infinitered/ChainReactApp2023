@@ -233,7 +233,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
         <FloatingButton isScrolling={isScrolling}>
           <Button
             testID="see-the-schedule-button"
-            text="Watch talk"
+            tx="talkDetailsScreen.watchTalk"
             LeftAccessory={(props) => (
               <Icon icon="play" color={colors.palette.neutral900} {...props} />
             )}
