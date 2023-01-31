@@ -167,7 +167,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                       sources,
                       level,
                       id,
+                      talkUrl,
                     } = item
+
                     const onPress =
                       item.variant !== "recurring"
                         ? () => navigation.navigate("TalkDetails")
@@ -190,6 +192,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                             level,
                             id,
                             isPast,
+                            talkUrl,
                           }}
                         />
                       </View>

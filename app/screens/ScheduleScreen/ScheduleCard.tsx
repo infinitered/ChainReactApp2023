@@ -15,6 +15,8 @@ interface FooterProps {
   heading: string
   subheading: string
   isPast?: boolean
+  talkUrl?: string
+  variant: Variants
 }
 
 const Header = ({ endTime, formattedStartTime, title, isPast }: HeaderProps) => (
@@ -29,14 +31,41 @@ const Header = ({ endTime, formattedStartTime, title, isPast }: HeaderProps) => 
   </View>
 )
 
-const Footer = ({ heading, subheading, isPast }: FooterProps) => (
-  <View style={$footerContainer}>
-    <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
-      {heading}
-    </Text>
-    <Text style={isPast ? $pastFooterSubheading : $footerSubheading}>{subheading}</Text>
-  </View>
-)
+const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
+  console.log(variant)
+  return (
+    <View style={$footerContainer}>
+      <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
+        {heading}
+      </Text>
+      {isPast ? (
+        <>
+          <Text style={$pastFooterSubheading}>{subheading}</Text>
+          {
+            {
+              talk: (
+                <View style={$talkRecording}>
+                  <Icon icon="play" />
+                  <Text
+                    preset="label"
+                    style={$talkRecordingLabel}
+                    tx={
+                      talkUrl
+                        ? "scheduleScreen.talkRecordingPosted"
+                        : "scheduleScreen.videoComingSoon"
+                    }
+                  />
+                </View>
+              ),
+            }[variant]
+          }
+        </>
+      ) : (
+        <Text style={$footerSubheading}>{subheading}</Text>
+      )}
+    </View>
+  )
+}
 
 export type Variants = "workshop" | "talk" | "party" | "recurring"
 
@@ -87,6 +116,10 @@ export interface ScheduleCardProps {
    * Whether the event is in the past
    */
   isPast?: boolean
+  /**
+   * Talk url
+   */
+  talkUrl?: string
 }
 
 interface SpeakingEventProps {
@@ -96,6 +129,8 @@ interface SpeakingEventProps {
   sources: string[]
   isPast?: boolean
   startTime?: string
+  talkUrl?: string
+  variant: Variants
 }
 
 interface BaseEventProps {
@@ -128,6 +163,8 @@ const baseSpeakingEventProps = ({
   sources = [],
   isPast,
   startTime,
+  talkUrl,
+  variant,
 }: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
@@ -145,7 +182,7 @@ const baseSpeakingEventProps = ({
         />
       </View>
     ),
-    FooterComponent: <Footer {...{ heading, subheading, isPast, startTime }} />,
+    FooterComponent: <Footer {...{ heading, subheading, isPast, startTime, talkUrl, variant }} />,
   }
 }
 
@@ -161,6 +198,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     level,
     id,
     isPast,
+    talkUrl,
   } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
@@ -188,7 +226,15 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
             />
           ),
         }
-      : baseSpeakingEventProps({ heading, subheading, eventTitle, sources, isPast })
+      : baseSpeakingEventProps({
+          heading,
+          subheading,
+          eventTitle,
+          sources,
+          isPast,
+          talkUrl,
+          variant,
+        })
 
   const isReversed = variant === "recurring" || variant === "party"
   const cardPreset = isReversed
@@ -214,6 +260,17 @@ const $footerSubheading: TextStyle = {
 
 const $pastFooterSubheading: TextStyle = {
   color: colors.palette.primary100,
+}
+
+const $talkRecording: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: spacing.extraSmall,
+}
+
+const $talkRecordingLabel: TextStyle = {
+  color: colors.palette.primary400,
+  marginStart: spacing.extraSmall,
 }
 
 const $timeText: TextStyle = {

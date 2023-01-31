@@ -44,6 +44,14 @@ export interface TextProps extends RNTextProps {
   children?: React.ReactNode
 }
 
+const letterSpacing = (value) => {
+  /*
+   * If this is true... https://forum.figma.com/t/letter-spacing-should-not-be-percentage-based/3062/13
+   * then 0.01em is 1%, than the size would be 16/100=0.16 pixels which means letter spacing would be 1.28 when converted.
+   */
+  return 0.16 * value
+}
+
 /**
  * For your text displaying needs.
  * This component is a HOC over the built-in React Native one.
@@ -146,6 +154,13 @@ const $presets = {
   tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
 
   navHeader: [$baseSecondaryStyle, $sizeStyles.sm, $secondaryFontWeightStyles.medium],
+
+  label: [
+    $baseSecondaryStyle,
+    $sizeStyles.xxs,
+    $secondaryFontWeightStyles.medium,
+    { letterSpacing: letterSpacing(8), textTransform: "uppercase" },
+  ],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}

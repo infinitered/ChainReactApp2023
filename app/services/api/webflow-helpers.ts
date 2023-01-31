@@ -168,6 +168,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         subheading: schedule.talk?.description,
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
         id: schedule._id,
+        talkUrl: schedule.talk["talk-url"],
       }
     case "Speaker Panel":
       return {
@@ -179,6 +180,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         subheading: "",
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
         id: schedule._id,
+        talkUrl: schedule.talk?.["talk-url"],
       }
     case "Workshop":
       // eslint-disable-next-line no-case-declarations

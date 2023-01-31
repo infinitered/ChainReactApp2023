@@ -70,6 +70,10 @@ const en = {
   talkDetailsScreen: {
     watchTalk: "Watch talk",
   },
+  scheduleScreen: {
+    talkRecordingPosted: "Talk recording posted",
+    videoComingSoon: "Video coming soon",
+  },
 }
 
 export default en
