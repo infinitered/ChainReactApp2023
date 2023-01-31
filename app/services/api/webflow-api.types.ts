@@ -71,12 +71,14 @@ export interface RawTalk extends Item {
   "talk-type": string
   description?: string
   year: string
+  "talk-url"?: string
 }
 
 export interface Talk extends Item {
   "speaker-s": Speaker[]
   "talk-type"?: "Talk" | "Speaker Panel" | "Emcee"
   description?: string
+  "talk-url"?: string
 }
 
 export interface RawVenue extends Item {

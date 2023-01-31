@@ -2,7 +2,18 @@ import React, { FC } from "react"
 import { ViewStyle, View, TextStyle, ImageStyle, Image, Dimensions } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Text, Tag, IconButton, MIN_HEADER_HEIGHT, BoxShadow, Screen } from "../../components"
+import {
+  Text,
+  Tag,
+  IconButton,
+  MIN_HEADER_HEIGHT,
+  BoxShadow,
+  Screen,
+  Button,
+  FloatingButton,
+  useFloatingButtonEvents,
+  Icon,
+} from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
@@ -53,6 +64,10 @@ export interface TalkDetailsProps {
    * The bio of the speaker
    */
   bio: string
+  /**
+   * The url of the talk
+   */
+  talkUrl?: string
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
@@ -78,6 +93,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         description: talk?.description,
         firstName: talk?.["speaker-s"][0]["speaker-first-name"],
         bio: talk?.["speaker-s"][0]["speaker-bio"],
+        talkUrl: talk?.["talk-url"],
       }
     case "Workshop":
     default:
@@ -115,10 +131,22 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
 
+  const { isScrolling, ...handlers } = useFloatingButtonEvents()
+
   if (!schedule) return null
 
-  const { bio, company, description, firstName, fullName, imageUrl, subtitle, title, variant } =
-    talkDetailsProps(schedule)
+  const {
+    bio,
+    company,
+    description,
+    firstName,
+    fullName,
+    imageUrl,
+    subtitle,
+    title,
+    variant,
+    talkUrl,
+  } = talkDetailsProps(schedule)
 
   const isWorkshop = variant === "workshop"
 
@@ -131,6 +159,8 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
         scrollEventThrottle={16}
         onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
+        onMomentumScrollEnd
+        {...handlers}
       >
         <View style={$container}>
           <View style={$headingContainer}>
@@ -189,6 +219,19 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
         </View>
       </Animated.ScrollView>
+      {talkUrl && (
+        <FloatingButton isScrolling={isScrolling}>
+          <Button
+            testID="see-the-schedule-button"
+            text="Watch talk"
+            LeftAccessory={(props) => (
+              <Icon icon="play" color={colors.palette.neutral900} {...props} />
+            )}
+            TextProps={{ allowFontScaling: false }}
+            onPress={() => onPress(talkUrl)}
+          />
+        </FloatingButton>
+      )}
     </Screen>
   )
 }
