@@ -164,8 +164,8 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
         startTime: schedule["day-time"],
         eventTitle: schedule.type,
-        heading: schedule.talk?.name,
-        subheading: schedule.talk?.description,
+        heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
+        subheading: schedule.talk?.name,
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
         id: schedule._id,
       }
