@@ -47,10 +47,10 @@ const isMyComponent = (children) =>
   )
 
 const FloatingButton = ({ children, isScrolling }: Props) => {
+  // TODO Experimental (not sure if I will do this...)
   if (!isMyComponent(children)) {
     throw new Error(`FloatingButton must have a ${Button.name} as a child`)
   }
-
   if (isScrolling) return null
 
   return (
