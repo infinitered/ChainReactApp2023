@@ -13,6 +13,7 @@ import {
   FloatingButton,
   useFloatingButtonEvents,
   Icon,
+  AutoImage,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
@@ -21,8 +22,9 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
-import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { isFuture, parseISO } from "date-fns"
+import { ScheduledEvent, RawSpeaker } from "../../services/api/webflow-api.types"
+import { translate } from "../../i18n"
 
 export type Variants = "workshop" | "talk"
 
@@ -73,6 +75,11 @@ export interface TalkDetailsProps {
    * The time of the event
    */
   eventTime: string
+  /**
+   * The assistants of the workshop
+   * Only available for workshops
+   */
+  assistants?: RawSpeaker[]
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
@@ -116,6 +123,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         firstName: workshop?.["instructor-info"]["speaker-first-name"],
         bio: workshop?.["instructor-info"]["speaker-bio"],
         eventTime: schedule["day-time"],
+        assistants: workshop?.assistants,
       }
   }
 }
@@ -154,6 +162,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     variant,
     talkUrl,
     eventTime,
+    assistants,
   } = talkDetailsProps(schedule)
 
   const isWorkshop = variant === "workshop"
@@ -227,6 +236,38 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
             <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
           </View>
+
+          {assistants?.length && (
+            <View style={$assistantContainer}>
+              <Text
+                preset="listHeading"
+                text={translate("talkDetailsScreen.assistingTheWorkshop")}
+                style={$assistantHeading}
+              />
+              <View
+                style={
+                  assistants.length < 2 ? $assistantsContainerWithOne : $assistantsContainerWithMore
+                }
+              >
+                {assistants.map((assistant) => (
+                  <View style={$assistant} key={assistant._id}>
+                    <AutoImage
+                      source={{ uri: assistant["speaker-photo"].url }}
+                      style={$assistantImage}
+                    />
+                    <Text preset="companionHeading" text={assistant.name} />
+                    <Text preset="label" style={$assistantCompany} text={assistant.company} />
+                    <View style={$assistantLinks}>
+                      <IconButton
+                        icon={assistant.twitter ? "twitter" : "link"}
+                        onPress={() => onPress(assistant.twitter || assistant.website)}
+                      />
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          )}
         </View>
       </Animated.ScrollView>
       {talkUrl && isEventPassed && (
@@ -347,4 +388,46 @@ const $subtitle: TextStyle = {
 
 const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
+}
+
+const $assistantsContainerWithOne: ViewStyle = {
+  flexDirection: "row",
+  marginStart: spacing.large,
+}
+
+const $assistantsContainerWithMore: ViewStyle = {
+  flexDirection: "row",
+  justifyContent: "space-around",
+}
+
+const $assistantContainer: ViewStyle = {
+  marginTop: spacing.large,
+  marginBottom: spacing.huge,
+}
+
+const $assistant: ViewStyle = {
+  alignItems: "center",
+}
+
+const $assistantHeading: TextStyle = {
+  marginVertical: spacing.large,
+}
+
+const $assistantImage: ImageStyle = {
+  height: 90,
+  width: 90,
+  aspectRatio: 1,
+  borderRadius: 100,
+  marginBottom: spacing.large,
+}
+
+const $assistantCompany: TextStyle = {
+  marginTop: spacing.tiny,
+  color: colors.palette.primary500,
+  textTransform: "uppercase",
+}
+
+const $assistantLinks: ViewStyle = {
+  flexDirection: "row",
+  marginTop: spacing.large,
 }

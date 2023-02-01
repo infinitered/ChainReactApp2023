@@ -32,7 +32,6 @@ const Header = ({ endTime, formattedStartTime, title, isPast }: HeaderProps) => 
 )
 
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
-  console.log(variant)
   return (
     <View style={$footerContainer}>
       <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>

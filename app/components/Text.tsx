@@ -155,6 +155,13 @@ const $presets = {
 
   navHeader: [$baseSecondaryStyle, $sizeStyles.sm, $secondaryFontWeightStyles.medium],
 
+  listHeading: [
+    $baseSecondaryStyle,
+    $sizeStyles.sm,
+    $secondaryFontWeightStyles.bold,
+    { letterSpacing: letterSpacing(8) },
+  ],
+
   label: [
     $baseSecondaryStyle,
     $sizeStyles.xxs,

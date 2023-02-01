@@ -69,6 +69,7 @@ const en = {
   },
   talkDetailsScreen: {
     watchTalk: "Watch talk",
+    assistingTheWorkshop: "Assisting the workshop",
   },
   scheduleScreen: {
     talkRecordingPosted: "Talk recording posted",
