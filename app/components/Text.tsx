@@ -146,6 +146,19 @@ const $presets = {
   tag: [$baseSecondaryStyle, $sizeStyles.xs, $secondaryFontWeightStyles.medium],
 
   navHeader: [$baseSecondaryStyle, $sizeStyles.sm, $secondaryFontWeightStyles.medium],
+
+  listHeading: [$baseSecondaryStyle, $sizeStyles.sm, $secondaryFontWeightStyles.bold],
+
+  label: [
+    $baseSecondaryStyle,
+    $sizeStyles.xxs,
+    $secondaryFontWeightStyles.medium,
+    /*
+     * If this is true... https://forum.figma.com/t/letter-spacing-should-not-be-percentage-based/3062/13
+     * then 0.01em is 1%, than the size would be 16/100=0.16 pixels which means letter spacing would be 1.28 when converted.
+     */
+    { letterSpacing: 1.28 },
+  ],
 }
 
 const $rtlStyle: TextStyle = isRTL ? { writingDirection: "rtl" } : {}
