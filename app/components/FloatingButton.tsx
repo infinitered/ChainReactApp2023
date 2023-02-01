@@ -51,9 +51,10 @@ const FloatingButton = ({ children, isScrolling }: Props) => {
   if (!isMyComponent(children)) {
     throw new Error(`FloatingButton must have a ${Button.name} as a child`)
   }
-  if (isScrolling) return null
 
   const { bottom } = useSafeAreaInsets()
+
+  if (isScrolling) return null
 
   return (
     <Animated.View
