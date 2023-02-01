@@ -53,9 +53,7 @@ export const SPACER_WIDTH = (width - CAROUSEL_IMAGE_WIDTH) / 2
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
 
 const openLink = (destination: string) =>
-  destination.startsWith("http") || destination.startsWith("https")
-    ? openLinkInBrowser(destination)
-    : openMap(destination)
+  destination.startsWith("http") ? openLinkInBrowser(destination) : openMap(destination)
 
 export function Carousel(props: CarouselProps) {
   const { data = [] } = props

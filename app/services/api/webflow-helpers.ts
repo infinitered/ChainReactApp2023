@@ -131,8 +131,6 @@ export const createScheduleScreenData = (): ScheduleList => {
 }
 
 const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps => {
-  console.tron.log("scheduleData", schedule)
-
   switch (schedule.type) {
     case "Recurring":
       return {
