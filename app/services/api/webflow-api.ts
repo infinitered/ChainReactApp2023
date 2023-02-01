@@ -1,20 +1,22 @@
 import { useQuery } from "@tanstack/react-query"
 import { axiosInstance, PaginatedItems } from "./axios"
 import type {
+  RawRecommendations,
   RawRecurringEvents,
   RawScheduledEvent,
-  RawSpeakerName,
   RawSpeaker,
+  RawSpeakerName,
   RawSponsor,
   RawTalk,
-  RawWorkshop,
   RawVenue,
+  RawWorkshop,
 } from "./webflow-api.types"
 import {
+  RECOMMENDATIONS,
   RECURRING_EVENTS,
   SCHEDULE,
-  SPEAKERS,
   SPEAKER_NAMES,
+  SPEAKERS,
   SPONSORS,
   TALKS,
   VENUES,
@@ -34,12 +36,12 @@ const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
     enabled,
   })
 
-export const useVenues = () => {
-  return useWebflowAPI<RawVenue>(VENUES.key, VENUES.collectionId)
+export const useRecommendations = () => {
+  return useWebflowAPI<RawRecommendations>(RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId)
 }
 
-export const useSponsors = () => {
-  return useWebflowAPI<RawSponsor>(SPONSORS.key, SPONSORS.collectionId)
+export const useRecurringEvents = () => {
+  return useWebflowAPI<RawRecurringEvents>(RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId)
 }
 
 export const useSpeakers = () => {
@@ -50,16 +52,20 @@ export const useSpeakerNames = () => {
   return useWebflowAPI<RawSpeakerName>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
 }
 
-export const useWorkshops = () => {
-  return useWebflowAPI<RawWorkshop>(WORKSHOPS.key, WORKSHOPS.collectionId)
-}
-
-export const useRecurringEvents = () => {
-  return useWebflowAPI<RawRecurringEvents>(RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId)
+export const useSponsors = () => {
+  return useWebflowAPI<RawSponsor>(SPONSORS.key, SPONSORS.collectionId)
 }
 
 export const useTalks = () => {
   return useWebflowAPI<RawTalk>(TALKS.key, TALKS.collectionId)
+}
+
+export const useVenues = () => {
+  return useWebflowAPI<RawVenue>(VENUES.key, VENUES.collectionId)
+}
+
+export const useWorkshops = () => {
+  return useWebflowAPI<RawWorkshop>(WORKSHOPS.key, WORKSHOPS.collectionId)
 }
 
 export const useScheduledEvents = () => {

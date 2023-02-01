@@ -30,6 +30,12 @@ const en = {
       button: "Let's try this again",
     },
   },
+  exploreScreen: {
+    title: "Explore",
+    nearbyFoodAndDrink: "Nearby food and drink",
+    downtownArtMurals: "Downtown art murals",
+    exploreNeighborhoods: "Explore neighborhoods",
+  },
   tabNavigator: {
     scheduleTab: "Schedule",
     venueTab: "Venue",
