@@ -44,11 +44,7 @@ const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
 )
 
 const FoodAndDrink = ({ item }) => {
-  return (
-    <View style={$carousel}>
-      <Carousel preset="dynamic" data={item} />
-    </View>
-  )
+  return <Carousel preset="dynamic" data={item} />
 }
 
 const ArtMurals = ({ item }) => {
