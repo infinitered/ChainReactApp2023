@@ -170,106 +170,111 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const isEventPassed = !isFuture(parseISO(eventTime))
 
   return (
-    <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
-      <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
+    <>
+      <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
+        <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
 
-      <Animated.ScrollView
-        style={[$scrollView, { paddingBottom }]}
-        scrollEventThrottle={16}
-        onScroll={scrollHandler}
-        showsVerticalScrollIndicator={false}
-        onMomentumScrollEnd
-        {...handlers}
-      >
-        <View style={$container}>
-          <View style={$headingContainer}>
-            <Text
-              preset="screenHeading"
-              style={$title}
-              text={title}
-              onLayout={({
-                nativeEvent: {
-                  layout: { height },
-                },
-              }) => {
-                setHeadingHeight(height)
-              }}
-            />
-            <Text preset="companionHeading" style={$subtitle} text={subtitle} />
-          </View>
-          <View style={$containerSpacing}>
-            <Image
-              source={isWorkshop ? workshopCurve : talkCurve}
-              style={isWorkshop ? $workshopCurve : $talkCurve}
-            />
-            <BoxShadow
-              preset={isWorkshop ? "bold" : "primary"}
-              style={$containerSpacing}
-              offset={6}
-            >
-              <Image source={{ uri: imageUrl }} style={$speakerImage} />
-            </BoxShadow>
-            <Image
-              source={isWorkshop ? workshopBlob : talkBlob}
-              style={isWorkshop ? $workshopBlob : $talkBlob}
-            />
-
-            <Text preset="bold" style={$nameText} text={fullName} />
-            <Text style={$companyNameText} text={company} />
-          </View>
-
-          <View style={$detailsContainer}>
-            <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
-            {isWorkshop && (
-              <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
-            )}
-            <Text style={$bodyText} text={description} />
-          </View>
-
-          <View style={$containerSpacing}>
-            <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
-            <Text style={$bodyText} text={bio} />
-          </View>
-
-          <View style={$linksContainer}>
-            <IconButton icon="twitter" onPress={() => onPress("https://cr.infinite.red")} />
-            <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
-            <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
-          </View>
-
-          {assistants?.length && (
-            <View style={$assistantContainer}>
+        <Animated.ScrollView
+          style={[$scrollView, { paddingBottom }]}
+          scrollEventThrottle={16}
+          onScroll={scrollHandler}
+          showsVerticalScrollIndicator={false}
+          onMomentumScrollEnd
+          {...handlers}
+        >
+          <View style={$container}>
+            <View style={$headingContainer}>
               <Text
-                preset="listHeading"
-                text={translate("talkDetailsScreen.assistingTheWorkshop")}
-                style={$assistantHeading}
+                preset="screenHeading"
+                style={$title}
+                text={title}
+                onLayout={({
+                  nativeEvent: {
+                    layout: { height },
+                  },
+                }) => {
+                  setHeadingHeight(height)
+                }}
               />
-              <View
-                style={
-                  assistants.length < 2 ? $assistantsContainerWithOne : $assistantsContainerWithMore
-                }
-              >
-                {assistants.map((assistant) => (
-                  <View style={$assistant} key={assistant._id}>
-                    <AutoImage
-                      source={{ uri: assistant["speaker-photo"].url }}
-                      style={$assistantImage}
-                    />
-                    <Text preset="companionHeading" text={assistant.name} />
-                    <Text preset="label" style={$assistantCompany} text={assistant.company} />
-                    <View style={$assistantLinks}>
-                      <IconButton
-                        icon={assistant.twitter ? "twitter" : "link"}
-                        onPress={() => onPress(assistant.twitter || assistant.website)}
-                      />
-                    </View>
-                  </View>
-                ))}
-              </View>
+              <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
-          )}
-        </View>
-      </Animated.ScrollView>
+            <View style={$containerSpacing}>
+              <Image
+                source={isWorkshop ? workshopCurve : talkCurve}
+                style={isWorkshop ? $workshopCurve : $talkCurve}
+              />
+              <BoxShadow
+                preset={isWorkshop ? "bold" : "primary"}
+                style={$containerSpacing}
+                offset={6}
+              >
+                <Image source={{ uri: imageUrl }} style={$speakerImage} />
+              </BoxShadow>
+              <Image
+                source={isWorkshop ? workshopBlob : talkBlob}
+                style={isWorkshop ? $workshopBlob : $talkBlob}
+              />
+
+              <Text preset="bold" style={$nameText} text={fullName} />
+              <Text style={$companyNameText} text={company} />
+            </View>
+
+            <View style={$detailsContainer}>
+              <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
+              {isWorkshop && (
+                <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
+              )}
+              <Text style={$bodyText} text={description} />
+            </View>
+
+            <View style={$containerSpacing}>
+              <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
+              <Text style={$bodyText} text={bio} />
+            </View>
+
+            <View style={$linksContainer}>
+              <IconButton icon="twitter" onPress={() => onPress("https://cr.infinite.red")} />
+              <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
+              <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
+            </View>
+
+            {assistants?.length && (
+              <View style={$assistantContainer}>
+                <Text
+                  preset="listHeading"
+                  text={translate("talkDetailsScreen.assistingTheWorkshop")}
+                  style={$assistantHeading}
+                />
+                <View
+                  style={
+                    assistants.length < 2
+                      ? $assistantsContainerWithOne
+                      : $assistantsContainerWithMore
+                  }
+                >
+                  {assistants.map((assistant) => (
+                    <View style={$assistant} key={assistant._id}>
+                      <AutoImage
+                        source={{ uri: assistant["speaker-photo"].url }}
+                        style={$assistantImage}
+                      />
+                      <Text preset="companionHeading" text={assistant.name} />
+                      <Text preset="label" style={$assistantCompany} text={assistant.company} />
+                      <View style={$assistantLinks}>
+                        <IconButton
+                          icon={assistant.twitter ? "twitter" : "link"}
+                          onPress={() => onPress(assistant.twitter || assistant.website)}
+                        />
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+        </Animated.ScrollView>
+      </Screen>
+
       {talkUrl && isEventPassed && (
         <FloatingButton isScrolling={isScrolling}>
           <Button
@@ -283,7 +288,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           />
         </FloatingButton>
       )}
-    </Screen>
+    </>
   )
 }
 

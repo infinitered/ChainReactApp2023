@@ -1,7 +1,7 @@
 import React from "react"
 import { Dimensions, ViewStyle } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { spacing } from "../theme"
 import { Button } from "./Button"
 
@@ -53,20 +53,23 @@ const FloatingButton = ({ children, isScrolling }: Props) => {
   }
   if (isScrolling) return null
 
+  const { bottom } = useSafeAreaInsets()
+
   return (
-    <SafeAreaView edges={["bottom"]} style={$floatingButton}>
-      <Animated.View entering={FadeInDown.delay(500)} exiting={FadeOutDown}>
-        {children}
-      </Animated.View>
-    </SafeAreaView>
+    <Animated.View
+      entering={FadeInDown.delay(500)}
+      exiting={FadeOutDown}
+      style={[$floatingButton, { bottom: bottom || spacing.large }]}
+    >
+      {children}
+    </Animated.View>
   )
 }
 
 const $floatingButton: ViewStyle = {
   position: "absolute",
-  bottom: spacing.large,
-  width: Dimensions.get("window").width,
-  paddingHorizontal: spacing.large,
+  width: Dimensions.get("window").width - spacing.large * 2,
+  marginLeft: spacing.large,
 }
 
 export { FloatingButton }
