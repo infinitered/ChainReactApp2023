@@ -191,7 +191,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     return {
       opacity: scrollButtonOpacity.value,
     }
-  }, [eventIndex, scheduleIndex])
+  })
 
   const $arrowStyle = useAnimatedStyle(
     () => ({
@@ -206,7 +206,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
         },
       ],
     }),
-    [eventIndex],
+    [eventIndex, scheduleIndex],
   )
 
   if (!selectedSchedule) return null
@@ -227,6 +227,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             pagingEnabled
             onScroll={scrollHandler}
             onViewableItemsChanged={handleViewableScheduleIndexChanged}
+            viewabilityConfig={{
+              itemVisiblePercentThreshold: 100,
+            }}
             bounces={false}
             scrollEventThrottle={16}
             decelerationRate="fast"
@@ -275,7 +278,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                       </View>
                     )
                   }}
-                  initialScrollIndex={eventIndex}
                   // To achieve better performance, specify the type based on the item
                   getItemType={(item) => item.variant}
                   estimatedItemSize={225}
