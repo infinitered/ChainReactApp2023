@@ -46,7 +46,7 @@ const $innerContainer: ViewStyle = {
   minHeight: 31,
   borderRadius: 100,
   borderWidth: 1,
-  borderColor: colors.palette.neutral900,
+  borderColor: colors.palette.neutral800,
   justifyContent: "center",
   alignItems: "center",
   flexDirection: "row",
@@ -56,7 +56,7 @@ const $innerContainer: ViewStyle = {
 }
 
 const $baseText: TextStyle = {
-  color: colors.palette.neutral500,
+  color: colors.palette.neutral700,
   textAlign: "center",
   flexShrink: 1,
   flexGrow: 0,
@@ -66,7 +66,7 @@ const $baseText: TextStyle = {
 const $baseShadow: ViewStyle = {
   paddingBottom: spacing.micro,
   borderRadius: 100,
-  borderColor: colors.palette.neutral900,
+  borderColor: colors.palette.neutral800,
   backgroundColor: colors.palette.secondary500,
   width: "50%",
 }
