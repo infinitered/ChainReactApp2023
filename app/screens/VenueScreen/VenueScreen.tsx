@@ -1,5 +1,12 @@
 import React, { FC } from "react"
-import { SectionList, SectionListData, TextStyle, View, ViewStyle } from "react-native"
+import {
+  ActivityIndicator,
+  SectionList,
+  SectionListData,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import { Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
@@ -35,8 +42,8 @@ const SponsorSection = ({ item }) => {
   )
 }
 
-const useVenueSections = (): SectionListData<any>[] => {
-  const { data: sponsors = [] } = useSponsors()
+const useVenueSections = (): { isLoading: boolean; sections: SectionListData<any>[] } => {
+  const { data: sponsors = [], isLoading: sponsorsLoading } = useSponsors()
   const rawTiers = groupBy("sponsor-tier")(sponsors)
   const tiers = Object.keys(rawTiers).reduce<Record<Tiers, RawSponsor[]>>(
     (acc, tier) => ({
@@ -45,76 +52,89 @@ const useVenueSections = (): SectionListData<any>[] => {
     }),
     initialTiers,
   )
-  const { data: venues } = useVenues()
+  const { data: venues = [], isLoading: venuesLoading } = useVenues()
 
-  return [
-    {
-      title: translate("venueScreen.conferenceAndWorkshopVenues"),
-      renderItem: Workshops,
-      data: [
-        venues?.map((venue) => ({
-          image: { uri: venue["venue-image-s"][0]?.url },
-          subtitle: venue.name,
-          meta: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${
-            WEBFLOW_MAP.venueTag[venue.tag] === "Workshop" ? "May 17" : "May 18-19"
-          }`,
-          body: `${venue["street-address"]}\n${venue["city-state-zip"]}`,
-          leftButton: {
-            text: "Open in maps",
-            link: `${venue["street-address"]},${venue["city-state-zip"]}`,
-          },
-        })),
-      ],
-    },
-    {
-      title: translate("venueScreen.thanksToThisYearsSponsors"),
-      renderItem: SponsorSection,
-      data: [
-        ...(["Platinum", "Gold"] as const).flatMap((tier) =>
-          tiers[tier].map((sponsor) => ({
-            sponsor: sponsor.name,
-            tier,
-            promoSummary: sponsor["promo-summary"],
-            externalURL: sponsor["external-url"],
-            logo: {
-              uri: sponsor.logo.url,
+  return {
+    isLoading: sponsorsLoading || venuesLoading,
+    sections: [
+      {
+        title: translate("venueScreen.conferenceAndWorkshopVenues"),
+        renderItem: Workshops,
+        data: [
+          venues?.map((venue) => ({
+            image: { uri: venue["venue-image-s"][0]?.url },
+            subtitle: venue.name,
+            meta: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${
+              WEBFLOW_MAP.venueTag[venue.tag] === "Workshop" ? "May 17" : "May 18-19"
+            }`,
+            body: `${venue["street-address"]}\n${venue["city-state-zip"]}`,
+            leftButton: {
+              text: "Open in maps",
+              link: `${venue["street-address"]},${venue["city-state-zip"]}`,
             },
           })),
-        ),
-        ...(["Silver", "Bronze", "Other"] as const).map((tier) => ({
-          tier,
-          sponsorImages: tiers[tier].map((sponsor) => ({
-            sponsor: sponsor.name,
-            uri: sponsor.logo.url,
+        ],
+      },
+      {
+        title: translate("venueScreen.thanksToThisYearsSponsors"),
+        renderItem: SponsorSection,
+        data: [
+          ...(["Platinum", "Gold"] as const).flatMap((tier) =>
+            tiers[tier].map((sponsor) => ({
+              sponsor: sponsor.name,
+              tier,
+              promoSummary: sponsor["promo-summary"],
+              externalURL: sponsor["external-url"],
+              logo: {
+                uri: sponsor.logo.url,
+              },
+            })),
+          ),
+          ...(["Silver", "Bronze", "Other"] as const).map((tier) => ({
+            tier,
+            sponsorImages: tiers[tier].map((sponsor) => ({
+              sponsor: sponsor.name,
+              uri: sponsor.logo.url,
+            })),
           })),
-        })),
-      ],
-    },
-  ]
+        ],
+      },
+    ],
+  }
 }
 
 export const VenueScreen: FC<TabScreenProps<"Venue">> = () => {
   useHeader({ title: translate("venueScreen.title") })
 
-  const sections = useVenueSections()
+  const { sections, isLoading } = useVenueSections()
 
   return (
     <Screen style={$root} preset="fixed">
-      <SectionList
-        showsVerticalScrollIndicator={false}
-        stickySectionHeadersEnabled={false}
-        sections={sections}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text preset="screenHeading" style={$heading}>
-            {title}
-          </Text>
-        )}
-      />
+      {isLoading && (
+        <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
+      )}
+      {!isLoading && sections.length > 0 && (
+        <SectionList
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
+          sections={sections}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text preset="screenHeading" style={$heading}>
+              {title}
+            </Text>
+          )}
+        />
+      )}
     </Screen>
   )
 }
 
 const $root: ViewStyle = {
+  flex: 1,
+  alignItems: "center",
+}
+
+const $activityIndicator: ViewStyle = {
   flex: 1,
 }
 
