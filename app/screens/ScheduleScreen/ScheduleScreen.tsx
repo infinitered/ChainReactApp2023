@@ -16,7 +16,6 @@ import Animated, {
   withSpring,
   useDerivedValue,
   interpolate,
-  Extrapolate,
 } from "react-native-reanimated"
 import { useIsFocused } from "@react-navigation/native"
 import { TabScreenProps } from "../../navigators/TabNavigator"
@@ -69,7 +68,10 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     )
   }, [])
 
+  // Uncomment this after testing
   // const date = new Date()
+
+  // Remove this after testing
   const date = new Date("2023-05-18T16:30:00.000Z")
   const scheduleIndex = getCurrentScheduleIndex(schedules, new Date(date))
   const schedule = schedules[scheduleIndex]
@@ -137,6 +139,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
   useEffect(() => {
     if (eventIndex > -1) {
+      currentEventIndex.value = eventIndex
       navigateToCurrentEvent()
     }
   }, [eventIndex, scheduleIndex])
@@ -162,6 +165,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [isFocused],
   )
 
+  const currentEventIndex = useSharedValue(-1)
   const currentlyViewingEvents = useSharedValue<number[]>([])
   const currentlyViewingSchedule = useSharedValue(0)
 
@@ -180,34 +184,28 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const scrollButtonOpacity = useDerivedValue(() => {
     return withSpring(
       scheduleIndex === currentlyViewingSchedule.value &&
-        eventIndex > -1 &&
-        currentlyViewingEvents.value[0] !== eventIndex
+        currentEventIndex.value > -1 &&
+        currentlyViewingEvents.value[0] !== currentEventIndex.value
         ? 1
         : 0,
     )
-  }, [eventIndex, scheduleIndex])
+  }, [scheduleIndex])
 
-  const $scrollButtonStyle = useAnimatedStyle(() => {
-    return {
-      opacity: scrollButtonOpacity.value,
-    }
-  })
+  const $scrollButtonStyle = useAnimatedStyle(() => ({
+    opacity: scrollButtonOpacity.value,
+  }))
 
-  const $arrowStyle = useAnimatedStyle(
-    () => ({
-      transform: [
-        {
-          rotate: `${interpolate(
-            Number(Math.min(...currentlyViewingEvents.value) > eventIndex),
-            [0, 1],
-            [0, 180],
-            Extrapolate.EXTEND,
-          )}deg`,
-        },
-      ],
-    }),
-    [eventIndex, scheduleIndex],
-  )
+  const $arrowStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        rotate: `${interpolate(
+          Number(Math.min(...currentlyViewingEvents.value) > currentEventIndex.value),
+          [0, 1],
+          [0, 180],
+        )}deg`,
+      },
+    ],
+  }))
 
   if (!selectedSchedule) return null
 
@@ -227,9 +225,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             pagingEnabled
             onScroll={scrollHandler}
             onViewableItemsChanged={handleViewableScheduleIndexChanged}
-            viewabilityConfig={{
-              itemVisiblePercentThreshold: 100,
-            }}
             bounces={false}
             scrollEventThrottle={16}
             decelerationRate="fast"
