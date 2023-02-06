@@ -140,7 +140,7 @@ function App(props: AppProps) {
 export default App
 
 const $toast: ViewStyle = {
-  backgroundColor: colors.palette.neutral300,
+  backgroundColor: colors.palette.neutral400,
   borderLeftWidth: 0,
   borderRadius: spacing.extraSmall,
   width: Dimensions.get("window").width - spacing.extraSmall * 2,

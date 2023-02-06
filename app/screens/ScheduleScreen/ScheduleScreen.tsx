@@ -173,7 +173,11 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                         ? () => navigation.navigate("TalkDetails")
                         : undefined
 
-                    const isPast = isBefore(new Date(startTime), new Date())
+                    const tempTime = "2023-05-18T20:30:00.000Z"
+                    // TODO: Remove tempTime and the line below after testing
+                    const isPast = isBefore(new Date(startTime), new Date(tempTime))
+
+                    // const isPast = isBefore(new Date(startTime), new Date())
 
                     return (
                       <View style={$cardContainer}>

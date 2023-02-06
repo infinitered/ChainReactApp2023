@@ -67,7 +67,7 @@ const $offsetPresets = {
     {
       backgroundColor: colors.palette.primary500,
       tintColor: colors.palette.secondary500,
-      borderColor: colors.palette.neutral500,
+      borderColor: colors.palette.neutral700,
       borderWidth: 1,
     },
   ] as StyleProp<ImageStyle>,
@@ -75,16 +75,16 @@ const $offsetPresets = {
   secondary: [
     {
       tintColor: colors.palette.secondary500,
-      borderColor: colors.palette.neutral300,
+      borderColor: colors.palette.neutral400,
       borderWidth: 1,
     },
   ] as StyleProp<ImageStyle>,
 
   reversed: [
     {
-      borderColor: colors.palette.neutral300,
+      borderColor: colors.palette.neutral400,
       borderWidth: 1,
-      tintColor: colors.palette.neutral300,
+      tintColor: colors.palette.neutral400,
     },
   ] as StyleProp<ImageStyle>,
 
@@ -92,7 +92,7 @@ const $offsetPresets = {
     {
       backgroundColor: colors.palette.bold500,
       tintColor: colors.palette.highlight500,
-      borderColor: colors.palette.neutral500,
+      borderColor: colors.palette.neutral700,
       borderWidth: 1,
     },
   ] as StyleProp<ImageStyle>,

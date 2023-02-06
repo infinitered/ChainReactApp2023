@@ -123,7 +123,7 @@ const $container: ViewStyle = {
 }
 
 const $heading: TextStyle = {
-  backgroundColor: colors.palette.neutral500,
+  backgroundColor: colors.palette.neutral700,
   marginTop: spacing.extraLarge,
   paddingHorizontal: spacing.large,
 }
