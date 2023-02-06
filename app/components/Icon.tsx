@@ -98,6 +98,7 @@ export const iconRegistry = {
   schedule: require("../../assets/icons/schedule.png"),
   twitter: require("../../assets/icons/twitter.png"),
   venue: require("../../assets/icons/venue.png"),
+  youtube: require("../../assets/icons/youtube.png"),
 }
 
 const $imageStyle: ImageStyle = {
