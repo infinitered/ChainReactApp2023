@@ -276,7 +276,7 @@ const $containerPresets = {
     $containerBase,
     {
       backgroundColor: colors.palette.neutral100,
-      borderColor: colors.palette.neutral500,
+      borderColor: colors.palette.neutral700,
     },
   ] as StyleProp<ViewStyle>,
 
@@ -287,12 +287,12 @@ const $containerPresets = {
 
   pastDefault: [
     $containerBase,
-    { backgroundColor: colors.palette.neutral500, borderColor: colors.palette.neutral300 },
+    { backgroundColor: colors.palette.neutral700, borderColor: colors.palette.neutral400 },
   ] as StyleProp<ViewStyle>,
 
   pastReversed: [
     $containerBase,
-    { backgroundColor: colors.palette.neutral300, borderColor: colors.palette.neutral300 },
+    { backgroundColor: colors.palette.neutral400, borderColor: colors.palette.neutral400 },
   ] as StyleProp<ViewStyle>,
 }
 

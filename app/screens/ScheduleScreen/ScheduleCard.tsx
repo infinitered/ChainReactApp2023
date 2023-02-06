@@ -209,7 +209,7 @@ const $avatar: ViewStyle = {
 }
 
 const $footerSubheading: TextStyle = {
-  color: colors.palette.neutral900,
+  color: colors.palette.neutral800,
 }
 
 const $pastFooterSubheading: TextStyle = {
@@ -217,7 +217,7 @@ const $pastFooterSubheading: TextStyle = {
 }
 
 const $timeText: TextStyle = {
-  color: colors.palette.neutral900,
+  color: colors.palette.neutral800,
   marginBottom: spacing.large,
 }
 
@@ -237,7 +237,7 @@ const $pastTitleText: TextStyle = {
 }
 
 const $contentText: TextStyle = {
-  color: colors.palette.neutral500,
+  color: colors.palette.neutral700,
   paddingTop: 10,
 }
 
@@ -247,7 +247,7 @@ const $pastContentText: TextStyle = {
 }
 
 const $footerHeading: TextStyle = {
-  color: colors.palette.neutral900,
+  color: colors.palette.neutral800,
   marginBottom: spacing.extraSmall,
 }
 
