@@ -36,6 +36,7 @@ export interface Schedule {
   events: ScheduleCardProps[]
 }
 
+const BUTTON_HEIGHT = 48
 const { width } = Dimensions.get("window")
 
 /** Get the current time's event index */
@@ -68,14 +69,11 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     )
   }, [])
 
-  // Uncomment this after testing
-  // const date = new Date()
+  const date = new Date()
 
-  // Remove this after testing
-  const date = new Date("2023-05-18T16:30:00.000Z")
-  const scheduleIndex = getCurrentScheduleIndex(schedules, new Date(date))
+  const scheduleIndex = getCurrentScheduleIndex(schedules, date)
   const schedule = schedules[scheduleIndex]
-  const eventIndex = getCurrentEventIndex(schedule, new Date(date))
+  const eventIndex = getCurrentEventIndex(schedule, date)
 
   const scrollX = useSharedValue(0)
   const isFocused = useIsFocused()
@@ -282,6 +280,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                   }
                   scrollEventThrottle={16}
                   onViewableItemsChanged={handleViewableEventIndexChanged}
+                  viewabilityConfig={{
+                    itemVisiblePercentThreshold: 50,
+                  }}
                 />
               </View>
             )}
@@ -322,13 +323,13 @@ const $container: ViewStyle = {
 }
 
 const $list: ContentStyle = {
-  paddingTop: 48 + spacing.extraLarge + spacing.extraSmall,
-  paddingBottom: 48 + spacing.medium,
+  paddingTop: BUTTON_HEIGHT + spacing.extraLarge + spacing.extraSmall,
+  paddingBottom: BUTTON_HEIGHT + spacing.medium,
 }
 
 const $listWithoutButton: ContentStyle = {
   paddingTop: spacing.extraLarge,
-  paddingBottom: 48 + spacing.medium,
+  paddingBottom: BUTTON_HEIGHT + spacing.medium,
 }
 
 const $cardContainer: ViewStyle = {
@@ -342,7 +343,7 @@ const $scrollButtonContainer: ViewStyle = {
 }
 
 const $scrollButton: ViewStyle = {
-  borderColor: colors.palette.primary300,
+  borderColor: colors.palette.primary200,
   marginTop: spacing.extraSmall,
   paddingVertical: spacing.small,
 }
