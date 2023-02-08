@@ -5,7 +5,7 @@ import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
 
 interface HeaderProps {
-  endTime?: string
+  formattedEndTime?: string
   formattedStartTime: string
   title: string
   isPast?: boolean
@@ -17,11 +17,11 @@ interface FooterProps {
   isPast?: boolean
 }
 
-const Header = ({ endTime, formattedStartTime, title, isPast }: HeaderProps) => (
+const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderProps) => (
   <View style={$headerContainer}>
     <Text style={isPast ? $pastTimeText : $timeText}>
       {formattedStartTime}
-      {!!endTime && ` - ${endTime}`}
+      {!!formattedEndTime && ` - ${formattedEndTime}`}
     </Text>
     <Text preset="eventTitle" style={isPast ? $pastTitleText : $titleText}>
       {title}
@@ -48,7 +48,7 @@ export interface ScheduleCardProps {
    */
   variant?: Variants
   /**
-   * Start time of the event formatted as "hh:mm aaa"
+   * Start time of the event formatted as "h:mm aaa"
    */
   formattedStartTime: string
   /**
@@ -58,7 +58,7 @@ export interface ScheduleCardProps {
   /**
    * End time of the recurring event
    */
-  endTime?: string
+  formattedEndTime?: string
   /**
    * The event title
    */
@@ -100,7 +100,7 @@ interface SpeakingEventProps {
 
 interface BaseEventProps {
   formattedStartTime: string
-  endTime?: string
+  formattedEndTime?: string
   eventTitle: string
   level?: string
   isPast?: boolean
@@ -109,7 +109,7 @@ interface BaseEventProps {
 
 const baseEventProps = ({
   formattedStartTime,
-  endTime,
+  formattedEndTime,
   eventTitle,
   level,
   isPast,
@@ -117,7 +117,7 @@ const baseEventProps = ({
 }: BaseEventProps) => {
   const title = `${level ? `${level} ` : ""}${eventTitle}`
   return {
-    HeadingComponent: <Header {...{ formattedStartTime, endTime, title, isPast, date }} />,
+    HeadingComponent: <Header {...{ formattedStartTime, formattedEndTime, title, isPast, date }} />,
   }
 }
 
@@ -153,7 +153,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const {
     variant = "recurring",
     formattedStartTime,
-    endTime,
+    formattedEndTime,
     eventTitle,
     heading,
     subheading,
@@ -170,7 +170,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     : undefined
 
   const cardProps = {
-    ...baseEventProps({ formattedStartTime, endTime, eventTitle, level, isPast }),
+    ...baseEventProps({ formattedStartTime, formattedEndTime, eventTitle, level, isPast }),
   }
   const variantProps =
     variant === "recurring"

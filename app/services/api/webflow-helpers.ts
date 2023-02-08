@@ -140,7 +140,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
           schedule["end-time"] ? "h:mm" : "h:mm aaa",
         ),
         startTime: schedule["day-time"],
-        endTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mm aaa"),
+        formattedEndTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mm aaa"),
         eventTitle: schedule["recurring-event"]?.name,
         heading: "",
         subheading: schedule["recurring-event"]?.["event-description"],
