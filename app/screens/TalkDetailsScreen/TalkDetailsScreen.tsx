@@ -167,6 +167,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   const isWorkshop = variant === "workshop"
 
+  // TODO isFuture is temporary for testing. should be !isFuture
   const isEventPassed = isFuture(parseISO(eventTime))
 
   return (
@@ -273,21 +274,19 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
         </Animated.ScrollView>
       </Screen>
-      <View>
-        {talkUrl && isEventPassed && !isScrolling && (
-          <FloatingAction>
-            <Button
-              testID="see-the-schedule-button"
-              tx="talkDetailsScreen.watchTalk"
-              LeftAccessory={(props) => (
-                <Icon icon="play" color={colors.palette.neutral900} {...props} />
-              )}
-              TextProps={{ allowFontScaling: false }}
-              onPress={() => onPress(talkUrl)}
-            />
-          </FloatingAction>
-        )}
-      </View>
+      {talkUrl && isEventPassed && (
+        <FloatingAction isScrolling={isScrolling}>
+          <Button
+            testID="see-the-schedule-button"
+            tx="talkDetailsScreen.watchTalk"
+            LeftAccessory={(props) => (
+              <Icon icon="play" color={colors.palette.neutral900} {...props} />
+            )}
+            TextProps={{ allowFontScaling: false }}
+            onPress={() => onPress(talkUrl)}
+          />
+        </FloatingAction>
+      )}
     </>
   )
 }

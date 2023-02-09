@@ -1,11 +1,11 @@
 import React from "react"
-import { Dimensions, ViewStyle } from "react-native"
+import { Dimensions, View, ViewStyle } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
-import { SafeAreaView } from "react-native-safe-area-context"
 import { spacing } from "../theme"
 
 type Props = {
   children: React.ReactElement
+  isScrolling?: boolean
 }
 
 enum Scroll {
@@ -52,13 +52,16 @@ export const useFloatingActionEvents = () => {
   }
 }
 
-const FloatingAction = ({ children }: Props) => {
+const FloatingAction = ({ children, isScrolling }: Props) => {
   return (
-    <SafeAreaView edges={["bottom"]} style={$floatingAction}>
-      <Animated.View entering={FadeInDown} exiting={FadeOutDown}>
-        {children}
-      </Animated.View>
-    </SafeAreaView>
+    <View>
+      {/* <View> must be here as the parent for Layout Animations to work. (entering/exiting animations) */}
+      {!isScrolling && (
+        <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={$floatingAction}>
+          {children}
+        </Animated.View>
+      )}
+    </View>
   )
 }
 
