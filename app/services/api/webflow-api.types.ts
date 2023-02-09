@@ -135,11 +135,17 @@ export interface RawSponsor extends Item {
 
 export interface Sponsor extends RawSponsor {}
 
-interface ImageRef {
-  alt: string | null
-  field: string
-  url: string
+export interface RawRecommendations extends Item {
+  "city-state-zip"?: string
+  "external-url"?: string
+  "street-address"?: string
+  description: string
+  descriptor: string
+  images: ImageRef[]
+  type: string
 }
+
+export interface Recommendations extends RawRecommendations {}
 
 export interface RawSpeakerName extends Item {
   "close-anchor"?: string
@@ -154,6 +160,12 @@ export interface RawSpeakerName extends Item {
   "twitter-url": string
   bio: string
   title: string
+}
+
+interface ImageRef {
+  alt: string | null
+  field: string
+  url: string
 }
 
 interface SpeakerPhotoPNG {

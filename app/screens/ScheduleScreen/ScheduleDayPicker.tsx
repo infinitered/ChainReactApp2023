@@ -26,7 +26,7 @@ const AnimatedDayButton = React.forwardRef(
   (props: AnimatedDayButtonProps, ref: MutableRefObject<View>) => {
     const { onPress, index, text, scrollX, inputRange, schedules } = props
     const outputRange = schedules.map((_, scheduleIndex) =>
-      index === scheduleIndex ? colors.palette.neutral900 : colors.palette.neutral100,
+      index === scheduleIndex ? colors.palette.neutral800 : colors.palette.neutral100,
     )
 
     const $animatedTextStyle = useAnimatedStyle(() => {
@@ -129,7 +129,7 @@ const $animatedViewStyle: ViewStyle = {
 }
 
 const $buttonBaseStyle: ViewStyle = {
-  backgroundColor: colors.palette.neutral500,
+  backgroundColor: colors.palette.neutral700,
   borderColor: colors.palette.primary500,
   borderRadius: 100,
   minHeight: 48,

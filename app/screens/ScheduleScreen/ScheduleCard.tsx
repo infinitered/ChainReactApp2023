@@ -5,7 +5,7 @@ import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
 
 interface HeaderProps {
-  endTime?: string
+  formattedEndTime?: string
   formattedStartTime: string
   title: string
   isPast?: boolean
@@ -19,11 +19,11 @@ interface FooterProps {
   variant: Variants
 }
 
-const Header = ({ endTime, formattedStartTime, title, isPast }: HeaderProps) => (
+const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderProps) => (
   <View style={$headerContainer}>
     <Text style={isPast ? $pastTimeText : $timeText}>
       {formattedStartTime}
-      {!!endTime && ` - ${endTime}`}
+      {!!formattedEndTime && ` - ${formattedEndTime}`}
     </Text>
     <Text preset="eventTitle" style={isPast ? $pastTitleText : $titleText}>
       {title}
@@ -44,7 +44,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
             {
               talk: (
                 <View style={$talkRecording}>
-                  <Icon icon="play" />
+                  <Icon icon="youtube" />
                   <Text
                     preset="label"
                     style={$talkRecordingLabel}
@@ -76,7 +76,7 @@ export interface ScheduleCardProps {
    */
   variant?: Variants
   /**
-   * Start time of the event formatted as "hh:mm aaa"
+   * Start time of the event formatted as "h:mm aaa"
    */
   formattedStartTime: string
   /**
@@ -86,7 +86,7 @@ export interface ScheduleCardProps {
   /**
    * End time of the recurring event
    */
-  endTime?: string
+  formattedEndTime?: string
   /**
    * The event title
    */
@@ -134,7 +134,7 @@ interface SpeakingEventProps {
 
 interface BaseEventProps {
   formattedStartTime: string
-  endTime?: string
+  formattedEndTime?: string
   eventTitle: string
   level?: string
   isPast?: boolean
@@ -143,7 +143,7 @@ interface BaseEventProps {
 
 const baseEventProps = ({
   formattedStartTime,
-  endTime,
+  formattedEndTime,
   eventTitle,
   level,
   isPast,
@@ -151,7 +151,7 @@ const baseEventProps = ({
 }: BaseEventProps) => {
   const title = `${level ? `${level} ` : ""}${eventTitle}`
   return {
-    HeadingComponent: <Header {...{ formattedStartTime, endTime, title, isPast, date }} />,
+    HeadingComponent: <Header {...{ formattedStartTime, formattedEndTime, title, isPast, date }} />,
   }
 }
 
@@ -189,7 +189,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const {
     variant = "recurring",
     formattedStartTime,
-    endTime,
+    formattedEndTime,
     eventTitle,
     heading,
     subheading,
@@ -207,7 +207,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     : undefined
 
   const cardProps = {
-    ...baseEventProps({ formattedStartTime, endTime, eventTitle, level, isPast }),
+    ...baseEventProps({ formattedStartTime, formattedEndTime, eventTitle, level, isPast }),
   }
   const variantProps =
     variant === "recurring"
@@ -254,7 +254,7 @@ const $avatar: ViewStyle = {
 }
 
 const $footerSubheading: TextStyle = {
-  color: colors.palette.neutral900,
+  color: colors.palette.neutral800,
 }
 
 const $pastFooterSubheading: TextStyle = {
@@ -273,7 +273,7 @@ const $talkRecordingLabel: TextStyle = {
 }
 
 const $timeText: TextStyle = {
-  color: colors.palette.neutral900,
+  color: colors.palette.neutral800,
   marginBottom: spacing.large,
 }
 
@@ -293,7 +293,7 @@ const $pastTitleText: TextStyle = {
 }
 
 const $contentText: TextStyle = {
-  color: colors.palette.neutral500,
+  color: colors.palette.neutral700,
   paddingTop: 10,
 }
 
@@ -303,7 +303,7 @@ const $pastContentText: TextStyle = {
 }
 
 const $footerHeading: TextStyle = {
-  color: colors.palette.neutral900,
+  color: colors.palette.neutral800,
   marginBottom: spacing.extraSmall,
 }
 

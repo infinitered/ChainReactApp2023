@@ -279,7 +279,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             testID="see-the-schedule-button"
             tx="talkDetailsScreen.watchTalk"
             LeftAccessory={(props) => (
-              <Icon icon="play" color={colors.palette.neutral900} {...props} />
+              <Icon icon="youtube" color={colors.palette.neutral800} {...props} />
             )}
             TextProps={{ allowFontScaling: false }}
             onPress={() => onPress(talkUrl)}

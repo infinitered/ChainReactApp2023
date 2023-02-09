@@ -86,6 +86,8 @@ export function Icon(props: IconProps) {
 
 export const iconRegistry = {
   arrow: require("../../assets/icons/arrows.png"),
+  arrowDown: require("../../assets/icons/arrowDown.png"),
+  arrowUp: require("../../assets/icons/arrowUp.png"),
   back: require("../../assets/icons/back.png"),
   caretLeft: require("../../assets/icons/caretLeft.png"),
   caretRight: require("../../assets/icons/caretRight.png"),
@@ -98,7 +100,7 @@ export const iconRegistry = {
   schedule: require("../../assets/icons/schedule.png"),
   twitter: require("../../assets/icons/twitter.png"),
   venue: require("../../assets/icons/venue.png"),
-  play: require("../../assets/icons/play.png"),
+  youtube: require("../../assets/icons/youtube.png"),
 }
 
 const $imageStyle: ImageStyle = {
