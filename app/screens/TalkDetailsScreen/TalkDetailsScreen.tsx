@@ -167,8 +167,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   const isWorkshop = variant === "workshop"
 
-  // TODO isFuture is temporary for testing. should be !isFuture
-  const isEventPassed = isFuture(parseISO(eventTime))
+  const isEventPassed = !isFuture(parseISO(eventTime))
 
   return (
     <>
