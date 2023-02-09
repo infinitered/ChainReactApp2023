@@ -52,7 +52,7 @@ interface AppProps {
 }
 
 // Creating a react-query client with the stale time set to "Infinity" so that its never stale
-const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
+export const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
 
 // Setting up our custom Toast component
 const CustomToast = () => {
