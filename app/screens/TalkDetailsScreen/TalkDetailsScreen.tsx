@@ -10,8 +10,8 @@ import {
   BoxShadow,
   Screen,
   Button,
-  FloatingButton,
-  useFloatingButtonEvents,
+  FloatingAction,
+  useFloatingActionEvents,
   Icon,
   AutoImage,
 } from "../../components"
@@ -146,7 +146,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
 
-  const { isScrolling, ...handlers } = useFloatingButtonEvents()
+  const { isScrolling, floatingScrollHandlers } = useFloatingActionEvents()
 
   if (!schedule) return null
 
@@ -167,7 +167,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   const isWorkshop = variant === "workshop"
 
-  const isEventPassed = !isFuture(parseISO(eventTime))
+  const isEventPassed = isFuture(parseISO(eventTime))
 
   return (
     <>
@@ -179,8 +179,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           scrollEventThrottle={16}
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
-          onMomentumScrollEnd
-          {...handlers}
+          {...floatingScrollHandlers}
         >
           <View style={$container}>
             <View style={$headingContainer}>
@@ -274,20 +273,21 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
         </Animated.ScrollView>
       </Screen>
-
-      {talkUrl && isEventPassed && (
-        <FloatingButton isScrolling={isScrolling}>
-          <Button
-            testID="see-the-schedule-button"
-            tx="talkDetailsScreen.watchTalk"
-            LeftAccessory={(props) => (
-              <Icon icon="play" color={colors.palette.neutral900} {...props} />
-            )}
-            TextProps={{ allowFontScaling: false }}
-            onPress={() => onPress(talkUrl)}
-          />
-        </FloatingButton>
-      )}
+      <View>
+        {talkUrl && isEventPassed && !isScrolling && (
+          <FloatingAction>
+            <Button
+              testID="see-the-schedule-button"
+              tx="talkDetailsScreen.watchTalk"
+              LeftAccessory={(props) => (
+                <Icon icon="play" color={colors.palette.neutral900} {...props} />
+              )}
+              TextProps={{ allowFontScaling: false }}
+              onPress={() => onPress(talkUrl)}
+            />
+          </FloatingAction>
+        )}
+      </View>
     </>
   )
 }
