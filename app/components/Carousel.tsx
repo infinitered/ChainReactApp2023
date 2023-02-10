@@ -1,7 +1,15 @@
 import React, { useMemo } from "react"
-import { View, FlatList, Dimensions, ViewStyle, ImageSourcePropType, TextStyle } from "react-native"
+import {
+  View,
+  FlatList,
+  Dimensions,
+  ViewStyle,
+  ImageSourcePropType,
+  TextStyle,
+  ImageStyle,
+} from "react-native"
 
-import { Button, ButtonProps, CarouselCard, Text } from "../components"
+import { Button, ButtonProps, CarouselCard, IconButton, Text } from "../components"
 import { spacing } from "../theme"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
@@ -22,12 +30,19 @@ interface ButtonData {
 }
 
 export interface DynamicCarouselItem {
-  image: ImageSourcePropType
-  subtitle: string
-  meta?: string
   body: string
+  image: ImageSourcePropType
+  imageStyle?: ImageStyle
+  label?: string
   leftButton?: ButtonData
+  meta?: string
   rightButton?: ButtonData
+  socialLinks?: {
+    twitter?: string
+    github?: string
+    externalURL?: string
+  }
+  subtitle: string
 }
 
 interface DynamicCarouselProps {
@@ -115,6 +130,39 @@ export function Carousel(props: CarouselProps) {
             )
           }
 
+          let socialLinks = null
+          if (props.preset === "dynamic") {
+            const { socialLinks: socialLinksData } = item as DynamicCarouselItem
+            socialLinks = socialLinksData && (
+              <View style={$linksContainer}>
+                {socialLinksData.twitter && (
+                  <IconButton
+                    icon="twitter"
+                    onPress={() => openLinkInBrowser(socialLinksData.twitter)}
+                    containerStyle={$iconButton}
+                    size={24}
+                  />
+                )}
+                {socialLinksData.github && (
+                  <IconButton
+                    icon="github"
+                    onPress={() => openLinkInBrowser(socialLinksData.github)}
+                    containerStyle={$iconButton}
+                    size={24}
+                  />
+                )}
+                {socialLinksData.externalURL && (
+                  <IconButton
+                    icon="link"
+                    onPress={() => openLinkInBrowser(socialLinksData.externalURL)}
+                    containerStyle={$iconButton}
+                    size={24}
+                  />
+                )}
+              </View>
+            )
+          }
+
           return (
             <CarouselCard
               {...{
@@ -123,7 +171,9 @@ export function Carousel(props: CarouselProps) {
                 scrollX,
                 leftButton,
                 rightButton,
+                socialLinks,
                 totalCardCount: data.length,
+                imageStyle: (item as DynamicCarouselItem).imageStyle,
               }}
             />
           )
@@ -170,4 +220,13 @@ const $meta: ViewStyle = {
 
 const $body: TextStyle = {
   marginBottom: spacing.large,
+}
+
+const $linksContainer: ViewStyle = {
+  display: "flex",
+  flexDirection: "row",
+}
+
+const $iconButton: ViewStyle = {
+  marginRight: spacing.medium,
 }

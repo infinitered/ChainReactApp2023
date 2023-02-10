@@ -79,7 +79,6 @@ const SCREEN_WIDTH = Dimensions.get("screen").width
 const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
   switch (schedule.type) {
     case "Talk":
-    case "Speaker Panel":
       // eslint-disable-next-line no-case-declarations
       const talk = schedule.talk
       return {
@@ -236,7 +235,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
                     <View style={$assistantLinks}>
                       <IconButton
                         icon={assistant.twitter ? "twitter" : "link"}
-                        onPress={() => onPress(assistant.twitter || assistant.website)}
+                        onPress={() => onPress(assistant.twitter || assistant.externalURL)}
                       />
                     </View>
                   </View>

@@ -16,6 +16,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
 import { DebugScreen, PartyDetailsScreen, TalkDetailsScreen, WelcomeScreen } from "../screens"
+import { SpeakerPanelScreen } from "../screens/TalkDetailsScreen/SpeakerPanelScreen"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
 
@@ -36,6 +37,7 @@ export type AppStackParamList = {
   Welcome: undefined
   Tabs: NavigatorScreenParams<TabParamList>
   TalkDetails: { scheduleId: string }
+  SpeakerPanel: { scheduleId: string }
   PartyDetails: { scheduleId: string }
   Debug: undefined
 }
@@ -60,6 +62,7 @@ const AppStack = () => {
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
       <Stack.Screen name="Tabs" component={TabNavigator} />
       <Stack.Screen name="TalkDetails" component={TalkDetailsScreen} />
+      <Stack.Screen name="SpeakerPanel" component={SpeakerPanelScreen} />
       <Stack.Screen name="PartyDetails" component={PartyDetailsScreen} />
       <Stack.Screen name="Debug" component={DebugScreen} />
     </Stack.Navigator>

@@ -1,6 +1,5 @@
 import React from "react"
 import { TouchableOpacityProps, ViewStyle } from "react-native"
-import { colors } from "../theme"
 import { Icon, IconProps } from "./Icon"
 
 interface IconButtonProps extends IconProps {
@@ -18,14 +17,14 @@ export function IconButton({
 }: IconButtonProps) {
   const $containerStyle = [$iconContainerStyle, containerStyleOverride]
 
-  return <Icon {...{ onPress, icon }} containerStyle={$containerStyle} size={20} {...props} />
+  return <Icon {...{ onPress, icon }} containerStyle={$containerStyle} size={24} {...props} />
 }
 
 const $iconContainerStyle: ViewStyle = {
-  backgroundColor: colors.palette.neutral700,
+  backgroundColor: "#1C2B3D",
   width: 42,
   height: 42,
-  borderRadius: 24,
+  borderRadius: 21,
   alignItems: "center",
   justifyContent: "center",
 }

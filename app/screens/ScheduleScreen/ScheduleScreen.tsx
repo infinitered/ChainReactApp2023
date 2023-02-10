@@ -13,7 +13,7 @@ import { useHeader } from "../../hooks/useHeader"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard, { ScheduleCardProps, Variants } from "./ScheduleCard"
 import { formatDate } from "../../utils/formatDate"
-import { useAppNavigation, useAppState } from "../../hooks"
+import { useAppState } from "../../hooks"
 import { format, isBefore } from "date-fns"
 
 import { createScheduleScreenData } from "../../services/api/webflow-helpers"
@@ -35,7 +35,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [schedules, selectedSchedule],
   )
 
-  const navigation = useAppNavigation()
   const hScrollRef = React.useRef(null)
   const scheduleListRefs = React.useMemo(() => {
     return Object.fromEntries(
@@ -168,10 +167,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                       level,
                       id,
                     } = item
-                    const onPress =
-                      item.variant !== "recurring"
-                        ? () => navigation.navigate("TalkDetails")
-                        : undefined
 
                     const isPast = isBefore(new Date(startTime), new Date())
 
@@ -185,7 +180,6 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
                             eventTitle,
                             heading,
                             subheading,
-                            onPress,
                             sources,
                             level,
                             id,
