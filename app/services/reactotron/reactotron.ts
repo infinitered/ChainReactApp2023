@@ -18,8 +18,9 @@ import { ArgType } from "reactotron-core-client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { clear } from "../../utils/storage"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotronConfig"
-import { goBack, resetRoot, navigate } from "../../navigators/navigationUtilities"
+import { goBack, resetRoot, navigate, navigationRef } from "../../navigators/navigationUtilities"
 import { fakeReactotron } from "./reactotronFake"
+import { queryClient } from "../../app"
 
 /**
  * We tell typescript we intend to hang Reactotron off of the console object.
@@ -104,6 +105,34 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
     })
 
     Reactotron.onCustomCommand({
+      title: "Log Current Navigation State",
+      description: "Logs the current navigation state",
+      command: "logNavigationState",
+      handler: () => {
+        Reactotron.display({
+          name: "NAV STATE",
+          value: navigationRef.current?.getRootState(),
+          preview: "preview",
+        })
+      },
+    })
+
+    Reactotron.onCustomCommand({
+      title: "Log Current Async Storage Values",
+      description: "Logs the current async storage values",
+      command: "logAsyncStorage",
+      handler: async () => {
+        const keys = await AsyncStorage.getAllKeys()
+        const values = await AsyncStorage.multiGet(keys)
+        Reactotron.display({
+          name: "ASYNC STORAGE",
+          value: values,
+          important: true,
+        })
+      },
+    })
+
+    Reactotron.onCustomCommand({
       title: "Reset Navigation State",
       description: "Resets the navigation state",
       command: "resetNavigation",
@@ -141,6 +170,24 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
       handler: () => {
         Reactotron.log("Going back")
         goBack()
+      },
+    })
+
+    Reactotron.onCustomCommand({
+      title: "Log Query Cache",
+      description: "Logs the react query cache",
+      command: "logQueryCache",
+      handler: () => {
+        queryClient
+          .getQueryCache()
+          .findAll()
+          .forEach((query) => {
+            Reactotron.display({
+              name: query.queryKey,
+              value: query.state,
+              preview: "preview",
+            })
+          })
       },
     })
 

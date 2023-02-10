@@ -111,12 +111,12 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           <AnimatedText text={body} style={[$mr, $animatedSlideData]} />
           <View style={$ctaContainer}>
             {!!leftButton && (
-              <Animated.View style={[$mr, $animatedSlideData]}>{leftButton}</Animated.View>
+              <Animated.View style={[$leftButton, $animatedSlideData]}>{leftButton}</Animated.View>
             )}
             {!!rightButton && (
               <Animated.View style={$animatedSlideData}>{rightButton}</Animated.View>
             )}
-            {button && (
+            {!!button && (
               <Animated.View style={[$button, $animatedSlideData]}>{button}</Animated.View>
             )}
             {!!socialLinks && (
@@ -159,11 +159,15 @@ const $mb: TextStyle = {
   marginBottom: spacing.extraSmall,
 }
 
+const $mr: TextStyle = {
+  marginRight: spacing.large,
+}
+
 const $meta: ViewStyle = {
   marginBottom: spacing.medium,
 }
 
-const $mr: TextStyle = {
+const $leftButton: ViewStyle = {
   marginRight: spacing.large,
 }
 
