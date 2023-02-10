@@ -1,12 +1,4 @@
 import React from "react"
-import { Dimensions, View, ViewStyle } from "react-native"
-import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
-import { spacing } from "../theme"
-
-type Props = {
-  children: React.ReactElement
-  isScrolling?: boolean
-}
 
 enum Scroll {
   onMomentumScrollBegin = "onMomentumScrollBegin",
@@ -19,7 +11,7 @@ export const useFloatingActionEvents = () => {
   const [scrollState, setScrollState] = React.useState<Scroll | null>(null)
   const [isScrolling, setIsScrolling] = React.useState(false)
 
-  const floatingScrollHandlers = {
+  const scrollHandlers = {
     [Scroll.onMomentumScrollBegin]: () => setScrollState(Scroll.onMomentumScrollBegin),
     [Scroll.onMomentumScrollEnd]: () => setScrollState(Scroll.onMomentumScrollEnd),
     [Scroll.onScrollBeginDrag]: () => setScrollState(Scroll.onScrollBeginDrag),
@@ -48,28 +40,6 @@ export const useFloatingActionEvents = () => {
 
   return {
     isScrolling,
-    floatingScrollHandlers,
+    scrollHandlers,
   }
 }
-
-const FloatingAction = ({ children, isScrolling }: Props) => {
-  return (
-    <View>
-      {/* <View> must be here as the parent for Layout Animations to work. (entering/exiting animations) */}
-      {!isScrolling && (
-        <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={$floatingAction}>
-          {children}
-        </Animated.View>
-      )}
-    </View>
-  )
-}
-
-const $floatingAction: ViewStyle = {
-  position: "absolute",
-  bottom: spacing.large,
-  width: Dimensions.get("window").width,
-  paddingHorizontal: spacing.large,
-}
-
-export { FloatingAction }

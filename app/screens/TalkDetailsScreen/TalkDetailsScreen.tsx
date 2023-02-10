@@ -9,11 +9,9 @@ import {
   MIN_HEADER_HEIGHT,
   BoxShadow,
   Screen,
-  Button,
-  FloatingAction,
-  useFloatingActionEvents,
   Icon,
   AutoImage,
+  FloatingButton,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
@@ -25,6 +23,7 @@ import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent, RawSpeaker } from "../../services/api/webflow-api.types"
 import { translate } from "../../i18n"
+import { useFloatingActionEvents } from "../../hooks"
 
 export type Variants = "workshop" | "talk"
 
@@ -146,7 +145,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
 
-  const { isScrolling, floatingScrollHandlers } = useFloatingActionEvents()
+  const { isScrolling, scrollHandlers } = useFloatingActionEvents()
 
   if (!schedule) return null
 
@@ -179,7 +178,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           scrollEventThrottle={16}
           onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
-          {...floatingScrollHandlers}
+          {...scrollHandlers}
         >
           <View style={$container}>
             <View style={$headingContainer}>
@@ -274,17 +273,16 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
         </Animated.ScrollView>
       </Screen>
       {talkUrl && isEventPassed && (
-        <FloatingAction isScrolling={isScrolling}>
-          <Button
-            testID="see-the-schedule-button"
-            tx="talkDetailsScreen.watchTalk"
-            LeftAccessory={(props) => (
-              <Icon icon="youtube" color={colors.palette.neutral800} {...props} />
-            )}
-            TextProps={{ allowFontScaling: false }}
-            onPress={() => onPress(talkUrl)}
-          />
-        </FloatingAction>
+        <FloatingButton
+          isVisible={!isScrolling}
+          testID="see-the-schedule-button"
+          tx="talkDetailsScreen.watchTalk"
+          LeftAccessory={(props) => (
+            <Icon icon="youtube" color={colors.palette.neutral800} {...props} />
+          )}
+          TextProps={{ allowFontScaling: false }}
+          onPress={() => onPress(talkUrl)}
+        ></FloatingButton>
       )}
     </>
   )
