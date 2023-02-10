@@ -36,6 +36,7 @@ export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "Speaker
   const carouselData = schedule?.talk?.["speaker-s"].map((speaker) => ({
     image: { uri: speaker["speaker-photo"].url },
     imageStyle: { height: 320 },
+    isSpeakerPanel: true,
     subtitle: speaker.name,
     label: speaker.company,
     body: speaker["speaker-bio"],
@@ -124,6 +125,7 @@ const $speakerPanelDescription: TextStyle = {
 }
 
 const $title: TextStyle = {
+  marginTop: spacing.extraLarge,
   marginBottom: spacing.extraSmall,
 }
 

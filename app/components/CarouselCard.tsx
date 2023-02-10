@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from "react-native"
 import { BoxShadow, ButtonLink, Text } from "../components"
-import { spacing } from "../theme"
+import { colors, spacing } from "../theme"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
 import { CAROUSEL_IMAGE_WIDTH, DynamicCarouselItem, SPACING } from "./Carousel"
 
@@ -40,7 +40,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   scrollX,
   socialLinks,
 }) => {
-  const { label, subtitle, meta, body, image } = item as DynamicCarouselItem
+  const { label, subtitle, meta, body, image, isSpeakerPanel } = item as DynamicCarouselItem
   const source = subtitle ? image : item
 
   const inputRange = [
@@ -68,39 +68,45 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
 
   return (
     <View style={$carouselCard}>
-      <Animated.View
-        style={[
-          // $cardWrapper,
-          // cardStyle,
-          $speakerPanelCard,
-          $animatedImage,
-          { width: Number($carouselCard.width) - 30 },
-        ]}
-      >
-        <BoxShadow preset="primary" offset={6}>
-          <Animated.Image
-            source={source}
-            style={[
-              $image,
-              // $animatedImage,
-              imageStyle,
-              { width: Number($carouselCard.width) - 36 },
-            ]}
-          />
-        </BoxShadow>
-      </Animated.View>
+      {isSpeakerPanel && (
+        <Animated.View style={[$speakerPanelCard, $animatedImage]}>
+          <BoxShadow preset="primary" offset={5}>
+            <Animated.Image
+              source={source}
+              style={[$image, imageStyle, { width: Number($carouselCard.width) - 36 }]}
+            />
+          </BoxShadow>
+        </Animated.View>
+      )}
+      {!isSpeakerPanel && (
+        <View style={$cardWrapper}>
+          <Animated.Image source={source} style={[$image, $animatedImage]} />
+        </View>
+      )}
       {!!subtitle && (
         <View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $slideWrapper]}>
           {!!meta && (
             <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
           )}
           <AnimatedText
-            preset="subheading"
+            preset={isSpeakerPanel ? "cardFooterHeading" : "subheading"}
             text={subtitle}
             style={[$mb, $mr, $animatedSlideData]}
           />
           {!!label && (
-            <AnimatedText preset="primaryLabel" text={label} style={[$meta, $animatedSlideData]} />
+            <AnimatedText
+              text={label}
+              style={[
+                $mb,
+                $animatedSlideData,
+                {
+                  fontSize: $label.fontSize,
+                  fontWeight: $label.fontWeight,
+                  lineHeight: $label.lineHeight,
+                  color: $label.color,
+                },
+              ]}
+            />
           )}
           <AnimatedText text={body} style={[$mr, $animatedSlideData]} />
           <View style={$ctaContainer}>
@@ -144,12 +150,6 @@ const $cardWrapper: ViewStyle = {
   marginHorizontal: SPACING,
 }
 
-const $speakerPanelCard: ViewStyle = {
-  ...$cardWrapper,
-  borderRadius: 0,
-  paddingBottom: spacing.medium,
-}
-
 const $image: ImageStyle = {
   height: 274,
   width: CAROUSEL_IMAGE_WIDTH,
@@ -180,4 +180,20 @@ const $button: ViewStyle = {
 
 const $slideWrapper: ViewStyle = {
   marginTop: spacing.medium,
+}
+
+const $speakerPanelCard: ViewStyle = {
+  ...$cardWrapper,
+  borderRadius: 0,
+  paddingTop: spacing.small + spacing.micro,
+  paddingBottom: spacing.medium,
+  marginLeft: spacing.medium,
+  width: CAROUSEL_IMAGE_WIDTH - 32,
+}
+
+const $label: TextStyle = {
+  color: colors.palette.primary500,
+  fontSize: 16,
+  fontWeight: "300",
+  lineHeight: 22.4,
 }

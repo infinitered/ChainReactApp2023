@@ -16,23 +16,24 @@ import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import { openMap } from "../utils/openMap"
 
 export interface StaticCarouselProps {
-  preset: "static"
-  data: ImageSourcePropType[]
-  subtitle: string
-  meta?: string
   body: string
   button?: ButtonData & ButtonProps
+  data: ImageSourcePropType[]
+  meta?: string
+  preset: "static"
+  subtitle: string
 }
 
 interface ButtonData {
-  text: string
   link: string
+  text: string
 }
 
 export interface DynamicCarouselItem {
   body: string
   image: ImageSourcePropType
   imageStyle?: ImageStyle
+  isSpeakerPanel?: boolean
   label?: string
   leftButton?: ButtonData
   meta?: string
@@ -166,14 +167,15 @@ export function Carousel(props: CarouselProps) {
           return (
             <CarouselCard
               {...{
-                item,
+                imageStyle: (item as DynamicCarouselItem).imageStyle,
                 index,
-                scrollX,
+                isSpeakerPanel: (item as DynamicCarouselItem).isSpeakerPanel,
+                item,
                 leftButton,
                 rightButton,
+                scrollX,
                 socialLinks,
                 totalCardCount: data.length,
-                imageStyle: (item as DynamicCarouselItem).imageStyle,
               }}
             />
           )
