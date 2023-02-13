@@ -20,7 +20,7 @@ export type CarouselCardProps = {
   leftButton?: React.ReactNode
   rightButton?: React.ReactNode
   scrollX: SharedValue<number>
-  socialLinks?: React.ReactNode
+  socialButtons?: React.ReactNode
   totalCardCount: number
 }
 
@@ -38,7 +38,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   leftButton,
   rightButton,
   scrollX,
-  socialLinks,
+  socialButtons,
 }) => {
   const { label, subtitle, meta, body, image, isSpeakerPanel } = item as DynamicCarouselItem
   const source = subtitle ? image : item
@@ -119,8 +119,8 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
             {!!button && (
               <Animated.View style={[$button, $animatedSlideData]}>{button}</Animated.View>
             )}
-            {!!socialLinks && (
-              <Animated.View style={[$mr, $animatedSlideData]}>{socialLinks}</Animated.View>
+            {!!socialButtons && (
+              <Animated.View style={[$mr, $animatedSlideData]}>{socialButtons}</Animated.View>
             )}
           </View>
         </View>

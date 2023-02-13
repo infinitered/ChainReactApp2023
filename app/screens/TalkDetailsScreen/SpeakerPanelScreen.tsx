@@ -40,11 +40,11 @@ export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "Speaker
     subtitle: speaker.name,
     label: speaker.company,
     body: speaker["speaker-bio"],
-    socialLinks: {
-      twitter: speaker.twitter,
-      github: speaker.github,
-      externalURL: speaker["external-url"],
-    },
+    socialButtons: [
+      { url: speaker.twitter, icon: "twitter" },
+      { url: speaker.github, icon: "github" },
+      { url: speaker.externalURL, icon: "link" },
+    ],
   })) as DynamicCarouselItem[]
 
   return (
@@ -75,9 +75,9 @@ export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "Speaker
           </View>
 
           <View>
-            <Text text="Talk details" preset="bold" style={$speakerPanelTitle} />
+            <Text text="Talk details" preset="boldHeading" style={$speakerPanelTitle} />
             <Text text={description} style={$speakerPanelDescription} />
-            <Text text="Panelists" preset="bold" style={$detailsText} />
+            <Text text="Panelists" preset="boldHeading" />
             <View style={{ marginHorizontal: -spacing.large }}>
               <Carousel preset="dynamic" data={carouselData} />
             </View>
@@ -105,19 +105,9 @@ const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
 }
 
-const $detailsText: TextStyle = {
-  fontSize: 26,
-  lineHeight: 28.6,
-}
-
-const $detailsTitleText: TextStyle = {
-  ...$detailsText,
-  ...$containerSpacing,
-}
-
 const $speakerPanelTitle: TextStyle = {
   marginTop: spacing.medium,
-  ...$detailsTitleText,
+  ...$containerSpacing,
 }
 
 const $speakerPanelDescription: TextStyle = {
