@@ -46,7 +46,7 @@ const palette = {
 
   angry100: "#F2D6CD",
   angry500: "#C03403",
-}
+} as const
 
 export const colors = {
   /**

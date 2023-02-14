@@ -1,33 +1,51 @@
 import React, { useMemo } from "react"
-import { View, FlatList, Dimensions, ViewStyle, ImageSourcePropType, TextStyle } from "react-native"
+import {
+  View,
+  FlatList,
+  Dimensions,
+  ViewStyle,
+  ImageSourcePropType,
+  TextStyle,
+  ImageStyle,
+} from "react-native"
 
-import { Button, ButtonProps, CarouselCard, Text } from "../components"
+import { Button, ButtonProps, CarouselCard, IconProps, Text } from "../components"
 import { spacing } from "../theme"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import { openMap } from "../utils/openMap"
+import { SocialButton } from "./SocialButton"
 
 export interface StaticCarouselProps {
-  preset: "static"
-  data: ImageSourcePropType[]
-  subtitle: string
-  meta?: string
   body: string
   button?: ButtonData & ButtonProps
+  data: ImageSourcePropType[]
+  meta?: string
+  preset: "static"
+  subtitle: string
 }
 
 interface ButtonData {
-  text: string
   link: string
+  text: string
+}
+
+interface SocialButtonData {
+  icon: IconProps["icon"]
+  url: string
 }
 
 export interface DynamicCarouselItem {
-  image: ImageSourcePropType
-  subtitle: string
-  meta?: string
   body: string
+  image: ImageSourcePropType
+  imageStyle?: ImageStyle
+  isSpeakerPanel?: boolean
+  label?: string
   leftButton?: ButtonData
+  meta?: string
   rightButton?: ButtonData
+  socialButtons?: SocialButtonData[]
+  subtitle: string
 }
 
 interface DynamicCarouselProps {
@@ -115,14 +133,38 @@ export function Carousel(props: CarouselProps) {
             )
           }
 
+          let socialButtons = null
+          if (props.preset === "dynamic") {
+            const { socialButtons: socialButtonsData } = item as DynamicCarouselItem
+            socialButtons = socialButtonsData && (
+              <View style={$socialButtonContainer}>
+                {socialButtonsData?.map(
+                  (socialButton) =>
+                    !!socialButton && (
+                      <SocialButton
+                        icon={socialButton.icon}
+                        key={socialButton.icon}
+                        style={$socialButton}
+                        url={socialButton.url}
+                        size={24}
+                      />
+                    ),
+                )}
+              </View>
+            )
+          }
+
           return (
             <CarouselCard
               {...{
-                item,
+                imageStyle: (item as DynamicCarouselItem).imageStyle,
                 index,
-                scrollX,
+                isSpeakerPanel: (item as DynamicCarouselItem).isSpeakerPanel,
+                item,
                 leftButton,
                 rightButton,
+                scrollX,
+                socialButtons,
                 totalCardCount: data.length,
               }}
             />
@@ -170,4 +212,13 @@ const $meta: ViewStyle = {
 
 const $body: TextStyle = {
   marginBottom: spacing.large,
+}
+
+const $socialButtonContainer: ViewStyle = {
+  display: "flex",
+  flexDirection: "row",
+}
+
+const $socialButton: ViewStyle = {
+  marginRight: spacing.medium,
 }

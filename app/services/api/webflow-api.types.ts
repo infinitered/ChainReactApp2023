@@ -112,7 +112,7 @@ export interface RawSpeaker extends Item {
   github?: string
   title?: string
   twitter?: string
-  website?: string
+  externalURL?: string
 }
 
 export type Speaker = RawSpeaker & {
