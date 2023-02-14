@@ -3,6 +3,7 @@ import { TextStyle, View, ViewStyle } from "react-native"
 import { Avatar, AvatarProps, Card, Icon, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
+import { isConferencePassed } from "../../utils/isConferencePassed"
 
 interface HeaderProps {
   formattedEndTime?: string
@@ -31,6 +32,18 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
   </View>
 )
 
+const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
+  isConferencePassed && (
+    <View style={$talkRecording}>
+      <Icon icon="youtube" />
+      <Text
+        preset="label"
+        style={$talkRecordingLabel}
+        tx={talkUrl ? "scheduleScreen.talkRecordingPosted" : "scheduleScreen.videoComingSoon"}
+      />
+    </View>
+  )
+
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
   return (
     <View style={$footerContainer}>
@@ -41,21 +54,9 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
         <>
           <Text style={$pastFooterSubheading}>{subheading}</Text>
           {
+            // assuming there will be other variants in the future I went with a switch statement
             {
-              talk: (
-                <View style={$talkRecording}>
-                  <Icon icon="youtube" />
-                  <Text
-                    preset="label"
-                    style={$talkRecordingLabel}
-                    tx={
-                      talkUrl
-                        ? "scheduleScreen.talkRecordingPosted"
-                        : "scheduleScreen.videoComingSoon"
-                    }
-                  />
-                </View>
-              ),
+              talk: <TalkCTA talkUrl={talkUrl} />,
             }[variant]
           }
         </>
