@@ -67,7 +67,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
   )
 }
 
-export type Variants = "workshop" | "talk" | "party" | "recurring"
+export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel"
 
 export interface ScheduleCardProps {
   /**
@@ -203,6 +203,8 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
+    : ["speaker-panel"].includes(variant)
+    ? () => navigation.navigate("SpeakerPanel", { scheduleId: id })
     : ["party"].includes(variant)
     ? () => navigation.navigate("PartyDetails", { scheduleId: id })
     : undefined

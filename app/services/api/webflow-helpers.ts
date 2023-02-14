@@ -172,7 +172,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
       }
     case "Speaker Panel":
       return {
-        variant: "talk",
+        variant: "speaker-panel",
         formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
         startTime: schedule["day-time"],
         eventTitle: schedule.type,
