@@ -15,7 +15,6 @@ import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
 import { formatDate } from "../../utils/formatDate"
 import { useAppState } from "../../hooks"
 import { format, isAfter } from "date-fns"
-
 import { createScheduleScreenData } from "../../services/api/webflow-helpers"
 import { ScrollToButton, useScrollToEvent } from "../../components"
 
@@ -50,6 +49,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
     [schedules, selectedSchedule],
   )
+
   const hScrollRef = React.useRef(null)
   const scheduleListRefs = React.useMemo(() => {
     return Object.fromEntries(
