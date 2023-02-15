@@ -247,7 +247,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     ? "pastDefault"
     : "default"
 
-  return <Card preset={cardPreset} {...{ ...cardProps, ...variantProps, onPress }} />
+  return <Card accessible preset={cardPreset} {...{ ...cardProps, ...variantProps, onPress }} />
 }
 
 const $avatar: ViewStyle = {
