@@ -154,6 +154,35 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [isFocused],
   )
 
+  const renderSchedule = React.useCallback(
+    ({ index, item: schedule }: { index: number; item: Schedule }) => (
+      <View style={[$container, { width }]}>
+        <FlashList<ScheduleCardProps>
+          ref={scheduleListRefs[schedule.date]}
+          data={schedule.events}
+          renderItem={({ item, index }) => (
+            <View style={$cardContainer}>
+              <ScheduleCard {...item} isPast={index < eventIndex} />
+            </View>
+          )}
+          // To achieve better performance, specify the type based on the item
+          getItemType={(item) => item.variant}
+          estimatedItemSize={225}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={
+            scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
+          }
+          scrollEventThrottle={16}
+          onViewableItemsChanged={handleViewableEventIndexChanged}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 50,
+          }}
+        />
+      </View>
+    ),
+    [scheduleIndex, eventIndex],
+  )
+
   if (!selectedSchedule) return null
 
   return (
@@ -175,31 +204,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             bounces={false}
             scrollEventThrottle={16}
             decelerationRate="fast"
-            renderItem={({ index, item: schedule }) => (
-              <View style={[$container, { width }]}>
-                <FlashList<ScheduleCardProps>
-                  ref={scheduleListRefs[schedule.date]}
-                  data={schedule.events}
-                  renderItem={({ item, index }) => (
-                    <View style={$cardContainer}>
-                      <ScheduleCard {...item} isPast={index < eventIndex} />
-                    </View>
-                  )}
-                  // To achieve better performance, specify the type based on the item
-                  getItemType={(item) => item.variant}
-                  estimatedItemSize={225}
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={
-                    scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
-                  }
-                  scrollEventThrottle={16}
-                  onViewableItemsChanged={handleViewableEventIndexChanged}
-                  viewabilityConfig={{
-                    itemVisiblePercentThreshold: 50,
-                  }}
-                />
-              </View>
-            )}
+            renderItem={renderSchedule}
           />
         )}
       </View>
