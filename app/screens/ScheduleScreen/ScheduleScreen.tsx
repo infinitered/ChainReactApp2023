@@ -1,5 +1,12 @@
-import React, { useEffect } from "react"
-import { ActivityIndicator, View, ViewStyle, Dimensions } from "react-native"
+import React, { useEffect, useMemo } from "react"
+import {
+  AccessibilityInfo,
+  ActivityIndicator,
+  View,
+  ViewStyle,
+  Dimensions,
+  findNodeHandle,
+} from "react-native"
 import { FlashList, ContentStyle } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
@@ -56,7 +63,13 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     return Object.fromEntries(
       schedules.map((s) => [s.date, React.createRef<FlashList<ScheduleCardProps>>()]),
     )
-  }, [])
+  }, [schedules])
+  const eventRefs = useMemo(() => {
+    // create object with keys of schedule index and values of arrays of view refs for each event
+    return Object.fromEntries(
+      schedules.map((s) => [s.date, s.events.map(() => React.createRef<View>())]),
+    )
+  }, [schedules])
 
   const date = useCurrentDate()
   const scheduleIndex = getCurrentScheduleIndex(schedules, date)
@@ -106,13 +119,18 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     // Scroll to the proper time of day talk
     setTimeout(() => {
       if (eventIndex > -1) {
-        scheduleListRefs[schedule?.date]?.current?.scrollToIndex({
+        const scheduleListRef = scheduleListRefs[schedule?.date]?.current
+        const eventRef = eventRefs[schedule?.date][eventIndex]?.current
+        eventRef && AccessibilityInfo.setAccessibilityFocus(findNodeHandle(eventRef))
+
+        scheduleListRef?.scrollToIndex({
           animated: true,
           index: eventIndex,
         })
+        // Focus the screen reader on the current list item
       }
     }, 200)
-  }, [onItemPress, scheduleListRefs, scheduleIndex, eventIndex])
+  }, [onItemPress, scheduleListRefs, scheduleIndex, eventIndex, eventRefs])
 
   // When app comes from the background to the foreground, focus on the current day in the schedule
   useAppState({
@@ -162,7 +180,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           ref={scheduleListRefs[schedule.date]}
           data={schedule.events}
           renderItem={({ item, index }) => (
-            <View style={$cardContainer}>
+            <View style={$cardContainer} ref={eventRefs[schedule.date][eventIndex]}>
               <ScheduleCard {...item} isPast={index < eventIndex} />
             </View>
           )}
