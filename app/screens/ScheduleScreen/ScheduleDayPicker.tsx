@@ -1,5 +1,5 @@
 import React, { FC, MutableRefObject } from "react"
-import { Dimensions, Pressable, TextStyle, View, ViewStyle } from "react-native"
+import { Dimensions, Pressable, PressableProps, TextStyle, View, ViewStyle } from "react-native"
 import Animated, {
   useAnimatedStyle,
   SharedValue,
@@ -13,7 +13,7 @@ import { Schedule } from "./ScheduleScreen"
 
 const { width } = Dimensions.get("window")
 
-type AnimatedDayButtonProps = {
+interface AnimatedDayButtonProps extends PressableProps {
   onPress: () => void
   index: number
   text: string
@@ -24,7 +24,7 @@ type AnimatedDayButtonProps = {
 
 const AnimatedDayButton = React.forwardRef(
   (props: AnimatedDayButtonProps, ref: MutableRefObject<View>) => {
-    const { onPress, index, text, scrollX, inputRange, schedules } = props
+    const { onPress, index, text, scrollX, inputRange, schedules, ...rest } = props
     const outputRange = schedules.map((_, scheduleIndex) =>
       index === scheduleIndex ? colors.palette.neutral800 : colors.palette.neutral100,
     )
@@ -36,7 +36,7 @@ const AnimatedDayButton = React.forwardRef(
     })
 
     return (
-      <Pressable {...{ ref, onPress }} style={$buttonStyle}>
+      <Pressable {...{ ref, onPress, ...rest }} style={$buttonStyle}>
         <Animated.Text maxFontSizeMultiplier={2} style={[$textStyle, $animatedTextStyle]}>
           {text}
         </Animated.Text>
@@ -114,6 +114,7 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
             onItemPress(index)
           }}
           text={formatDate(schedule.date, "EE")}
+          accessibilityLabel={formatDate(schedule.date, "EEEE")}
           {...{ index, scrollX, inputRange, schedules }}
         />
       ))}
