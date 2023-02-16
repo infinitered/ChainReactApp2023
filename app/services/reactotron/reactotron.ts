@@ -16,7 +16,7 @@ import { Platform } from "react-native"
 import { Reactotron } from "./reactotronClient"
 import { ArgType } from "reactotron-core-client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { clear } from "../../utils/storage"
+import { saveString } from "../../utils/storage"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotronConfig"
 import { goBack, resetRoot, navigate, navigationRef } from "../../navigators/navigationUtilities"
 import { fakeReactotron } from "./reactotronFake"
@@ -94,14 +94,28 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
      * creativity -- this is great for development to quickly and easily
      * get your app into the state you want.
      */
+
     Reactotron.onCustomCommand({
-      title: "Reset Root Store",
-      description: "Resets the MST store",
-      command: "resetStore",
-      handler: () => {
-        Reactotron.log("resetting store")
-        clear()
+      command: "setCurrentDate",
+      handler: (args) => {
+        const { currentDate } = args
+        ;(async () => {
+          await saveString("currentDate", currentDate)
+        })()
+        if (currentDate) {
+          console.log(`Setting current date: ${currentDate}`)
+        } else {
+          console.log("Could not set current date. No date provided.")
+        }
       },
+      title: "Set Current Date",
+      description: "Set current date for timeline view",
+      args: [
+        {
+          name: "currentDate",
+          type: ArgType.String,
+        },
+      ],
     })
 
     Reactotron.onCustomCommand({
