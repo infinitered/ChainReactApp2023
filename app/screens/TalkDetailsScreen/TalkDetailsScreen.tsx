@@ -9,7 +9,9 @@ import {
   MIN_HEADER_HEIGHT,
   BoxShadow,
   Screen,
+  Icon,
   AutoImage,
+  FloatingButton,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
@@ -18,8 +20,10 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
+import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent, RawSpeaker } from "../../services/api/webflow-api.types"
 import { translate } from "../../i18n"
+import { useFloatingActionEvents } from "../../hooks"
 
 export type Variants = "workshop" | "talk"
 
@@ -63,6 +67,14 @@ export interface TalkDetailsProps {
    */
   bio: string
   /**
+   * The url of the talk
+   */
+  talkUrl?: string
+  /**
+   * The time of the event
+   */
+  eventTime: string
+  /**
    * The assistants of the workshop
    * Only available for workshops
    */
@@ -91,6 +103,8 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         description: talk?.description,
         firstName: talk?.["speaker-s"][0]["speaker-first-name"],
         bio: talk?.["speaker-s"][0]["speaker-bio"],
+        talkUrl: talk?.["talk-url"],
+        eventTime: schedule["day-time"],
       }
     case "Workshop":
     default:
@@ -106,6 +120,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
         description: workshop?.abstract,
         firstName: workshop?.["instructor-info"]["speaker-first-name"],
         bio: workshop?.["instructor-info"]["speaker-bio"],
+        eventTime: schedule["day-time"],
         assistants: workshop?.assistants,
       }
   }
@@ -129,6 +144,8 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
 
+  const { isScrolling, scrollHandlers } = useFloatingActionEvents()
+
   if (!schedule) return null
 
   const {
@@ -141,111 +158,132 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     subtitle,
     title,
     variant,
+    talkUrl,
+    eventTime,
     assistants,
   } = talkDetailsProps(schedule)
 
   const isWorkshop = variant === "workshop"
 
+  const isEventPassed = !isFuture(parseISO(eventTime))
+
   return (
-    <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
-      <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
+    <>
+      <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
+        <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
 
-      <Animated.ScrollView
-        style={[$scrollView, { paddingBottom }]}
-        scrollEventThrottle={16}
-        onScroll={scrollHandler}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={$container}>
-          <View style={$headingContainer}>
-            <Text
-              preset="screenHeading"
-              style={$title}
-              text={title}
-              onLayout={({
-                nativeEvent: {
-                  layout: { height },
-                },
-              }) => {
-                setHeadingHeight(height)
-              }}
-            />
-            <Text preset="companionHeading" style={$subtitle} text={subtitle} />
-          </View>
-          <View style={$containerSpacing}>
-            <Image
-              source={isWorkshop ? workshopCurve : talkCurve}
-              style={isWorkshop ? $workshopCurve : $talkCurve}
-            />
-            <BoxShadow
-              preset={isWorkshop ? "bold" : "primary"}
-              style={$containerSpacing}
-              offset={6}
-            >
-              <Image source={{ uri: imageUrl }} style={$speakerImage} />
-            </BoxShadow>
-            <Image
-              source={isWorkshop ? workshopBlob : talkBlob}
-              style={isWorkshop ? $workshopBlob : $talkBlob}
-            />
-
-            <Text preset="bold" style={$nameText} text={fullName} />
-            <Text style={$companyNameText} text={company} />
-          </View>
-
-          <View style={$detailsContainer}>
-            <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
-            {isWorkshop && (
-              <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
-            )}
-            <Text style={$bodyText} text={description} />
-          </View>
-
-          <View style={$containerSpacing}>
-            <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
-            <Text style={$bodyText} text={bio} />
-          </View>
-
-          <View style={$linksContainer}>
-            <IconButton icon="twitter" onPress={() => onPress("https://cr.infinite.red")} />
-            <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
-            <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
-          </View>
-
-          {assistants?.length && (
-            <View style={$assistantContainer}>
+        <Animated.ScrollView
+          style={[$scrollView, { paddingBottom }]}
+          scrollEventThrottle={16}
+          onScroll={scrollHandler}
+          showsVerticalScrollIndicator={false}
+          {...scrollHandlers}
+        >
+          <View style={$container}>
+            <View style={$headingContainer}>
               <Text
-                preset="listHeading"
-                text={translate("talkDetailsScreen.assistingTheWorkshop")}
-                style={$assistantHeading}
+                preset="screenHeading"
+                style={$title}
+                text={title}
+                onLayout={({
+                  nativeEvent: {
+                    layout: { height },
+                  },
+                }) => {
+                  setHeadingHeight(height)
+                }}
               />
-              <View
-                style={
-                  assistants.length < 2 ? $assistantsContainerWithOne : $assistantsContainerWithMore
-                }
-              >
-                {assistants.map((assistant) => (
-                  <View style={$assistant} key={assistant._id}>
-                    <AutoImage
-                      source={{ uri: assistant["speaker-photo"].url }}
-                      style={$assistantImage}
-                    />
-                    <Text preset="companionHeading" text={assistant.name} />
-                    <Text preset="label" style={$assistantCompany} text={assistant.company} />
-                    <View style={$assistantLinks}>
-                      <IconButton
-                        icon={assistant.twitter ? "twitter" : "link"}
-                        onPress={() => onPress(assistant.twitter || assistant.externalURL)}
-                      />
-                    </View>
-                  </View>
-                ))}
-              </View>
+              <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
+            <View style={$containerSpacing}>
+              <Image
+                source={isWorkshop ? workshopCurve : talkCurve}
+                style={isWorkshop ? $workshopCurve : $talkCurve}
+              />
+              <BoxShadow
+                preset={isWorkshop ? "bold" : "primary"}
+                style={$containerSpacing}
+                offset={6}
+              >
+                <Image source={{ uri: imageUrl }} style={$speakerImage} />
+              </BoxShadow>
+              <Image
+                source={isWorkshop ? workshopBlob : talkBlob}
+                style={isWorkshop ? $workshopBlob : $talkBlob}
+              />
+
+              <Text preset="bold" style={$nameText} text={fullName} />
+              <Text style={$companyNameText} text={company} />
+            </View>
+
+            <View style={$detailsContainer}>
+              <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
+              {isWorkshop && (
+                <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
+              )}
+              <Text style={$bodyText} text={description} />
+            </View>
+
+            <View style={$containerSpacing}>
+              <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
+              <Text style={$bodyText} text={bio} />
+            </View>
+
+            <View style={$linksContainer}>
+              <IconButton icon="twitter" onPress={() => onPress("https://cr.infinite.red")} />
+              <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
+              <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
+            </View>
+
+            {assistants?.length && (
+              <View style={$assistantContainer}>
+                <Text
+                  preset="listHeading"
+                  text={translate("talkDetailsScreen.assistingTheWorkshop")}
+                  style={$assistantHeading}
+                />
+                <View
+                  style={
+                    assistants.length < 2
+                      ? $assistantsContainerWithOne
+                      : $assistantsContainerWithMore
+                  }
+                >
+                  {assistants.map((assistant) => (
+                    <View style={$assistant} key={assistant._id}>
+                      <AutoImage
+                        source={{ uri: assistant["speaker-photo"].url }}
+                        style={$assistantImage}
+                      />
+                      <Text preset="companionHeading" text={assistant.name} />
+                      <Text preset="label" style={$assistantCompany} text={assistant.company} />
+                      <View style={$assistantLinks}>
+                        <IconButton
+                          icon={assistant.twitter ? "twitter" : "link"}
+                          onPress={() => onPress(assistant.twitter || assistant.externalURL)}
+                        />
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+        </Animated.ScrollView>
+      </Screen>
+      {talkUrl && isEventPassed && (
+        <FloatingButton
+          isVisible={!isScrolling}
+          testID="see-the-schedule-button"
+          tx="talkDetailsScreen.watchTalk"
+          LeftAccessory={(props) => (
+            <Icon icon="youtube" color={colors.palette.neutral800} {...props} />
           )}
-        </View>
-      </Animated.ScrollView>
-    </Screen>
+          TextProps={{ allowFontScaling: false }}
+          onPress={() => onPress(talkUrl)}
+        ></FloatingButton>
+      )}
+    </>
   )
 }
 

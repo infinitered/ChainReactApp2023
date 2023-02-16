@@ -74,7 +74,12 @@ const en = {
       ".\n\nWhen submitting a report, please include as much information as you feel comfortable sharing. We take all reports seriously.",
   },
   talkDetailsScreen: {
+    watchTalk: "Watch talk",
     assistingTheWorkshop: "Assisting the workshop",
+  },
+  scheduleScreen: {
+    talkRecordingPosted: "Talk recording posted",
+    videoComingSoon: "Video coming soon",
   },
 }
 

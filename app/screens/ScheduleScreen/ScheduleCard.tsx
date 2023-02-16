@@ -3,6 +3,7 @@ import { TextStyle, View, ViewStyle } from "react-native"
 import { Avatar, AvatarProps, Card, Icon, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { useAppNavigation } from "../../hooks"
+import { isConferencePassed } from "../../utils/isConferencePassed"
 
 interface HeaderProps {
   formattedEndTime?: string
@@ -15,6 +16,8 @@ interface FooterProps {
   heading: string
   subheading: string
   isPast?: boolean
+  talkUrl?: string
+  variant: Variants
 }
 
 const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderProps) => (
@@ -29,14 +32,40 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
   </View>
 )
 
-const Footer = ({ heading, subheading, isPast }: FooterProps) => (
-  <View style={$footerContainer}>
-    <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
-      {heading}
-    </Text>
-    <Text style={isPast ? $pastFooterSubheading : $footerSubheading}>{subheading}</Text>
-  </View>
-)
+const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
+  isConferencePassed && (
+    <View style={$talkRecording}>
+      <Icon icon="youtube" />
+      <Text
+        preset="label"
+        style={$talkRecordingLabel}
+        tx={talkUrl ? "scheduleScreen.talkRecordingPosted" : "scheduleScreen.videoComingSoon"}
+      />
+    </View>
+  )
+
+const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
+  return (
+    <View style={$footerContainer}>
+      <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
+        {heading}
+      </Text>
+      {isPast ? (
+        <>
+          <Text style={$pastFooterSubheading}>{subheading}</Text>
+          {
+            // assuming there will be other variants in the future I went with a switch statement
+            {
+              talk: <TalkCTA talkUrl={talkUrl} />,
+            }[variant]
+          }
+        </>
+      ) : (
+        <Text style={$footerSubheading}>{subheading}</Text>
+      )}
+    </View>
+  )
+}
 
 export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel"
 
@@ -87,6 +116,10 @@ export interface ScheduleCardProps {
    * Whether the event is in the past
    */
   isPast?: boolean
+  /**
+   * Talk url
+   */
+  talkUrl?: string
 }
 
 interface SpeakingEventProps {
@@ -96,6 +129,8 @@ interface SpeakingEventProps {
   sources: string[]
   isPast?: boolean
   startTime?: string
+  talkUrl?: string
+  variant: Variants
 }
 
 interface BaseEventProps {
@@ -128,6 +163,8 @@ const baseSpeakingEventProps = ({
   sources = [],
   isPast,
   startTime,
+  talkUrl,
+  variant,
 }: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
@@ -145,7 +182,7 @@ const baseSpeakingEventProps = ({
         />
       </View>
     ),
-    FooterComponent: <Footer {...{ heading, subheading, isPast, startTime }} />,
+    FooterComponent: <Footer {...{ heading, subheading, isPast, startTime, talkUrl, variant }} />,
   }
 }
 
@@ -161,6 +198,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     level,
     id,
     isPast,
+    talkUrl,
   } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "workshop"].includes(variant)
@@ -190,7 +228,15 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
             />
           ),
         }
-      : baseSpeakingEventProps({ heading, subheading, eventTitle, sources, isPast })
+      : baseSpeakingEventProps({
+          heading,
+          subheading,
+          eventTitle,
+          sources,
+          isPast,
+          talkUrl,
+          variant,
+        })
 
   const isReversed = variant === "recurring" || variant === "party"
   const cardPreset = isReversed
@@ -216,6 +262,17 @@ const $footerSubheading: TextStyle = {
 
 const $pastFooterSubheading: TextStyle = {
   color: colors.palette.primary100,
+}
+
+const $talkRecording: ViewStyle = {
+  flexDirection: "row",
+  alignItems: "center",
+  marginTop: spacing.extraSmall,
+}
+
+const $talkRecordingLabel: TextStyle = {
+  color: colors.palette.primary400,
+  marginStart: spacing.extraSmall,
 }
 
 const $timeText: TextStyle = {
