@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
+import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
 import type {
   RawRecommendations,
@@ -22,7 +23,13 @@ import {
   VENUES,
   WORKSHOPS,
 } from "./webflow-consts"
-import { cleanedSchedule, cleanedSpeakers, cleanedTalks, cleanedWorkshops } from "./webflow-helpers"
+import {
+  cleanedSchedule,
+  cleanedSpeakers,
+  cleanedTalks,
+  cleanedWorkshops,
+  convertScheduleToScheduleCard,
+} from "./webflow-helpers"
 
 const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
   useQuery({
@@ -87,6 +94,31 @@ export const useScheduledEvents = () => {
       workshops: cleanedWorkshops(workshops, cleanedSpeakers(speakers)),
     }),
     ...rest,
+  }
+}
+
+export const useScheduleScreenData = (): { isLoading: boolean; schedules: Schedule[] } => {
+  const { data: events, isLoading } = useScheduledEvents()
+
+  return {
+    isLoading,
+    schedules: [
+      {
+        date: "2023-05-17",
+        title: "React Native Workshops",
+        events: convertScheduleToScheduleCard(events, "Wednesday"),
+      },
+      {
+        date: "2023-05-18",
+        title: "Conference Day 1",
+        events: convertScheduleToScheduleCard(events, "Thursday"),
+      },
+      {
+        date: "2023-05-19",
+        title: "Conference Day 2",
+        events: convertScheduleToScheduleCard(events, "Friday"),
+      },
+    ],
   }
 }
 

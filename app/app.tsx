@@ -22,13 +22,14 @@ import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
 import { colors, customFontsToLoad, spacing } from "./theme"
-import { setupReactotron } from "./services/reactotron"
+import { setupReactotron } from "./services/reactotron/reactotron"
 import Config from "./config"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClientProvider } from "@tanstack/react-query"
 import messaging from "@react-native-firebase/messaging"
 import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
 import { $baseSecondaryStyle, $baseStyle } from "./components"
 import { Dimensions, ViewStyle } from "react-native"
+import { queryClient } from "./services/api/react-query"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -50,9 +51,6 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 interface AppProps {
   hideSplashScreen: () => Promise<void>
 }
-
-// Creating a react-query client with the stale time set to "Infinity" so that its never stale
-export const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: Infinity } } })
 
 // Setting up our custom Toast component
 const CustomToast = () => {

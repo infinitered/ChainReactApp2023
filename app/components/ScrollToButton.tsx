@@ -1,6 +1,7 @@
 import React, { useRef } from "react"
 import { ViewStyle, ViewToken, TextStyle } from "react-native"
-import { Button, ButtonProps, Icon } from "../components"
+import { Button, ButtonProps } from "./Button"
+import { Icon } from "./Icon"
 import { colors, spacing } from "../theme"
 import Animated, {
   interpolate,

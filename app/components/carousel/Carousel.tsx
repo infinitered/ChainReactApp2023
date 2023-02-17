@@ -1,71 +1,15 @@
 import React, { useMemo } from "react"
-import {
-  View,
-  FlatList,
-  Dimensions,
-  ViewStyle,
-  ImageSourcePropType,
-  TextStyle,
-  ImageStyle,
-} from "react-native"
-
-import { Button, ButtonProps, CarouselCard, IconProps, Text } from "../components"
-import { spacing } from "../theme"
+import { View, FlatList, ViewStyle, ImageSourcePropType, TextStyle } from "react-native"
+import { Button } from "../Button"
+import { CarouselCard } from "./CarouselCard"
+import { Text } from "../Text"
+import { spacing } from "../../theme"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
-import { openLinkInBrowser } from "../utils/openLinkInBrowser"
-import { openMap } from "../utils/openMap"
-import { SocialButton } from "./SocialButton"
-
-export interface StaticCarouselProps {
-  body: string
-  button?: ButtonData & ButtonProps
-  data: ImageSourcePropType[]
-  meta?: string
-  preset: "static"
-  subtitle: string
-}
-
-interface ButtonData {
-  link: string
-  text: string
-}
-
-interface SocialButtonData {
-  icon: IconProps["icon"]
-  url: string
-}
-
-export interface DynamicCarouselItem {
-  body: string
-  image: ImageSourcePropType
-  imageStyle?: ImageStyle
-  isSpeakerPanel?: boolean
-  label?: string
-  leftButton?: ButtonData
-  meta?: string
-  rightButton?: ButtonData
-  socialButtons?: SocialButtonData[]
-  subtitle: string
-}
-
-interface DynamicCarouselProps {
-  preset: "dynamic"
-  data: DynamicCarouselItem[]
-}
-
-interface Spacer {
-  spacer: boolean
-}
-
-type CarouselProps =
-  | (StaticCarouselProps | DynamicCarouselProps) & {
-      openLink?: () => void
-    }
-
-const { width } = Dimensions.get("screen")
-export const CAROUSEL_IMAGE_WIDTH = width * 0.9
-export const SPACING = spacing.extraSmall
-export const SPACER_WIDTH = (width - CAROUSEL_IMAGE_WIDTH) / 2
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
+import { openMap } from "../../utils/openMap"
+import { SocialButton } from "../SocialButton"
+import { CAROUSEL_IMAGE_WIDTH, SPACER_WIDTH } from "./constants"
+import { CarouselProps, DynamicCarouselItem, Spacer } from "./carousel.types"
 
 // ! https://github.com/software-mansion/react-native-reanimated/issues/457
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)

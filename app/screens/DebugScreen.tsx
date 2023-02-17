@@ -1,7 +1,8 @@
 import React, { FC } from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
-import { AppStackParamList, resetRoot } from "../navigators"
+import { AppStackParamList } from "../navigators/AppNavigator"
+import { resetRoot } from "../navigators/navigationUtilities"
 import { Button, HeaderAction, Screen, Text } from "../components"
 
 import messaging from "@react-native-firebase/messaging"
