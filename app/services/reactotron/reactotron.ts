@@ -20,7 +20,7 @@ import { clear } from "../../utils/storage"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotronConfig"
 import { goBack, resetRoot, navigate, navigationRef } from "../../navigators/navigationUtilities"
 import { fakeReactotron } from "./reactotronFake"
-import { queryClient } from "../../app"
+import { queryClient } from "../api/react-query"
 
 /**
  * We tell typescript we intend to hang Reactotron off of the console object.

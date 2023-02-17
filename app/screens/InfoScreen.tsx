@@ -6,7 +6,7 @@ import { TabScreenProps } from "../navigators/TabNavigator"
 import { colors, spacing } from "../theme"
 import { translate } from "../i18n"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
-import { Carousel } from "../components/Carousel"
+import { Carousel } from "../components/carousel/Carousel"
 
 const phoneNumber = "360-450-4752"
 

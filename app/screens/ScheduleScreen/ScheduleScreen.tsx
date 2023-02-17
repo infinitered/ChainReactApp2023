@@ -15,7 +15,7 @@ import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
 import { formatDate } from "../../utils/formatDate"
 import { useAppState } from "../../hooks"
 import { format, isAfter } from "date-fns"
-import { createScheduleScreenData } from "../../services/api/webflow-helpers"
+import { useScheduleScreenData } from "../../services/api/webflow-api"
 import { ScrollToButton, useScrollToEvent } from "../../components"
 
 export interface Schedule {
@@ -40,7 +40,7 @@ const getCurrentScheduleIndex = (schedules: Schedule[], currentTime = new Date()
 }
 
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
-  const { isLoading, schedules } = createScheduleScreenData()
+  const { isLoading, schedules } = useScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
   useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
