@@ -109,7 +109,7 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
         }
       },
       title: "Set Current Date",
-      description: "Set current date for timeline view",
+      description: "Use any valid Date() string to set the current date for the schedule view. For example: 'Fri May 19 2023 14:00:00 GMT-0800 (Pacific Standard Time)'",
       args: [
         {
           name: "currentDate",
