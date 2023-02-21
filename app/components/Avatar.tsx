@@ -44,7 +44,7 @@ export const Avatar: React.FC<AvatarProps> = (props) => {
           key={`panel-${index}-${source}`}
           source={source}
           style={[$imageStyle, $panelImageStyle]}
-          resizeMode="contain"
+          resizeMode="cover"
         />
       ))}
     </View>

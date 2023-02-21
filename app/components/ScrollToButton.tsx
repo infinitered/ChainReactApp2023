@@ -1,10 +1,9 @@
 import React, { useRef } from "react"
-import { ViewStyle, ViewToken, TextStyle } from "react-native"
+import { ViewStyle, ViewToken, TextStyle, View } from "react-native"
 import { Button, ButtonProps } from "./Button"
 import { Icon } from "./Icon"
 import { colors, spacing } from "../theme"
 import Animated, {
-  interpolate,
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
@@ -14,6 +13,8 @@ import Animated, {
 export interface ScrollToButtonProps extends ButtonProps, ReturnType<typeof useScrollToEvent> {
   navigateToCurrentEvent: () => void
 }
+
+const ARROW_SIZE = 24
 
 export function useScrollToEvent(scheduleIndex) {
   const currentEventIndex = useSharedValue(-1)
@@ -46,20 +47,21 @@ export function useScrollToEvent(scheduleIndex) {
     opacity: scrollButtonOpacity.value,
   }))
 
-  const $arrowStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        rotate: `${interpolate(
-          Number(Math.min(...currentlyViewingEvents.value) > currentEventIndex.value),
-          [0, 1],
-          [0, 180],
-        )}deg`,
-      },
-    ],
+  const $arrowDownStyle = useAnimatedStyle(() => ({
+    opacity: withSpring(
+      Number(Math.min(...currentlyViewingEvents.value) < currentEventIndex.value),
+    ),
+  }))
+
+  const $arrowUpStyle = useAnimatedStyle(() => ({
+    opacity: withSpring(
+      Number(Math.min(...currentlyViewingEvents.value) > currentEventIndex.value),
+    ),
   }))
 
   return {
-    $arrowStyle,
+    $arrowDownStyle,
+    $arrowUpStyle,
     currentEventIndex,
     currentlyViewingEvents,
     handleViewableEventIndexChanged,
@@ -69,15 +71,21 @@ export function useScrollToEvent(scheduleIndex) {
 }
 
 export function ScrollToButton(props: ScrollToButtonProps) {
-  const { $arrowStyle, $scrollButtonStyle, navigateToCurrentEvent, ...rest } = props
+  const { $arrowDownStyle, $arrowUpStyle, $scrollButtonStyle, navigateToCurrentEvent, ...rest } =
+    props
 
   return (
     <Animated.View style={[$scrollButtonContainer, $scrollButtonStyle]}>
       <Button
         LeftAccessory={() => (
-          <Animated.View style={$arrowStyle}>
-            <Icon icon="arrowDown" size={24} color={colors.palette.primary500} />
-          </Animated.View>
+          <View style={$arrowContainer}>
+            <Animated.View style={[$arrow, $arrowDownStyle]}>
+              <Icon icon="arrowDown" size={24} color={colors.palette.primary500} />
+            </Animated.View>
+            <Animated.View style={[$arrow, $arrowUpStyle]}>
+              <Icon icon="arrowUp" size={24} color={colors.palette.primary500} />
+            </Animated.View>
+          </View>
         )}
         preset="reversed"
         style={$scrollButton}
@@ -105,4 +113,15 @@ const $scrollButton: ViewStyle = {
 const $scrollButtonText: TextStyle = {
   color: colors.palette.primary500,
   marginLeft: spacing.small + spacing.micro,
+}
+
+const $arrowContainer: ViewStyle = {
+  height: ARROW_SIZE,
+  width: ARROW_SIZE,
+}
+
+const $arrow: ViewStyle = {
+  position: "absolute",
+  top: 0,
+  left: 0,
 }
