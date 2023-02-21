@@ -7,10 +7,13 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { BoxShadow, ButtonLink, Text } from "../components"
-import { colors, spacing } from "../theme"
+import { BoxShadow } from "../BoxShadow"
+import { ButtonLink } from "../ButtonLink"
+import { Text } from "../Text"
+import { colors, spacing } from "../../theme"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { CAROUSEL_IMAGE_WIDTH, DynamicCarouselItem, SPACING } from "./Carousel"
+import { CAROUSEL_IMAGE_WIDTH, SPACING } from "./constants"
+import { DynamicCarouselItem } from "./carousel.types"
 
 export type CarouselCardProps = {
   button?: React.ReactNode

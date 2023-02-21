@@ -1,6 +1,7 @@
 import React, { FC } from "react"
 import { GestureResponderEvent, Linking, ViewStyle } from "react-native"
-import { Button, AutoImage } from "."
+import { Button } from "./Button"
+import { AutoImage } from "./AutoImage"
 import { spacing } from "../theme"
 
 type Props = {

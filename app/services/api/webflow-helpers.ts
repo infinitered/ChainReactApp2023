@@ -1,7 +1,5 @@
-import { Schedule } from "../../screens"
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
 import { formatDate, sortByTime } from "../../utils/formatDate"
-import { useScheduledEvents } from "./webflow-api"
 import type {
   RawScheduledEvent,
   RawSpeaker,
@@ -98,38 +96,9 @@ export const cleanedSchedule = ({
     }))
 }
 
-type ScheduleList = {
-  isLoading: boolean
-  schedules: Schedule[]
-}
 /*
  * Converting workshop data from "type ids" to "type names"
  */
-export const createScheduleScreenData = (): ScheduleList => {
-  const { data: events, isLoading } = useScheduledEvents()
-
-  return {
-    isLoading,
-    schedules: [
-      {
-        date: "2023-05-17",
-        title: "React Native Workshops",
-        events: convertScheduleToScheduleCard(events, "Wednesday"),
-      },
-      {
-        date: "2023-05-18",
-        title: "Conference Day 1",
-        events: convertScheduleToScheduleCard(events, "Thursday"),
-      },
-      {
-        date: "2023-05-19",
-        title: "Conference Day 2",
-        events: convertScheduleToScheduleCard(events, "Friday"),
-      },
-    ],
-  }
-}
-
 const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps => {
   switch (schedule.type) {
     case "Recurring":
@@ -200,7 +169,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
 }
 
 // [NOTE] util function that might be needed in the future
-const convertScheduleToScheduleCard = (
+export const convertScheduleToScheduleCard = (
   scheduleData: ScheduledEvent[],
   day: string,
 ): ScheduleCardProps[] => {
