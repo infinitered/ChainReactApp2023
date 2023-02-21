@@ -17,6 +17,7 @@ import { useAppState } from "../../hooks"
 import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
 import { ScrollToButton, useScrollToEvent } from "../../components"
+import { useCurrentDate } from "../../hooks/useCurrentDate"
 
 export interface Schedule {
   date: string
@@ -57,7 +58,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     )
   }, [])
 
-  const date = new Date()
+  const date = useCurrentDate()
   const scheduleIndex = getCurrentScheduleIndex(schedules, date)
   const schedule = schedules[scheduleIndex]
   const eventIndex = getCurrentEventIndex(schedule, date)
