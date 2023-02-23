@@ -159,29 +159,34 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     ({ index, item: schedule }: { index: number; item: Schedule }) => (
       <View style={[$container, { width }]}>
         <FlashList<ScheduleCardProps>
-          ref={scheduleListRefs[schedule.date]}
           data={schedule.events}
-          renderItem={({ item, index }) => (
-            <View style={$cardContainer}>
-              <ScheduleCard {...item} isPast={index < eventIndex} />
-            </View>
-          )}
+          estimatedItemSize={242}
+          estimatedListSize={{ height: schedules.length * 242, width }}
           // To achieve better performance, specify the type based on the item
           getItemType={(item) => item.variant}
-          estimatedItemSize={225}
+          keyExtractor={(item) => item.id}
+          onViewableItemsChanged={handleViewableEventIndexChanged}
+          ref={scheduleListRefs[schedule.date]}
+          scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
+          viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
           contentContainerStyle={
             scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
           }
-          scrollEventThrottle={16}
-          onViewableItemsChanged={handleViewableEventIndexChanged}
-          viewabilityConfig={{
-            itemVisiblePercentThreshold: 50,
-          }}
+          renderItem={({ item, index: itemIndex }) => (
+            <View style={$cardContainer}>
+              <ScheduleCard
+                {...item}
+                isPast={
+                  index < scheduleIndex || (index === scheduleIndex && itemIndex < eventIndex)
+                }
+              />
+            </View>
+          )}
         />
       </View>
     ),
-    [scheduleIndex, eventIndex],
+    [scheduleIndex, eventIndex, isFocused],
   )
 
   if (!selectedSchedule) return null
