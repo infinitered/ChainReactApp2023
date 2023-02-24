@@ -133,7 +133,9 @@ export interface RawSponsor extends Item {
   logo: ImageRef
 }
 
-export interface Sponsor extends RawSponsor {}
+export type Sponsor = RawSponsor & {
+  "sponsor-tier"?: "Platinum" | "Gold" | "Silver" | "Bronze" | "Other"
+}
 
 export interface RawRecommendations extends Item {
   "city-state-zip"?: string

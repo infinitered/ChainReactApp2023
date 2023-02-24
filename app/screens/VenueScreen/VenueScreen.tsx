@@ -48,7 +48,7 @@ const useVenueSections = (): { isLoading: boolean; sections: SectionListData<any
   const tiers = Object.keys(rawTiers).reduce<Record<Tiers, RawSponsor[]>>(
     (acc, tier) => ({
       ...acc,
-      [WEBFLOW_MAP.sponsorTier[tier]]: rawTiers[tier] ?? [],
+      [tier]: rawTiers[tier] ?? [],
     }),
     initialTiers,
   )

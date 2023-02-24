@@ -26,6 +26,7 @@ import {
 import {
   cleanedSchedule,
   cleanedSpeakers,
+  cleanedSponsors,
   cleanedTalks,
   cleanedWorkshops,
   convertScheduleToScheduleCard,
@@ -59,10 +60,15 @@ export const useSpeakerNames = () => {
   return useWebflowAPI<RawSpeakerName>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
 }
 
-export const useSponsors = () => {
-  return useWebflowAPI<RawSponsor>(SPONSORS.key, SPONSORS.collectionId)
-}
+export const useSponsors = (): { isLoading: boolean; data: RawSponsor[] } => {
+  const { data: sponsors, isLoading } = useWebflowAPI<RawSponsor>(
+    SPONSORS.key,
+    SPONSORS.collectionId,
+  )
+  const data = cleanedSponsors(sponsors)
 
+  return { isLoading, data }
+}
 export const useTalks = () => {
   return useWebflowAPI<RawTalk>(TALKS.key, TALKS.collectionId)
 }
