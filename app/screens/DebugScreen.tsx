@@ -3,7 +3,7 @@ import { TextStyle, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../navigators/AppNavigator"
 import { resetRoot } from "../navigators/navigationUtilities"
-import { Button, HeaderAction, Screen, Text } from "../components"
+import { Button, Screen, Text } from "../components"
 
 import messaging from "@react-native-firebase/messaging"
 import { spacing } from "../theme"
@@ -11,11 +11,12 @@ import { useAppNavigation, useHeader } from "../hooks"
 import { translate } from "../i18n"
 import { clear } from "../utils/storage"
 import { useQueryClient } from "@tanstack/react-query"
+import { BackButton } from "../navigators/BackButton"
 
 export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () => {
   const navigation = useAppNavigation()
   useHeader({
-    LeftActionComponent: <HeaderAction icon="back" onPress={navigation.goBack} />,
+    LeftActionComponent: <BackButton />,
     title: translate("debugScreen.title"),
   })
   const [fcmToken, setFcmToken] = React.useState<string | null>(null)
