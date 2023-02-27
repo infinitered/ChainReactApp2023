@@ -3,68 +3,17 @@ import { formatDate, sortByTime } from "../../utils/formatDate"
 import type {
   RawScheduledEvent,
   RawSpeaker,
+  RawSponsor,
   RawTalk,
   RawWorkshop,
   RecurringEvents,
   ScheduledEvent,
   Speaker,
+  Sponsor,
   Talk,
   Workshop,
 } from "./webflow-api.types"
 import { WEBFLOW_MAP } from "./webflow-consts"
-
-/*
- * Converting workshop data from "type ids" to "type names"
- */
-export const cleanedWorkshops = (
-  workshopsData?: RawWorkshop[],
-  speakersData?: Speaker[],
-): Workshop[] => {
-  return workshopsData
-    ?.filter((workshop) => !workshop._archived && !workshop._draft)
-    .map((workshop) => ({
-      ...workshop,
-      level: WEBFLOW_MAP.workshopLevel[workshop.level],
-      "instructor-info": speakersData?.find(
-        (speaker) => speaker._id === workshop["instructor-info"],
-      ),
-      assistants: workshop?.assistants?.map((id) =>
-        speakersData?.find((speaker) => speaker._id === id),
-      ),
-    }))
-}
-
-/*
- * Converting speakers data from "type ids" to "type names"
- */
-export const cleanedSpeakers = (speakersData?: RawSpeaker[]): Speaker[] => {
-  return speakersData?.map(cleanedSpeaker)
-}
-
-export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
-  if (!speaker) return null
-  return {
-    ...speaker,
-    "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
-    "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
-  }
-}
-
-export const cleanedTalks = ({
-  speakers,
-  talks,
-}: {
-  speakers?: RawSpeaker[]
-  talks?: RawTalk[]
-}): Talk[] => {
-  return talks?.map((talk) => ({
-    ...talk,
-    "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
-    "speaker-s": talk["speaker-s"].map((speakerId) =>
-      cleanedSpeaker(speakers?.find(({ _id }) => _id === speakerId)),
-    ),
-  }))
-}
 
 /*
  * Converting schedule data from "type ids" to "type names"
@@ -93,6 +42,71 @@ export const cleanedSchedule = ({
       talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
       workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+    }))
+}
+
+/*
+ * Converting speakers data from "type ids" to "type names"
+ */
+export const cleanedSpeakers = (speakersData?: RawSpeaker[]): Speaker[] => {
+  return speakersData?.map(cleanedSpeaker)
+}
+
+export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
+  if (!speaker) return null
+  return {
+    ...speaker,
+    "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
+    "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
+  }
+}
+
+export const cleanedSponsors = (sponsorsData?: RawSponsor[]): Sponsor[] => {
+  return sponsorsData?.filter((s) => s["is-a-current-sponsor"]).map(cleanedSponsor)
+}
+
+export const cleanedSponsor = (sponsor?: RawSponsor): Sponsor | null => {
+  if (!sponsor) return null
+  return {
+    ...sponsor,
+    "sponsor-tier": WEBFLOW_MAP.sponsorTier[sponsor["sponsor-tier"]],
+  }
+}
+
+export const cleanedTalks = ({
+  speakers,
+  talks,
+}: {
+  speakers?: RawSpeaker[]
+  talks?: RawTalk[]
+}): Talk[] => {
+  return talks?.map((talk) => ({
+    ...talk,
+    "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
+    "speaker-s": talk["speaker-s"].map((speakerId) =>
+      cleanedSpeaker(speakers?.find(({ _id }) => _id === speakerId)),
+    ),
+  }))
+}
+
+/*
+ * Converting workshop data from "type ids" to "type names"
+ */
+export const cleanedWorkshops = (
+  workshopsData?: RawWorkshop[],
+  speakersData?: Speaker[],
+): Workshop[] => {
+  return workshopsData
+    ?.filter((workshop) => !workshop._archived && !workshop._draft)
+    .map((workshop) => ({
+      ...workshop,
+      level: WEBFLOW_MAP.workshopLevel[workshop.level],
+      "instructor-info": speakersData?.find(
+        (speaker) => speaker._id === workshop["instructor-info"],
+      ),
+      assistants: workshop?.assistants?.map((id) =>
+        speakersData?.find((speaker) => speaker._id === id),
+      ),
     }))
 }
 
