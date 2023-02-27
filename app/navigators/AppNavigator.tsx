@@ -15,9 +15,14 @@ import { StackScreenProps } from "@react-navigation/stack"
 import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import { DebugScreen, PartyDetailsScreen, TalkDetailsScreen, WelcomeScreen } from "../screens"
-import { SpeakerPanelDetailsScreen } from "../screens/TalkDetailsScreen/SpeakerPanelDetailsScreen copy"
-import { WorkshopDetailsScreen } from "../screens/TalkDetailsScreen/WorkshopDetailsScreen"
+import {
+  DebugScreen,
+  PartyDetailsScreen,
+  SpeakerPanelDetailsScreen,
+  TalkDetailsScreen,
+  WelcomeScreen,
+  WorkshopDetailsScreen,
+} from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
 
