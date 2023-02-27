@@ -43,7 +43,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   scrollX,
   socialButtons,
 }) => {
-  const { label, subtitle, meta, body, image, isSpeakerPanel } = item as DynamicCarouselItem
+  const { label, subtitle, meta, body, image, speakerPanelOrWorkshop } = item as DynamicCarouselItem
   const source = subtitle ? image : item
 
   const inputRange = [
@@ -71,8 +71,8 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
 
   return (
     <View style={$carouselCard}>
-      {isSpeakerPanel && (
-        <Animated.View style={[$speakerPanelCard, $animatedImage]}>
+      {speakerPanelOrWorkshop && (
+        <Animated.View style={[$otherCards, $animatedImage]}>
           <BoxShadow preset="primary" offset={5}>
             <Animated.Image
               source={source}
@@ -81,7 +81,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           </BoxShadow>
         </Animated.View>
       )}
-      {!isSpeakerPanel && (
+      {!speakerPanelOrWorkshop && (
         <View style={$cardWrapper}>
           <Animated.Image source={source} style={[$image, $animatedImage]} />
         </View>
@@ -92,7 +92,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
             <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
           )}
           <AnimatedText
-            preset={isSpeakerPanel ? "cardFooterHeading" : "subheading"}
+            preset={speakerPanelOrWorkshop ? "cardFooterHeading" : "subheading"}
             text={subtitle}
             style={[$mb, $mr, $animatedSlideData]}
           />
@@ -189,7 +189,7 @@ const $slideWrapper: ViewStyle = {
   marginTop: spacing.medium,
 }
 
-const $speakerPanelCard: ViewStyle = {
+const $otherCards: ViewStyle = {
   ...$cardWrapper,
   borderRadius: 0,
   paddingTop: spacing.small + spacing.micro,

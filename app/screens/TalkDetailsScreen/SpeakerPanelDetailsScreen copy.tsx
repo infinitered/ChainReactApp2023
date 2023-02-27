@@ -2,17 +2,18 @@ import React, { FC } from "react"
 import { ViewStyle, View, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Text, MIN_HEADER_HEIGHT, Screen, Carousel, DynamicCarouselItem } from "../../components"
+import { Text, MIN_HEADER_HEIGHT, Screen, Carousel } from "../../components"
 import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
+import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 
-export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "SpeakerPanel">> = ({
-  route: { params },
-}) => {
+export const SpeakerPanelDetailsScreen: FC<
+  StackScreenProps<AppStackParamList, "SpeakerPanelDetails">
+> = ({ route: { params } }) => {
   const scrollY = useSharedValue(0)
   const [headingHeight, setHeadingHeight] = React.useState(0)
 
@@ -35,8 +36,8 @@ export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "Speaker
 
   const carouselData = schedule?.talk?.["speaker-s"].map((speaker) => ({
     image: { uri: speaker["speaker-photo"].url },
+    speakerPanelOrWorkshop: true,
     imageStyle: { height: 320 },
-    isSpeakerPanel: true,
     subtitle: speaker.name,
     label: speaker.company,
     body: speaker["speaker-bio"],

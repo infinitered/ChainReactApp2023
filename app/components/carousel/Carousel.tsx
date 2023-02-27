@@ -103,7 +103,7 @@ export function Carousel(props: CarouselProps) {
               {...{
                 imageStyle: (item as DynamicCarouselItem).imageStyle,
                 index,
-                isSpeakerPanel: (item as DynamicCarouselItem).isSpeakerPanel,
+                speakerPanelOrWorkshop: (item as DynamicCarouselItem).speakerPanelOrWorkshop,
                 item,
                 leftButton,
                 rightButton,

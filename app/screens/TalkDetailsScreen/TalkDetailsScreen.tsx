@@ -4,13 +4,11 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
 import {
   Text,
-  Tag,
   IconButton,
   MIN_HEADER_HEIGHT,
   BoxShadow,
   Screen,
   Icon,
-  AutoImage,
   FloatingButton,
 } from "../../components"
 import { colors, spacing } from "../../theme"
@@ -21,19 +19,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
-import { ScheduledEvent, RawSpeaker } from "../../services/api/webflow-api.types"
-import { translate } from "../../i18n"
+import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents } from "../../hooks"
 
 export type Variants = "workshop" | "talk"
 
 export interface TalkDetailsProps {
-  /**
-   * The variant of the talk details screen.
-   * Options: "workshop", "talk"
-   * Default: "workshop"
-   */
-  variant?: Variants
   /**
    * The title of the talk
    */
@@ -74,55 +65,27 @@ export interface TalkDetailsProps {
    * The time of the event
    */
   eventTime: string
-  /**
-   * The assistants of the workshop
-   * Only available for workshops
-   */
-  assistants?: RawSpeaker[]
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
-const workshopBlob = require("../../../assets/images/workshop-shape.png")
-const workshopCurve = require("../../../assets/images/workshop-curve.png")
 const talkCurve = require("../../../assets/images/talk-curve.png")
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
 const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
-  switch (schedule.type) {
-    case "Talk":
-      // eslint-disable-next-line no-case-declarations
-      const talk = schedule.talk
-      return {
-        variant: "talk",
-        title: talk?.name,
-        subtitle: formatDate(schedule["day-time"], "MMMM dd, h:mm aaa"),
-        imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
-        fullName: talk?.["speaker-s"][0]?.name,
-        company: talk?.["speaker-s"][0]?.company,
-        description: talk?.description,
-        firstName: talk?.["speaker-s"][0]["speaker-first-name"],
-        bio: talk?.["speaker-s"][0]["speaker-bio"],
-        talkUrl: talk?.["talk-url"],
-        eventTime: schedule["day-time"],
-      }
-    case "Workshop":
-    default:
-      // eslint-disable-next-line no-case-declarations
-      const workshop = schedule.workshop
-      return {
-        variant: "workshop",
-        title: workshop?.name,
-        subtitle: schedule.location,
-        imageUrl: workshop?.["instructor-info"]?.["speaker-photo"].url,
-        fullName: workshop?.["instructor-info"].name,
-        company: workshop?.["instructor-info"].company,
-        description: workshop?.abstract,
-        firstName: workshop?.["instructor-info"]["speaker-first-name"],
-        bio: workshop?.["instructor-info"]["speaker-bio"],
-        eventTime: schedule["day-time"],
-        assistants: workshop?.assistants,
-      }
+  const talk = schedule.talk
+
+  return {
+    title: talk?.name,
+    subtitle: formatDate(schedule["day-time"], "MMMM dd, h:mm aaa"),
+    imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
+    fullName: talk?.["speaker-s"][0]?.name,
+    company: talk?.["speaker-s"][0]?.company,
+    description: talk?.description,
+    firstName: talk?.["speaker-s"][0]["speaker-first-name"],
+    bio: talk?.["speaker-s"][0]["speaker-bio"],
+    talkUrl: talk?.["talk-url"],
+    eventTime: schedule["day-time"],
   }
 }
 
@@ -157,13 +120,9 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     imageUrl,
     subtitle,
     title,
-    variant,
     talkUrl,
     eventTime,
-    assistants,
   } = talkDetailsProps(schedule)
-
-  const isWorkshop = variant === "workshop"
 
   const isEventPassed = !isFuture(parseISO(eventTime))
 
@@ -196,21 +155,11 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
             <View style={$containerSpacing}>
-              <Image
-                source={isWorkshop ? workshopCurve : talkCurve}
-                style={isWorkshop ? $workshopCurve : $talkCurve}
-              />
-              <BoxShadow
-                preset={isWorkshop ? "bold" : "primary"}
-                style={$containerSpacing}
-                offset={6}
-              >
+              <Image source={talkCurve} style={$talkCurve} />
+              <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
                 <Image source={{ uri: imageUrl }} style={$speakerImage} />
               </BoxShadow>
-              <Image
-                source={isWorkshop ? workshopBlob : talkBlob}
-                style={isWorkshop ? $workshopBlob : $talkBlob}
-              />
+              <Image source={talkBlob} style={$talkBlob} />
 
               <Text preset="bold" style={$nameText} text={fullName} />
               <Text style={$companyNameText} text={company} />
@@ -218,9 +167,6 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
             <View style={$detailsContainer}>
               <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
-              {isWorkshop && (
-                <Tag text={`${schedule.workshop.level} Workshop`} style={$containerSpacing} />
-              )}
               <Text style={$bodyText} text={description} />
             </View>
 
@@ -234,40 +180,6 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
               <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
               <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
             </View>
-
-            {assistants?.length && (
-              <View style={$assistantContainer}>
-                <Text
-                  preset="listHeading"
-                  text={translate("talkDetailsScreen.assistingTheWorkshop")}
-                  style={$assistantHeading}
-                />
-                <View
-                  style={
-                    assistants.length < 2
-                      ? $assistantsContainerWithOne
-                      : $assistantsContainerWithMore
-                  }
-                >
-                  {assistants.map((assistant) => (
-                    <View style={$assistant} key={assistant._id}>
-                      <AutoImage
-                        source={{ uri: assistant["speaker-photo"].url }}
-                        style={$assistantImage}
-                      />
-                      <Text preset="companionHeading" text={assistant.name} />
-                      <Text preset="label" style={$assistantCompany} text={assistant.company} />
-                      <View style={$assistantLinks}>
-                        <IconButton
-                          icon={assistant.twitter ? "twitter" : "link"}
-                          onPress={() => onPress(assistant.twitter || assistant.externalURL)}
-                        />
-                      </View>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            )}
           </View>
         </Animated.ScrollView>
       </Screen>
@@ -351,20 +263,6 @@ const $bodyText: TextStyle = {
   lineHeight: 22.4,
 }
 
-const $workshopBlob: ImageStyle = {
-  position: "absolute",
-  top: spacing.extraLarge,
-  left: -spacing.large + spacing.tiny,
-}
-
-const $workshopCurve: ImageStyle = {
-  position: "absolute",
-  left: -spacing.large,
-  top: spacing.huge - spacing.tiny,
-  width: SCREEN_WIDTH,
-  resizeMode: "stretch",
-}
-
 const $talkBlob: ImageStyle = {
   bottom: spacing.extraLarge * 2.25,
   right: -spacing.extraLarge + spacing.extraSmall,
@@ -388,46 +286,4 @@ const $subtitle: TextStyle = {
 
 const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
-}
-
-const $assistantsContainerWithOne: ViewStyle = {
-  flexDirection: "row",
-  marginStart: spacing.large,
-}
-
-const $assistantsContainerWithMore: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-around",
-}
-
-const $assistantContainer: ViewStyle = {
-  marginTop: spacing.large,
-  marginBottom: spacing.huge,
-}
-
-const $assistant: ViewStyle = {
-  alignItems: "center",
-}
-
-const $assistantHeading: TextStyle = {
-  marginVertical: spacing.large,
-}
-
-const $assistantImage: ImageStyle = {
-  height: 90,
-  width: 90,
-  aspectRatio: 1,
-  borderRadius: 100,
-  marginBottom: spacing.large,
-}
-
-const $assistantCompany: TextStyle = {
-  marginTop: spacing.tiny,
-  color: colors.palette.primary500,
-  textTransform: "uppercase",
-}
-
-const $assistantLinks: ViewStyle = {
-  flexDirection: "row",
-  marginTop: spacing.large,
 }

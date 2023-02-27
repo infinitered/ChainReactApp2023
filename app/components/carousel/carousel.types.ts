@@ -25,7 +25,7 @@ export interface DynamicCarouselItem {
   body: string
   image: ImageSourcePropType
   imageStyle?: ImageStyle
-  isSpeakerPanel?: boolean
+  speakerPanelOrWorkshop?: boolean
   label?: string
   leftButton?: ButtonData
   meta?: string
