@@ -243,6 +243,7 @@ export function HeaderAction(props: HeaderActionProps) {
         size={24}
         icon={icon}
         color={iconColor}
+        accessibilityHint={icon}
         onPress={onPress}
         containerStyle={[$actionIconContainer, { backgroundColor }]}
         style={isRTL ? { transform: [{ rotate: "180deg" }] } : {}}
