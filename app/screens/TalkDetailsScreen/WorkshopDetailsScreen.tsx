@@ -53,6 +53,9 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
     ],
   })) as DynamicCarouselItem[]
 
+  // store the translated strings in a const to avoid jest error
+  const instructor = "workshopDetailsScreen.instructor"
+
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
       <TalkDetailsHeader {...{ title, subtitle, scrollY, headingHeight }} />
@@ -87,11 +90,7 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
               style={$speakerPanelTitle}
             />
             <Text text={description} style={$speakerPanelDescription} />
-            <Text
-              preset="boldHeading"
-              tx="workshopDetailsScreen.instructor"
-              txOptions={{ count: instructors.length }}
-            />
+            <Text preset="boldHeading" tx={instructor} txOptions={{ count: instructors.length }} />
             <View style={{ marginHorizontal: -spacing.large }}>
               <Carousel preset="dynamic" data={carouselData} />
             </View>
