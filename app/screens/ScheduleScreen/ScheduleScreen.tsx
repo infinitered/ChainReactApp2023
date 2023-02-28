@@ -196,7 +196,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
               <ScheduleCard
                 {...item}
                 isPast={
-                  index < scheduleIndex || (index === scheduleIndex && itemIndex < eventIndex)
+                  index < scheduleIndex ||
+                  (index === scheduleIndex && itemIndex < eventIndex) ||
+                  !eventIndex
                 }
               />
             </View>

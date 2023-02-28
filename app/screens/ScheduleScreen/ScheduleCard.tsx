@@ -33,7 +33,7 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
 )
 
 const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
-  isConferencePassed() && (
+  !isConferencePassed() && (
     <View style={$talkRecording}>
       <Icon icon="youtube" />
       <Text
@@ -57,6 +57,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
             // assuming there will be other variants in the future I went with a switch statement
             {
               talk: <TalkCTA talkUrl={talkUrl} />,
+              "speaker-panel": <TalkCTA talkUrl={talkUrl} />,
             }[variant]
           }
         </>

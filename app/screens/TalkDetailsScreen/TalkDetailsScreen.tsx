@@ -165,7 +165,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   const isWorkshop = variant === "workshop"
 
-  const isEventPassed = !isFuture(parseISO(eventTime))
+  const isEventPassed = isFuture(parseISO(eventTime))
 
   return (
     <>
