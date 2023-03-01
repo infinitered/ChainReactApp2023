@@ -80,7 +80,7 @@ export const SpeakerPanelDetailsScreen: FC<
             <Text text={description} style={$speakerPanelDescription} />
             <Text text="Panelists" preset="boldHeading" />
             <View style={{ marginHorizontal: -spacing.large }}>
-              <Carousel preset="dynamic" data={carouselData} />
+              <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
             </View>
           </View>
         </View>
