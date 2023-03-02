@@ -201,10 +201,12 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     talkUrl,
   } = props
   const navigation = useAppNavigation()
-  const onPress = ["talk", "workshop"].includes(variant)
+  const onPress = ["talk"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
+    : ["workshop"].includes(variant)
+    ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
     : ["speaker-panel"].includes(variant)
-    ? () => navigation.navigate("SpeakerPanel", { scheduleId: id })
+    ? () => navigation.navigate("SpeakerPanelDetails", { scheduleId: id })
     : ["party"].includes(variant)
     ? () => navigation.navigate("PartyDetails", { scheduleId: id })
     : undefined

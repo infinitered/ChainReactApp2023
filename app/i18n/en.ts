@@ -77,6 +77,12 @@ const en = {
     watchTalk: "Watch talk",
     assistingTheWorkshop: "Assisting the workshop",
   },
+  workshopDetailsScreen: {
+    instructor: {
+      one: "Instructor",
+      other: "Instructors",
+    },
+  },
   scheduleScreen: {
     talkRecordingPosted: "Talk recording posted",
     videoComingSoon: "Video coming soon",

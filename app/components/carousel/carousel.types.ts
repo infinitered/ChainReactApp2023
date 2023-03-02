@@ -25,7 +25,6 @@ export interface DynamicCarouselItem {
   body: string
   image: ImageSourcePropType
   imageStyle?: ImageStyle
-  isSpeakerPanel?: boolean
   label?: string
   leftButton?: ButtonData
   meta?: string
@@ -46,4 +45,5 @@ export interface Spacer {
 export type CarouselProps =
   | (StaticCarouselProps | DynamicCarouselProps) & {
       openLink?: () => void
+      carouselCardVariant?: "default" | "speaker"
     }

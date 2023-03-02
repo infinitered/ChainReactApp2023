@@ -104,6 +104,9 @@ export const cleanedWorkshops = (
       "instructor-info": speakersData?.find(
         (speaker) => speaker._id === workshop["instructor-info"],
       ),
+      "instructor-s-2": workshop?.["instructor-s-2"]?.map((id) =>
+        speakersData?.find((speaker) => speaker._id === id),
+      ),
       assistants: workshop?.assistants?.map((id) =>
         speakersData?.find((speaker) => speaker._id === id),
       ),
