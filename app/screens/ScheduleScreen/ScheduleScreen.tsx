@@ -25,6 +25,7 @@ import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
 import { ScrollToButton, useScrollToEvent } from "../../components"
 import { useCurrentDate } from "../../hooks/useCurrentDate"
+import { isConferencePassed } from "../../utils/isConferencePassed"
 
 export interface Schedule {
   date: string
@@ -72,6 +73,8 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   }, [schedules])
 
   const date = useCurrentDate()
+  const isConfOver = isConferencePassed(date)
+
   const scheduleIndex = getCurrentScheduleIndex(schedules, date)
   const schedule = schedules[scheduleIndex]
   const eventIndex = getCurrentEventIndex(schedule, date)
@@ -196,7 +199,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
               <ScheduleCard
                 {...item}
                 isPast={
-                  index < scheduleIndex || (index === scheduleIndex && itemIndex < eventIndex)
+                  index < scheduleIndex ||
+                  (index === scheduleIndex && itemIndex < eventIndex) ||
+                  isConfOver
                 }
               />
             </View>
@@ -204,7 +209,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
         />
       </View>
     ),
-    [scheduleIndex, eventIndex, isFocused],
+    [scheduleIndex, eventIndex, isConfOver, isFocused],
   )
 
   if (!selectedSchedule) return null
