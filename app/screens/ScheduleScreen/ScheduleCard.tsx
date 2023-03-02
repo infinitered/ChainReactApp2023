@@ -33,7 +33,7 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
 )
 
 const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
-  !isConferencePassed() && (
+  isConferencePassed() && (
     <View style={$talkRecording}>
       <Icon icon="youtube" />
       <Text

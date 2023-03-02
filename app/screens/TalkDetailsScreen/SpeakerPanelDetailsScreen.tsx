@@ -57,7 +57,7 @@ export const SpeakerPanelDetailsScreen: FC<
     ],
   })) as DynamicCarouselItem[]
 
-  const isEventPassed = isFuture(parseISO(eventTime))
+  const isEventPassed = !isFuture(parseISO(eventTime))
 
   return (
     <>
@@ -87,13 +87,14 @@ export const SpeakerPanelDetailsScreen: FC<
               />
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
-          </View>
-          <View>
-            <Text text="Talk details" preset="boldHeading" style={$speakerPanelTitle} />
-            <Text text={description} style={$speakerPanelDescription} />
-            <Text text="Panelists" preset="boldHeading" />
-            <View style={{ marginHorizontal: -spacing.large }}>
-              <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
+
+            <View>
+              <Text text="Talk details" preset="boldHeading" style={$speakerPanelTitle} />
+              <Text text={description} style={$speakerPanelDescription} />
+              <Text text="Panelists" preset="boldHeading" />
+              <View style={{ marginHorizontal: -spacing.large }}>
+                <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
+              </View>
             </View>
           </View>
         </Animated.ScrollView>
