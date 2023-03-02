@@ -14,9 +14,9 @@ import { useFloatingActionEvents } from "../../hooks"
 import { isFuture, parseISO } from "date-fns"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
-export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "SpeakerPanel">> = ({
-  route: { params },
-}) => {
+export const SpeakerPanelDetailsScreen: FC<
+  StackScreenProps<AppStackParamList, "SpeakerPanelDetails">
+> = ({ route: { params } }) => {
   const scrollY = useSharedValue(0)
   const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
@@ -45,8 +45,8 @@ export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "Speaker
 
   const carouselData = schedule?.talk?.["speaker-s"].map((speaker) => ({
     image: { uri: speaker["speaker-photo"].url },
+    speakerPanelOrWorkshop: true,
     imageStyle: { height: 320 },
-    isSpeakerPanel: true,
     subtitle: speaker.name,
     label: speaker.company,
     body: speaker["speaker-bio"],
@@ -87,14 +87,13 @@ export const SpeakerPanelScreen: FC<StackScreenProps<AppStackParamList, "Speaker
               />
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
-
-            <View>
-              <Text text="Talk details" preset="boldHeading" style={$speakerPanelTitle} />
-              <Text text={description} style={$speakerPanelDescription} />
-              <Text text="Panelists" preset="boldHeading" />
-              <View style={{ marginHorizontal: -spacing.large }}>
-                <Carousel preset="dynamic" data={carouselData} />
-              </View>
+          </View>
+          <View>
+            <Text text="Talk details" preset="boldHeading" style={$speakerPanelTitle} />
+            <Text text={description} style={$speakerPanelDescription} />
+            <Text text="Panelists" preset="boldHeading" />
+            <View style={{ marginHorizontal: -spacing.large }}>
+              <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
             </View>
           </View>
         </Animated.ScrollView>

@@ -47,6 +47,7 @@ export interface RawWorkshop extends Item {
   "day-time": string
   "has-more-than-one-instructor"?: boolean
   "instructor-info"?: string
+  "instructor-s-2": string[]
   "ticket-link": string
   abstract: string
   assistants?: string[]
@@ -59,6 +60,7 @@ export interface Workshop extends Item {
   "day-time": string
   "has-more-than-one-instructor"?: boolean
   "instructor-info": Speaker
+  "instructor-s-2": Speaker[]
   "ticket-link": string
   abstract: string
   assistants?: Speaker[]

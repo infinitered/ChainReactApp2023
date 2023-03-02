@@ -15,8 +15,14 @@ import { StackScreenProps } from "@react-navigation/stack"
 import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import { DebugScreen, PartyDetailsScreen, TalkDetailsScreen, WelcomeScreen } from "../screens"
-import { SpeakerPanelScreen } from "../screens/TalkDetailsScreen/SpeakerPanelScreen"
+import {
+  DebugScreen,
+  PartyDetailsScreen,
+  SpeakerPanelDetailsScreen,
+  TalkDetailsScreen,
+  WelcomeScreen,
+  WorkshopDetailsScreen,
+} from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
 
@@ -34,12 +40,13 @@ import { TabNavigator, TabParamList } from "./TabNavigator"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
+  Debug: undefined
+  PartyDetails: { scheduleId: string }
+  SpeakerPanelDetails: { scheduleId: string }
   Tabs: NavigatorScreenParams<TabParamList>
   TalkDetails: { scheduleId: string }
-  SpeakerPanel: { scheduleId: string }
-  PartyDetails: { scheduleId: string }
-  Debug: undefined
+  Welcome: undefined
+  WorkshopDetails: { scheduleId: string }
 }
 
 /**
@@ -59,24 +66,29 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 const AppStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="Tabs" component={TabNavigator} />
-      <Stack.Screen
-        name="SpeakerPanel"
-        component={SpeakerPanelScreen}
-        options={{ fullScreenGestureEnabled: true }}
-      />
-      <Stack.Screen
-        name="TalkDetails"
-        component={TalkDetailsScreen}
-        options={{ fullScreenGestureEnabled: true }}
-      />
+      <Stack.Screen name="Debug" component={DebugScreen} />
       <Stack.Screen
         name="PartyDetails"
         component={PartyDetailsScreen}
         options={{ fullScreenGestureEnabled: true }}
       />
-      <Stack.Screen name="Debug" component={DebugScreen} />
+      <Stack.Screen
+        name="SpeakerPanelDetails"
+        component={SpeakerPanelDetailsScreen}
+        options={{ fullScreenGestureEnabled: true }}
+      />
+      <Stack.Screen name="Tabs" component={TabNavigator} />
+      <Stack.Screen
+        name="TalkDetails"
+        component={TalkDetailsScreen}
+        options={{ fullScreenGestureEnabled: true }}
+      />
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen
+        name="WorkshopDetails"
+        component={WorkshopDetailsScreen}
+        options={{ fullScreenGestureEnabled: true }}
+      />
     </Stack.Navigator>
   )
 }

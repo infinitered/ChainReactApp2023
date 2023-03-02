@@ -101,9 +101,9 @@ export function Carousel(props: CarouselProps) {
           return (
             <CarouselCard
               {...{
+                variant: props.carouselCardVariant,
                 imageStyle: (item as DynamicCarouselItem).imageStyle,
                 index,
-                isSpeakerPanel: (item as DynamicCarouselItem).isSpeakerPanel,
                 item,
                 leftButton,
                 rightButton,
