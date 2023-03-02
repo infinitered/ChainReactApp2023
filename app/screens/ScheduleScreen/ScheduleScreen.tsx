@@ -60,11 +60,11 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   )
 
   const hScrollRef = React.useRef(null)
-  const scheduleListRefs = React.useMemo(() => {
-    return Object.fromEntries(
+  const scheduleListRefs = React.useRef(
+    Object.fromEntries(
       schedules.map((s) => [s.date, React.createRef<FlashList<ScheduleCardProps>>()]),
-    )
-  }, [schedules])
+    ),
+  ).current
   const eventRefs = useMemo(() => {
     // create object with keys of schedule index and values of arrays of view refs for each event
     return Object.fromEntries(
