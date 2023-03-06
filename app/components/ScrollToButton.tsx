@@ -16,7 +16,13 @@ export interface ScrollToButtonProps extends ButtonProps, ReturnType<typeof useS
 
 const ARROW_SIZE = 24
 
-export function useScrollToEvent(scheduleIndex) {
+export function useScrollToEvent({
+  lastEventIndex,
+  scheduleIndex,
+}: {
+  lastEventIndex: number
+  scheduleIndex: number
+}) {
   const currentEventIndex = useSharedValue(-1)
   const currentlyViewingEvents = useSharedValue<number[]>([])
   const currentlyViewingSchedule = useSharedValue(0)
@@ -34,18 +40,33 @@ export function useScrollToEvent(scheduleIndex) {
   ).current
 
   const scrollButtonOpacity = useDerivedValue(() => {
-    return withSpring(
-      scheduleIndex === currentlyViewingSchedule.value &&
-        currentEventIndex.value > -1 &&
-        currentlyViewingEvents.value[0] !== currentEventIndex.value
-        ? 1
-        : 0,
-    )
-  }, [scheduleIndex])
+    const isScheduleVisible = scheduleIndex === currentlyViewingSchedule.value
+    const isEventVisible = currentlyViewingEvents.value.includes(currentEventIndex.value)
+    const isLastTwoEvents =
+      [lastEventIndex, lastEventIndex - 1].includes(currentEventIndex.value) &&
+      [lastEventIndex - 2].includes(currentlyViewingEvents.value[0])
+    const isEventFirstVisible = currentlyViewingEvents.value[0] === currentEventIndex.value
+    const hasCurrentEventIndex = currentEventIndex.value > -1
+    const shouldShow = isLastTwoEvents ? !isEventVisible : !isEventFirstVisible
+    return withSpring(isScheduleVisible && hasCurrentEventIndex && shouldShow ? 1 : 0)
+  }, [lastEventIndex, scheduleIndex])
 
   const $scrollButtonStyle = useAnimatedStyle(() => ({
     opacity: scrollButtonOpacity.value,
   }))
+
+  // const $arrowStyle = useAnimatedStyle(
+  //   () => ({
+  //     transform: [
+  //       {
+  //         rotate: withTiming(
+  //           currentlyViewingEvents.value[0] <= currentEventIndex.value ? "0deg" : "180deg",
+  //         ),
+  //       },
+  //     ],
+  //   }),
+  //   [lastEventIndex],
+  // )
 
   const $arrowDownStyle = useAnimatedStyle(() => ({
     opacity: withSpring(
@@ -60,6 +81,7 @@ export function useScrollToEvent(scheduleIndex) {
   }))
 
   return {
+    // $arrowStyle,
     $arrowDownStyle,
     $arrowUpStyle,
     currentEventIndex,
@@ -71,7 +93,7 @@ export function useScrollToEvent(scheduleIndex) {
 }
 
 export function ScrollToButton(props: ScrollToButtonProps) {
-  const { $arrowDownStyle, $arrowUpStyle, $scrollButtonStyle, navigateToCurrentEvent, ...rest } =
+  const { $arrowUpStyle, $arrowDownStyle, $scrollButtonStyle, navigateToCurrentEvent, ...rest } =
     props
 
   return (
