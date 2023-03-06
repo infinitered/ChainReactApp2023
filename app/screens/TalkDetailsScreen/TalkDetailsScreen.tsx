@@ -8,19 +8,18 @@ import {
   MIN_HEADER_HEIGHT,
   BoxShadow,
   Screen,
-  Icon,
-  FloatingButton,
+  MediaButton,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
-import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent } from "../../services/api/webflow-api.types"
-import { useFloatingActionEvents } from "../../hooks"
+import { useFloatingActionEvents, useScrollY } from "../../hooks"
 
 export type Variants = "workshop" | "talk"
 
@@ -92,22 +91,15 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = ({
   route: { params },
 }) => {
-  const scrollY = useSharedValue(0)
   const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y
-    },
-  })
-
+  const { isScrolling, scrollHandlers } = useFloatingActionEvents()
+  const { scrollY, scrollHandler } = useScrollY()
   const { bottom: paddingBottom } = useSafeAreaInsets()
 
   const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
-
-  const { isScrolling, scrollHandlers } = useFloatingActionEvents()
 
   if (!schedule) return null
 
@@ -154,6 +146,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
               />
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
+
             <View style={$containerSpacing}>
               <Image source={talkCurve} style={$talkCurve} />
               <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
@@ -183,18 +176,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
           </View>
         </Animated.ScrollView>
       </Screen>
-      {talkUrl && isEventPassed && (
-        <FloatingButton
-          isVisible={!isScrolling}
-          testID="see-the-schedule-button"
-          tx="talkDetailsScreen.watchTalk"
-          LeftAccessory={(props) => (
-            <Icon icon="youtube" color={colors.palette.neutral800} {...props} />
-          )}
-          TextProps={{ allowFontScaling: false }}
-          onPress={() => onPress(talkUrl)}
-        ></FloatingButton>
-      )}
+      {talkUrl && isEventPassed && <MediaButton isScrolling={isScrolling} talkURL={talkUrl} />}
     </>
   )
 }

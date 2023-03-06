@@ -1,31 +1,24 @@
 import React, { FC } from "react"
-import { ViewStyle, View, TextStyle, ImageStyle } from "react-native"
+import { ViewStyle, View, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Text, MIN_HEADER_HEIGHT, Screen, Carousel, AutoImage, IconButton } from "../../components"
+import { Text, MIN_HEADER_HEIGHT, Screen, Carousel } from "../../components"
 import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
-import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
-import { translate } from "../../i18n"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
+import { AssistantsList } from "./AssistantsList"
+import { useScrollY } from "../../hooks"
 
 export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "WorkshopDetails">> = ({
   route: { params },
 }) => {
-  const scrollY = useSharedValue(0)
-  const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y
-    },
-  })
-
+  const { scrollY, scrollHandler } = useScrollY()
   const { bottom: paddingBottom } = useSafeAreaInsets()
 
   const { data: scheduleData } = useScheduledEvents()
@@ -93,40 +86,7 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
             <View style={{ marginHorizontal: -spacing.large }}>
               <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
             </View>
-
-            {assistants?.length && (
-              <View style={$assistantContainer}>
-                <Text
-                  preset="listHeading"
-                  text={translate("talkDetailsScreen.assistingTheWorkshop")}
-                  style={$assistantHeading}
-                />
-                <View
-                  style={
-                    assistants.length < 2
-                      ? $assistantsContainerWithOne
-                      : $assistantsContainerWithMore
-                  }
-                >
-                  {assistants.map((assistant) => (
-                    <View style={$assistant} key={assistant._id}>
-                      <AutoImage
-                        source={{ uri: assistant["speaker-photo"].url }}
-                        style={$assistantImage}
-                      />
-                      <Text preset="companionHeading" text={assistant.name} />
-                      <Text preset="label" style={$assistantCompany} text={assistant.company} />
-                      <View style={$assistantLinks}>
-                        <IconButton
-                          icon={assistant.twitter ? "twitter" : "link"}
-                          onPress={() => onPress(assistant.twitter || assistant.externalURL)}
-                        />
-                      </View>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            )}
+            {assistants?.length && <AssistantsList assistants={assistants} />}
           </View>
         </View>
       </Animated.ScrollView>
@@ -171,46 +131,4 @@ const $subtitle: TextStyle = {
 
 const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
-}
-
-const $assistantsContainerWithOne: ViewStyle = {
-  flexDirection: "row",
-  marginStart: spacing.large,
-}
-
-const $assistantsContainerWithMore: ViewStyle = {
-  flexDirection: "row",
-  justifyContent: "space-around",
-}
-
-const $assistantContainer: ViewStyle = {
-  marginTop: spacing.large,
-  marginBottom: spacing.huge,
-}
-
-const $assistant: ViewStyle = {
-  alignItems: "center",
-}
-
-const $assistantHeading: TextStyle = {
-  marginVertical: spacing.large,
-}
-
-const $assistantImage: ImageStyle = {
-  height: 90,
-  width: 90,
-  aspectRatio: 1,
-  borderRadius: 100,
-  marginBottom: spacing.large,
-}
-
-const $assistantCompany: TextStyle = {
-  marginTop: spacing.tiny,
-  color: colors.palette.primary500,
-  textTransform: "uppercase",
-}
-
-const $assistantLinks: ViewStyle = {
-  flexDirection: "row",
-  marginTop: spacing.large,
 }
