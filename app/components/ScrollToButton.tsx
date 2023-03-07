@@ -69,21 +69,7 @@ export function useScrollToEvent({
     [lastEventIndex],
   )
 
-  // const $arrowDownStyle = useAnimatedStyle(() => ({
-  //   opacity: withSpring(
-  //     Number(Math.min(...currentlyViewingEvents.value) < currentEventIndex.value),
-  //   ),
-  // }))
-
-  // const $arrowUpStyle = useAnimatedStyle(() => ({
-  //   opacity: withSpring(
-  //     Number(Math.min(...currentlyViewingEvents.value) > currentEventIndex.value),
-  //   ),
-  // }))
-
   return {
-    // $arrowDownStyle,
-    // $arrowUpStyle,
     $arrowStyle,
     currentEventIndex,
     currentlyViewingEvents,
@@ -104,9 +90,6 @@ export function ScrollToButton(props: ScrollToButtonProps) {
             <Animated.View style={[$arrow, $arrowStyle]}>
               <Icon icon="arrowDown" size={24} color={colors.palette.primary500} />
             </Animated.View>
-            {/* <Animated.View style={[$arrow, $arrowUpStyle]}>
-              <Icon icon="arrowUp" size={24} color={colors.palette.primary500} />
-            </Animated.View> */}
           </View>
         )}
         preset="reversed"
