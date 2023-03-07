@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useCallback, useRef } from "react"
 import { ViewStyle, ViewToken, TextStyle, View } from "react-native"
 import { Button, ButtonProps } from "./Button"
 import { Icon } from "./Icon"
@@ -9,6 +9,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated"
+import { useFocusEffect } from "@react-navigation/native"
 
 export interface ScrollToButtonProps extends ButtonProps, ReturnType<typeof useScrollToEvent> {
   navigateToCurrentEvent: () => void
@@ -26,9 +27,20 @@ export function useScrollToEvent({
   const currentEventIndex = useSharedValue(-1)
   const currentlyViewingEvents = useSharedValue<number[]>([])
   const currentlyViewingSchedule = useSharedValue(0)
+  const isFocused = useSharedValue(false)
+
+  useFocusEffect(
+    useCallback(() => {
+      isFocused.value = true
+      return () => {
+        isFocused.value = false
+      }
+    }, []),
+  )
 
   const handleViewableEventIndexChanged = useRef(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (!isFocused.value) return
       currentlyViewingEvents.value = viewableItems.map((item) => item.index)
     },
   ).current
