@@ -72,11 +72,14 @@ const ExploreMap = ({ item }: { item: ExploreMapProps }) => {
       <Text text={translate("exploreScreen.exploreNeighborhoods")} preset="screenHeading" />
       <Text text={item.description} style={$description} />
       <View style={$creditContainer}>
-        <Text text={item.credit.text} />
-        <Text onPress={() => openLinkInBrowser(item.credit.link)} style={$credit}>
-          {" "}
-          {item.credit.author}
-        </Text>
+        <Text maxFontSizeMultiplier={1.5} text={item.credit.text} />
+        <Text
+          maxFontSizeMultiplier={1.5}
+          onPress={() => openLinkInBrowser(item.credit.link)}
+          style={$credit}
+          // Leave the space before the author name so it has the spacing from the text before it
+          text={` ${item.credit.author}`}
+        />
       </View>
     </View>
   )
