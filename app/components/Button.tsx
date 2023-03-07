@@ -148,7 +148,7 @@ export function Button(props: ButtonProps) {
   )
 }
 
-type FloatingButtonProps = ButtonProps & { isVisible?: boolean }
+export type FloatingButtonProps = ButtonProps & { isVisible?: boolean }
 
 export const FloatingButton = ({ isVisible, ...props }: FloatingButtonProps) => {
   return (

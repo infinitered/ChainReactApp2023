@@ -1,4 +1,5 @@
 import React from "react"
+import { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 
 enum Scroll {
   onMomentumScrollBegin = "onMomentumScrollBegin",
@@ -42,4 +43,14 @@ export const useFloatingActionEvents = () => {
     isScrolling,
     scrollHandlers,
   }
+}
+
+export const useScrollY = () => {
+  const scrollY = useSharedValue(0)
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y
+    },
+  })
+  return { scrollY, scrollHandler }
 }

@@ -2,39 +2,30 @@ import React, { FC } from "react"
 import { ViewStyle, View, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { Text, MIN_HEADER_HEIGHT, Screen, Carousel, FloatingButton, Icon } from "../../components"
+import { Text, MIN_HEADER_HEIGHT, Screen, Carousel, MediaButton } from "../../components"
 import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
-import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
-import { useFloatingActionEvents } from "../../hooks"
+import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { isFuture, parseISO } from "date-fns"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 export const SpeakerPanelDetailsScreen: FC<
   StackScreenProps<AppStackParamList, "SpeakerPanelDetails">
 > = ({ route: { params } }) => {
-  const scrollY = useSharedValue(0)
-  const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
 
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollY.value = event.contentOffset.y
-    },
-  })
-
+  const { isScrolling, scrollHandlers } = useFloatingActionEvents()
   const { bottom: paddingBottom } = useSafeAreaInsets()
+  const { scrollY, scrollHandler } = useScrollY()
 
   const { data: scheduleData } = useScheduledEvents()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
 
   if (!schedule) return null
-
-  const { isScrolling, scrollHandlers } = useFloatingActionEvents()
 
   const title = schedule.type
   const subtitle = formatDate(schedule["day-time"], "MMMM dd, h:mm aaa")
@@ -99,18 +90,7 @@ export const SpeakerPanelDetailsScreen: FC<
           </View>
         </Animated.ScrollView>
       </Screen>
-      {talkUrl && isEventPassed && (
-        <FloatingButton
-          isVisible={!isScrolling}
-          testID="see-the-schedule-button"
-          tx="talkDetailsScreen.watchTalk"
-          LeftAccessory={(props) => (
-            <Icon icon="youtube" color={colors.palette.neutral800} {...props} />
-          )}
-          TextProps={{ allowFontScaling: false }}
-          onPress={() => onPress(talkUrl)}
-        ></FloatingButton>
-      )}
+      {talkUrl && isEventPassed && <MediaButton talkURL={talkUrl} isScrolling={isScrolling} />}
     </>
   )
 }
