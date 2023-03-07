@@ -7,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useDerivedValue,
   useSharedValue,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated"
 
 export interface ScrollToButtonProps extends ButtonProps, ReturnType<typeof useScrollToEvent> {
@@ -48,42 +48,43 @@ export function useScrollToEvent({
     const isEventFirstVisible = currentlyViewingEvents.value[0] === currentEventIndex.value
     const hasCurrentEventIndex = currentEventIndex.value > -1
     const shouldShow = isLastTwoEvents ? !isEventVisible : !isEventFirstVisible
-    return withSpring(isScheduleVisible && hasCurrentEventIndex && shouldShow ? 1 : 0)
+    return isScheduleVisible && hasCurrentEventIndex && shouldShow ? 1 : 0
   }, [lastEventIndex, scheduleIndex])
 
   const $scrollButtonStyle = useAnimatedStyle(() => ({
     opacity: scrollButtonOpacity.value,
   }))
 
-  // const $arrowStyle = useAnimatedStyle(
-  //   () => ({
-  //     transform: [
-  //       {
-  //         rotate: withTiming(
-  //           currentlyViewingEvents.value[0] <= currentEventIndex.value ? "0deg" : "180deg",
-  //         ),
-  //       },
-  //     ],
-  //   }),
-  //   [lastEventIndex],
-  // )
+  const $arrowStyle = useAnimatedStyle(
+    () => ({
+      transform: [
+        {
+          rotate: withTiming(
+            currentlyViewingEvents.value[0] <= currentEventIndex.value ? "0deg" : "180deg",
+            { duration: 0 },
+          ),
+        },
+      ],
+    }),
+    [lastEventIndex],
+  )
 
-  const $arrowDownStyle = useAnimatedStyle(() => ({
-    opacity: withSpring(
-      Number(Math.min(...currentlyViewingEvents.value) < currentEventIndex.value),
-    ),
-  }))
+  // const $arrowDownStyle = useAnimatedStyle(() => ({
+  //   opacity: withSpring(
+  //     Number(Math.min(...currentlyViewingEvents.value) < currentEventIndex.value),
+  //   ),
+  // }))
 
-  const $arrowUpStyle = useAnimatedStyle(() => ({
-    opacity: withSpring(
-      Number(Math.min(...currentlyViewingEvents.value) > currentEventIndex.value),
-    ),
-  }))
+  // const $arrowUpStyle = useAnimatedStyle(() => ({
+  //   opacity: withSpring(
+  //     Number(Math.min(...currentlyViewingEvents.value) > currentEventIndex.value),
+  //   ),
+  // }))
 
   return {
-    // $arrowStyle,
-    $arrowDownStyle,
-    $arrowUpStyle,
+    // $arrowDownStyle,
+    // $arrowUpStyle,
+    $arrowStyle,
     currentEventIndex,
     currentlyViewingEvents,
     handleViewableEventIndexChanged,
@@ -93,20 +94,19 @@ export function useScrollToEvent({
 }
 
 export function ScrollToButton(props: ScrollToButtonProps) {
-  const { $arrowUpStyle, $arrowDownStyle, $scrollButtonStyle, navigateToCurrentEvent, ...rest } =
-    props
+  const { $arrowStyle, $scrollButtonStyle, navigateToCurrentEvent, ...rest } = props
 
   return (
     <Animated.View style={[$scrollButtonContainer, $scrollButtonStyle]}>
       <Button
         LeftAccessory={() => (
           <View style={$arrowContainer}>
-            <Animated.View style={[$arrow, $arrowDownStyle]}>
+            <Animated.View style={[$arrow, $arrowStyle]}>
               <Icon icon="arrowDown" size={24} color={colors.palette.primary500} />
             </Animated.View>
-            <Animated.View style={[$arrow, $arrowUpStyle]}>
+            {/* <Animated.View style={[$arrow, $arrowUpStyle]}>
               <Icon icon="arrowUp" size={24} color={colors.palette.primary500} />
-            </Animated.View>
+            </Animated.View> */}
           </View>
         )}
         preset="reversed"

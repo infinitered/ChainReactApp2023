@@ -193,7 +193,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           ref={scheduleListRefs[schedule.date]}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
-          viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+          viewabilityConfig={{ itemVisiblePercentThreshold: 1, minimumViewTime: 100 }}
           contentContainerStyle={
             scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
           }
