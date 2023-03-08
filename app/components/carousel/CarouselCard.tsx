@@ -179,6 +179,8 @@ const $leftButton: ViewStyle = {
 }
 
 const $ctaContainer: ViewStyle = {
+  flex: 1,
+  flexWrap: "wrap",
   flexDirection: "row",
   marginTop: spacing.medium,
 }

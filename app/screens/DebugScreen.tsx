@@ -43,7 +43,12 @@ export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () 
   }, [])
 
   return (
-    <Screen style={$root} safeAreaEdges={["bottom"]}>
+    <Screen
+      style={$root}
+      preset="scroll"
+      ScrollViewProps={{ showsVerticalScrollIndicator: false }}
+      safeAreaEdges={["bottom"]}
+    >
       <Text preset="bold" tx="debugScreen.pushToken" style={$subtitle} />
       <Text text={fcmToken} selectable />
       <Button

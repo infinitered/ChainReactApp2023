@@ -232,7 +232,13 @@ export function HeaderAction(props: HeaderActionProps) {
         disabled={!onPress}
         activeOpacity={0.8}
       >
-        <Text weight="medium" size="md" text={content} style={$actionText} />
+        <Text
+          maxFontSizeMultiplier={1.5}
+          weight="medium"
+          size="md"
+          text={content}
+          style={$actionText}
+        />
       </TouchableOpacity>
     )
   }
