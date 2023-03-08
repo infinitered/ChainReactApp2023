@@ -38,7 +38,11 @@ export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> 
     return (
       <View style={$rowContainer}>
         <BackButton />
-        <AnimatedText preset="navHeader" style={[$centerTitle, $animatedTitle]}>
+        <AnimatedText
+          allowFontScaling={false}
+          preset="navHeader"
+          style={[$centerTitle, $animatedTitle]}
+        >
           {title}
         </AnimatedText>
       </View>
