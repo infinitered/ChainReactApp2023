@@ -79,7 +79,10 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const schedule = schedules[scheduleIndex]
   const eventIndex = getCurrentEventIndex(schedule, date)
 
-  const scrollToButtonProps = useScrollToEvent(scheduleIndex)
+  const scrollToButtonProps = useScrollToEvent({
+    lastEventIndex: schedule?.events?.length - 1,
+    scheduleIndex,
+  })
   const { currentEventIndex, handleViewableEventIndexChanged, handleViewableScheduleIndexChanged } =
     scrollToButtonProps
 
@@ -190,7 +193,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           ref={scheduleListRefs[schedule.date]}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
-          viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
+          viewabilityConfig={{ itemVisiblePercentThreshold: 1, minimumViewTime: 100 }}
           contentContainerStyle={
             scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
           }
