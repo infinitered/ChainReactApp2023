@@ -1,52 +1,52 @@
 export const SITE_ID = "5ca38f35db5d2ea94aea469d"
 
 export const SPONSORS = {
-  collectionId: "6362b046e69e80645c361104",
+  collectionId: "640a728fc24f8e73575fe189",
   key: "sponsors",
 }
 
 export const SPEAKERS = {
-  collectionId: "6362b046e69e802c58361103",
+  collectionId: "640a728fc24f8e94385fe188",
   key: "speakers",
 }
 
 export const SPEAKER_NAMES = {
-  collectionId: "6362b046e69e8079f9361101",
+  collectionId: "640a728fc24f8e74d05fe18a",
   key: "speakerNames",
 }
 
 export const WORKSHOPS = {
-  collectionId: "6362b046e69e800c2c361100",
+  collectionId: "640a728fc24f8e7f635fe187",
   key: "workshops",
 }
 
 export const SCHEDULE = {
-  collectionId: "6362b046e69e80096f361102",
+  collectionId: "640a728fc24f8e63325fe185",
   key: "schedule",
 }
 
 export const PAST_TALKS = {
-  collectionId: "6362b046e69e8009ce361105",
+  collectionId: "640a728fc24f8e76ef5fe186",
   key: "pastTalks",
 }
 
 export const RECURRING_EVENTS = {
-  collectionId: "63b5c3c8dd1e3b1bb59ec141",
+  collectionId: "640a728fc24f8e85a75fe18c",
   key: "recurringEvents",
 }
 
 export const TALKS = {
-  collectionId: "63b897d591a301c0bf96b457",
+  collectionId: "640a728fc24f8e31ee5fe18e",
   key: "talks",
 }
 
 export const VENUES = {
-  collectionId: "63b5c4cab48bf69ecee5bec5",
+  collectionId: "640a728fc24f8e553c5fe18d",
   key: "venues",
 }
 
 export const RECOMMENDATIONS = {
-  collectionId: "63c086b93fe8bd7843748f33",
+  collectionId: "640a728fc24f8e083b5fe18f",
   key: "recommendations",
 }
 
@@ -57,6 +57,7 @@ export const WEBFLOW_MAP = {
     bcb33aac3cd85ef6f2e7a97cf23c9771: "Beginner",
     e9d1df0d23f4049bd9d1a6fe83c5db01: "Intermediate",
     "860319fadc9cd03654561fba21490285": "Advanced",
+    "9ec823420253bd29f312b005681510ac": "Beginner-Intermediate",
   },
   workshopType: {
     d9770c43cd59f01f2d60b288d65c1f90: "New",
