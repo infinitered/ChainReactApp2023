@@ -6,6 +6,7 @@ import {
   ViewStyle,
   Dimensions,
   findNodeHandle,
+  RefreshControl,
 } from "react-native"
 import { FlashList, ContentStyle } from "@shopify/flash-list"
 import Animated, {
@@ -49,7 +50,7 @@ const getCurrentScheduleIndex = (schedules: Schedule[], currentTime = new Date()
 }
 
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
-  const { isLoading, schedules } = useScheduleScreenData()
+  const { isLoading, schedules, refetch: refetchScheduleScreenData } = useScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
   useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
@@ -209,6 +210,13 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
               />
             </View>
           )}
+          refreshControl={
+            <RefreshControl
+              onRefresh={refetchScheduleScreenData}
+              refreshing={isLoading}
+              tintColor={colors.palette.neutral100}
+            />
+          }
         />
       </View>
     ),
