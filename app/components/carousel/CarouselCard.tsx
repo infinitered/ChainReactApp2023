@@ -43,10 +43,12 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   rightButton,
   scrollX,
   socialButtons,
+  totalCardCount,
   variant,
 }) => {
   const { label, subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
+  const isMultipleSpeakers = variant === "speaker" && totalCardCount > 1 && index === totalCardCount
 
   const inputRange = [
     (index - 2) * CAROUSEL_IMAGE_WIDTH,
@@ -62,7 +64,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   const $animatedSlideData = useAnimatedStyle(() => {
     const translateX = interpolate(scrollX.value, inputRange, [
       CAROUSEL_IMAGE_WIDTH,
-      spacing.medium,
+      isMultipleSpeakers ? -spacing.extraSmall : spacing.medium,
       -CAROUSEL_IMAGE_WIDTH,
     ])
 
@@ -80,7 +82,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           <BoxShadow preset="primary" offset={5}>
             <Animated.Image
               source={source}
-              style={[$image, imageStyle, { width: Number($carouselCard.width) - 36 }]}
+              style={[$image, imageStyle, { width: CAROUSEL_IMAGE_WIDTH - 36 }]}
             />
           </BoxShadow>
         </Animated.View>
