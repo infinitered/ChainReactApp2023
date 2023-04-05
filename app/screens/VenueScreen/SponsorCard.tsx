@@ -1,8 +1,9 @@
 import React from "react"
-import { TouchableOpacity, ImageStyle, TextStyle, ViewStyle, Linking, View } from "react-native"
+import { ImageStyle, TextStyle, ViewStyle, View, Pressable } from "react-native"
 import { AutoImage, Icon, Text } from "../../components"
 import { spacing } from "../../theme"
 import { translate } from "../../i18n"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 export type CommonProps = {
   containerStyle?: ViewStyle
@@ -22,7 +23,7 @@ export type TierLevelProps =
       logo?: never
       promoSummary?: never
       sponsor?: never
-      sponsorImages: { uri: string; sponsor: string }[]
+      sponsorImages: { uri: string; sponsor: string; externalURL?: string }[]
       tier: "Silver" | "Bronze"
     }
 
@@ -37,23 +38,19 @@ export const SponsorCard = ({
   sponsorImages,
   tier = "Gold",
 }: SponsorCardProps) => {
-  const onPress = () => {
-    Linking.openURL(externalURL)
-  }
-
   switch (tier) {
     case "Platinum":
     case "Gold":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
-          <TouchableOpacity style={$sponsorTitle} onPress={onPress}>
+          <Pressable style={$sponsorTitle} onPress={() => openLinkInBrowser(externalURL)}>
             <AutoImage
               accessibilityLabel={sponsor}
               style={tier === "Platinum" ? $platinumLogo : $goldLogo}
               source={logo}
-            ></AutoImage>
+            />
             <Icon icon="arrow" containerStyle={$iconButton} />
-          </TouchableOpacity>
+          </Pressable>
           <Text preset="primaryLabel" style={$sponsorType}>
             {
               {
@@ -66,17 +63,33 @@ export const SponsorCard = ({
         </View>
       )
     case "Silver":
+      return (
+        <View style={[$sponsorContainer, containerStyle]}>
+          <Text preset="primaryLabel" style={$sponsorType} tx="venueScreen.silverSponsor" />
+          <View style={$silverTierButtonWrapper}>
+            {sponsorImages.map(({ uri, sponsor, externalURL }, index) => (
+              <Pressable
+                key={index}
+                style={$silverTierButton}
+                onPress={() => openLinkInBrowser(externalURL)}
+              >
+                <AutoImage
+                  accessibilityLabel={sponsor}
+                  style={$silverTierImage}
+                  source={{ uri }}
+                  maxHeight={36}
+                  maxWidth={125}
+                />
+                <Icon icon="arrow" containerStyle={$iconButton} />
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      )
     case "Bronze":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
-          <Text preset="primaryLabel" style={$sponsorType}>
-            {
-              {
-                Silver: translate("venueScreen.silverSponsor"),
-                Bronze: translate("venueScreen.bronzeSponsor"),
-              }[tier]
-            }
-          </Text>
+          <Text preset="primaryLabel" style={$sponsorType} tx="venueScreen.bronzeSponsor" />
           <View style={$sponsorBottomTierLogos}>
             {sponsorImages.map(({ uri, sponsor }, index) => (
               <AutoImage
@@ -87,12 +100,28 @@ export const SponsorCard = ({
                   index % 2 === 0 ? $sponsorImageBottomTierStart : $sponsorImageBottomTierEnd,
                 ]}
                 source={{ uri }}
-              ></AutoImage>
+              />
             ))}
           </View>
         </View>
       )
   }
+}
+
+const $silverTierImage: ImageStyle = {
+  marginVertical: spacing.small,
+}
+
+const $silverTierButton: ViewStyle = {
+  alignItems: "center",
+  flex: 1,
+  flexDirection: "row",
+}
+
+const $silverTierButtonWrapper: ViewStyle = {
+  flex: 1,
+  flexDirection: "row",
+  marginHorizontal: spacing.large,
 }
 
 const $sponsorTitle: ViewStyle = {

@@ -103,8 +103,8 @@ export const useScheduledEvents = () => {
   }
 }
 
-export const useScheduleScreenData = (): { isLoading: boolean; schedules: Schedule[] } => {
-  const { data: events, isLoading } = useScheduledEvents()
+export const useScheduleScreenData = () => {
+  const { data: events, isLoading, refetch } = useScheduledEvents()
 
   return {
     isLoading,
@@ -124,7 +124,8 @@ export const useScheduleScreenData = (): { isLoading: boolean; schedules: Schedu
         title: "Conference Day 2",
         events: convertScheduleToScheduleCard(events, "Friday"),
       },
-    ],
+    ] as Schedule[],
+    refetch,
   }
 }
 
