@@ -1,8 +1,9 @@
 import React from "react"
-import { ImageStyle, TextStyle, ViewStyle, Linking, View, Pressable } from "react-native"
+import { ImageStyle, TextStyle, ViewStyle, View, Pressable } from "react-native"
 import { AutoImage, Icon, Text } from "../../components"
 import { spacing } from "../../theme"
 import { translate } from "../../i18n"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 export type CommonProps = {
   containerStyle?: ViewStyle
@@ -37,16 +38,12 @@ export const SponsorCard = ({
   sponsorImages,
   tier = "Gold",
 }: SponsorCardProps) => {
-  const onPress = (url: string) => {
-    Linking.openURL(url)
-  }
-
   switch (tier) {
     case "Platinum":
     case "Gold":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
-          <Pressable style={$sponsorTitle} onPress={() => onPress(externalURL)}>
+          <Pressable style={$sponsorTitle} onPress={() => openLinkInBrowser(externalURL)}>
             <AutoImage
               accessibilityLabel={sponsor}
               style={tier === "Platinum" ? $platinumLogo : $goldLogo}
@@ -71,7 +68,11 @@ export const SponsorCard = ({
           <Text preset="primaryLabel" style={$sponsorType} tx="venueScreen.silverSponsor" />
           <View style={$silverTierButtonWrapper}>
             {sponsorImages.map(({ uri, sponsor, externalURL }, index) => (
-              <Pressable key={index} style={$silverTierButton} onPress={() => onPress(externalURL)}>
+              <Pressable
+                key={index}
+                style={$silverTierButton}
+                onPress={() => openLinkInBrowser(externalURL)}
+              >
                 <AutoImage
                   accessibilityLabel={sponsor}
                   style={$silverTierImage}
