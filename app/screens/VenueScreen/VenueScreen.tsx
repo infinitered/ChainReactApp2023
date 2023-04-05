@@ -95,6 +95,7 @@ const useVenueSections = (): { isLoading: boolean; sections: SectionListData<any
             sponsorImages: tiers[tier].map((sponsor) => ({
               sponsor: sponsor.name,
               uri: sponsor.logo.url,
+              externalURL: sponsor["external-url"],
             })),
           })),
         ],
