@@ -26,7 +26,7 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
       {formattedStartTime}
       {!!formattedEndTime && ` - ${formattedEndTime}`}
     </Text>
-    <Text preset="eventTitle" style={isPast ? $pastTitleText : $titleText}>
+    <Text preset="eventTitle" style={[isPast ? $pastTitleText : $titleText, $titleTextBase]}>
       {title}
     </Text>
   </View>
@@ -281,6 +281,10 @@ const $talkRecordingLabel: TextStyle = {
 const $timeText: TextStyle = {
   color: colors.palette.neutral800,
   marginBottom: spacing.large,
+}
+
+const $titleTextBase: TextStyle = {
+  width: "80%",
 }
 
 const $pastTimeText: TextStyle = {
