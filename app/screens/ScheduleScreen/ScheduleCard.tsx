@@ -26,7 +26,7 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
       {formattedStartTime}
       {!!formattedEndTime && ` - ${formattedEndTime}`}
     </Text>
-    <Text preset="eventTitle" style={[isPast ? $pastTitleText : $titleText, $titleTextBase]}>
+    <Text preset="eventTitle" style={[$titleTextBase, isPast ? $pastTitleText : $titleText]}>
       {title}
     </Text>
   </View>
