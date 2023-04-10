@@ -54,8 +54,8 @@ export const SponsorCard = ({
           <Text preset="primaryLabel" style={$sponsorType}>
             {
               {
-                Platinum: translate("venueScreen.platinumSponsor"),
-                Gold: translate("venueScreen.goldSponsor"),
+                Platinum: translate("infoScreen.platinumSponsor"),
+                Gold: translate("infoScreen.goldSponsor"),
               }[tier]
             }
           </Text>
@@ -65,7 +65,7 @@ export const SponsorCard = ({
     case "Silver":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
-          <Text preset="primaryLabel" style={$sponsorType} tx="venueScreen.silverSponsor" />
+          <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.silverSponsor" />
           <View style={$silverTierButtonWrapper}>
             {sponsorImages.map(({ uri, sponsor, externalURL }, index) => (
               <Pressable
@@ -89,7 +89,7 @@ export const SponsorCard = ({
     case "Bronze":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
-          <Text preset="primaryLabel" style={$sponsorType} tx="venueScreen.bronzeSponsor" />
+          <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.bronzeSponsor" />
           <View style={$sponsorBottomTierLogos}>
             {sponsorImages.map(({ uri, sponsor }, index) => (
               <AutoImage
