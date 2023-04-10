@@ -30,7 +30,7 @@ interface VenuesSection {
 
 const useVenuesSections = (): {
   isLoading: boolean
-  sections: SectionListData<Array<VenuesSection>>[]
+  sections: Array<SectionListData<Array<VenuesSection>>>
 } => {
   const { data: venues = [], isLoading: venuesLoading } = useVenues()
 
@@ -57,24 +57,21 @@ const useVenuesSections = (): {
   }
 }
 
-const VenueCard = ({ body, cta, imageSource, subtitle, title }: VenuesSection) => {
-  console.tron.log({ body, cta, imageSource, subtitle, title })
-  return (
-    <View style={$venueCardWrapper}>
-      <AutoImage source={imageSource} style={$venueCardImage} />
-      <View style={$venueCardBodyWrapper}>
-        <Text preset="screenHeading" style={$venueCardTitle}>
-          {title}
-        </Text>
-        <Text preset="primaryLabel">{subtitle}</Text>
-        <Text selectable style={$venueCardBody}>
-          {body}
-        </Text>
-        <ButtonLink openLink={() => openMap(cta.link)}>{cta.text}</ButtonLink>
-      </View>
+const VenueCard = ({ body, cta, imageSource, subtitle, title }: VenuesSection) => (
+  <View style={$venueCardWrapper}>
+    <AutoImage source={imageSource} style={$venueCardImage} />
+    <View style={$venueCardBodyWrapper}>
+      <Text preset="screenHeading" style={$venueCardTitle}>
+        {title}
+      </Text>
+      <Text preset="primaryLabel">{subtitle}</Text>
+      <Text selectable style={$venueCardBody}>
+        {body}
+      </Text>
+      <ButtonLink openLink={() => openMap(cta.link)}>{cta.text}</ButtonLink>
     </View>
-  )
-}
+  </View>
+)
 
 export const VenuesScreen: FC<TabScreenProps<"Venues">> = () => {
   useHeader({ title: translate("venuesScreen.title") })
