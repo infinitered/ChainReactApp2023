@@ -47,7 +47,7 @@ const useVenuesSections = (): {
             }`,
             body: `${venue["street-address"]}\n${venue["city-state-zip"]}`,
             cta: {
-              text: "Open in maps",
+              text: translate("venuesScreen.openInMaps"),
               link: `${venue["street-address"]},${venue["city-state-zip"]}`,
             },
           })),

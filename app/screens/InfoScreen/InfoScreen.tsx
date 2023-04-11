@@ -22,15 +22,15 @@ type Links = Array<{
 
 const links: Links = [
   {
-    title: "Code of conduct",
+    title: translate("infoScreen.codeOfConductHeaderTitle"),
     link: "CodeOfConduct",
   },
   {
-    title: "Contact us",
+    title: translate("infoScreen.contactUsTitle"),
     link: "ContactUs",
   },
   {
-    title: "Our sponsors",
+    title: translate("infoScreen.ourSponsorsTitle"),
     link: "OurSponsors",
   },
 ]

@@ -44,6 +44,7 @@ const en = {
   },
   venuesScreen: {
     title: "Venues",
+    openInMaps: "Open in maps",
   },
   infoScreen: {
     title: "Info",
