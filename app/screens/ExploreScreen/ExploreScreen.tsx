@@ -74,6 +74,19 @@ const useRecommendationSections = (): {
               subtitle: item.name,
               meta: item.descriptor,
               body: item.description,
+              link: item["external-url"]
+                ? {
+                    text: translate("exploreScreen.openInMaps"),
+                    link: item["external-url"],
+                  }
+                : undefined,
+              button:
+                item["street-address"] && item["city-state-zip"]
+                  ? {
+                      text: translate("exploreScreen.openInMaps"),
+                      link: `${item["street-address"]},${item["city-state-zip"]}`,
+                    }
+                  : undefined,
               preset: "static",
             } as StaticCarouselProps),
         ),

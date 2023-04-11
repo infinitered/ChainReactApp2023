@@ -5,6 +5,7 @@ import { IconProps } from "../Icon"
 export interface StaticCarouselProps {
   body: string
   button?: ButtonData & ButtonProps
+  link?: { link: string; text: string }
   data: ImageSourcePropType[]
   meta?: string
   preset: "static"
