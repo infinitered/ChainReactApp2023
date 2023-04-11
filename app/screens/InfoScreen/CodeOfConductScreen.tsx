@@ -1,48 +1,28 @@
 import React from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, ImageSourcePropType, Image } from "react-native"
-import { Screen, Text } from "../components"
-import { useAppNavigation, useHeader } from "../hooks"
-import { TabScreenProps } from "../navigators/TabNavigator"
-import { colors, spacing } from "../theme"
-import { translate } from "../i18n"
-import { openLinkInBrowser } from "../utils/openLinkInBrowser"
-import { Carousel } from "../components/carousel/Carousel"
+import { ImageStyle, TextStyle, View, ViewStyle, Image } from "react-native"
+import { Screen, Text } from "../../components"
+import { colors, spacing } from "../../theme"
+import { translate } from "../../i18n"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
+import { useAppNavigation, useHeader } from "../../hooks"
 
 const phoneNumber = "360-450-4752"
 
-const confImage = require("../../assets/images/info-conf.png")
-const irImage1 = require("../../assets/images/info-ir1.png")
-const irImage2 = require("../../assets/images/info-ir2.png")
-const irImage3 = require("../../assets/images/info-ir3.png")
+const confImage = require("../../../assets/images/info-conf.png")
 
-const carouselData: ImageSourcePropType[] = [irImage1, irImage2, irImage3]
-
-export const InfoScreen: React.FunctionComponent<TabScreenProps<"Info">> = () => {
-  // NOTE: this only works on a device, warning in sim
+export const CodeOfConductScreen = () => {
   const callPhoneNumber = () => openLinkInBrowser(`tel:${phoneNumber}`)
-  const contactByEmail = () => openLinkInBrowser("mailto:conf@infinite.red")
 
   const navigation = useAppNavigation()
 
   useHeader({
-    title: translate("infoScreen.title"),
-    rightTx: "infoScreen.contact",
-    onRightPress: contactByEmail,
-    leftText: "     ",
-    onLeftPress: () => navigation.navigate("Debug"),
+    title: translate("infoScreen.codeOfConductHeaderTitle"),
+    leftIcon: "back",
+    onLeftPress: () => navigation.goBack(),
   })
 
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
-      <Text preset="screenHeading" tx="infoScreen.screenHeading" style={$screenHeading} />
-
-      <Carousel
-        preset="static"
-        data={carouselData}
-        subtitle={translate("infoScreen.aboutTitle")}
-        body={translate("infoScreen.about")}
-      />
-
       <View style={$content}>
         <Text preset="screenHeading" text="Code of conduct" style={$codeOfConductHeading} />
         <Text tx="infoScreen.conductWarning" />
@@ -98,10 +78,4 @@ const $phoneNumber: TextStyle = {
 const $codeOfConductHeading: TextStyle = {
   marginTop: spacing.extraLarge * 2,
   marginBottom: spacing.extraSmall,
-}
-
-const $screenHeading: ViewStyle = {
-  marginTop: spacing.extraLarge,
-  marginBottom: spacing.medium,
-  paddingHorizontal: spacing.large,
 }
