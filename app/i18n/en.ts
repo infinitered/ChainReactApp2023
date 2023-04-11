@@ -33,8 +33,10 @@ const en = {
   exploreScreen: {
     title: "Explore",
     nearbyFoodAndDrink: "Nearby food and drink",
-    downtownArtMurals: "Downtown art murals",
-    exploreNeighborhoods: "Explore neighborhoods",
+    sightSee: "Things to see",
+    uniqueToPortland: "Unique to Portland",
+    openInMaps: "Open in maps",
+    website: "Website",
   },
   tabNavigator: {
     scheduleTab: "Schedule",
