@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, Suspense } from "react"
 import {
   ActivityIndicator,
   Linking,
@@ -21,7 +21,7 @@ import { groupBy } from "../../utils/groupBy"
 import { customSortObjectKeys } from "../../utils/customSort"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
-type RecommendationType = typeof recommendationTypes[number]
+type RecommendationType = (typeof recommendationTypes)[number]
 type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
 
 const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
@@ -49,11 +49,8 @@ const sectionTitle = (type: RecommendationType) => {
   }
 }
 
-const useRecommendationSections = (): {
-  isLoading: boolean
-  sections: Array<SectionListData<Array<DynamicCarouselItem>>>
-} => {
-  const { data: recommendations = [], isLoading } = useRecommendations()
+const useRecommendationSections = (): { sections: SectionListData<any>[] } => {
+  const { data: recommendations = [] } = useRecommendations()
 
   const rawRecs = groupBy("type")(recommendations)
   const recs = Object.keys(rawRecs).reduce<GroupedRecommendations>(
@@ -66,7 +63,6 @@ const useRecommendationSections = (): {
   const sortedRecs = customSortObjectKeys(recs, ["Food/Drink", "Unique/to/Portland"])
 
   return {
-    isLoading,
     sections: Object.entries(sortedRecs).map(
       ([key, value]: [RecommendationType, RawRecommendations[]]) => ({
         title: sectionTitle(key),
@@ -94,41 +90,47 @@ const useRecommendationSections = (): {
   }
 }
 
+const Layout = () => {
+  const { sections } = useRecommendationSections()
+
+  return (
+    <SectionList
+      ListFooterComponent={
+        <ButtonLink
+          openLink={() =>
+            Linking.openURL(
+              "https://www.google.com/maps/d/viewer?mid=1QWdKaK186ufwRQR2m_oGSOIiRVMRjSs&hl=en_US&ll=45.52275389785826%2C-122.67765992521456&z=16",
+            )
+          }
+          style={$buttonLink}
+          preset="reversed"
+        >
+          {translate("exploreScreen.wantToSeeMore")}
+        </ButtonLink>
+      }
+      stickySectionHeadersEnabled={false}
+      sections={sections}
+      renderSectionHeader={({ section: { title, data } }) =>
+        data[0].length > 0 ? (
+          <Text preset="screenHeading" style={!!title && $heading}>
+            {title}
+          </Text>
+        ) : null
+      }
+    />
+  )
+}
+
 export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
   useHeader({ title: translate("exploreScreen.title") })
-  const { sections, isLoading } = useRecommendationSections()
 
   return (
     <Screen style={$root} preset="fixed">
-      {isLoading && (
-        <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
-      )}
-      {!isLoading && sections.length > 0 && (
-        <SectionList
-          ListFooterComponent={
-            <ButtonLink
-              openLink={() =>
-                Linking.openURL(
-                  "https://www.google.com/maps/d/viewer?mid=1QWdKaK186ufwRQR2m_oGSOIiRVMRjSs&hl=en_US&ll=45.52275389785826%2C-122.67765992521456&z=16",
-                )
-              }
-              style={$buttonLink}
-              preset="reversed"
-            >
-              {translate("exploreScreen.wantToSeeMore")}
-            </ButtonLink>
-          }
-          stickySectionHeadersEnabled={false}
-          sections={sections}
-          renderSectionHeader={({ section: { title, data } }) =>
-            data[0].length > 0 ? (
-              <Text preset="screenHeading" style={!!title && $heading}>
-                {title}
-              </Text>
-            ) : null
-          }
-        />
-      )}
+      <Suspense
+        fallback={<ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />}
+      >
+        <Layout />
+      </Suspense>
     </Screen>
   )
 }
