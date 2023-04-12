@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQueries, useQuery, UseQueryOptions } from "@tanstack/react-query"
 import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
 import type {
@@ -31,76 +31,127 @@ import {
   cleanedWorkshops,
   convertScheduleToScheduleCard,
 } from "./webflow-helpers"
+import { queryClient } from "./react-query"
 
-const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
-  useQuery({
-    queryKey: [key],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get<PaginatedItems<T>>(
-        `/collections/${collectionId}/items`,
-      )
-      return data.items
-    },
-    enabled,
-  })
+const getCollectionById = async <T>(collectionId: string) => {
+  const { data } = await axiosInstance.get<PaginatedItems<T>>(`/collections/${collectionId}/items`)
+  return data.items
+}
+
+const useRecommendationsOptions = {
+  queryKey: [RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId],
+  queryFn: async () => getCollectionById<RawRecommendations>(RECOMMENDATIONS.collectionId),
+} satisfies UseQueryOptions
 
 export const useRecommendations = () => {
-  return useWebflowAPI<RawRecommendations>(RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId)
+  return useQuery(useRecommendationsOptions)
 }
+
+const useRecurringEventsOptions = {
+  queryKey: [RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId],
+  queryFn: async () => getCollectionById<RawRecurringEvents>(RECURRING_EVENTS.collectionId),
+} satisfies UseQueryOptions
 
 export const useRecurringEvents = () => {
-  return useWebflowAPI<RawRecurringEvents>(RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId)
+  return useQuery(useRecurringEventsOptions)
 }
+
+const useSpeakersOptions = {
+  queryKey: [SPEAKERS.key, SPEAKERS.collectionId],
+  queryFn: async () => getCollectionById<RawSpeaker>(SPEAKERS.collectionId),
+} satisfies UseQueryOptions
 
 export const useSpeakers = () => {
-  return useWebflowAPI<RawSpeaker>(SPEAKERS.key, SPEAKERS.collectionId)
+  return useQuery(useSpeakersOptions)
 }
+
+const useSpeakerNamesOptions = {
+  queryKey: [SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId],
+  queryFn: async () => getCollectionById<RawSpeakerName>(SPEAKER_NAMES.collectionId),
+} satisfies UseQueryOptions
 
 export const useSpeakerNames = () => {
-  return useWebflowAPI<RawSpeakerName>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
+  return useQuery(useSpeakerNamesOptions)
 }
 
-export const useSponsors = (): { isLoading: boolean; data: RawSponsor[] } => {
-  const { data: sponsors, isLoading } = useWebflowAPI<RawSponsor>(
-    SPONSORS.key,
-    SPONSORS.collectionId,
-  )
+const useSponsorsOptions = {
+  queryKey: [SPONSORS.key, SPONSORS.collectionId],
+  queryFn: async () => getCollectionById<RawSponsor>(SPONSORS.collectionId),
+} satisfies UseQueryOptions
+
+export const useSponsors = () => {
+  const { data: sponsors, isLoading } = useQuery(useSponsorsOptions)
   const data = cleanedSponsors(sponsors)
 
   return { isLoading, data }
 }
+
+const useTalksOptions = {
+  queryKey: [TALKS.key, TALKS.collectionId],
+  queryFn: async () => getCollectionById<RawTalk>(TALKS.collectionId),
+} satisfies UseQueryOptions
+
 export const useTalks = () => {
-  return useWebflowAPI<RawTalk>(TALKS.key, TALKS.collectionId)
+  return useQuery(useTalksOptions)
 }
+
+const useVenuesOptions = {
+  queryKey: [VENUES.key, VENUES.collectionId],
+  queryFn: async () => getCollectionById<RawVenue>(VENUES.collectionId),
+} satisfies UseQueryOptions
 
 export const useVenues = () => {
-  return useWebflowAPI<RawVenue>(VENUES.key, VENUES.collectionId)
+  return useQuery(useVenuesOptions)
 }
 
+const useWorkshopsOptions = {
+  queryKey: [WORKSHOPS.key, WORKSHOPS.collectionId],
+  queryFn: async () => getCollectionById<RawWorkshop>(WORKSHOPS.collectionId),
+} satisfies UseQueryOptions
+
 export const useWorkshops = () => {
-  return useWebflowAPI<RawWorkshop>(WORKSHOPS.key, WORKSHOPS.collectionId)
+  return useQuery(useWorkshopsOptions)
+}
+
+const useScheduledEventsOptions = {
+  queryKey: [SCHEDULE.key, SCHEDULE.collectionId],
+  queryFn: async () => getCollectionById<RawScheduledEvent>(SCHEDULE.collectionId),
+} satisfies UseQueryOptions
+
+const useScheduledEventsQueries = [
+  useSpeakersOptions,
+  useWorkshopsOptions,
+  useRecurringEventsOptions,
+  useTalksOptions,
+  useScheduledEventsOptions,
+] as const
+
+export const prefetchScheduledEvents = async () => {
+  await Promise.all(
+    useScheduledEventsQueries.map(async (query) => {
+      return queryClient.prefetchQuery(query)
+    }),
+  )
 }
 
 export const useScheduledEvents = () => {
-  const { data: speakers, isLoading } = useSpeakers()
-  const { data: workshops } = useWorkshops()
-  const { data: recurringEvents } = useRecurringEvents()
-  const { data: talks } = useTalks()
-  const { data: scheduledEvents, ...rest } = useWebflowAPI<RawScheduledEvent>(
-    SCHEDULE.key,
-    SCHEDULE.collectionId,
-    !isLoading && !!speakers && !!workshops && !!recurringEvents && !!talks,
-  )
+  const queries = useQueries({
+    queries: useScheduledEventsQueries,
+  })
+
+  const [speakers, workshops, recurringEvents, talks, scheduledEvents] = queries
 
   return {
     data: cleanedSchedule({
-      recurringEvents,
-      scheduledEvents,
-      speakers: cleanedSpeakers(speakers),
-      talks: cleanedTalks({ speakers, talks }),
-      workshops: cleanedWorkshops(workshops, cleanedSpeakers(speakers)),
+      recurringEvents: recurringEvents.data,
+      scheduledEvents: scheduledEvents.data,
+      speakers: cleanedSpeakers(speakers.data),
+      talks: cleanedTalks({ speakers: speakers.data, talks: talks.data }),
+      workshops: cleanedWorkshops(workshops.data, cleanedSpeakers(speakers.data)),
     }),
-    ...rest,
+    refetch: async () => Promise.all(queries.map((query) => query.refetch())),
+    isLoading: queries.map((query) => query.isLoading).some((isLoading) => isLoading),
+    isRefetching: queries.map((query) => query.isFetching).some((isFetching) => isFetching),
   }
 }
 
@@ -126,7 +177,7 @@ export const useScheduleScreenData = () => {
         title: "Conference Day 2",
         events: convertScheduleToScheduleCard(events, "Friday"),
       },
-    ] as Schedule[],
+    ] satisfies Schedule[],
     refetch,
   }
 }
