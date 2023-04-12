@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Suspense } from "react"
 import {
   ActivityIndicator,
   SectionList,
@@ -18,7 +18,7 @@ import { SponsorCard } from "./SponsorCard"
 import { groupBy } from "../../utils/groupBy"
 
 const sponsorTiers = Object.values(WEBFLOW_MAP.sponsorTier)
-type Tiers = typeof sponsorTiers[number]
+type Tiers = (typeof sponsorTiers)[number]
 
 const initialTiers = sponsorTiers.reduce<Record<Tiers, RawSponsor[]>>(
   (acc, tier) => ({ ...acc, [tier]: [] }),
@@ -26,10 +26,9 @@ const initialTiers = sponsorTiers.reduce<Record<Tiers, RawSponsor[]>>(
 )
 
 const useSponsorsSections = (): {
-  isLoading: boolean
   sections: Array<SectionListData<any>>
 } => {
-  const { data: sponsors = [], isLoading } = useSponsors()
+  const { data: sponsors = [] } = useSponsors()
   const rawTiers = groupBy("sponsor-tier")(sponsors)
   const tiers = Object.keys(rawTiers).reduce<Record<Tiers, RawSponsor[]>>(
     (acc, tier) => ({
@@ -39,7 +38,6 @@ const useSponsorsSections = (): {
     initialTiers,
   )
   return {
-    isLoading,
     sections: [
       {
         data: [
@@ -68,6 +66,28 @@ const useSponsorsSections = (): {
   }
 }
 
+const Layout = () => {
+  const { sections } = useSponsorsSections()
+
+  return (
+    <>
+      <SectionList
+        ListHeaderComponent={
+          <Text preset="screenHeading" tx="infoScreen.thanksToThisYearsSponsors" style={$heading} />
+        }
+        showsVerticalScrollIndicator={false}
+        stickySectionHeadersEnabled={false}
+        sections={sections}
+        renderItem={({ item }) => (
+          <View style={$container}>
+            <SponsorCard {...item} />
+          </View>
+        )}
+      />
+    </>
+  )
+}
+
 export const OurSponsorsScreen = () => {
   const navigation = useAppNavigation()
 
@@ -77,34 +97,13 @@ export const OurSponsorsScreen = () => {
     onLeftPress: () => navigation.goBack(),
   })
 
-  const { isLoading, sections } = useSponsorsSections()
-
   return (
     <Screen style={$root} preset="fixed">
-      {isLoading && (
-        <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
-      )}
-      {!isLoading && sections.length > 0 && (
-        <>
-          <SectionList
-            ListHeaderComponent={
-              <Text
-                preset="screenHeading"
-                tx="infoScreen.thanksToThisYearsSponsors"
-                style={$heading}
-              />
-            }
-            showsVerticalScrollIndicator={false}
-            stickySectionHeadersEnabled={false}
-            sections={sections}
-            renderItem={({ item }) => (
-              <View style={$container}>
-                <SponsorCard {...item} />
-              </View>
-            )}
-          />
-        </>
-      )}
+      <Suspense
+        fallback={<ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />}
+      >
+        <Layout />
+      </Suspense>
     </Screen>
   )
 }
