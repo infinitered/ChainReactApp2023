@@ -13,6 +13,7 @@
  * @refresh reset
  */
 import { Platform } from "react-native"
+import { QueryClientManager, reactotronReactQuery } from "reactotron-react-query"
 import { Reactotron } from "./reactotronClient"
 import { ArgType } from "reactotron-core-client"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -55,6 +56,10 @@ const config = DEFAULT_REACTOTRON_CONFIG
 // Avoid setting up Reactotron multiple times with Fast Refresh
 let _reactotronIsSetUp = false
 
+const queryClientManager = new QueryClientManager({
+  queryClient,
+})
+
 /**
  * Configure reactotron based on the the config settings passed in, then connect if we need to.
  */
@@ -71,6 +76,9 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
     Reactotron.configure({
       name: config.name || require("../../../package.json").name,
       host: config.host,
+      onDisconnect: () => {
+        queryClientManager.unsubscribe()
+      },
     })
 
     // hookup middleware
@@ -78,6 +86,7 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
       if (config.useAsyncStorage) {
         Reactotron.setAsyncStorageHandler(AsyncStorage)
       }
+      Reactotron.use(reactotronReactQuery(queryClientManager))
       Reactotron.useReactNative({
         asyncStorage: config.useAsyncStorage ? undefined : false,
       })
