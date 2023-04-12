@@ -12141,6 +12141,11 @@ reactotron-react-native@5.0.3:
   optionalDependencies:
     react-native-flipper "^0.164.0"
 
+reactotron-react-query@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/reactotron-react-query/-/reactotron-react-query-1.0.2.tgz#88dc62b3ed3df75e57252d87b9afcf50451aee80"
+  integrity sha512-c6SKMIMIL1t8qjA9oEGBL4QAGKYSAHM3GpcX44my2iSokmdb9NY7s06zZMQ6xZdYUorQnVMbsQ7tcFfU7EelZA==
+
 read-pkg-up@^7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-7.0.1.tgz#f3a6135758459733ae2b95638056e1854e7ef507"
