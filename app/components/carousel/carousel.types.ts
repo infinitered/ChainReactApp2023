@@ -2,9 +2,10 @@ import { ImageSourcePropType, ImageStyle } from "react-native"
 import { ButtonProps } from "../Button"
 import { IconProps } from "../Icon"
 
-interface StaticCarouselProps {
+export interface StaticCarouselProps {
   body: string
   button?: ButtonData & ButtonProps
+  link?: { link: string; text: string }
   data: ImageSourcePropType[]
   meta?: string
   preset: "static"

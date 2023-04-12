@@ -10,6 +10,7 @@ import { openMap } from "../../utils/openMap"
 import { SocialButton } from "../SocialButton"
 import { CAROUSEL_IMAGE_WIDTH, SPACER_WIDTH } from "./constants"
 import { CarouselProps, DynamicCarouselItem, Spacer } from "./carousel.types"
+import { ButtonLink } from "../ButtonLink"
 
 // ! https://github.com/software-mansion/react-native-reanimated/issues/457
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)
@@ -125,6 +126,11 @@ export function Carousel(props: CarouselProps) {
             style={[!props.meta ? $mt : undefined, $mb]}
           />
           <Text text={props.body} style={$body} />
+          {props.link && (
+            <ButtonLink openLink={() => openLink(props.link.link)} style={$buttonLink}>
+              {props.link.text}
+            </ButtonLink>
+          )}
           {props.button && (
             <Button text={props.button.text} onPress={() => openLink(props.button.link)} />
           )}
@@ -155,6 +161,10 @@ const $meta: ViewStyle = {
 }
 
 const $body: TextStyle = {
+  marginBottom: spacing.large,
+}
+
+const $buttonLink: ViewStyle = {
   marginBottom: spacing.large,
 }
 
