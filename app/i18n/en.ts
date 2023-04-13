@@ -50,7 +50,6 @@ const en = {
   },
   infoScreen: {
     title: "Info",
-    contact: "Contact",
     contactUsTitle: "Contact Us",
     screenHeading: "Hosted by the Infinite Red team",
     aboutTitle: "About Chain React",
