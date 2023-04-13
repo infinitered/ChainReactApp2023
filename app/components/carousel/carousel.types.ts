@@ -10,6 +10,7 @@ export interface StaticCarouselProps {
   meta?: string
   preset: "static"
   subtitle: string
+  isBodySelectable?: boolean
 }
 
 export interface ButtonData {
