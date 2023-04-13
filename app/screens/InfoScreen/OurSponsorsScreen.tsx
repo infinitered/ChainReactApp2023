@@ -86,8 +86,14 @@ export const OurSponsorsScreen = () => {
       )}
       {!isLoading && sections.length > 0 && (
         <>
-          <Text preset="screenHeading" tx="infoScreen.thanksToThisYearsSponsors" style={$heading} />
           <SectionList
+            ListHeaderComponent={
+              <Text
+                preset="screenHeading"
+                tx="infoScreen.thanksToThisYearsSponsors"
+                style={$heading}
+              />
+            }
             showsVerticalScrollIndicator={false}
             stickySectionHeadersEnabled={false}
             sections={sections}
