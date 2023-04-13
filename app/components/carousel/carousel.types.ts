@@ -34,7 +34,7 @@ export interface DynamicCarouselItem {
   subtitle: string
 }
 
-interface DynamicCarouselProps {
+export interface DynamicCarouselProps {
   preset: "dynamic"
   data: DynamicCarouselItem[]
 }
