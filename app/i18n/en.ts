@@ -71,7 +71,7 @@ const en = {
     reportingIncidentPart2:
       ".\n\nWhen submitting a report, please include as much information as you feel comfortable sharing. We take all reports seriously.",
     emailUs: "Email us",
-    haveQuestion: "Have Questions? Send Us a Message",
+    haveQuestions: "Have Questions? Send Us a Message",
     reachOut: "Reach out to our team at ",
     ourSponsorsTitle: "Our Sponsors",
     thanksToThisYearsSponsors: "Thanks to this year's sponsors",
