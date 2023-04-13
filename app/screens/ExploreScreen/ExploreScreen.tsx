@@ -21,7 +21,7 @@ import { groupBy } from "../../utils/groupBy"
 import { customSortObjectKeys } from "../../utils/customSort"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
-type RecommendationType = (typeof recommendationTypes)[number]
+type RecommendationType = typeof recommendationTypes[number]
 type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
 
 const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
