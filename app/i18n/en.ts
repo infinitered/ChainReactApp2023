@@ -5,10 +5,10 @@ const en = {
     back: "Back",
   },
   welcomeScreen: {
-    heading: "Welcome to Chain React 2023",
+    heading: "Welcome to Chain React!",
     topBlurb:
-      "Yay! You're here! It's been a while, but glad you could join us. Get all the details for workshops, talks, and events right here.",
-    bottomBlurb: "And if you're sticking around for a bit, we've added some places to explore.",
+      "Welcome to the 4th annual React Native Conference! This app is your official companion for all things Chain React.\n\nYou can do it all in the app: View the schedule, find directions to the afterparty, or even recommendations to grab food. It's all here in the app!",
+    bottomBlurb: "Let's Get Started </>",
     scheduleButton: "See the schedule",
   },
   errorScreen: {
