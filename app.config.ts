@@ -71,7 +71,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     eas: {
       projectId: "b72c79d7-7c87-4aa7-b964-998dcff69e07",
     },
-    webflowToken: "63eb6ae43b109a57f2f18438a50a2a91887f53dc238c700b332b0379e74cf616",
   },
   plugins: [
     "@react-native-firebase/app",
