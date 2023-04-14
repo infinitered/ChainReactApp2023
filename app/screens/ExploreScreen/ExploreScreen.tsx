@@ -19,7 +19,7 @@ import { RawRecommendations } from "../../services/api/webflow-api.types"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
-type RecommendationType = typeof recommendationTypes[number]
+type RecommendationType = (typeof recommendationTypes)[number]
 type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
 
 const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
