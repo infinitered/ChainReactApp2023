@@ -18,7 +18,7 @@ import { colors, spacing } from "../../theme"
 import { SponsorCard } from "./SponsorCard"
 
 const sponsorTiers = Object.values(WEBFLOW_MAP.sponsorTier)
-type Tiers = typeof sponsorTiers[number]
+type Tiers = (typeof sponsorTiers)[number]
 
 const initialTiers = sponsorTiers.reduce<Record<Tiers, RawSponsor[]>>(
   (acc, tier) => ({ ...acc, [tier]: [] }),
