@@ -1,4 +1,3 @@
-import Constants from "expo-constants"
 import axios from "axios"
 
 interface PaginatedData {
@@ -17,7 +16,6 @@ export const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     "User-Agent": "Webflow Javascript SDK / 1.0",
-    Authorization: `Bearer ${Constants.expoConfig.extra.webflowToken}`,
   },
 })
 
