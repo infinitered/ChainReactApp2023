@@ -23,6 +23,5 @@ export const formatDate = (date: string | Date, dateFormat?: string, options?: O
   return format(parseDate(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
 }
 
-type DayTime = { ["day-time"]: Date | string }
-export const sortByTime = (a: DayTime, b: DayTime) =>
+export const sortByTime = (a: Date | string, b: Date | string) =>
   parseDate(a["day-time"]).getTime() - parseDate(b["day-time"]).getTime()
