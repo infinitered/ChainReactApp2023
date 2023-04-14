@@ -13,6 +13,7 @@ import type {
   Sponsor,
   Talk,
   Workshop,
+  Day,
 } from "./webflow-api.types"
 import { WEBFLOW_MAP } from "./webflow-consts"
 
@@ -66,7 +67,6 @@ export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
   return {
     ...speaker,
     "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
-    "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
   }
 }
 
@@ -120,6 +120,9 @@ export const cleanedWorkshops = (
       level: WEBFLOW_MAP.workshopLevel[workshop.level],
       "instructor-info": speakersData?.find(
         (speaker) => speaker._id === workshop["instructor-info"],
+      ),
+      "second-instructor-3": speakersData?.find(
+        (speaker) => speaker._id === workshop["second-instructor-3"],
       ),
       "instructor-s-2": workshop?.["instructor-s-2"]?.map((id) =>
         speakersData?.find((speaker) => speaker._id === id),
@@ -245,14 +248,26 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         level: workshop?.level,
         id: schedule._id,
       }
+    default:
+      throw new Error(`Unknown schedule type '${schedule.type}' for event '${schedule.name}'`)
   }
 }
 
 // [NOTE] util function that might be needed in the future
 export const convertScheduleToScheduleCard = (
   scheduleData: ScheduledEvent[],
-  day: string,
+  day: Day,
 ): ScheduleCardProps[] => {
-  const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
-  return daySchedule.sort(sortByTime).map(convertScheduleToCardProps).filter(Boolean)
+  // 1. Get the schedule for the current day
+  const groupByDay = groupBy("day")
+  const schedules = groupByDay(scheduleData ?? [])
+  const daySchedule: ScheduledEvent[] = schedules[day] ?? []
+  // 2. Sort the schedule by time
+  const sortedSchedule: ScheduledEvent[] = daySchedule.sort((a, b) =>
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    sortByTime(a["day-time"]!, b["day-time"]!),
+  )
+
+  // 3. Convert the schedule to card props
+  return sortedSchedule.map(convertScheduleToCardProps).filter(Boolean)
 }

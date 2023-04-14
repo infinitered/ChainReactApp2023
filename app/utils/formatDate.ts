@@ -49,6 +49,10 @@ export const formatDate = (date: string | Date, dateFormat?: string, options?: O
   return format(parsedDateToPSTDate(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
 }
 
-type DayTime = { ["day-time"]: Date | string }
-export const sortByTime = (a: DayTime, b: DayTime) =>
-  parseDate(a["day-time"]).getTime() - parseDate(b["day-time"]).getTime()
+interface Event {
+  "day-time": string
+}
+export const sortByDayTime = (a: Event, b: Event) => sortByTime(a["day-time"], b["day-time"])
+
+export const sortByTime = (a: Date | string, b: Date | string) =>
+  parseDate(a).getTime() - parseDate(b).getTime()

@@ -1,53 +1,75 @@
+import {
+  RawRecommendationsSchema,
+  RawRecurringEventsSchema,
+  RawScheduledEventSchema,
+  RawSpeakerNameSchema,
+  RawSpeakerSchema,
+  RawSponsorSchema,
+  RawTalkSchema,
+  RawVenueSchema,
+  RawWorkshopSchema,
+} from "./webflow-api.types"
+
 export const SITE_ID = "5ca38f35db5d2ea94aea469d"
 
 export const SPONSORS = {
   collectionId: "640a728fc24f8e73575fe189",
   key: "sponsors",
+  schema: RawSponsorSchema,
 } as const
 
 export const SPEAKERS = {
   collectionId: "640a728fc24f8e94385fe188",
   key: "speakers",
+  schema: RawSpeakerSchema,
 } as const
 
 export const SPEAKER_NAMES = {
   collectionId: "640a728fc24f8e74d05fe18a",
   key: "speakerNames",
-}
+  schema: RawSpeakerNameSchema,
+} as const
 
 export const WORKSHOPS = {
   collectionId: "640a728fc24f8e7f635fe187",
   key: "workshops",
-}
+  schema: RawWorkshopSchema,
+} as const
 
 export const SCHEDULE = {
   collectionId: "640a728fc24f8e63325fe185",
   key: "schedule",
+  schema: RawScheduledEventSchema,
 } as const
 
 export const PAST_TALKS = {
   collectionId: "640a728fc24f8e76ef5fe186",
   key: "pastTalks",
+  schema: RawTalkSchema,
 } as const
 
 export const RECURRING_EVENTS = {
   collectionId: "640a728fc24f8e85a75fe18c",
   key: "recurringEvents",
+  schema: RawRecurringEventsSchema,
 } as const
 
 export const TALKS = {
   collectionId: "640a728fc24f8e31ee5fe18e",
   key: "talks",
+  schema: RawTalkSchema,
 } as const
 
 export const VENUES = {
   collectionId: "640a728fc24f8e553c5fe18d",
   key: "venues",
+  schema: RawVenueSchema,
 } as const
 
 export const RECOMMENDATIONS = {
   collectionId: "640a728fc24f8e083b5fe18f",
   key: "recommendations",
+  schema: RawRecommendationsSchema,
 } as const
 
 export type CollectionConst =
@@ -61,6 +83,32 @@ export type CollectionConst =
   | typeof TALKS
   | typeof VENUES
   | typeof RECOMMENDATIONS
+
+export const COLLECTIONS_MAP = {
+  [SPONSORS.key]: SPONSORS,
+  [SPONSORS.collectionId]: SPEAKERS,
+  [SPEAKERS.key]: SPEAKERS,
+  [SPEAKERS.collectionId]: SPEAKERS,
+  [SPEAKER_NAMES.key]: SPEAKER_NAMES,
+  [SPEAKER_NAMES.collectionId]: SPEAKER_NAMES,
+  [WORKSHOPS.key]: WORKSHOPS,
+  [WORKSHOPS.collectionId]: WORKSHOPS,
+  [SCHEDULE.key]: SCHEDULE,
+  [SCHEDULE.collectionId]: SCHEDULE,
+  [PAST_TALKS.key]: PAST_TALKS,
+  [PAST_TALKS.collectionId]: PAST_TALKS,
+  [RECURRING_EVENTS.key]: RECURRING_EVENTS,
+  [RECURRING_EVENTS.collectionId]: RECURRING_EVENTS,
+  [TALKS.key]: TALKS,
+  [TALKS.collectionId]: TALKS,
+  [VENUES.key]: VENUES,
+  [VENUES.collectionId]: VENUES,
+  [RECOMMENDATIONS.key]: RECOMMENDATIONS,
+  [RECOMMENDATIONS.collectionId]: RECOMMENDATIONS,
+} as const
+
+export type CollectionKey = keyof typeof COLLECTIONS_MAP
+export type CollectionId = (typeof COLLECTIONS_MAP)[CollectionKey]["collectionId"]
 
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys

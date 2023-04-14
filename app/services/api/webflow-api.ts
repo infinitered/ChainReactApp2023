@@ -1,4 +1,6 @@
 import { useQueries, useQuery, UseQueryOptions } from "@tanstack/react-query"
+import { z } from "zod"
+import { fromZodError } from "zod-validation-error"
 import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
 import type {
@@ -14,6 +16,8 @@ import type {
 } from "./webflow-api.types"
 import {
   CollectionConst,
+  CollectionId,
+  COLLECTIONS_MAP,
   RECOMMENDATIONS,
   RECURRING_EVENTS,
   SCHEDULE,
@@ -34,9 +38,19 @@ import {
 } from "./webflow-helpers"
 import { queryClient } from "./react-query"
 
-const getCollectionById = async <T>(collectionId: string) => {
+const getCollectionById = async <T>(collectionId: CollectionId) => {
   const { data } = await axiosInstance.get<PaginatedItems<T>>(`/collections/${collectionId}/items`)
-  return data.items
+  const schema = z.array(COLLECTIONS_MAP[collectionId].schema)
+  try {
+    return schema.parse(data.items) as T[]
+  } catch (error) {
+    const validationError = fromZodError(error)
+    throw Error(
+      `Whoops! Our API didn't come back in the expected shape. ${
+        schema.description ?? "Unknown schema"
+      } threw the following error: ${validationError.message}`,
+    )
+  }
 }
 
 const webflowOptions = <Payload, Collection extends CollectionConst = CollectionConst>(

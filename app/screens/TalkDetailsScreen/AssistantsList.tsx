@@ -36,7 +36,7 @@ export function AssistantsList(props: AssistantsListProp) {
                   socialButtons={[
                     { icon: "twitter", url: assistant.twitter },
                     { icon: "github", url: assistant.github },
-                    { icon: "link", url: assistant.externalURL },
+                    { icon: "link", url: assistant.website },
                   ]}
                 />
               </View>
