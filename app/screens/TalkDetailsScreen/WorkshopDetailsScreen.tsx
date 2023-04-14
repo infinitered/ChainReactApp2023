@@ -41,7 +41,7 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
     socialButtons: [
       { url: speaker.twitter, icon: "twitter" },
       { url: speaker.github, icon: "github" },
-      { url: speaker.externalURL, icon: "link" },
+      { url: speaker.website, icon: "link" },
     ],
   })) as DynamicCarouselItem[]
 

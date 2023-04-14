@@ -13,6 +13,9 @@ import type {
   RawWorkshop,
 } from "./webflow-api.types"
 import {
+  CollectionId,
+  CollectionKey,
+  COLLECTIONS_MAP,
   RECOMMENDATIONS,
   RECURRING_EVENTS,
   SCHEDULE,
@@ -31,15 +34,27 @@ import {
   cleanedWorkshops,
   convertScheduleToScheduleCard,
 } from "./webflow-helpers"
+import { z } from "zod"
+import { fromZodError } from "zod-validation-error"
 
-const useWebflowAPI = <T>(key: string, collectionId: string, enabled = true) =>
+const useWebflowAPI = <T>(key: CollectionKey, collectionId: CollectionId, enabled = true) =>
   useQuery({
     queryKey: [key],
     queryFn: async () => {
       const { data } = await axiosInstance.get<PaginatedItems<T>>(
         `/collections/${collectionId}/items`,
       )
-      return data.items
+      const schema = z.array(COLLECTIONS_MAP[key].schema)
+      try {
+        return schema.parse(data.items) as T[]
+      } catch (error) {
+        const validationError = fromZodError(error)
+        throw Error(
+          `Whoops! Our API didn't come back in the expected shape. ${
+            schema.description ?? "Unknown schema"
+          } threw the following error: ${validationError.message}`,
+        )
+      }
     },
     enabled,
   })

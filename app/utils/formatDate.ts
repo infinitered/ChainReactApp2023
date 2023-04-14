@@ -5,6 +5,8 @@ import ar from "date-fns/locale/ar-SA"
 import ko from "date-fns/locale/ko"
 import en from "date-fns/locale/en-US"
 
+import { DateString } from "../services/api/webflow-api.types"
+
 type Options = Parameters<typeof format>[2]
 
 const getLocale = (): Locale => {
@@ -23,6 +25,12 @@ export const formatDate = (date: string | Date, dateFormat?: string, options?: O
   return format(parseDate(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
 }
 
-type DayTime = { ["day-time"]: Date | string }
-export const sortByTime = (a: DayTime, b: DayTime) =>
-  parseDate(a["day-time"]).getTime() - parseDate(b["day-time"]).getTime()
+interface Event {
+  "day-time": DateString
+}
+
+export const sortByDayTime = <T extends Event>(a: T, b: T) =>
+  sortByTime(a["day-time"], b["day-time"])
+
+export const sortByTime = (a: DateString, b: DateString) =>
+  parseDate(a).getTime() - parseDate(b).getTime()

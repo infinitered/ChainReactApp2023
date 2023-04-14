@@ -34,7 +34,7 @@ export function AssistantsList(props: AssistantsListProp) {
               <View style={$assistantLinks}>
                 <IconButton
                   icon={assistant.twitter ? "twitter" : "link"}
-                  onPress={() => openLinkInBrowser(assistant.twitter || assistant.externalURL)}
+                  onPress={() => openLinkInBrowser(assistant.twitter || assistant.website)}
                 />
               </View>
             </View>

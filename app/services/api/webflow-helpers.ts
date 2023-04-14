@@ -1,5 +1,5 @@
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
-import { formatDate, sortByTime } from "../../utils/formatDate"
+import { formatDate, sortByDayTime } from "../../utils/formatDate"
 import type {
   RawScheduledEvent,
   RawSpeaker,
@@ -12,6 +12,7 @@ import type {
   Sponsor,
   Talk,
   Workshop,
+  Day,
 } from "./webflow-api.types"
 import { WEBFLOW_MAP } from "./webflow-consts"
 
@@ -38,6 +39,8 @@ export const cleanedSchedule = ({
       location: WEBFLOW_MAP.location[schedule.location],
       "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
       "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
+      "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
+      "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-2-3"]),
       day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
       talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
@@ -57,7 +60,6 @@ export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
   return {
     ...speaker,
     "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
-    "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
   }
 }
 
@@ -103,6 +105,9 @@ export const cleanedWorkshops = (
       level: WEBFLOW_MAP.workshopLevel[workshop.level],
       "instructor-info": speakersData?.find(
         (speaker) => speaker._id === workshop["instructor-info"],
+      ),
+      "second-instructor-3": speakersData?.find(
+        (speaker) => speaker._id === workshop["second-instructor-3"],
       ),
       "instructor-s-2": workshop?.["instructor-s-2"]?.map((id) =>
         speakersData?.find((speaker) => speaker._id === id),
@@ -200,23 +205,25 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         level: workshop?.level,
         id: schedule._id,
       }
+    default:
+      throw new Error(`Unknown schedule type '${schedule.type}' for event '${schedule.name}'`)
   }
 }
 
 // [NOTE] util function that might be needed in the future
 export const convertScheduleToScheduleCard = (
   scheduleData: ScheduledEvent[],
-  day: string,
+  day: Day,
 ): ScheduleCardProps[] => {
   const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
-  return daySchedule.sort(sortByTime).map(convertScheduleToCardProps).filter(Boolean)
+  return daySchedule.sort(sortByDayTime).map(convertScheduleToCardProps).filter(Boolean)
 }
 
 // [NOTE] util function that might be needed in the future
 export const groupBy =
   (key: string) =>
   <T>(array: T[]) =>
-    array.reduce(
+    array.reduce<Record<string, T[]>>(
       (objectsByKeyValue, obj) => ({
         ...objectsByKeyValue,
         [obj[key]]: (objectsByKeyValue[obj[key]] || []).concat(obj),
