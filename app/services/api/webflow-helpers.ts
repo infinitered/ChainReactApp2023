@@ -152,9 +152,9 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
         subheading: schedule.talk?.name,
-        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
+        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
         id: schedule._id,
-        talkUrl: schedule.talk["talk-url"],
+        talkUrl: schedule.talk?.["talk-url"],
       }
     case "Speaker Panel":
       return {
@@ -164,7 +164,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
         subheading: "",
-        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"].url) ?? [],
+        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
         id: schedule._id,
         talkUrl: schedule.talk?.["talk-url"],
       }
@@ -178,7 +178,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         eventTitle: "workshop",
         heading: workshop?.name,
         subheading: workshop?.["instructor-info"]?.name,
-        sources: [workshop?.["instructor-info"]?.["speaker-photo"].url],
+        sources: [workshop?.["instructor-info"]?.["speaker-photo"]?.url],
         level: workshop?.level,
         id: schedule._id,
       }
@@ -191,7 +191,7 @@ export const convertScheduleToScheduleCard = (
   day: string,
 ): ScheduleCardProps[] => {
   const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
-  return daySchedule.sort(sortByTime).map(convertScheduleToCardProps)
+  return daySchedule.sort(sortByTime).map(convertScheduleToCardProps).filter(Boolean)
 }
 
 // [NOTE] util function that might be needed in the future
