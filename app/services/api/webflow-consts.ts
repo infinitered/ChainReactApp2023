@@ -10,6 +10,8 @@ import {
   RawWorkshopSchema,
 } from "./webflow-api.types"
 
+export const WEBFLOW_API_URL = "https://chain-react-ai-chat.vercel.app/api/schedule/"
+
 export const SITE_ID = "5ca38f35db5d2ea94aea469d"
 
 export const SPONSORS = {
@@ -86,7 +88,7 @@ export type CollectionConst =
 
 export const COLLECTIONS_MAP = {
   [SPONSORS.key]: SPONSORS,
-  [SPONSORS.collectionId]: SPEAKERS,
+  [SPONSORS.collectionId]: SPONSORS,
   [SPEAKERS.key]: SPEAKERS,
   [SPEAKERS.collectionId]: SPEAKERS,
   [SPEAKER_NAMES.key]: SPEAKER_NAMES,
