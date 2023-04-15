@@ -30,7 +30,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "adb": "adb reverse tcp:9090 tcp:9090 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9001 tcp:9001 && adb reverse tcp:8081 tcp:8081",
-    "postinstall": "node ./bin/postInstall"
+    "postinstall": "node ./bin/postInstall",
+    "webflow-codegen": "tsx ./scripts/webflow-codegen.ts",
+    "webflow-codegen-test": "tsx ./scripts/webflow-codegen-test.ts"
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
@@ -123,6 +125,7 @@
     "reactotron-react-query": "^1.0.2",
     "regenerator-runtime": "^0.13.4",
     "ts-jest": "26",
+    "tsx": "^3.12.6",
     "typescript": "^4.8.4",
     "webpack": "4"
   },
