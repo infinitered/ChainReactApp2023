@@ -5,7 +5,7 @@ import ar from "date-fns/locale/ar-SA"
 import ko from "date-fns/locale/ko"
 import en from "date-fns/locale/en-US"
 
-import { DateString } from "../services/api/webflow-api.types"
+import { DateString } from "../services/api/webflow-api.schema"
 
 type Options = Parameters<typeof format>[2]
 

@@ -1,20 +1,13 @@
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
-import { formatDate, sortByDayTime } from "../../utils/formatDate"
+import { formatDate, sortByTime } from "../../utils/formatDate"
+import type { RecurringEvent, ScheduledEvent, Workshop } from "./webflow-api"
 import type {
-  RawScheduledEvent,
-  RawSpeaker,
-  RawSponsor,
-  RawTalk,
-  RawWorkshop,
-  RecurringEvents,
-  ScheduledEvent,
-  Speaker,
-  Sponsor,
-  Talk,
-  Workshop,
-  Day,
-} from "./webflow-api.types"
-import { WEBFLOW_MAP } from "./webflow-consts"
+  ScheduledeventsCollection,
+  SpeakersCollection,
+  SponsorsCollection,
+  TalksCollection,
+} from "./webflow-api.generated"
+import { ScheduleDay, WEBFLOW_MAP } from "./webflow-consts"
 
 /*
  * Converting schedule data from "type ids" to "type names"
@@ -26,48 +19,63 @@ export const cleanedSchedule = ({
   talks,
   recurringEvents,
 }: {
-  scheduledEvents?: RawScheduledEvent[]
-  speakers?: Speaker[]
-  workshops?: Workshop[]
-  talks?: Talk[]
-  recurringEvents?: RecurringEvents[]
-}): ScheduledEvent[] => {
+  scheduledEvents?: ScheduledeventsCollection[]
+  speakers?: CleanedSpeakers
+  workshops?: CleanedWorkshops
+  talks?: CleanedTalks
+  recurringEvents?: RecurringEvent[]
+}) => {
   return scheduledEvents
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
-    .map((schedule) => ({
-      ...schedule,
-      location: WEBFLOW_MAP.location[schedule.location],
-      "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
-      "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
-      "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
-      "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-2-3"]),
-      day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
-      talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
-      type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
-      workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
-    }))
+    .map((schedule) => {
+      return {
+        ...schedule,
+        location: WEBFLOW_MAP.location[schedule.location ?? ""] ?? "Unknown Location",
+        "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+        "speaker-2": speakers?.find((s) => s?._id === schedule["speaker-2"]),
+        "speaker-2-2": speakers?.find((s) => s?._id === schedule["speaker-2-2"]),
+        "speaker-3": speakers?.find((s) => s?._id === schedule["speaker-2-3"]),
+        day: (WEBFLOW_MAP.scheduleDay[schedule.day] ??
+          WEBFLOW_MAP.scheduleDay["2e399bc3"]) satisfies ScheduleDay,
+        talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
+        type: WEBFLOW_MAP.scheduleType[schedule["event-type"] ?? ""] ?? "Unknown Type",
+        workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+      }
+    })
 }
+
+export type CleanedSchedule = ReturnType<typeof cleanedSchedule>
 
 /*
  * Converting speakers data from "type ids" to "type names"
  */
-export const cleanedSpeakers = (speakersData?: RawSpeaker[]): Speaker[] => {
+export const cleanedSpeakers = (speakersData?: SpeakersCollection[]) => {
   return speakersData?.map(cleanedSpeaker)
 }
 
-export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
+export type CleanedSpeakers = ReturnType<typeof cleanedSpeakers>
+
+export const cleanedSpeaker = (speaker?: SpeakersCollection) => {
   if (!speaker) return null
+
+  const speakerType: string | undefined = WEBFLOW_MAP.speakersType[speaker["speaker-type"]]
+  if (typeof speakerType === "undefined") {
+    return null
+  }
+
   return {
     ...speaker,
-    "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
+    "speaker-type": speakerType,
   }
 }
 
-export const cleanedSponsors = (sponsorsData?: RawSponsor[]): Sponsor[] => {
+export type CleanedSpeaker = ReturnType<typeof cleanedSpeaker>
+
+export const cleanedSponsors = (sponsorsData?: SponsorsCollection[]) => {
   return sponsorsData?.filter((s) => s["is-a-current-sponsor"]).map(cleanedSponsor)
 }
 
-export const cleanedSponsor = (sponsor?: RawSponsor): Sponsor | null => {
+export const cleanedSponsor = (sponsor?: SponsorsCollection) => {
   if (!sponsor) return null
   return {
     ...sponsor,
@@ -75,13 +83,15 @@ export const cleanedSponsor = (sponsor?: RawSponsor): Sponsor | null => {
   }
 }
 
+export type CleanedSponsor = ReturnType<typeof cleanedSponsor>
+
 export const cleanedTalks = ({
   speakers,
   talks,
 }: {
-  speakers?: RawSpeaker[]
-  talks?: RawTalk[]
-}): Talk[] => {
+  speakers?: SpeakersCollection[]
+  talks?: TalksCollection[]
+}) => {
   return talks?.map((talk) => ({
     ...talk,
     "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
@@ -91,32 +101,33 @@ export const cleanedTalks = ({
   }))
 }
 
+export type CleanedTalks = ReturnType<typeof cleanedTalks>
+
 /*
  * Converting workshop data from "type ids" to "type names"
  */
-export const cleanedWorkshops = (
-  workshopsData?: RawWorkshop[],
-  speakersData?: Speaker[],
-): Workshop[] => {
+export const cleanedWorkshops = (workshopsData?: Workshop[], speakersData?: CleanedSpeakers) => {
   return workshopsData
     ?.filter((workshop) => !workshop._archived && !workshop._draft)
     .map((workshop) => ({
       ...workshop,
       level: WEBFLOW_MAP.workshopLevel[workshop.level],
       "instructor-info": speakersData?.find(
-        (speaker) => speaker._id === workshop["instructor-info"],
+        (speaker) => speaker?._id === workshop["instructor-info"],
       ),
       "second-instructor-3": speakersData?.find(
-        (speaker) => speaker._id === workshop["second-instructor-3"],
+        (speaker) => speaker?._id === workshop["second-instructor-3"],
       ),
       "instructor-s-2": workshop?.["instructor-s-2"]?.map((id) =>
-        speakersData?.find((speaker) => speaker._id === id),
+        speakersData?.find((speaker) => speaker?._id === id),
       ),
       assistants: workshop?.assistants?.map((id) =>
-        speakersData?.find((speaker) => speaker._id === id),
+        speakersData?.find((speaker) => speaker?._id === id),
       ),
     }))
 }
+
+export type CleanedWorkshops = ReturnType<typeof cleanedWorkshops>
 
 /*
  * Converting workshop data from "type ids" to "type names"
@@ -213,10 +224,23 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
 // [NOTE] util function that might be needed in the future
 export const convertScheduleToScheduleCard = (
   scheduleData: ScheduledEvent[],
-  day: Day,
+  day: string,
 ): ScheduleCardProps[] => {
-  const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
-  return daySchedule.sort(sortByDayTime).map(convertScheduleToCardProps).filter(Boolean)
+  // 1. Get the schedule for the current day
+  const groupByDay = groupBy("day")
+  const schedules = groupByDay(scheduleData ?? [])
+  const daySchedule: ScheduledEvent[] = schedules[day] ?? []
+
+  // 2. Sort the schedule by time
+  const sortedSchedule: ScheduledEvent[] = daySchedule.sort((a, b) =>
+    // weird issue with Zod where array properties are set to optional when strict: true is not set in tsconfig.json
+    // https://stackoverflow.com/questions/71185664/why-does-zod-make-all-my-schema-fields-optional
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    sortByTime(a["day-time"]!, b["day-time"]!),
+  )
+
+  // 3. Convert the schedule to card props
+  return sortedSchedule.map(convertScheduleToCardProps)
 }
 
 // [NOTE] util function that might be needed in the future

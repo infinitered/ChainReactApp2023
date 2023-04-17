@@ -41,7 +41,7 @@ const createCollectionSchema = (collection: GetCollectionResponse) => {
   })
 
   return (
-    `export const ${typeName} = z.object({${fields.join(",\n")}})` +
+    `export const ${typeName} = CollectionBaseSchema.extend({${fields.join(",\n")}})` +
     "\n\n" +
     createCollectionType(name) +
     "\n"
@@ -84,7 +84,7 @@ const createCollectionStore = (collections: ListCollectionsResponse) => {
 
   const imports = [
     `import { z } from 'zod'`,
-    `import { ${uniqueFieldSchemas.join(", ")}} from './webflow-api.schema'`,
+    `import { CollectionBaseSchema, ${uniqueFieldSchemas.join(", ")}} from './webflow-api.schema'`,
   ]
 
   const collectionStore = createCollectionStore(allCollections)
