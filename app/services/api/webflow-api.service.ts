@@ -33,7 +33,7 @@ export const Webflow = (deps: { api: AxiosInstance }) => ({
         if ("items" in payload && Array.isArray(payload.items)) {
           payload.items = payload.items.filter(
             (item: unknown) =>
-              typeof item === "object" && "_draft" in item && item._draft === false,
+              !!item && typeof item === "object" && "_draft" in item && item._draft === false,
           )
         }
 

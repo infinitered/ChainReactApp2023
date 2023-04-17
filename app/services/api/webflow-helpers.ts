@@ -34,7 +34,7 @@ export const cleanedSchedule = ({
       return {
         ...schedule,
         location: WEBFLOW_MAP.location[schedule.location ?? ""],
-        "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+        "recurring-event": recurringEvents?.find((s) => s?._id === schedule["recurring-event"]),
         "speaker-2": speakers?.find((s) => s?._id === schedule["speaker-2"]),
         "speaker-3": speakers?.find((s) => s?._id === schedule["speaker-3"]),
         "speaker-2-2": speakers?.find((s) => s?._id === schedule["speaker-2-2"]),
@@ -273,6 +273,8 @@ export const convertScheduleToScheduleCard = (
   const daySchedule: ScheduledEvent[] = schedules[day] ?? []
   // 2. Sort the schedule by time
   const sortedSchedule: ScheduledEvent[] = daySchedule.sort((a, b) =>
+    // weird issue with Zod where array properties are set to optional when strict: true is not set in tsconfig.json
+    // https://stackoverflow.com/questions/71185664/why-does-zod-make-all-my-schema-fields-optional
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     sortByTime(a["day-time"]!, b["day-time"]!),
   )
