@@ -7,7 +7,7 @@ import type {
   SponsorsCollection,
   TalksCollection,
 } from "./webflow-api.generated"
-import { WEBFLOW_MAP } from "./webflow-consts"
+import { ScheduleDay, WEBFLOW_MAP } from "./webflow-consts"
 
 /*
  * Converting schedule data from "type ids" to "type names"
@@ -27,18 +27,21 @@ export const cleanedSchedule = ({
 }) => {
   return scheduledEvents
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
-    .map((schedule) => ({
-      ...schedule,
-      location: WEBFLOW_MAP.location[schedule.location],
-      "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
-      "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
-      "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
-      "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-2-3"]),
-      day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
-      talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
-      type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
-      workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
-    }))
+    .map((schedule) => {
+      return {
+        ...schedule,
+        location: WEBFLOW_MAP.location[schedule.location ?? ""] ?? "Unknown Location",
+        "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+        "speaker-2": speakers?.find((s) => s?._id === schedule["speaker-2"]),
+        "speaker-2-2": speakers?.find((s) => s?._id === schedule["speaker-2-2"]),
+        "speaker-3": speakers?.find((s) => s?._id === schedule["speaker-2-3"]),
+        day: (WEBFLOW_MAP.scheduleDay[schedule.day] ??
+          WEBFLOW_MAP.scheduleDay["2e399bc3"]) satisfies ScheduleDay,
+        talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
+        type: WEBFLOW_MAP.scheduleType[schedule["event-type"] ?? ""] ?? "Unknown Type",
+        workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+      }
+    })
 }
 
 export type CleanedSchedule = ReturnType<typeof cleanedSchedule>
@@ -110,16 +113,16 @@ export const cleanedWorkshops = (workshopsData?: Workshop[], speakersData?: Clea
       ...workshop,
       level: WEBFLOW_MAP.workshopLevel[workshop.level],
       "instructor-info": speakersData?.find(
-        (speaker) => speaker._id === workshop["instructor-info"],
+        (speaker) => speaker?._id === workshop["instructor-info"],
       ),
       "second-instructor-3": speakersData?.find(
-        (speaker) => speaker._id === workshop["second-instructor-3"],
+        (speaker) => speaker?._id === workshop["second-instructor-3"],
       ),
       "instructor-s-2": workshop?.["instructor-s-2"]?.map((id) =>
-        speakersData?.find((speaker) => speaker._id === id),
+        speakersData?.find((speaker) => speaker?._id === id),
       ),
       assistants: workshop?.assistants?.map((id) =>
-        speakersData?.find((speaker) => speaker._id === id),
+        speakersData?.find((speaker) => speaker?._id === id),
       ),
     }))
 }
@@ -214,6 +217,8 @@ export const convertScheduleToScheduleCard = (
 
   // 2. Sort the schedule by time
   const sortedSchedule: ScheduledEvent[] = daySchedule.sort((a, b) =>
+    // weird issue with Zod where array properties are set to optional when strict: true is not set in tsconfig.json
+    // https://stackoverflow.com/questions/71185664/why-does-zod-make-all-my-schema-fields-optional
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     sortByTime(a["day-time"]!, b["day-time"]!),
   )

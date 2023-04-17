@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
+import type { AxiosError } from "axios"
+import type { ZodError } from "zod"
 import { Schedule } from "../../screens"
-import { axiosInstance, PaginatedItems } from "./axios"
+import { axiosInstance } from "./axios"
 import {
   CollectionId,
   CollectionKey,
@@ -23,7 +25,6 @@ import {
   cleanedWorkshops,
   convertScheduleToScheduleCard,
 } from "./webflow-helpers"
-import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 import type {
   RecommendationsCollection,
@@ -36,18 +37,18 @@ import type {
   WorkshopsCollection,
   ScheduledeventsCollection,
 } from "./webflow-api.generated"
+import { Webflow } from "./webflow-api.service"
+
+const webflow = Webflow({ api: axiosInstance })
 
 const useWebflowAPI = <T>(key: CollectionKey, collectionId: CollectionId, enabled = true) =>
-  useQuery({
+  useQuery<T[], ZodError | AxiosError, T[], CollectionKey[]>({
     queryKey: [key],
     queryFn: async () => {
-      const { data } = await axiosInstance.get<PaginatedItems<T>>(
-        `/collections/${collectionId}/items`,
-      )
       const itemSchema = COLLECTIONS_MAP[key].schema
-      const schema = z.array(itemSchema)
       try {
-        return schema.parse(data.items) as T[]
+        const payload = await webflow.collection.items.get({ collectionId, itemSchema })
+        return payload.items as T[]
       } catch (error) {
         const validationError = fromZodError(error)
         throw Error(
@@ -64,7 +65,10 @@ export const useRecommendations = () => {
   return useWebflowAPI<RecommendationsCollection>(RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId)
 }
 
-export type Recommendation = ReturnType<typeof useRecommendations>["data"][number]
+type Hook = () => { data: unknown[] }
+type InferHookData<Fn extends Hook> = ReturnType<Fn>["data"][number]
+
+export type Recommendation = InferHookData<typeof useRecommendations>
 
 export const useRecurringEvents = () => {
   return useWebflowAPI<RecurringEventsCollection>(
@@ -73,21 +77,21 @@ export const useRecurringEvents = () => {
   )
 }
 
-export type RecurringEvent = ReturnType<typeof useRecurringEvents>["data"][number]
+export type RecurringEvent = InferHookData<typeof useRecurringEvents>
 
 export const useSpeakers = () => {
   return useWebflowAPI<SpeakersCollection>(SPEAKERS.key, SPEAKERS.collectionId)
 }
 
-export type Speaker = ReturnType<typeof useSpeakers>["data"][number]
+export type Speaker = InferHookData<typeof useSpeakers>
 
 export const useSpeakerNames = () => {
   return useWebflowAPI<SpeakerNamesCollection>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
 }
 
-export type SpeakerName = ReturnType<typeof useSpeakerNames>["data"][number]
+export type SpeakerName = InferHookData<typeof useSpeakerNames>
 
-export const useSponsors = (): { isLoading: boolean; data: SponsorsCollection[] } => {
+export const useSponsors = () => {
   const { data: sponsors, isLoading } = useWebflowAPI<SponsorsCollection>(
     SPONSORS.key,
     SPONSORS.collectionId,
@@ -97,25 +101,25 @@ export const useSponsors = (): { isLoading: boolean; data: SponsorsCollection[] 
   return { isLoading, data }
 }
 
-export type Sponsor = ReturnType<typeof useSponsors>["data"][number]
+export type Sponsor = InferHookData<typeof useSponsors>
 
 export const useTalks = () => {
   return useWebflowAPI<TalksCollection>(TALKS.key, TALKS.collectionId)
 }
 
-export type Talk = ReturnType<typeof useTalks>["data"][number]
+export type Talk = InferHookData<typeof useTalks>
 
 export const useVenues = () => {
   return useWebflowAPI<VenuesCollection>(VENUES.key, VENUES.collectionId)
 }
 
-export type Venue = ReturnType<typeof useVenues>["data"][number]
+export type Venue = InferHookData<typeof useVenues>
 
 export const useWorkshops = () => {
   return useWebflowAPI<WorkshopsCollection>(WORKSHOPS.key, WORKSHOPS.collectionId)
 }
 
-export type Workshop = ReturnType<typeof useWorkshops>["data"][number]
+export type Workshop = InferHookData<typeof useWorkshops>
 
 export const useScheduledEvents = () => {
   const { data: speakers, isLoading } = useSpeakers()
@@ -139,7 +143,7 @@ export const useScheduledEvents = () => {
   }
 }
 
-export type ScheduledEvent = ReturnType<typeof useScheduledEvents>["data"][number]
+export type ScheduledEvent = InferHookData<typeof useScheduledEvents>
 
 export const useScheduleScreenData = () => {
   const { data: events, isLoading, refetch } = useScheduledEvents()

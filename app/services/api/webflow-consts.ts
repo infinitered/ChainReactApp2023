@@ -99,6 +99,7 @@ export const COLLECTIONS_MAP = {
 
 export type CollectionKey = keyof typeof COLLECTIONS_MAP
 export type CollectionId = (typeof COLLECTIONS_MAP)[CollectionKey]["collectionId"]
+export type CollectionSchema = (typeof COLLECTIONS_MAP)[CollectionKey]["schema"]
 
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys
@@ -171,3 +172,7 @@ export const WEBFLOW_MAP = {
     f42e3ac1a464004c28d91ddf3945b654: "Unique/to/Portland",
   },
 } as const
+
+type ValueOf<T> = T[keyof T]
+
+export type ScheduleDay = ValueOf<(typeof WEBFLOW_MAP)["scheduleDay"]>
