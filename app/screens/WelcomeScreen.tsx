@@ -1,28 +1,15 @@
-import React, { useLayoutEffect } from "react"
+import React from "react"
 import { Dimensions, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
-import * as Device from "expo-device"
 import { Button, Screen, Text } from "../components"
 import { useAppNavigation } from "../hooks"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
-import messaging from "@react-native-firebase/messaging"
 
 const welcomeLogo = require("../../assets/images/welcome-shapes.png")
 const { width: screenWidth } = Dimensions.get("screen")
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
-
-const requestUserPermission = async () => {
-  if (!Device.isDevice) return
-  const authStatus = await messaging().requestPermission()
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL
-  if (enabled) {
-    // handle enabled state
-  }
-}
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   const navigation = useAppNavigation()
@@ -30,10 +17,6 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   function goNext() {
     navigation.navigate("Tabs", { screen: "Schedule" })
   }
-
-  useLayoutEffect(() => {
-    requestUserPermission()
-  }, [])
 
   return (
     <Screen style={$container}>

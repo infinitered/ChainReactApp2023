@@ -16,7 +16,7 @@ import { useRecommendations } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { groupBy } from "../../services/api/webflow-helpers"
 import { RawRecommendations } from "../../services/api/webflow-api.types"
-import { StaticCarouselProps } from "../../components/carousel/carousel.types"
+import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = typeof recommendationTypes[number]
@@ -27,11 +27,12 @@ const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
   {} as GroupedRecommendations,
 )
 
-const RenderItem = ({ item }: { item: StaticCarouselProps }) => (
-  <View style={$carouselWrapper}>
-    <Carousel {...item} />
-  </View>
-)
+const RenderItem = ({ item }: { item: Array<DynamicCarouselItem> }) =>
+  item.length > 0 ? (
+    <View style={$carouselWrapper}>
+      <Carousel data={item} preset="dynamic" />
+    </View>
+  ) : null
 
 const sectionTitle = (type: RecommendationType) => {
   switch (type) {
@@ -48,7 +49,7 @@ const sectionTitle = (type: RecommendationType) => {
 
 const useRecommendationSections = (): {
   isLoading: boolean
-  sections: Array<SectionListData<StaticCarouselProps>>
+  sections: Array<SectionListData<Array<DynamicCarouselItem>>>
 } => {
   const { data: recommendations = [], isLoading } = useRecommendations()
 
@@ -67,29 +68,24 @@ const useRecommendationSections = (): {
       ([key, value]: [RecommendationType, RawRecommendations[]]) => ({
         title: sectionTitle(key),
         renderItem: RenderItem,
-        data: value.map(
-          (item) =>
-            ({
-              data: item.images.map((image) => ({ uri: image.url })),
-              subtitle: item.name,
-              meta: item.descriptor,
-              body: item.description,
-              link: item["external-url"]
-                ? {
-                    text: translate("exploreScreen.openInMaps"),
-                    link: item["external-url"],
-                  }
-                : undefined,
-              button:
-                item["street-address"] && item["city-state-zip"]
-                  ? {
-                      text: translate("exploreScreen.openInMaps"),
-                      link: `${item["street-address"]},${item["city-state-zip"]}`,
-                    }
-                  : undefined,
-              preset: "static",
-            } as StaticCarouselProps),
-        ),
+        data: [
+          value.map(
+            (item) =>
+              ({
+                image: item.images.map((image) => ({ uri: image.url })),
+                subtitle: item.name,
+                meta: item.descriptor,
+                body: item.description,
+                leftButton:
+                  item["street-address"] && item["city-state-zip"]
+                    ? {
+                        text: translate("exploreScreen.openInMaps"),
+                        link: `${item["street-address"]},${item["city-state-zip"]}`,
+                      }
+                    : undefined,
+              } as DynamicCarouselItem),
+          ),
+        ],
       }),
     ),
   }
@@ -109,7 +105,7 @@ export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
           stickySectionHeadersEnabled={false}
           sections={sections}
           renderSectionHeader={({ section: { title, data } }) =>
-            data.length > 0 ? (
+            data[0].length > 0 ? (
               <Text preset="screenHeading" style={!!title && $heading}>
                 {title}
               </Text>

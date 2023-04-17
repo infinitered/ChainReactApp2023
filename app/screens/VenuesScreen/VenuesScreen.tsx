@@ -1,21 +1,19 @@
 import React, { FC } from "react"
 import {
   ActivityIndicator,
-  ImageStyle,
+  ImageSourcePropType,
   SectionList,
   SectionListData,
-  TextStyle,
-  View,
   ViewStyle,
 } from "react-native"
-import { AutoImage, ButtonLink, Screen, Text } from "../../components"
+import { Carousel, Screen } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { colors, spacing } from "../../theme"
+import { colors } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { useVenues } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
-import { openMap } from "../../utils/openMap"
+import { customSort } from "../../utils/customSort"
 
 interface VenuesSection {
   body: string
@@ -23,7 +21,7 @@ interface VenuesSection {
     text: string
     link: string
   }
-  imageSource: { uri: string }
+  imageSource: Array<ImageSourcePropType>
   subtitle: string
   title: string
 }
@@ -33,14 +31,19 @@ const useVenuesSections = (): {
   sections: Array<SectionListData<Array<VenuesSection>>>
 } => {
   const { data: venues = [], isLoading: venuesLoading } = useVenues()
+  const sortedVenues = customSort(venues, "slug", [
+    "the-armory",
+    "after-party-expensify-office",
+    "courtyard-portland-city-center",
+  ])
 
   return {
     isLoading: venuesLoading,
     sections: [
       {
         data: [
-          venues?.map((venue) => ({
-            imageSource: { uri: venue["venue-image-s"][0]?.url },
+          sortedVenues?.map((venue) => ({
+            imageSource: venue["venue-image-s"].map((image) => ({ uri: image.url })),
             title: venue.name,
             subtitle: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${
               WEBFLOW_MAP.venueTag[venue.tag] === "Workshop" ? "May 17" : "May 18-19"
@@ -58,19 +61,15 @@ const useVenuesSections = (): {
 }
 
 const VenueCard = ({ body, cta, imageSource, subtitle, title }: VenuesSection) => (
-  <View style={$venueCardWrapper}>
-    <AutoImage source={imageSource} style={$venueCardImage} />
-    <View style={$venueCardBodyWrapper}>
-      <Text preset="screenHeading" style={$venueCardTitle}>
-        {title}
-      </Text>
-      <Text preset="primaryLabel">{subtitle}</Text>
-      <Text selectable style={$venueCardBody}>
-        {body}
-      </Text>
-      <ButtonLink openLink={() => openMap(cta.link)}>{cta.text}</ButtonLink>
-    </View>
-  </View>
+  <Carousel
+    preset="static"
+    data={imageSource}
+    body={body}
+    subtitle={title}
+    meta={subtitle}
+    link={cta}
+    isBodySelectable
+  />
 )
 
 export const VenuesScreen: FC<TabScreenProps<"Venues">> = () => {
@@ -108,27 +107,4 @@ const $root: ViewStyle = {
 
 const $activityIndicator: ViewStyle = {
   flex: 1,
-}
-
-const $venueCardWrapper: ViewStyle = {
-  marginVertical: spacing.large,
-}
-
-const $venueCardBodyWrapper: ViewStyle = {
-  marginHorizontal: spacing.medium,
-  marginTop: spacing.large,
-}
-
-const $venueCardImage: ImageStyle = {
-  borderRadius: 4,
-  height: 274,
-  width: "100%",
-}
-
-const $venueCardTitle: TextStyle = {
-  marginBottom: spacing.extraSmall,
-}
-
-const $venueCardBody: TextStyle = {
-  marginVertical: spacing.medium,
 }

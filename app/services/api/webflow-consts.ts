@@ -104,6 +104,7 @@ export const WEBFLOW_MAP = {
   venueTag: {
     cf3d319cdaa0e6787b03ab94e74e3b8e: "Workshop",
     d098b6fc74f6c55c6084ea42c385e7f6: "Conference",
+    "6157eba78b067d800ea4cfd5188e782f": "After Party",
   },
   sponsorTier: {
     fe9c5b4d9fc3b0cf366607646cebcb95: "Platinum",

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useLayoutEffect, useMemo } from "react"
 import {
   AccessibilityInfo,
   ActivityIndicator,
@@ -27,6 +27,8 @@ import { useScheduleScreenData } from "../../services/api/webflow-api"
 import { ScrollToButton, useScrollToEvent } from "../../components"
 import { useCurrentDate } from "../../hooks/useCurrentDate"
 import { isConferencePassed } from "../../utils/isConferencePassed"
+import * as Device from "expo-device"
+import messaging from "@react-native-firebase/messaging"
 
 export interface Schedule {
   date: string
@@ -47,6 +49,17 @@ const getCurrentEventIndex = (schedule: Schedule, currentTime = new Date()) => {
 const getCurrentScheduleIndex = (schedules: Schedule[], currentTime = new Date()) => {
   const currentDate = format(currentTime, "yyyy-MM-dd")
   return schedules.map((x) => x.date).findIndex((date) => date === currentDate)
+}
+
+const requestUserPermission = async () => {
+  if (!Device.isDevice) return
+  const authStatus = await messaging().requestPermission()
+  const enabled =
+    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    authStatus === messaging.AuthorizationStatus.PROVISIONAL
+  if (enabled) {
+    // handle enabled state
+  }
 }
 
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
@@ -158,6 +171,10 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
       navigateToCurrentEvent()
     }
   }, [eventIndex, scheduleIndex])
+
+  useLayoutEffect(() => {
+    requestUserPermission()
+  }, [])
 
   const scrollHandler = useAnimatedScrollHandler(
     {

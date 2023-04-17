@@ -24,13 +24,13 @@ export const ContactUsScreen = () => {
   return (
     <Screen style={$root} preset="scroll" ScrollViewProps={{ showsVerticalScrollIndicator: false }}>
       <View style={$content}>
-        <Text preset="primaryLabel" tx="infoScreen.emailUs" style={$mb} />
+        <Text preset="screenHeading" tx="infoScreen.haveQuestions" style={$mb} />
         <Text style={$mb}>
           {translate("infoScreen.reachOut")}
           <Text onPress={contactByEmail} text={emailAddress} />
         </Text>
 
-        <Text preset="primaryLabel" tx="infoScreen.reportingIncidentTitle" style={$mb} />
+        <Text preset="screenHeading" tx="infoScreen.reportingIncidentTitle" style={$mb} />
         <Text>
           {translate("infoScreen.reportingIncidentPart1")}
           <Text style={$phoneNumber} onPress={callPhoneNumber} text={phoneNumber} />
