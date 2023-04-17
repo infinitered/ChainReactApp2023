@@ -54,7 +54,9 @@ const createCollectionSchema = (collection: GetCollectionResponse) => {
   })
 
   return (
-    `export const ${typeName} = CollectionBaseSchema.extend({${"\n" + fields.join(",\n")}})` +
+    `export const ${typeName} = CollectionBaseSchema.extend({${
+      "\n" + fields.join(",\n")
+    }}).describe("${typeName}")` +
     "\n\n" +
     createCollectionType(name) +
     "\n"

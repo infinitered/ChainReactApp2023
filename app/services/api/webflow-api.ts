@@ -44,14 +44,15 @@ const useWebflowAPI = <T>(key: CollectionKey, collectionId: CollectionId, enable
       const { data } = await axiosInstance.get<PaginatedItems<T>>(
         `/collections/${collectionId}/items`,
       )
-      const schema = z.array(COLLECTIONS_MAP[key].schema)
+      const itemSchema = COLLECTIONS_MAP[key].schema
+      const schema = z.array(itemSchema)
       try {
         return schema.parse(data.items) as T[]
       } catch (error) {
         const validationError = fromZodError(error)
         throw Error(
           `Whoops! Our API didn't come back in the expected shape. ${
-            schema.description ?? "Unknown schema"
+            itemSchema.description ?? "Unknown schema"
           } threw the following error: ${validationError.message}`,
         )
       }

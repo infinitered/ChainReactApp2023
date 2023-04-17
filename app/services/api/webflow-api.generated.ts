@@ -65,7 +65,7 @@ export const RecommendationsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("RecommendationsCollectionSchema")
 
 export type RecommendationsCollection = z.infer<typeof RecommendationsCollectionSchema>
 
@@ -168,7 +168,7 @@ export const ConferenceYearsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("ConferenceYearsCollectionSchema")
 
 export type ConferenceYearsCollection = z.infer<typeof ConferenceYearsCollectionSchema>
 
@@ -224,7 +224,7 @@ export const TalksCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("TalksCollectionSchema")
 
 export type TalksCollection = z.infer<typeof TalksCollectionSchema>
 
@@ -268,7 +268,7 @@ export const VenuesCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("VenuesCollectionSchema")
 
 export type VenuesCollection = z.infer<typeof VenuesCollectionSchema>
 
@@ -375,7 +375,7 @@ export const ScheduledeventsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("ScheduledeventsCollectionSchema")
 
 export type ScheduledeventsCollection = z.infer<typeof ScheduledeventsCollectionSchema>
 
@@ -434,7 +434,7 @@ export const SponsorsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("SponsorsCollectionSchema")
 
 export type SponsorsCollection = z.infer<typeof SponsorsCollectionSchema>
 
@@ -480,7 +480,7 @@ export const SpeakerNamesCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("SpeakerNamesCollectionSchema")
 
 export type SpeakerNamesCollection = z.infer<typeof SpeakerNamesCollectionSchema>
 
@@ -553,7 +553,7 @@ export const PastTalksCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("PastTalksCollectionSchema")
 
 export type PastTalksCollection = z.infer<typeof PastTalksCollectionSchema>
 
@@ -654,7 +654,7 @@ export const WorkshopsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("WorkshopsCollectionSchema")
 
 export type WorkshopsCollection = z.infer<typeof WorkshopsCollectionSchema>
 
@@ -699,7 +699,7 @@ export const RecurringEventsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("RecurringEventsCollectionSchema")
 
 export type RecurringEventsCollection = z.infer<typeof RecurringEventsCollectionSchema>
 
@@ -780,7 +780,7 @@ export const SpeakersCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("SpeakersCollectionSchema")
 
 export type SpeakersCollection = z.infer<typeof SpeakersCollectionSchema>
 
@@ -806,7 +806,7 @@ export const TicketsCollectionSchema = CollectionBaseSchema.extend({
   "created-by": UserSchema.optional(),
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
-})
+}).describe("TicketsCollectionSchema")
 
 export type TicketsCollection = z.infer<typeof TicketsCollectionSchema>
 
