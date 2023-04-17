@@ -31,6 +31,9 @@ const createCollectionType = (name: string) => {
   return `export type ${name}Collection = z.infer<typeof ${name}CollectionSchema>`
 }
 
+const createJsDoc = (lines: string[], indent: number) =>
+  `/**\n${lines.map((l) => `${" ".repeat(indent)} * ${l}`).join("\n")}\n*/`
+
 const createCollectionSchema = (collection: GetCollectionResponse) => {
   const name = collection.name.replace(" ", "")
   const typeName = `${name}CollectionSchema`
@@ -38,7 +41,12 @@ const createCollectionSchema = (collection: GetCollectionResponse) => {
     const key = f.slug
     const value = `${f.type}Schema${f.required === true ? "" : ".optional()"}`
     const keyValue = `"${key}": ${value}`
-    const comment = f.helpText ? `/** ${f.helpText} */` : ""
+
+    const helpText = f.helpText ?? ""
+    const validations = JSON.stringify(f.validations ?? "{}")
+    const metadata = [helpText, validations].filter((m) => !!m && m !== '"{}"' && m !== "{}")
+
+    const comment = metadata.length > 0 ? createJsDoc(metadata, 4) : ""
 
     if (comment) return comment + "\n" + keyValue
 
