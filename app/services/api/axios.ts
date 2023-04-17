@@ -1,4 +1,3 @@
-import Constants from "expo-constants"
 import axios from "axios"
 
 interface PaginatedData {
@@ -13,11 +12,11 @@ export type PaginatedItems<T> = PaginatedData & {
 }
 
 export const axiosInstance = axios.create({
-  baseURL: "https://api.webflow.com/",
+  baseURL: "https://chain-react-ai-chat.vercel.app/api/schedule/",
+  // baseURL: "http://localhost:3000/api/schedule/",
   headers: {
     "Content-Type": "application/json",
     "User-Agent": "Webflow Javascript SDK / 1.0",
-    Authorization: `Bearer ${Constants.expoConfig.extra.webflowToken}`,
   },
 })
 
