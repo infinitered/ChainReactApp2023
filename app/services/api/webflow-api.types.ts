@@ -21,6 +21,9 @@ export interface RawScheduledEvent extends Item {
   "is-a-talk"?: boolean
   "recurring-event"?: string
   "speaker-2"?: string
+  "speaker-3"?: Speaker | RawSpeakerName
+  "speaker-4"?: Speaker | RawSpeakerName
+  "speaker-5"?: Speaker | RawSpeakerName
   day: string
   talk?: string
   type: string
@@ -36,9 +39,19 @@ export interface ScheduledEvent extends Item {
   "is-a-talk"?: boolean
   "recurring-event"?: RecurringEvents
   "speaker-2"?: Speaker | RawSpeakerName
+  "speaker-3"?: Speaker | RawSpeakerName
+  "speaker-4"?: Speaker | RawSpeakerName
+  "speaker-5"?: Speaker | RawSpeakerName
   day: "Wednesday" | "Thursday" | "Friday"
   talk?: Talk
-  type?: "Talk" | "Speaker Panel" | "Workshop" | "Party" | "Recurring"
+  type?:
+    | "Talk"
+    | "Speaker Panel"
+    | "Workshop"
+    | "Party"
+    | "Recurring"
+    | "Sponsored"
+    | "Lightning Talk"
   workshop?: Workshop
   location?: string
 }
