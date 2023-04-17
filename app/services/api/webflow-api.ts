@@ -45,15 +45,15 @@ const useWebflowAPI = <T>(key: CollectionKey, collectionId: CollectionId, enable
   useQuery<T[], ZodError | AxiosError, T[], CollectionKey[]>({
     queryKey: [key],
     queryFn: async () => {
-      const schema = COLLECTIONS_MAP[key].schema
+      const itemSchema = COLLECTIONS_MAP[key].schema
       try {
-        const payload = await webflow.collection.items.get({ collectionId, itemSchema: schema })
+        const payload = await webflow.collection.items.get({ collectionId, itemSchema })
         return payload.items as T[]
       } catch (error) {
         const validationError = fromZodError(error)
         throw Error(
           `Whoops! Our API didn't come back in the expected shape. ${
-            schema.description ?? "Unknown schema"
+            itemSchema.description ?? "Unknown schema"
           } threw the following error: ${validationError.message}`,
         )
       }
@@ -65,8 +65,8 @@ export const useRecommendations = () => {
   return useWebflowAPI<RecommendationsCollection>(RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId)
 }
 
-type Hook = () => { data: unknown[] | undefined | null | undefined[] }
-type InferHookData<Fn extends Hook> = NonNullable<ReturnType<Fn>["data"]>[number]
+type Hook = () => { data: unknown[] }
+type InferHookData<Fn extends Hook> = ReturnType<Fn>["data"][number]
 
 export type Recommendation = InferHookData<typeof useRecommendations>
 

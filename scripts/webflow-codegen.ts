@@ -31,17 +31,32 @@ const createCollectionType = (name: string) => {
   return `export type ${name}Collection = z.infer<typeof ${name}CollectionSchema>`
 }
 
+const createJsDoc = (lines: string[], indent: number) =>
+  `/**\n${lines.map((l) => `${" ".repeat(indent)} * ${l}`).join("\n")}\n*/`
+
 const createCollectionSchema = (collection: GetCollectionResponse) => {
   const name = collection.name.replace(" ", "")
   const typeName = `${name}CollectionSchema`
   const fields = collection.fields.map((f) => {
     const key = f.slug
     const value = `${f.type}Schema${f.required === true ? "" : ".optional()"}`
-    return `"${key}": ${value}`
+    const keyValue = `"${key}": ${value}`
+
+    const helpText = f.helpText ?? ""
+    const validations = JSON.stringify(f.validations ?? "{}")
+    const metadata = [helpText, validations].filter((m) => !!m && m !== '"{}"' && m !== "{}")
+
+    const comment = metadata.length > 0 ? createJsDoc(metadata, 4) : ""
+
+    if (comment) return comment + "\n" + keyValue
+
+    return keyValue
   })
 
   return (
-    `export const ${typeName} = CollectionBaseSchema.extend({${fields.join(",\n")}})` +
+    `export const ${typeName} = CollectionBaseSchema.extend({${
+      "\n" + fields.join(",\n")
+    }}).describe("${typeName}")` +
     "\n\n" +
     createCollectionType(name) +
     "\n"
