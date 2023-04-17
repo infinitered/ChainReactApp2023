@@ -6,13 +6,30 @@ import { GiftedChat, IMessage } from "react-native-gifted-chat"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { claudePrompt } from "./claude"
 
+const chatbotAvatarURL =
+  "https://pbs.twimg.com/profile_images/1638277840352456704/g7sdYc76_400x400.jpg"
+const chatbotName = "Chain React Bot"
+
+const INITIAL_MESSAGES: IMessage[] = [
+  {
+    _id: 1,
+    text: `Hello there! I'm ${chatbotName}. How can I help you with questions about the Chain React conference and the surrounding Portland area?`,
+    createdAt: new Date(),
+    user: {
+      _id: 2,
+      name: chatbotName,
+      avatar: chatbotAvatarURL,
+    },
+  },
+]
+
 export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () => {
   useHeader({
     title: translate("chatScreen.title"),
     rightTx: "chatScreen.reset",
     onRightPress: () => {
       AsyncStorage.removeItem("chat/messages")
-      setMessages([])
+      setMessages(INITIAL_MESSAGES)
     },
   })
 
@@ -20,7 +37,7 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
   const [uuid, setUuid] = React.useState<string | null>(null)
 
   // also grab messages in AsyncStorage
-  const [messages, setMessages] = React.useState<IMessage[]>([])
+  const [messages, setMessages] = React.useState<IMessage[]>(INITIAL_MESSAGES)
 
   useEffect(() => {
     const getUuid = async () => {
@@ -81,8 +98,8 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
                 createdAt: new Date(),
                 user: {
                   _id: 2,
-                  name: "Claude",
-                  // avatar: "https://i.imgur.com/7k12EPD.png",
+                  name: chatbotName,
+                  avatar: chatbotAvatarURL,
                 },
               }
               saveMessages(GiftedChat.append(appendedMessages, [claudeMessage]))
