@@ -37,11 +37,16 @@ const createCollectionSchema = (collection: GetCollectionResponse) => {
   const fields = collection.fields.map((f) => {
     const key = f.slug
     const value = `${f.type}Schema${f.required === true ? "" : ".optional()"}`
-    return `"${key}": ${value}`
+    const keyValue = `"${key}": ${value}`
+    const comment = f.helpText ? `/** ${f.helpText} */` : ""
+
+    if (comment) return comment + "\n" + keyValue
+
+    return keyValue
   })
 
   return (
-    `export const ${typeName} = CollectionBaseSchema.extend({${fields.join(",\n")}})` +
+    `export const ${typeName} = CollectionBaseSchema.extend({${"\n" + fields.join(",\n")}})` +
     "\n\n" +
     createCollectionType(name) +
     "\n"
