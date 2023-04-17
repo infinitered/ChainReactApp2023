@@ -29,6 +29,34 @@ export type TierLevelProps =
 
 export type SponsorCardProps = CommonProps & TierLevelProps
 
+function maxImageDimensions(tier: "Platinum" | "Gold" | "Silver" | "Bronze"): {
+  maxWidth: number
+  maxHeight: number
+} {
+  switch (tier) {
+    case "Platinum":
+      return {
+        maxWidth: 280,
+        maxHeight: 60,
+      }
+    case "Gold":
+      return {
+        maxWidth: 240,
+        maxHeight: 48,
+      }
+    case "Silver":
+      return {
+        maxWidth: 135,
+        maxHeight: 26,
+      }
+    default: // Bronze and Other(?)
+      return {
+        maxWidth: 155,
+        maxHeight: 36,
+      }
+  }
+}
+
 export const SponsorCard = ({
   containerStyle,
   externalURL,
@@ -38,6 +66,7 @@ export const SponsorCard = ({
   sponsorImages,
   tier = "Gold",
 }: SponsorCardProps) => {
+  const { maxHeight, maxWidth } = maxImageDimensions(tier)
   switch (tier) {
     case "Platinum":
     case "Gold":
@@ -46,8 +75,9 @@ export const SponsorCard = ({
           <Pressable style={$sponsorTitle} onPress={() => openLinkInBrowser(externalURL)}>
             <AutoImage
               accessibilityLabel={sponsor}
-              style={tier === "Platinum" ? $platinumLogo : $goldLogo}
               source={logo}
+              maxWidth={maxWidth}
+              maxHeight={maxHeight}
             />
             <Icon icon="arrow" containerStyle={$iconButton} />
           </Pressable>
@@ -77,8 +107,8 @@ export const SponsorCard = ({
                   accessibilityLabel={sponsor}
                   style={$silverTierImage}
                   source={{ uri }}
-                  maxHeight={36}
-                  maxWidth={125}
+                  maxWidth={maxWidth}
+                  maxHeight={maxHeight}
                 />
                 <Icon icon="arrow" containerStyle={$iconButton} />
               </Pressable>
@@ -92,15 +122,18 @@ export const SponsorCard = ({
           <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.bronzeSponsor" />
           <View style={$sponsorBottomTierLogos}>
             {sponsorImages.map(({ uri, sponsor }, index) => (
-              <AutoImage
-                key={index}
-                accessibilityLabel={sponsor}
-                style={[
-                  $sponsorImageBottomTier,
-                  index % 2 === 0 ? $sponsorImageBottomTierStart : $sponsorImageBottomTierEnd,
-                ]}
-                source={{ uri }}
-              />
+              <View key={index} style={$sponsorBottomTierLogoWrapper}>
+                <AutoImage
+                  accessibilityLabel={sponsor}
+                  maxWidth={maxWidth}
+                  maxHeight={maxHeight}
+                  style={[
+                    $sponsorImageBottomTier,
+                    index % 2 === 0 ? $sponsorImageBottomTierStart : $sponsorImageBottomTierEnd,
+                  ]}
+                  source={{ uri }}
+                />
+              </View>
             ))}
           </View>
         </View>
@@ -130,16 +163,6 @@ const $sponsorTitle: ViewStyle = {
   alignItems: "center",
 }
 
-const $platinumLogo: ImageStyle = {
-  maxWidth: 280,
-  maxHeight: 60,
-}
-
-const $goldLogo: ImageStyle = {
-  maxWidth: 240,
-  maxHeight: 48,
-}
-
 const $sponsorType: TextStyle = {
   marginTop: spacing.extraSmall,
   marginBottom: spacing.large,
@@ -158,11 +181,17 @@ const $sponsorBottomTierLogos: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   flexWrap: "wrap",
+  justifyContent: "space-between",
+}
+
+const $sponsorBottomTierLogoWrapper: ViewStyle = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "center",
+  width: "50%",
 }
 
 const $sponsorImageBottomTier: ImageStyle = {
-  maxWidth: 155,
-  maxHeight: 36,
   marginVertical: spacing.small,
 }
 
