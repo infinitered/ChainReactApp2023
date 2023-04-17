@@ -27,19 +27,25 @@ const $ = (cmd: string) =>
     ),
   )
 
+const createCollectionType = (name: string) => {
+  return `export type ${name}Collection = z.infer<typeof ${name}CollectionSchema>`
+}
+
 const createCollectionSchema = (collection: GetCollectionResponse) => {
-  const typeName = `${collection.name.replace(" ", "")}CollectionSchema`
+  const name = collection.name.replace(" ", "")
+  const typeName = `${name}CollectionSchema`
   const fields = collection.fields.map((f) => {
     const key = f.slug
     const value = `${f.type}Schema${f.required === true ? "" : ".optional()"}`
     return `"${key}": ${value}`
   })
 
-  return `
-    export const ${typeName} = z.object({
-        ${fields.join(",\n")}
-    })
-    `
+  return (
+    `export const ${typeName} = z.object({${fields.join(",\n")}})` +
+    "\n\n" +
+    createCollectionType(name) +
+    "\n"
+  )
 }
 
 /**
@@ -64,13 +70,13 @@ const createCollectionStore = (collections: ListCollectionsResponse) => {
   console.log("Fetching all collections from Webflow...")
   const allCollections = await webflow.collection.list(SITE_ID)
   const fields: Field[] = []
-  const collectionTypes: string[] = []
+  const collectionSchemas: string[] = []
 
   console.log("Found collections: ", allCollections.map((c) => c.name).join(", "))
   for (const collection of allCollections) {
     console.log("Fetching collection: ", collection.name)
     const data = await webflow.collection.get(collection._id)
-    collectionTypes.push(createCollectionSchema(data))
+    collectionSchemas.push(createCollectionSchema(data))
     fields.push(...data.fields)
   }
 
@@ -83,7 +89,7 @@ const createCollectionStore = (collections: ListCollectionsResponse) => {
 
   const collectionStore = createCollectionStore(allCollections)
 
-  const code = [...imports, ...collectionTypes, collectionStore].join("\n")
+  const code = [...imports, "\n", ...collectionSchemas, collectionStore].join("\n")
 
   console.log('Writing generated code to "app/services/api/webflow-api.generated.ts"')
   fs.writeFileSync(path.join(__dirname, "..", "app/services/api/webflow-api.generated.ts"), code)

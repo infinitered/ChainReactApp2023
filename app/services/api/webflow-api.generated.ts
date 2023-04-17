@@ -33,6 +33,8 @@ export const RecommendationsCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type RecommendationsCollection = z.infer<typeof RecommendationsCollectionSchema>
+
 export const ConferenceYearsCollectionSchema = z.object({
   "card-image": ImageRefSchema,
   "overview-about-conference-year": PlainTextSchema,
@@ -65,6 +67,8 @@ export const ConferenceYearsCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type ConferenceYearsCollection = z.infer<typeof ConferenceYearsCollectionSchema>
+
 export const TalksCollectionSchema = z.object({
   description: PlainTextSchema.optional(),
   "description-preview": PlainTextSchema.optional(),
@@ -85,6 +89,8 @@ export const TalksCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type TalksCollection = z.infer<typeof TalksCollectionSchema>
+
 export const VenuesCollectionSchema = z.object({
   "venue-image-s": SetSchema,
   "street-address": PlainTextSchema,
@@ -102,6 +108,8 @@ export const VenuesCollectionSchema = z.object({
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
 })
+
+export type VenuesCollection = z.infer<typeof VenuesCollectionSchema>
 
 export const ScheduledeventsCollectionSchema = z.object({
   day: OptionSchema,
@@ -133,6 +141,8 @@ export const ScheduledeventsCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type ScheduledeventsCollection = z.infer<typeof ScheduledeventsCollectionSchema>
+
 export const SponsorsCollectionSchema = z.object({
   logo: ImageRefSchema,
   "sponsor-tier": OptionSchema,
@@ -153,6 +163,8 @@ export const SponsorsCollectionSchema = z.object({
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
 })
+
+export type SponsorsCollection = z.infer<typeof SponsorsCollectionSchema>
 
 export const SpeakerNamesCollectionSchema = z.object({
   title: PlainTextSchema.optional(),
@@ -179,6 +191,8 @@ export const SpeakerNamesCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type SpeakerNamesCollection = z.infer<typeof SpeakerNamesCollectionSchema>
+
 export const PastTalksCollectionSchema = z.object({
   "speaker-photo": ImageRefSchema,
   "speaker-full-name": PlainTextSchema,
@@ -203,6 +217,8 @@ export const PastTalksCollectionSchema = z.object({
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
 })
+
+export type PastTalksCollection = z.infer<typeof PastTalksCollectionSchema>
 
 export const WorkshopsCollectionSchema = z.object({
   level: OptionSchema,
@@ -234,6 +250,8 @@ export const WorkshopsCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type WorkshopsCollection = z.infer<typeof WorkshopsCollectionSchema>
+
 export const RecurringEventsCollectionSchema = z.object({
   "event-description": PlainTextSchema,
   "secondary-callout": PlainTextSchema.optional(),
@@ -251,6 +269,8 @@ export const RecurringEventsCollectionSchema = z.object({
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
 })
+
+export type RecurringEventsCollection = z.infer<typeof RecurringEventsCollectionSchema>
 
 export const SpeakersCollectionSchema = z.object({
   "speaker-first-name": PlainTextSchema.optional(),
@@ -278,6 +298,8 @@ export const SpeakersCollectionSchema = z.object({
   "published-by": UserSchema.optional(),
 })
 
+export type SpeakersCollection = z.infer<typeof SpeakersCollectionSchema>
+
 export const TicketsCollectionSchema = z.object({
   "eventbrite-id": PlainTextSchema.optional(),
   name: PlainTextSchema,
@@ -291,6 +313,8 @@ export const TicketsCollectionSchema = z.object({
   "updated-by": UserSchema.optional(),
   "published-by": UserSchema.optional(),
 })
+
+export type TicketsCollection = z.infer<typeof TicketsCollectionSchema>
 
 export const COLLECTIONS_ID = {
   RECOMMENDATIONS: "640a728fc24f8e083b5fe18f",
