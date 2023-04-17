@@ -3,11 +3,11 @@ import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { AutoImage, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
-import { Speaker } from "../../services/api/webflow-api.types"
 import { SocialButtons } from "../../components/SocialButton"
+import type { SpeakersCollection } from "../../services/api/webflow-api.generated"
 
 export interface AssistantsListProp {
-  assistants: Speaker[]
+  assistants: SpeakersCollection[]
 }
 
 export function AssistantsList(props: AssistantsListProp) {
@@ -28,15 +28,18 @@ export function AssistantsList(props: AssistantsListProp) {
         >
           {assistants.map((assistant) => (
             <View style={$assistant} key={assistant._id}>
-              <AutoImage source={{ uri: assistant["speaker-photo"].url }} style={$assistantImage} />
+              <AutoImage
+                source={{ uri: assistant["speaker-photo"]?.url }}
+                style={$assistantImage}
+              />
               <Text preset="companionHeading" text={assistant.name} />
               <Text preset="label" style={$assistantCompany} text={assistant.company} />
               <View style={$assistantLinks}>
                 <SocialButtons
                   socialButtons={[
-                    { icon: "twitter", url: assistant.twitter },
-                    { icon: "github", url: assistant.github },
-                    { icon: "link", url: assistant.website },
+                    { icon: "twitter", url: assistant.twitter ?? "" },
+                    { icon: "github", url: assistant.github ?? "" },
+                    { icon: "link", url: assistant.website ?? "" },
                   ]}
                 />
               </View>

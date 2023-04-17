@@ -15,14 +15,14 @@ import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { useRecommendations } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
-import { RawRecommendations } from "../../services/api/webflow-api.types"
+import type { RecommendationsCollection } from "../../services/api/webflow-api.generated"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 import { groupBy } from "../../utils/groupBy"
 import { customSortObjectKeys } from "../../utils/customSort"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = (typeof recommendationTypes)[number]
-type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
+type GroupedRecommendations = Record<RecommendationType, RecommendationsCollection[]>
 
 const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
   (acc, recommendationType) => ({ ...acc, [recommendationType]: [] }),
@@ -68,7 +68,7 @@ const useRecommendationSections = (): {
   return {
     isLoading,
     sections: Object.entries(sortedRecs).map(
-      ([key, value]: [RecommendationType, RawRecommendations[]]) => ({
+      ([key, value]: [RecommendationType, RecommendationsCollection[]]) => ({
         title: sectionTitle(key),
         renderItem: RenderItem,
         data: [

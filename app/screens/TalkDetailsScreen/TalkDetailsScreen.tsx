@@ -17,8 +17,8 @@ import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
+import type { ScheduledEvent } from "../../services/api"
 import { isFuture, parseISO } from "date-fns"
-import { ScheduledEvent, Speaker } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
@@ -111,7 +111,7 @@ const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
     talkUrl: talk?.["talk-url"],
     eventTime: schedule["day-time"],
     isMultipleSpeakers: true,
-    carouselData: speakers.map((speaker: Speaker) => ({
+    carouselData: speakers.map((speaker) => ({
       image: { uri: speaker?.["speaker-photo"].url },
       imageStyle: { height: 320 },
       subtitle: speaker?.name,
@@ -120,7 +120,7 @@ const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       socialButtons: [
         { url: speaker?.twitter, icon: "twitter" },
         { url: speaker?.github, icon: "github" },
-        { url: speaker?.externalURL || speaker?.website, icon: "link" },
+        { url: speaker?.website, icon: "link" },
       ],
     })),
   }
@@ -145,7 +145,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
     socialButtons: [
       { url: talk?.["speaker-s"][0]?.twitter, icon: "twitter" },
       { url: talk?.["speaker-s"][0]?.github, icon: "github" },
-      { url: talk?.["speaker-s"][0]?.externalURL, icon: "link" },
+      { url: talk?.["speaker-s"][0]?.website, icon: "link" },
     ],
     isMultipleSpeakers: talk?.["speaker-s"].length > 1,
     carouselData: talk?.["speaker-s"].map((speaker) => ({
@@ -157,7 +157,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       socialButtons: [
         { url: speaker?.twitter, icon: "twitter" },
         { url: speaker?.github, icon: "github" },
-        { url: speaker?.externalURL || speaker?.website, icon: "link" },
+        { url: speaker?.website, icon: "link" },
       ],
     })),
   }

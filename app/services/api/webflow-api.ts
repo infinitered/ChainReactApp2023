@@ -3,17 +3,6 @@ import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
 import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
-import type {
-  RawRecommendations,
-  RawRecurringEvents,
-  RawScheduledEvent,
-  RawSpeaker,
-  RawSpeakerName,
-  RawSponsor,
-  RawTalk,
-  RawVenue,
-  RawWorkshop,
-} from "./webflow-api.types"
 import {
   CollectionConst,
   CollectionId,
@@ -37,6 +26,17 @@ import {
   convertScheduleToScheduleCard,
 } from "./webflow-helpers"
 import { queryClient } from "./react-query"
+import type {
+  RecommendationsCollection,
+  RecurringEventsCollection,
+  ScheduledeventsCollection,
+  SpeakerNamesCollection,
+  SpeakersCollection,
+  SponsorsCollection,
+  TalksCollection,
+  VenuesCollection,
+  WorkshopsCollection,
+} from "./webflow-api.generated"
 
 const getCollectionById = async <T>(collectionId: CollectionId) => {
   const { data } = await axiosInstance.get<PaginatedItems<T>>(`/collections/${collectionId}/items`)
@@ -61,36 +61,44 @@ const webflowOptions = <Payload, Collection extends CollectionConst = Collection
     queryFn: async () => getCollectionById<Payload>(collection.collectionId),
   } satisfies UseQueryOptions)
 
-const recommendationsOptions = webflowOptions<RawRecommendations>(RECOMMENDATIONS)
+const recommendationsOptions = webflowOptions<RecommendationsCollection>(RECOMMENDATIONS)
 export const useRecommendations = () => useQuery(recommendationsOptions)
+export type Recommendations = ReturnType<typeof useRecommendations>["data"]
 
-const recurringEventsOptions = webflowOptions<RawRecurringEvents>(RECURRING_EVENTS)
+const recurringEventsOptions = webflowOptions<RecurringEventsCollection>(RECURRING_EVENTS)
 export const useRecurringEvents = () => useQuery(recurringEventsOptions)
+export type RecurringEvents = ReturnType<typeof useRecurringEvents>["data"]
 
-const speakersOptions = webflowOptions<RawSpeaker>(SPEAKERS)
+const speakersOptions = webflowOptions<SpeakersCollection>(SPEAKERS)
 export const useSpeakers = () => useQuery(speakersOptions)
+export type Speakers = ReturnType<typeof useSpeakers>["data"]
 
-const speakerNamesOptions = webflowOptions<RawSpeakerName>(SPEAKER_NAMES)
+const speakerNamesOptions = webflowOptions<SpeakerNamesCollection>(SPEAKER_NAMES)
 export const useSpeakerNames = () => useQuery(speakerNamesOptions)
+export type SpeakerNames = ReturnType<typeof useSpeakerNames>["data"]
 
-const sponsorsOptions = webflowOptions<RawSponsor>(SPONSORS)
+const sponsorsOptions = webflowOptions<SponsorsCollection>(SPONSORS)
 export const useSponsors = () => {
   const { data: sponsors, ...rest } = useQuery(sponsorsOptions)
   const data = cleanedSponsors(sponsors)
 
   return { data, ...rest }
 }
+export type Sponsors = ReturnType<typeof useSponsors>["data"]
 
-const talksOptions = webflowOptions<RawTalk>(TALKS)
+const talksOptions = webflowOptions<TalksCollection>(TALKS)
 export const useTalks = () => useQuery(talksOptions)
+export type Talks = ReturnType<typeof useTalks>["data"]
 
-const venuesOptions = webflowOptions<RawVenue>(VENUES)
+const venuesOptions = webflowOptions<VenuesCollection>(VENUES)
 export const useVenues = () => useQuery(venuesOptions)
+export type Venues = ReturnType<typeof useVenues>["data"]
 
-const workshopsOptions = webflowOptions<RawWorkshop>(WORKSHOPS)
+const workshopsOptions = webflowOptions<WorkshopsCollection>(WORKSHOPS)
 export const useWorkshops = () => useQuery(workshopsOptions)
+export type Workshops = ReturnType<typeof useWorkshops>["data"]
 
-const scheduledEventsOptions = webflowOptions<RawScheduledEvent>(SCHEDULE)
+const scheduledEventsOptions = webflowOptions<ScheduledeventsCollection>(SCHEDULE)
 const scheduledEventsQueries = [
   speakersOptions,
   workshopsOptions,
@@ -125,6 +133,7 @@ export const useScheduledEvents = () => {
     isRefetching: queries.map((query) => query.isFetching).some((isFetching) => isFetching),
   }
 }
+export type ScheduledEvent = ReturnType<typeof useScheduledEvents>["data"][number]
 
 export const useScheduleScreenData = () => {
   const { data: events, isLoading, isRefetching, refetch } = useScheduledEvents()
