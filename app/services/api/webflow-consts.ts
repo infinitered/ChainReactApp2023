@@ -1,14 +1,14 @@
 import {
-  RawRecommendationsSchema,
-  RawRecurringEventsSchema,
-  RawScheduledEventSchema,
-  RawSpeakerNameSchema,
-  RawSpeakerSchema,
-  RawSponsorSchema,
-  RawTalkSchema,
-  RawVenueSchema,
-  RawWorkshopSchema,
-} from "./webflow-api.types"
+  RecommendationsCollectionSchema,
+  RecurringEventsCollectionSchema,
+  ScheduledeventsCollectionSchema,
+  SpeakerNamesCollectionSchema,
+  SpeakersCollectionSchema,
+  SponsorsCollectionSchema,
+  TalksCollectionSchema,
+  VenuesCollectionSchema,
+  WorkshopsCollectionSchema,
+} from "./webflow-api.generated"
 
 export const WEBFLOW_API_URL = "https://chain-react-ai-chat.vercel.app/api/schedule/"
 
@@ -17,61 +17,61 @@ export const SITE_ID = "5ca38f35db5d2ea94aea469d"
 export const SPONSORS = {
   collectionId: "640a728fc24f8e73575fe189",
   key: "sponsors",
-  schema: RawSponsorSchema,
+  schema: SponsorsCollectionSchema,
 } as const
 
 export const SPEAKERS = {
   collectionId: "640a728fc24f8e94385fe188",
   key: "speakers",
-  schema: RawSpeakerSchema,
+  schema: SpeakersCollectionSchema,
 } as const
 
 export const SPEAKER_NAMES = {
   collectionId: "640a728fc24f8e74d05fe18a",
   key: "speakerNames",
-  schema: RawSpeakerNameSchema,
+  schema: SpeakerNamesCollectionSchema,
 } as const
 
 export const WORKSHOPS = {
   collectionId: "640a728fc24f8e7f635fe187",
   key: "workshops",
-  schema: RawWorkshopSchema,
+  schema: WorkshopsCollectionSchema,
 } as const
 
 export const SCHEDULE = {
   collectionId: "640a728fc24f8e63325fe185",
   key: "schedule",
-  schema: RawScheduledEventSchema,
+  schema: ScheduledeventsCollectionSchema,
 } as const
 
 export const PAST_TALKS = {
   collectionId: "640a728fc24f8e76ef5fe186",
   key: "pastTalks",
-  schema: RawTalkSchema,
+  schema: TalksCollectionSchema,
 } as const
 
 export const RECURRING_EVENTS = {
   collectionId: "640a728fc24f8e85a75fe18c",
   key: "recurringEvents",
-  schema: RawRecurringEventsSchema,
+  schema: RecurringEventsCollectionSchema,
 } as const
 
 export const TALKS = {
   collectionId: "640a728fc24f8e31ee5fe18e",
   key: "talks",
-  schema: RawTalkSchema,
+  schema: TalksCollectionSchema,
 } as const
 
 export const VENUES = {
   collectionId: "640a728fc24f8e553c5fe18d",
   key: "venues",
-  schema: RawVenueSchema,
+  schema: VenuesCollectionSchema,
 } as const
 
 export const RECOMMENDATIONS = {
   collectionId: "640a728fc24f8e083b5fe18f",
   key: "recommendations",
-  schema: RawRecommendationsSchema,
+  schema: RecommendationsCollectionSchema,
 } as const
 
 export const COLLECTIONS_MAP = {

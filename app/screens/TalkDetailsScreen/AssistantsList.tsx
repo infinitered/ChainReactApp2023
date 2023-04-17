@@ -4,10 +4,10 @@ import { AutoImage, IconButton, Text } from "../../components"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
-import { Speaker } from "../../services/api/webflow-api.types"
+import type { SpeakersCollection } from "../../services/api/webflow-api.generated"
 
 export interface AssistantsListProp {
-  assistants: Speaker[]
+  assistants: SpeakersCollection[]
 }
 
 export function AssistantsList(props: AssistantsListProp) {

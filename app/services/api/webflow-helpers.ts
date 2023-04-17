@@ -1,19 +1,12 @@
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
 import { formatDate, sortByTime } from "../../utils/formatDate"
+import type { RecurringEvent, ScheduledEvent, Workshop } from "./webflow-api"
 import type {
-  RawScheduledEvent,
-  RawSpeaker,
-  RawSponsor,
-  RawTalk,
-  RawWorkshop,
-  RecurringEvents,
-  ScheduledEvent,
-  Speaker,
-  Sponsor,
-  Talk,
-  Workshop,
-  Day,
-} from "./webflow-api.types"
+  ScheduledeventsCollection,
+  SpeakersCollection,
+  SponsorsCollection,
+  TalksCollection,
+} from "./webflow-api.generated"
 import { WEBFLOW_MAP } from "./webflow-consts"
 
 /*
@@ -26,12 +19,12 @@ export const cleanedSchedule = ({
   talks,
   recurringEvents,
 }: {
-  scheduledEvents?: RawScheduledEvent[]
-  speakers?: Speaker[]
-  workshops?: Workshop[]
-  talks?: Talk[]
-  recurringEvents?: RecurringEvents[]
-}): ScheduledEvent[] => {
+  scheduledEvents?: ScheduledeventsCollection[]
+  speakers?: CleanedSpeakers
+  workshops?: CleanedWorkshops
+  talks?: CleanedTalks
+  recurringEvents?: RecurringEvent[]
+}) => {
   return scheduledEvents
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => ({
@@ -48,26 +41,38 @@ export const cleanedSchedule = ({
     }))
 }
 
+export type CleanedSchedule = ReturnType<typeof cleanedSchedule>
+
 /*
  * Converting speakers data from "type ids" to "type names"
  */
-export const cleanedSpeakers = (speakersData?: RawSpeaker[]): Speaker[] => {
+export const cleanedSpeakers = (speakersData?: SpeakersCollection[]) => {
   return speakersData?.map(cleanedSpeaker)
 }
 
-export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
+export type CleanedSpeakers = ReturnType<typeof cleanedSpeakers>
+
+export const cleanedSpeaker = (speaker?: SpeakersCollection) => {
   if (!speaker) return null
+
+  const speakerType: string | undefined = WEBFLOW_MAP.speakersType[speaker["speaker-type"]]
+  if (typeof speakerType === "undefined") {
+    return null
+  }
+
   return {
     ...speaker,
-    "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
+    "speaker-type": speakerType,
   }
 }
 
-export const cleanedSponsors = (sponsorsData?: RawSponsor[]): Sponsor[] => {
+export type CleanedSpeaker = ReturnType<typeof cleanedSpeaker>
+
+export const cleanedSponsors = (sponsorsData?: SponsorsCollection[]) => {
   return sponsorsData?.filter((s) => s["is-a-current-sponsor"]).map(cleanedSponsor)
 }
 
-export const cleanedSponsor = (sponsor?: RawSponsor): Sponsor | null => {
+export const cleanedSponsor = (sponsor?: SponsorsCollection) => {
   if (!sponsor) return null
   return {
     ...sponsor,
@@ -75,13 +80,15 @@ export const cleanedSponsor = (sponsor?: RawSponsor): Sponsor | null => {
   }
 }
 
+export type CleanedSponsor = ReturnType<typeof cleanedSponsor>
+
 export const cleanedTalks = ({
   speakers,
   talks,
 }: {
-  speakers?: RawSpeaker[]
-  talks?: RawTalk[]
-}): Talk[] => {
+  speakers?: SpeakersCollection[]
+  talks?: TalksCollection[]
+}) => {
   return talks?.map((talk) => ({
     ...talk,
     "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
@@ -91,13 +98,12 @@ export const cleanedTalks = ({
   }))
 }
 
+export type CleanedTalks = ReturnType<typeof cleanedTalks>
+
 /*
  * Converting workshop data from "type ids" to "type names"
  */
-export const cleanedWorkshops = (
-  workshopsData?: RawWorkshop[],
-  speakersData?: Speaker[],
-): Workshop[] => {
+export const cleanedWorkshops = (workshopsData?: Workshop[], speakersData?: CleanedSpeakers) => {
   return workshopsData
     ?.filter((workshop) => !workshop._archived && !workshop._draft)
     .map((workshop) => ({
@@ -117,6 +123,8 @@ export const cleanedWorkshops = (
       ),
     }))
 }
+
+export type CleanedWorkshops = ReturnType<typeof cleanedWorkshops>
 
 /*
  * Converting workshop data from "type ids" to "type names"
@@ -197,7 +205,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
 // [NOTE] util function that might be needed in the future
 export const convertScheduleToScheduleCard = (
   scheduleData: ScheduledEvent[],
-  day: Day,
+  day: string,
 ): ScheduleCardProps[] => {
   // 1. Get the schedule for the current day
   const groupByDay = groupBy("day")

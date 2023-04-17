@@ -11,7 +11,7 @@ import { Screen, Text } from "../../components"
 import { translate } from "../../i18n"
 import { useAppNavigation, useHeader } from "../../hooks"
 import { useSponsors } from "../../services/api"
-import { RawSponsor } from "../../services/api/webflow-api.types"
+import type { SponsorsCollection } from "../../services/api/webflow-api.generated"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { groupBy } from "../../services/api/webflow-helpers"
 import { colors, spacing } from "../../theme"
@@ -20,9 +20,9 @@ import { SponsorCard } from "./SponsorCard"
 const sponsorTiers = Object.values(WEBFLOW_MAP.sponsorTier)
 type Tiers = (typeof sponsorTiers)[number]
 
-const initialTiers = sponsorTiers.reduce<Record<Tiers, RawSponsor[]>>(
+const initialTiers = sponsorTiers.reduce<Record<Tiers, SponsorsCollection[]>>(
   (acc, tier) => ({ ...acc, [tier]: [] }),
-  {} as Record<Tiers, RawSponsor[]>,
+  {} as Record<Tiers, SponsorsCollection[]>,
 )
 
 const useSponsorsSections = (): {
@@ -31,7 +31,7 @@ const useSponsorsSections = (): {
 } => {
   const { data: sponsors = [], isLoading } = useSponsors()
   const rawTiers = groupBy("sponsor-tier")(sponsors)
-  const tiers = Object.keys(rawTiers).reduce<Record<Tiers, RawSponsor[]>>(
+  const tiers = Object.keys(rawTiers).reduce<Record<Tiers, SponsorsCollection[]>>(
     (acc, tier) => ({
       ...acc,
       [tier]: rawTiers[tier] ?? [],

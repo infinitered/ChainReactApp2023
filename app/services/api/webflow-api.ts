@@ -1,17 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
-import type {
-  RawRecommendations,
-  RawRecurringEvents,
-  RawScheduledEvent,
-  RawSpeaker,
-  RawSpeakerName,
-  RawSponsor,
-  RawTalk,
-  RawVenue,
-  RawWorkshop,
-} from "./webflow-api.types"
 import {
   CollectionId,
   CollectionKey,
@@ -36,6 +25,17 @@ import {
 } from "./webflow-helpers"
 import { z } from "zod"
 import { fromZodError } from "zod-validation-error"
+import type {
+  RecommendationsCollection,
+  RecurringEventsCollection,
+  SpeakersCollection,
+  SpeakerNamesCollection,
+  SponsorsCollection,
+  TalksCollection,
+  VenuesCollection,
+  WorkshopsCollection,
+  ScheduledeventsCollection,
+} from "./webflow-api.generated"
 
 const useWebflowAPI = <T>(key: CollectionKey, collectionId: CollectionId, enabled = true) =>
   useQuery({
@@ -60,23 +60,34 @@ const useWebflowAPI = <T>(key: CollectionKey, collectionId: CollectionId, enable
   })
 
 export const useRecommendations = () => {
-  return useWebflowAPI<RawRecommendations>(RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId)
+  return useWebflowAPI<RecommendationsCollection>(RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId)
 }
+
+export type Recommendation = ReturnType<typeof useRecommendations>["data"][number]
 
 export const useRecurringEvents = () => {
-  return useWebflowAPI<RawRecurringEvents>(RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId)
+  return useWebflowAPI<RecurringEventsCollection>(
+    RECURRING_EVENTS.key,
+    RECURRING_EVENTS.collectionId,
+  )
 }
+
+export type RecurringEvent = ReturnType<typeof useRecurringEvents>["data"][number]
 
 export const useSpeakers = () => {
-  return useWebflowAPI<RawSpeaker>(SPEAKERS.key, SPEAKERS.collectionId)
+  return useWebflowAPI<SpeakersCollection>(SPEAKERS.key, SPEAKERS.collectionId)
 }
+
+export type Speaker = ReturnType<typeof useSpeakers>["data"][number]
 
 export const useSpeakerNames = () => {
-  return useWebflowAPI<RawSpeakerName>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
+  return useWebflowAPI<SpeakerNamesCollection>(SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId)
 }
 
-export const useSponsors = (): { isLoading: boolean; data: RawSponsor[] } => {
-  const { data: sponsors, isLoading } = useWebflowAPI<RawSponsor>(
+export type SpeakerName = ReturnType<typeof useSpeakerNames>["data"][number]
+
+export const useSponsors = (): { isLoading: boolean; data: SponsorsCollection[] } => {
+  const { data: sponsors, isLoading } = useWebflowAPI<SponsorsCollection>(
     SPONSORS.key,
     SPONSORS.collectionId,
   )
@@ -84,24 +95,33 @@ export const useSponsors = (): { isLoading: boolean; data: RawSponsor[] } => {
 
   return { isLoading, data }
 }
+
+export type Sponsor = ReturnType<typeof useSponsors>["data"][number]
+
 export const useTalks = () => {
-  return useWebflowAPI<RawTalk>(TALKS.key, TALKS.collectionId)
+  return useWebflowAPI<TalksCollection>(TALKS.key, TALKS.collectionId)
 }
+
+export type Talk = ReturnType<typeof useTalks>["data"][number]
 
 export const useVenues = () => {
-  return useWebflowAPI<RawVenue>(VENUES.key, VENUES.collectionId)
+  return useWebflowAPI<VenuesCollection>(VENUES.key, VENUES.collectionId)
 }
 
+export type Venue = ReturnType<typeof useVenues>["data"][number]
+
 export const useWorkshops = () => {
-  return useWebflowAPI<RawWorkshop>(WORKSHOPS.key, WORKSHOPS.collectionId)
+  return useWebflowAPI<WorkshopsCollection>(WORKSHOPS.key, WORKSHOPS.collectionId)
 }
+
+export type Workshop = ReturnType<typeof useWorkshops>["data"][number]
 
 export const useScheduledEvents = () => {
   const { data: speakers, isLoading } = useSpeakers()
   const { data: workshops } = useWorkshops()
   const { data: recurringEvents } = useRecurringEvents()
   const { data: talks } = useTalks()
-  const { data: scheduledEvents, ...rest } = useWebflowAPI<RawScheduledEvent>(
+  const { data: scheduledEvents, ...rest } = useWebflowAPI<ScheduledeventsCollection>(
     SCHEDULE.key,
     SCHEDULE.collectionId,
     !isLoading && !!speakers && !!workshops && !!recurringEvents && !!talks,
@@ -117,6 +137,8 @@ export const useScheduledEvents = () => {
     ...rest,
   }
 }
+
+export type ScheduledEvent = ReturnType<typeof useScheduledEvents>["data"][number]
 
 export const useScheduleScreenData = () => {
   const { data: events, isLoading, refetch } = useScheduledEvents()

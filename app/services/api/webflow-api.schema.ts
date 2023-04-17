@@ -74,6 +74,10 @@ export const GetCollectionItemResponseSchema = <T extends z.ZodTypeAny>(itemSche
     offset: z.number(),
   })
 
+export const CollectionBaseSchema = z.object({
+  _id: z.string(),
+  _cid: z.string(),
+})
 export const ImageRefSchema = z.object({
   alt: z.string().optional().nullable(),
   fileId: z.string(),
@@ -84,8 +88,8 @@ export const ItemRefSetSchema = z.array(ItemRefSchema)
 export const SetSchema = z.array(ImageRefSchema)
 export const PlainTextSchema = z.string()
 export const LinkSchema = z.string()
-export const OptionSchema = z.any()
+export const OptionSchema = z.string()
 export const BoolSchema = z.boolean()
 export const DateSchema = DateStringSchema.nullable()
-export const UserSchema = z.any()
+export const UserSchema = z.string()
 export const RichTextSchema = z.string()
