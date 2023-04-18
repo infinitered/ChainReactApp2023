@@ -209,11 +209,6 @@ export const convertScheduleToScheduleCard = (
   day: string,
 ): ScheduleCardProps[] => {
   const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
-  const sortedDaySchedule = daySchedule
-    .sort(sortByTime)
-    .map(convertScheduleToCardProps)
-    .filter(Boolean)
-  console.tron.log({ day, daySchedule: daySchedule.sort(sortByTime), sortedDaySchedule })
   return daySchedule.sort(sortByTime).map(convertScheduleToCardProps).filter(Boolean)
 }
 
