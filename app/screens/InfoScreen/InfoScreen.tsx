@@ -5,7 +5,6 @@ import { useAppNavigation, useHeader } from "../../hooks"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { translate } from "../../i18n"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { Carousel } from "../../components/carousel/Carousel"
 import { InfoStackParamList } from "../../navigators/InfoStackNavigator"
 
@@ -36,16 +35,11 @@ const links: Links = [
 ]
 
 export const InfoScreen: React.FunctionComponent<TabScreenProps<"InfoStack">> = () => {
-  // NOTE: this only works on a device, warning in sim
-  const contactByEmail = () => openLinkInBrowser("mailto:conf@infinite.red")
-
   const mainNavigation = useAppNavigation()
   const infoStackNavigation = useAppNavigation<InfoStackParamList>()
 
   useHeader({
     title: translate("infoScreen.title"),
-    rightTx: "infoScreen.contact",
-    onRightPress: contactByEmail,
     leftText: "     ",
     onLeftPress: () => mainNavigation.navigate("Debug"),
   })

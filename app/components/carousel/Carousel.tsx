@@ -125,7 +125,7 @@ export function Carousel(props: CarouselProps) {
             text={props.subtitle}
             style={[!props.meta ? $mt : undefined, $mb]}
           />
-          <Text text={props.body} style={$body} />
+          <Text text={props.body} style={$body} selectable={props.isBodySelectable} />
           {props.link && (
             <ButtonLink openLink={() => openLink(props.link.link)} style={$buttonLink}>
               {props.link.text}
