@@ -49,7 +49,7 @@ function maxImageDimensions(tier: SponsorCardProps["tier"]): {
         maxWidth: 135,
         maxHeight: 26,
       }
-    default: // Bronze and Other(?)
+    case "Bronze":
       return {
         maxWidth: 155,
         maxHeight: 36,
@@ -66,19 +66,13 @@ export const SponsorCard = ({
   sponsorImages,
   tier = "Gold",
 }: SponsorCardProps) => {
-  const { maxHeight, maxWidth } = maxImageDimensions(tier)
   switch (tier) {
     case "Platinum":
     case "Gold":
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Pressable style={$sponsorTitle} onPress={() => openLinkInBrowser(externalURL)}>
-            <AutoImage
-              accessibilityLabel={sponsor}
-              source={logo}
-              maxWidth={maxWidth}
-              maxHeight={maxHeight}
-            />
+            <AutoImage {...maxImageDimensions(tier)} accessibilityLabel={sponsor} source={logo} />
             <Icon icon="arrow" containerStyle={$iconButton} />
           </Pressable>
           <Text preset="primaryLabel" style={$sponsorType}>
@@ -104,11 +98,10 @@ export const SponsorCard = ({
                 onPress={() => openLinkInBrowser(externalURL)}
               >
                 <AutoImage
+                  {...maxImageDimensions(tier)}
                   accessibilityLabel={sponsor}
                   style={$silverTierImage}
                   source={{ uri }}
-                  maxWidth={maxWidth}
-                  maxHeight={maxHeight}
                 />
                 <Icon icon="arrow" containerStyle={$iconButton} />
               </Pressable>
@@ -124,9 +117,8 @@ export const SponsorCard = ({
             {sponsorImages.map(({ uri, sponsor }, index) => (
               <View key={index} style={$sponsorBottomTierLogoWrapper}>
                 <AutoImage
+                  {...maxImageDimensions(tier)}
                   accessibilityLabel={sponsor}
-                  maxWidth={maxWidth}
-                  maxHeight={maxHeight}
                   style={[
                     $sponsorImageBottomTier,
                     index % 2 === 0 ? $sponsorImageBottomTierStart : $sponsorImageBottomTierEnd,
