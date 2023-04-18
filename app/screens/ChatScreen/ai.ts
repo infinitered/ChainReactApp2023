@@ -16,10 +16,9 @@ export async function aiPrompt({ prompt, userId }: { prompt: string; userId: str
       },
     )
 
-    console.tron.logImportant(response)
-
     return response.data
   } catch (error) {
+    console.error(error)
     return { completion: "Hm, I seem to be having some trouble right now." }
   }
 }
