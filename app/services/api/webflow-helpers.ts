@@ -38,6 +38,7 @@ export const cleanedSchedule = ({
       location: WEBFLOW_MAP.location[schedule.location],
       "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
       "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
+      "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
       day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
       talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
       type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
@@ -141,9 +142,12 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         formattedEndTime:
           schedule["end-time"] && !isTheSameTime && formatDate(schedule["end-time"], "h:mm aaa"),
         eventTitle: schedule["recurring-event"]?.name ?? schedule["event-title"] ?? schedule.name,
-        heading: schedule["recurring-event"]?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
+        heading:
+          schedule["recurring-event"]?.["speaker-s"]?.map((s) => s.name).join(", ") ??
+          schedule["speaker-3"]?.name ??
+          "",
         subheading: schedule["recurring-event"]?.["event-description"],
-        sources: [],
+        sources: schedule["speaker-3"] ? [schedule["speaker-3"]["speaker-photo"].url] : [],
         id: schedule._id,
       }
     case "Party":

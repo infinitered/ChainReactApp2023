@@ -47,19 +47,21 @@ const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
   return (
     <View style={$footerContainer}>
-      <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
+      <Text
+        preset="cardFooterHeading"
+        style={isPast ? $pastFooterHeading : heading.length > 0 ? $footerHeading : {}}
+      >
         {heading}
       </Text>
       {isPast ? (
         <>
           <Text style={$pastFooterSubheading}>{subheading}</Text>
-          {
+          {talkUrl ??
             // assuming there will be other variants in the future I went with a switch statement
             {
               talk: <TalkCTA talkUrl={talkUrl} />,
               "speaker-panel": <TalkCTA talkUrl={talkUrl} />,
-            }[variant]
-          }
+            }[variant]}
         </>
       ) : (
         <Text style={$footerSubheading}>{subheading}</Text>
@@ -134,6 +136,15 @@ interface SpeakingEventProps {
   variant: Variants
 }
 
+interface RecurringEventProps {
+  heading: string
+  subheading: string
+  isPast?: boolean
+  sources: string[]
+  eventTitle: string
+  variant: Variants
+}
+
 interface BaseEventProps {
   formattedStartTime: string
   formattedEndTime?: string
@@ -187,6 +198,30 @@ const baseSpeakingEventProps = ({
   }
 }
 
+const baseRecurringEventProps = ({
+  heading,
+  subheading,
+  isPast,
+  sources,
+  eventTitle,
+  variant,
+}: RecurringEventProps) => {
+  const props = {
+    preset: eventTitle,
+    sources: sources.map((source) => ({ uri: source })),
+  } as AvatarProps
+  return {
+    // content: subheading,
+    contentStyle: isPast ? $pastContentText : $contentText,
+    RightComponent: (
+      <View style={$rightContainer}>
+        <Avatar style={$avatar} {...props} />
+      </View>
+    ),
+    FooterComponent: <Footer {...{ subheading, isPast, heading, variant }} />,
+  }
+}
+
 const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   const {
     variant = "recurring",
@@ -217,7 +252,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   }
   const variantProps =
     variant === "recurring"
-      ? { content: subheading, contentStyle: isPast ? $pastContentText : $contentText }
+      ? baseRecurringEventProps({ subheading, isPast, sources, eventTitle, heading, variant })
       : variant === "party"
       ? {
           content: subheading,
