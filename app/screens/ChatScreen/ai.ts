@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export async function claudePrompt({ prompt, userId }: { prompt: string; userId: string }) {
+export async function aiPrompt({ prompt, userId }: { prompt: string; userId: string }) {
   try {
     const response = await axios.post<{ completion: string }>(
       // "http://localhost:3000/api/claude",

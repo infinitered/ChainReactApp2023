@@ -46,8 +46,8 @@ const en = {
     chatTab: "AI Chat",
   },
   chatScreen: {
-    title: "Chat with AI",
-    reset: "Reset",
+    title: "AI Chat (experimental)",
+    reset: "Clear",
   },
   venuesScreen: {
     title: "Venues",

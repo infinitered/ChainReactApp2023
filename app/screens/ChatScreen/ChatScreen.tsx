@@ -1,10 +1,10 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useHeader } from "../../hooks"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { translate } from "../../i18n"
 import { GiftedChat, IMessage } from "react-native-gifted-chat"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { claudePrompt } from "./claude"
+import { aiPrompt } from "./ai"
 
 const chatbotAvatarURL =
   "https://pbs.twimg.com/profile_images/1638277840352456704/g7sdYc76_400x400.jpg"
@@ -34,13 +34,13 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
   })
 
   // generate a user-specific uuid if it isn't already in AsyncStorage
-  const [uuid, setUuid] = React.useState<string | null>(null)
+  const [uuid, setUuid] = useState<string | null>(null)
 
   // show a "typing" indicator when Claude is responding -- initially true
-  const [typingIndicator, setTypingIndicator] = React.useState(true)
+  const [typingIndicator, setTypingIndicator] = useState(true)
 
   // also grab messages in AsyncStorage
-  const [messages, setMessages] = React.useState<IMessage[]>([])
+  const [messages, setMessages] = useState<IMessage[]>([])
 
   useEffect(() => {
     const getUuid = async () => {
@@ -77,6 +77,8 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
       return newMessages
     })
 
+    // console.log("saving messages", newMessages)
+
     // persist to AsyncStorage
     AsyncStorage.setItem("chat/messages", JSON.stringify(newMessages))
   }
@@ -88,25 +90,26 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
           messages={messages}
           isTyping={typingIndicator}
           onSend={async (newMessages) => {
-            // async so it doesn't block the UI
             const appendedMessages = [
               ...newMessages.map((message) => ({ ...message, _id: Date.now() })),
               ...messages,
             ]
             saveMessages(() => appendedMessages)
             setTypingIndicator(true)
+
             // ask Claude for AI response
-            // first, build the prompt using the last 40 messages
+            // first, build the prompt using the last 15 messages
             const prompt = appendedMessages
-              .slice(-40)
+              .slice(0, 15)
               .reverse()
               .map(
                 (message) => (message.user._id === uuid ? "Human: " : "Assistant: ") + message.text,
               )
               .join("\n\n")
+
             // turn on the GiftedChat "typing" indicator
             // then, ask Claude for a response
-            const response = await claudePrompt({ prompt, userId: uuid })
+            const response = await aiPrompt({ prompt, userId: uuid })
             const claudeMessage = {
               _id: Date.now(),
               text: response.completion.trim(),
