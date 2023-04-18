@@ -29,7 +29,7 @@ export type TierLevelProps =
 
 export type SponsorCardProps = CommonProps & TierLevelProps
 
-function maxImageDimensions(tier: "Platinum" | "Gold" | "Silver" | "Bronze"): {
+function maxImageDimensions(tier: SponsorCardProps["tier"]): {
   maxWidth: number
   maxHeight: number
 } {
