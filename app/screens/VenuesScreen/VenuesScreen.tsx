@@ -26,6 +26,17 @@ interface VenuesSection {
   title: string
 }
 
+const getVenueDate = (venueTag: string): string => {
+  switch (WEBFLOW_MAP.venueTag[venueTag]) {
+    case "Workshop":
+      return "May 17"
+    case "After Party":
+      return "May 18"
+    default:
+      return "May 18-19"
+  }
+}
+
 const useVenuesSections = (): {
   isLoading: boolean
   sections: Array<SectionListData<Array<VenuesSection>>>
@@ -45,13 +56,7 @@ const useVenuesSections = (): {
           sortedVenues?.map((venue) => ({
             imageSource: venue["venue-image-s"].map((image) => ({ uri: image.url })),
             title: venue.name,
-            subtitle: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${
-              WEBFLOW_MAP.venueTag[venue.tag] === "Workshop"
-                ? "May 17"
-                : WEBFLOW_MAP.venueTag[venue.tag] === "After Party"
-                ? "May 18"
-                : "May 18-19"
-            }`,
+            subtitle: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${getVenueDate(venue.tag)}`,
             body: `${venue["street-address"]}\n${venue["city-state-zip"]}`,
             cta: {
               text: translate("venuesScreen.openInMaps"),
