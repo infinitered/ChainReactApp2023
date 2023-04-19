@@ -85,6 +85,8 @@ export const WEBFLOW_MAP = {
     dd977a70188a93af399ad496d6cf2785: "Recurring",
     b2f17244cf6bd0782c2a099568169219: "Party",
     "7ccbd551ac994b4489c4fe31ad985120": "Workshop",
+    a46728e5ac2795216173113b4cd6d91a: "Sponsored",
+    "67acc937d6af3a65b7b349a2bec4f701": "Lightning Talk",
   },
   recurringEventType: {
     "63b8a530a5f15f0d26539f07": "Check-in & Registration",
