@@ -65,7 +65,12 @@ const requestUserPermission = async () => {
 }
 
 export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
-  const { isLoading, schedules, refetch: refetchScheduleScreenData } = useScheduleScreenData()
+  const {
+    isLoading,
+    isRefetching,
+    schedules,
+    refetch: refetchScheduleScreenData,
+  } = useScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
   useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
@@ -238,7 +243,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             refreshControl={
               <RefreshControl
                 onRefresh={refetchScheduleScreenData}
-                refreshing={isLoading}
+                refreshing={isRefetching}
                 tintColor={colors.palette.neutral100}
               />
             }

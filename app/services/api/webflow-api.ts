@@ -91,6 +91,7 @@ export const useScheduledEvents = () => {
     SCHEDULE.collectionId,
     !isLoading && !!speakers && !!workshops && !!recurringEvents && !!talks,
   )
+
   return {
     data: cleanedSchedule({
       recurringEvents,
@@ -104,10 +105,11 @@ export const useScheduledEvents = () => {
 }
 
 export const useScheduleScreenData = () => {
-  const { data: events, isLoading, refetch } = useScheduledEvents()
+  const { data: events, isLoading, isRefetching, refetch } = useScheduledEvents()
 
   return {
     isLoading,
+    isRefetching,
     schedules: [
       {
         date: "2023-05-17",
