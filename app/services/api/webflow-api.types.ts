@@ -38,7 +38,14 @@ export interface ScheduledEvent extends Item {
   "speaker-2"?: Speaker | RawSpeakerName
   day: "Wednesday" | "Thursday" | "Friday"
   talk?: Talk
-  type?: "Talk" | "Speaker Panel" | "Workshop" | "Party" | "Recurring"
+  type?:
+    | "Talk"
+    | "Speaker Panel"
+    | "Workshop"
+    | "Party"
+    | "Recurring"
+    | "Sponsored"
+    | "Lightning Talk"
   workshop?: Workshop
   location?: string
 }

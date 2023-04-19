@@ -118,17 +118,30 @@ export const cleanedWorkshops = (
  */
 const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps => {
   switch (schedule.type) {
+    case "Sponsored":
+      return {
+        variant: "recurring",
+        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        startTime: schedule["day-time"],
+        sources: [],
+        eventTitle: schedule.name,
+        subheading: schedule["event-description"],
+        id: schedule._id,
+      }
     case "Recurring":
+      // eslint-disable-next-line no-case-declarations
+      const isTheSameTime = schedule["day-time"] === schedule["end-time"]
       return {
         variant: "recurring",
         formattedStartTime: formatDate(
           schedule["day-time"],
-          schedule["end-time"] ? "h:mm" : "h:mm aaa",
+          schedule["end-time"] && !isTheSameTime ? "h:mm" : "h:mm aaa",
         ),
         startTime: schedule["day-time"],
-        formattedEndTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mm aaa"),
-        eventTitle: schedule["recurring-event"]?.name,
-        heading: "",
+        formattedEndTime:
+          schedule["end-time"] && !isTheSameTime && formatDate(schedule["end-time"], "h:mm aaa"),
+        eventTitle: schedule["recurring-event"]?.name ?? schedule["event-title"] ?? schedule.name,
+        heading: schedule["recurring-event"]?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
         subheading: schedule["recurring-event"]?.["event-description"],
         sources: [],
         id: schedule._id,
@@ -144,6 +157,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         sources: [],
         id: schedule._id,
       }
+    case "Lightning Talk":
     case "Talk":
       return {
         variant: "talk",
@@ -173,7 +187,11 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
       const workshop = schedule.workshop
       return {
         variant: "workshop",
-        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(
+          schedule["day-time"],
+          schedule["end-time"] ? "h:mm" : "h:mm aaa",
+        ),
+        formattedEndTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mm aaa"),
         startTime: schedule["day-time"],
         eventTitle: "workshop",
         heading: workshop?.name,
