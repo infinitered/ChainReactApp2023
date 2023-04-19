@@ -120,4 +120,8 @@ export const WEBFLOW_MAP = {
     a5028d71ed9c315a6e9fa67778f2579d: "SightSee",
     f42e3ac1a464004c28d91ddf3945b654: "Unique/to/Portland",
   },
+  triviaShow: {
+    title: "Trivia Show",
+    variant: "trivia-show",
+  },
 } as const

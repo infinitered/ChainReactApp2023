@@ -47,19 +47,21 @@ const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
   return (
     <View style={$footerContainer}>
-      <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
+      <Text
+        preset="cardFooterHeading"
+        style={isPast ? $pastFooterHeading : (heading ?? "").length > 0 ? $footerHeading : {}}
+      >
         {heading}
       </Text>
       {isPast ? (
         <>
           <Text style={$pastFooterSubheading}>{subheading}</Text>
-          {
+          {talkUrl ??
             // assuming there will be other variants in the future I went with a switch statement
             {
               talk: <TalkCTA talkUrl={talkUrl} />,
               "speaker-panel": <TalkCTA talkUrl={talkUrl} />,
-            }[variant]
-          }
+            }[variant]}
         </>
       ) : (
         <Text style={$footerSubheading}>{subheading}</Text>
@@ -68,7 +70,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
   )
 }
 
-export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel"
+export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel" | "trivia-show"
 
 export interface ScheduleCardProps {
   /**
@@ -132,6 +134,16 @@ interface SpeakingEventProps {
   startTime?: string
   talkUrl?: string
   variant: Variants
+  isClickable: boolean
+}
+
+interface RecurringEventProps {
+  heading: string
+  subheading: string
+  isPast?: boolean
+  sources: string[]
+  eventTitle: string
+  variant: Variants
 }
 
 interface BaseEventProps {
@@ -166,6 +178,7 @@ const baseSpeakingEventProps = ({
   startTime,
   talkUrl,
   variant,
+  isClickable,
 }: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
@@ -175,15 +188,40 @@ const baseSpeakingEventProps = ({
     RightComponent: (
       <View style={$rightContainer}>
         <Avatar style={$avatar} {...props} />
-        <Icon
-          icon="arrow"
-          size={24}
-          color={colors.palette.primary500}
-          containerStyle={$arrowContainer}
-        />
+        {isClickable && (
+          <Icon
+            icon="arrow"
+            size={24}
+            color={colors.palette.primary500}
+            containerStyle={$arrowContainer}
+          />
+        )}
       </View>
     ),
     FooterComponent: <Footer {...{ heading, subheading, isPast, startTime, talkUrl, variant }} />,
+  }
+}
+
+const baseRecurringEventProps = ({
+  heading,
+  subheading,
+  isPast,
+  sources,
+  eventTitle,
+  variant,
+}: RecurringEventProps) => {
+  const props = {
+    preset: eventTitle,
+    sources: sources.map((source) => ({ uri: source })),
+  } as AvatarProps
+  return {
+    contentStyle: isPast ? $pastContentText : $contentText,
+    RightComponent: (
+      <View style={$rightContainer}>
+        <Avatar style={$avatar} {...props} />
+      </View>
+    ),
+    FooterComponent: <Footer {...{ subheading, isPast, heading, variant }} />,
   }
 }
 
@@ -202,7 +240,9 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     talkUrl,
   } = props
   const navigation = useAppNavigation()
-  const onPress = ["talk"].includes(variant)
+  const onPress = ["trivia-show"].includes(variant)
+    ? undefined
+    : ["talk"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["workshop"].includes(variant)
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
@@ -217,7 +257,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   }
   const variantProps =
     variant === "recurring"
-      ? { content: subheading, contentStyle: isPast ? $pastContentText : $contentText }
+      ? baseRecurringEventProps({ subheading, isPast, sources, eventTitle, heading, variant })
       : variant === "party"
       ? {
           content: subheading,
@@ -239,6 +279,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
           isPast,
           talkUrl,
           variant,
+          isClickable: !!onPress,
         })
 
   const isReversed = variant === "recurring" || variant === "party"
