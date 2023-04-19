@@ -37,6 +37,8 @@ export interface ScheduledEvent extends Item {
   "recurring-event"?: RecurringEvents
   "speaker-2"?: Speaker | RawSpeakerName
   "speaker-3"?: Speaker | RawSpeakerName
+  "event-title"?: string
+  "event-description"?: string
   day: "Wednesday" | "Thursday" | "Friday"
   talk?: Talk
   type?:
@@ -47,6 +49,7 @@ export interface ScheduledEvent extends Item {
     | "Recurring"
     | "Sponsored"
     | "Lightning Talk"
+    | "Trivia Show"
   workshop?: Workshop
   location?: string
 }

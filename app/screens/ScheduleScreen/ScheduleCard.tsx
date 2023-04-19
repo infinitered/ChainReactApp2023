@@ -70,7 +70,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
   )
 }
 
-export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel"
+export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel" | "trivia-show"
 
 export interface ScheduleCardProps {
   /**
@@ -134,6 +134,7 @@ interface SpeakingEventProps {
   startTime?: string
   talkUrl?: string
   variant: Variants
+  isClickable: boolean
 }
 
 interface RecurringEventProps {
@@ -177,6 +178,7 @@ const baseSpeakingEventProps = ({
   startTime,
   talkUrl,
   variant,
+  isClickable,
 }: SpeakingEventProps) => {
   const props = {
     preset: eventTitle,
@@ -186,12 +188,14 @@ const baseSpeakingEventProps = ({
     RightComponent: (
       <View style={$rightContainer}>
         <Avatar style={$avatar} {...props} />
-        <Icon
-          icon="arrow"
-          size={24}
-          color={colors.palette.primary500}
-          containerStyle={$arrowContainer}
-        />
+        {isClickable && (
+          <Icon
+            icon="arrow"
+            size={24}
+            color={colors.palette.primary500}
+            containerStyle={$arrowContainer}
+          />
+        )}
       </View>
     ),
     FooterComponent: <Footer {...{ heading, subheading, isPast, startTime, talkUrl, variant }} />,
@@ -211,7 +215,6 @@ const baseRecurringEventProps = ({
     sources: sources.map((source) => ({ uri: source })),
   } as AvatarProps
   return {
-    // content: subheading,
     contentStyle: isPast ? $pastContentText : $contentText,
     RightComponent: (
       <View style={$rightContainer}>
@@ -237,7 +240,9 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     talkUrl,
   } = props
   const navigation = useAppNavigation()
-  const onPress = ["talk"].includes(variant)
+  const onPress = ["trivia-show"].includes(variant)
+    ? undefined
+    : ["talk"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["workshop"].includes(variant)
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
@@ -274,6 +279,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
           isPast,
           talkUrl,
           variant,
+          isClickable: !!onPress,
         })
 
   const isReversed = variant === "recurring" || variant === "party"

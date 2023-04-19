@@ -33,17 +33,22 @@ export const cleanedSchedule = ({
 }): ScheduledEvent[] => {
   return scheduledEvents
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
-    .map((schedule) => ({
-      ...schedule,
-      location: WEBFLOW_MAP.location[schedule.location],
-      "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
-      "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
-      "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
-      day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
-      talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
-      type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
-      workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
-    }))
+    .map((schedule) => {
+      const isTriviaShow = schedule["event-title"] === WEBFLOW_MAP.triviaShow.title
+      return {
+        ...schedule,
+        location: WEBFLOW_MAP.location[schedule.location],
+        "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+        "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
+        "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
+        day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
+        talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
+        type: isTriviaShow
+          ? WEBFLOW_MAP.triviaShow.title
+          : WEBFLOW_MAP.scheduleType[schedule["event-type"]],
+        workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+      }
+    })
 }
 
 /*
@@ -161,18 +166,25 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         sources: [],
         id: schedule._id,
       }
+    case "Trivia Show":
     case "Lightning Talk":
     case "Talk":
-      return {
-        variant: "talk",
+      // eslint-disable-next-line no-case-declarations
+      const isTriviaShow = schedule.type === WEBFLOW_MAP.triviaShow.title
+      // eslint-disable-next-line no-case-declarations
+      const baseItems = {
         formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
         startTime: schedule["day-time"],
-        eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
-        subheading: schedule.talk?.name,
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
         id: schedule._id,
         talkUrl: schedule.talk?.["talk-url"],
+      }
+      return {
+        ...baseItems,
+        variant: isTriviaShow ? WEBFLOW_MAP.triviaShow.variant : "talk",
+        eventTitle: isTriviaShow ? WEBFLOW_MAP.triviaShow.title : schedule.type,
+        subheading: isTriviaShow ? schedule["event-description"] : schedule.talk?.name,
       }
     case "Speaker Panel":
       return {
