@@ -41,6 +41,8 @@ export const cleanedSchedule = ({
         "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
         "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
         "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
+        "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
+        "speaker-3-2": speakers?.find(({ _id }) => _id === schedule["speaker-3-2"]),
         day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
         talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
         type: isTriviaShow
@@ -179,13 +181,29 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
         id: schedule._id,
         talkUrl: schedule.talk?.["talk-url"],
+        variant: "talk",
+        eventTitle: schedule.type,
+        subheading: schedule.talk?.name,
+      } as ScheduleCardProps
+      if (isTriviaShow) {
+        console.tron.log({ schedule })
+        baseItems.variant = WEBFLOW_MAP.triviaShow.variant
+        baseItems.eventTitle = WEBFLOW_MAP.triviaShow.title
+        baseItems.subheading = schedule["event-description"]
+        baseItems.sources = [
+          schedule["speaker-2-2"]?.["speaker-photo"].url,
+          schedule["speaker-3"]?.["speaker-photo"].url,
+          schedule["speaker-3-2"]?.["speaker-photo"].url,
+        ].filter(Boolean)
+        baseItems.heading = [
+          schedule["speaker-2-2"]?.name,
+          schedule["speaker-3"]?.name,
+          schedule["speaker-3-2"]?.name,
+        ]
+          .filter(Boolean)
+          .join(", ")
       }
-      return {
-        ...baseItems,
-        variant: isTriviaShow ? WEBFLOW_MAP.triviaShow.variant : "talk",
-        eventTitle: isTriviaShow ? WEBFLOW_MAP.triviaShow.title : schedule.type,
-        subheading: isTriviaShow ? schedule["event-description"] : schedule.talk?.name,
-      }
+      return baseItems
     case "Speaker Panel":
       return {
         variant: "speaker-panel",
