@@ -1,12 +1,13 @@
 import React from "react"
 import { ViewStyle, ImageSourcePropType, ImageStyle, Pressable } from "react-native"
-import { AutoImage, Screen, Text } from "../../components"
+import { AutoImage, ButtonLink, Screen, Text } from "../../components"
 import { useAppNavigation, useHeader } from "../../hooks"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { translate } from "../../i18n"
 import { Carousel } from "../../components/carousel/Carousel"
 import { InfoStackParamList } from "../../navigators/InfoStackNavigator"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 const irImage1 = require("../../../assets/images/info-ir1.png")
 const irImage2 = require("../../../assets/images/info-ir2.png")
@@ -55,6 +56,10 @@ export const InfoScreen: React.FunctionComponent<TabScreenProps<"InfoStack">> = 
         body={translate("infoScreen.about")}
       />
 
+      <ButtonLink openLink={() => openLinkInBrowser("https://infinite.red/")} style={$buttonLink}>
+        {translate("infoScreen.moreAboutIR")}
+      </ButtonLink>
+
       {links.map((link, index) => (
         <Pressable
           key={index}
@@ -98,4 +103,9 @@ const $arrow: ImageStyle = {
   marginStart: spacing.medium,
   tintColor: colors.palette.primary500,
   width: 8,
+}
+
+const $buttonLink: ViewStyle = {
+  paddingHorizontal: spacing.large,
+  paddingVertical: spacing.medium,
 }
