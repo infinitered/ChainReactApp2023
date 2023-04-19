@@ -46,7 +46,11 @@ const useVenuesSections = (): {
             imageSource: venue["venue-image-s"].map((image) => ({ uri: image.url })),
             title: venue.name,
             subtitle: `${WEBFLOW_MAP.venueTag[venue.tag]} • ${
-              WEBFLOW_MAP.venueTag[venue.tag] === "Workshop" ? "May 17" : "May 18-19"
+              WEBFLOW_MAP.venueTag[venue.tag] === "Workshop"
+                ? "May 17"
+                : WEBFLOW_MAP.venueTag[venue.tag] === "After Party"
+                ? "May 18"
+                : "May 18-19"
             }`,
             body: `${venue["street-address"]}\n${venue["city-state-zip"]}`,
             cta: {
