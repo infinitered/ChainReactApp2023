@@ -5,7 +5,7 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon, IconTypes } from "../components"
 import { translate, TxKeyPath } from "../i18n"
-import { ExploreScreen, ScheduleScreen, VenuesScreen } from "../screens"
+import { ExploreScreen, ScheduleScreen, VenuesScreen, ChatScreen } from "../screens"
 import { colors, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { InfoStackNavigator } from "./InfoStackNavigator"
@@ -15,6 +15,7 @@ export type TabParamList = {
   Venues: undefined
   Explore: undefined
   InfoStack: undefined
+  Chat: undefined
 }
 
 /**
@@ -60,6 +61,12 @@ const screens: Screen[] = [
     component: InfoStackNavigator,
     txLabel: "tabNavigator.infoTab",
     icon: "info",
+  },
+  {
+    name: "Chat",
+    component: ChatScreen,
+    txLabel: "tabNavigator.chatTab",
+    icon: "ladybug",
   },
 ]
 
