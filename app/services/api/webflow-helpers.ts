@@ -33,16 +33,24 @@ export const cleanedSchedule = ({
 }): ScheduledEvent[] => {
   return scheduledEvents
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
-    .map((schedule) => ({
-      ...schedule,
-      location: WEBFLOW_MAP.location[schedule.location],
-      "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
-      "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
-      day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
-      talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
-      type: WEBFLOW_MAP.scheduleType[schedule["event-type"]],
-      workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
-    }))
+    .map((schedule) => {
+      const isTriviaShow = schedule["event-title"] === WEBFLOW_MAP.triviaShow.title
+      return {
+        ...schedule,
+        location: WEBFLOW_MAP.location[schedule.location],
+        "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+        "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
+        "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
+        "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
+        "speaker-3-2": speakers?.find(({ _id }) => _id === schedule["speaker-3-2"]),
+        day: WEBFLOW_MAP.scheduleDay[schedule.day] ?? WEBFLOW_MAP.scheduleDay["2e399bc3"],
+        talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
+        type: isTriviaShow
+          ? WEBFLOW_MAP.triviaShow.title
+          : WEBFLOW_MAP.scheduleType[schedule["event-type"]],
+        workshop: workshops?.find(({ _id }) => _id === schedule.workshop),
+      }
+    })
 }
 
 /*
@@ -141,9 +149,12 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         formattedEndTime:
           schedule["end-time"] && !isTheSameTime && formatDate(schedule["end-time"], "h:mm aaa"),
         eventTitle: schedule["recurring-event"]?.name ?? schedule["event-title"] ?? schedule.name,
-        heading: schedule["recurring-event"]?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
+        heading:
+          schedule["recurring-event"]?.["speaker-s"]?.map((s) => s.name).join(", ") ??
+          schedule["speaker-3"]?.name ??
+          "",
         subheading: schedule["recurring-event"]?.["event-description"],
-        sources: [],
+        sources: schedule["speaker-3"] ? [schedule["speaker-3"]["speaker-photo"].url] : [],
         id: schedule._id,
       }
     case "Party":
@@ -157,19 +168,41 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         sources: [],
         id: schedule._id,
       }
+    case "Trivia Show":
     case "Lightning Talk":
     case "Talk":
-      return {
-        variant: "talk",
+      // eslint-disable-next-line no-case-declarations
+      const isTriviaShow = schedule.type === WEBFLOW_MAP.triviaShow.title
+      // eslint-disable-next-line no-case-declarations
+      const baseItems = {
         formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
         startTime: schedule["day-time"],
-        eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
-        subheading: schedule.talk?.name,
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
         id: schedule._id,
         talkUrl: schedule.talk?.["talk-url"],
+        variant: "talk",
+        eventTitle: schedule.type,
+        subheading: schedule.talk?.name,
+      } as ScheduleCardProps
+      if (isTriviaShow) {
+        baseItems.variant = WEBFLOW_MAP.triviaShow.variant
+        baseItems.eventTitle = WEBFLOW_MAP.triviaShow.title
+        baseItems.subheading = schedule["event-description"]
+        baseItems.sources = [
+          schedule["speaker-2-2"]?.["speaker-photo"].url,
+          schedule["speaker-3"]?.["speaker-photo"].url,
+          schedule["speaker-3-2"]?.["speaker-photo"].url,
+        ].filter(Boolean)
+        baseItems.heading = [
+          schedule["speaker-2-2"]?.name,
+          schedule["speaker-3"]?.name,
+          schedule["speaker-3-2"]?.name,
+        ]
+          .filter(Boolean)
+          .join(", ")
       }
+      return baseItems
     case "Speaker Panel":
       return {
         variant: "speaker-panel",
@@ -195,8 +228,11 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         startTime: schedule["day-time"],
         eventTitle: "workshop",
         heading: workshop?.name,
-        subheading: workshop?.["instructor-info"]?.name,
-        sources: [workshop?.["instructor-info"]?.["speaker-photo"]?.url],
+        subheading:
+          workshop?.["instructor-s-2"]?.map((instructor) => instructor.name).join(", ") ??
+          workshop?.["instructor-info"]?.name,
+        sources:
+          workshop?.["instructor-s-2"]?.map((instructor) => instructor["speaker-photo"].url) ?? [],
         level: workshop?.level,
         id: schedule._id,
       }

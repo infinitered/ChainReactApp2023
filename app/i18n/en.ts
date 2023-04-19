@@ -98,6 +98,7 @@ const en = {
   scheduleScreen: {
     talkRecordingPosted: "Talk recording posted",
     videoComingSoon: "Video coming soon",
+    workshopBanner: "Events for workshop ticket-holders",
   },
 }
 

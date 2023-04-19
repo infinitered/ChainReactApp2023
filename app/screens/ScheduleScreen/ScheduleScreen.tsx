@@ -7,6 +7,7 @@ import {
   Dimensions,
   findNodeHandle,
   RefreshControl,
+  TextStyle,
 } from "react-native"
 import { FlashList, ContentStyle } from "@shopify/flash-list"
 import Animated, {
@@ -24,11 +25,12 @@ import { formatDate } from "../../utils/formatDate"
 import { useAppState } from "../../hooks"
 import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
-import { ScrollToButton, useScrollToEvent } from "../../components"
+import { ScrollToButton, Text, useScrollToEvent } from "../../components"
 import { useCurrentDate } from "../../hooks/useCurrentDate"
 import { isConferencePassed } from "../../utils/isConferencePassed"
 import * as Device from "expo-device"
 import messaging from "@react-native-firebase/messaging"
+import { translate } from "../../i18n"
 
 export interface Schedule {
   date: string
@@ -204,43 +206,50 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
   const renderSchedule = React.useCallback(
     ({ index, item: schedule }: { index: number; item: Schedule }) => (
-      <View style={[$container, { width }]}>
-        <FlashList<ScheduleCardProps>
-          data={schedule.events}
-          estimatedItemSize={242}
-          estimatedListSize={{ height: schedules.length * 242, width }}
-          // To achieve better performance, specify the type based on the item
-          getItemType={(item) => item.variant}
-          keyExtractor={(item) => item.id}
-          onViewableItemsChanged={handleViewableEventIndexChanged}
-          ref={scheduleListRefs[schedule.date]}
-          scrollEventThrottle={16}
-          showsVerticalScrollIndicator={false}
-          viewabilityConfig={{ itemVisiblePercentThreshold: 1, minimumViewTime: 100 }}
-          contentContainerStyle={
-            scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
-          }
-          renderItem={({ item, index: itemIndex }) => (
-            <View style={$cardContainer}>
-              <ScheduleCard
-                {...item}
-                isPast={
-                  index < scheduleIndex ||
-                  (index === scheduleIndex && itemIndex < eventIndex) ||
-                  isConfOver
-                }
+      <>
+        {index === 0 && (
+          <View style={$workshopBanner}>
+            <Text style={$workshopBannerText}>{translate("scheduleScreen.workshopBanner")}</Text>
+          </View>
+        )}
+        <View style={[$container, { width }]}>
+          <FlashList<ScheduleCardProps>
+            data={schedule.events}
+            estimatedItemSize={242}
+            estimatedListSize={{ height: schedules.length * 242, width }}
+            // To achieve better performance, specify the type based on the item
+            getItemType={(item) => item.variant}
+            keyExtractor={(item) => item.id}
+            onViewableItemsChanged={handleViewableEventIndexChanged}
+            ref={scheduleListRefs[schedule.date]}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+            viewabilityConfig={{ itemVisiblePercentThreshold: 1, minimumViewTime: 100 }}
+            contentContainerStyle={
+              scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
+            }
+            renderItem={({ item, index: itemIndex }) => (
+              <View style={$cardContainer}>
+                <ScheduleCard
+                  {...item}
+                  isPast={
+                    index < scheduleIndex ||
+                    (index === scheduleIndex && itemIndex < eventIndex) ||
+                    isConfOver
+                  }
+                />
+              </View>
+            )}
+            refreshControl={
+              <RefreshControl
+                onRefresh={refetchScheduleScreenData}
+                refreshing={isRefetching}
+                tintColor={colors.palette.neutral100}
               />
-            </View>
-          )}
-          refreshControl={
-            <RefreshControl
-              onRefresh={refetchScheduleScreenData}
-              refreshing={isRefetching}
-              tintColor={colors.palette.neutral100}
-            />
-          }
-        />
-      </View>
+            }
+          />
+        </View>
+      </>
     ),
     [scheduleIndex, eventIndex, isConfOver, isFocused],
   )
@@ -302,4 +311,14 @@ const $listWithoutButton: ContentStyle = {
 
 const $cardContainer: ViewStyle = {
   paddingBottom: spacing.large,
+}
+
+const $workshopBanner: ViewStyle = {
+  backgroundColor: colors.palette.primary400,
+  paddingHorizontal: spacing.large,
+  paddingVertical: spacing.extraSmall,
+}
+
+const $workshopBannerText: TextStyle = {
+  color: colors.palette.neutral800,
 }
