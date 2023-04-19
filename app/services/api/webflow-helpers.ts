@@ -186,7 +186,6 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         subheading: schedule.talk?.name,
       } as ScheduleCardProps
       if (isTriviaShow) {
-        console.tron.log({ schedule })
         baseItems.variant = WEBFLOW_MAP.triviaShow.variant
         baseItems.eventTitle = WEBFLOW_MAP.triviaShow.title
         baseItems.subheading = schedule["event-description"]
