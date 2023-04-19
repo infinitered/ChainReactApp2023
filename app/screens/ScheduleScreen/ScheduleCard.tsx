@@ -49,7 +49,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
     <View style={$footerContainer}>
       <Text
         preset="cardFooterHeading"
-        style={isPast ? $pastFooterHeading : heading.length > 0 ? $footerHeading : {}}
+        style={isPast ? $pastFooterHeading : (heading ?? "").length > 0 ? $footerHeading : {}}
       >
         {heading}
       </Text>
