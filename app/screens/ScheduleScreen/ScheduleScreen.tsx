@@ -202,9 +202,11 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const renderSchedule = React.useCallback(
     ({ index, item: schedule }: { index: number; item: Schedule }) => (
       <>
-        <View style={$workshopBanner}>
-          <Text style={$workshopBannerText}>{translate("scheduleScreen.workshopBanner")}</Text>
-        </View>
+        {index === 0 && (
+          <View style={$workshopBanner}>
+            <Text style={$workshopBannerText}>{translate("scheduleScreen.workshopBanner")}</Text>
+          </View>
+        )}
         <View style={[$container, { width }]}>
           <FlashList<ScheduleCardProps>
             data={schedule.events}
