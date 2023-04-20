@@ -130,7 +130,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Sponsored":
       return {
         variant: "recurring",
-        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mmaaa"),
         startTime: schedule["day-time"],
         sources: [],
         eventTitle: schedule.name,
@@ -144,11 +144,11 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         variant: "recurring",
         formattedStartTime: formatDate(
           schedule["day-time"],
-          schedule["end-time"] && !isTheSameTime ? "h:mm" : "h:mm aaa",
+          schedule["end-time"] && !isTheSameTime ? "h:mm" : "h:mmaaa",
         ),
         startTime: schedule["day-time"],
         formattedEndTime:
-          schedule["end-time"] && !isTheSameTime && formatDate(schedule["end-time"], "h:mm aaa"),
+          schedule["end-time"] && !isTheSameTime && formatDate(schedule["end-time"], "h:mmaaa"),
         eventTitle: schedule["recurring-event"]?.name ?? schedule["event-title"] ?? schedule.name,
         heading:
           schedule["recurring-event"]?.["speaker-s"]?.map((s) => s.name).join(", ") ??
@@ -161,7 +161,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Party":
       return {
         variant: "party",
-        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mmaaa"),
         startTime: schedule["day-time"],
         eventTitle: "party",
         heading: schedule.name,
@@ -176,7 +176,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
       const isTriviaShow = schedule.type === WEBFLOW_MAP.triviaShow.title
       // eslint-disable-next-line no-case-declarations
       const baseItems = {
-        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mmaaa"),
         startTime: schedule["day-time"],
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
@@ -207,7 +207,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
     case "Speaker Panel":
       return {
         variant: "speaker-panel",
-        formattedStartTime: formatDate(schedule["day-time"], "h:mm aaa"),
+        formattedStartTime: formatDate(schedule["day-time"], "h:mmaaa"),
         startTime: schedule["day-time"],
         eventTitle: schedule.type,
         heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
@@ -223,9 +223,9 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         variant: "workshop",
         formattedStartTime: formatDate(
           schedule["day-time"],
-          schedule["end-time"] ? "h:mm" : "h:mm aaa",
+          schedule["end-time"] ? "h:mm" : "h:mmaaa",
         ),
-        formattedEndTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mm aaa"),
+        formattedEndTime: schedule["end-time"] && formatDate(schedule["end-time"], "h:mmaaa"),
         startTime: schedule["day-time"],
         eventTitle: "workshop",
         heading: workshop?.name,

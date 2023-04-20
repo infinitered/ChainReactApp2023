@@ -27,7 +27,7 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
   if (!schedule) return null
 
   const title = schedule.workshop?.name
-  const subtitle = formatDate(schedule["day-time"], "MMMM dd, h:mm aaa")
+  const subtitle = `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`
   const description = schedule.workshop?.abstract
   const instructors = schedule.workshop?.["instructor-s-2"]
   const assistants = schedule.workshop?.assistants
