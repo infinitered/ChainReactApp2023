@@ -47,8 +47,12 @@ interface SocialButtonsProps {
 
 export const SocialButtons = ({ socialButtons }: SocialButtonsProps) => (
   <>
-    {socialButtons.map((socialButtonProps) => (
-      <SocialButton {...socialButtonProps} key={socialButtonProps.url} style={$socialButtons} />
+    {socialButtons.map((socialButtonProps, index) => (
+      <SocialButton
+        {...socialButtonProps}
+        key={`${socialButtonProps.icon}-${index}`}
+        style={$socialButtons}
+      />
     ))}
   </>
 )
