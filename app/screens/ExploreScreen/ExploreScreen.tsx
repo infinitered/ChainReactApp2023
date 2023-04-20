@@ -1,6 +1,7 @@
 import React, { FC } from "react"
 import {
   ActivityIndicator,
+  Linking,
   SectionList,
   SectionListData,
   TextStyle,
@@ -18,7 +19,6 @@ import { RawRecommendations } from "../../services/api/webflow-api.types"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 import { groupBy } from "../../utils/groupBy"
 import { customSortObjectKeys } from "../../utils/customSort"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = typeof recommendationTypes[number]
@@ -108,8 +108,8 @@ export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
           ListFooterComponent={
             <ButtonLink
               openLink={() =>
-                openLinkInBrowser(
-                  "https://www.google.com/maps/d/u/0/viewer?mid=1QWdKaK186ufwRQR2m_oGSOIiRVMRjSs&hl=en_US&ll=45.52275389785826%2C-122.67765992521456&z=16",
+                Linking.openURL(
+                  "https://www.google.com/maps/d/viewer?mid=1QWdKaK186ufwRQR2m_oGSOIiRVMRjSs&hl=en_US&ll=45.52275389785826%2C-122.67765992521456&z=16",
                 )
               }
               style={$buttonLink}

@@ -1,8 +1,9 @@
 import React, { FC } from "react"
-import { GestureResponderEvent, Linking, ViewStyle } from "react-native"
+import { GestureResponderEvent, ViewStyle } from "react-native"
 import { Button } from "./Button"
 import { AutoImage } from "./AutoImage"
 import { spacing } from "../theme"
+import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 
 type Props = {
   children: string
@@ -17,7 +18,7 @@ export const ButtonLink: FC<Props> = ({ children, style, preset = "link", ...pro
       props.openLink(e)
       return
     }
-    Linking.openURL(props.openLink)
+    openLinkInBrowser(props.openLink)
   }
 
   return (

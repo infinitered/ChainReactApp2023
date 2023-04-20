@@ -3,7 +3,7 @@ import { Linking, Platform } from "react-native"
 export const openMap = async (address: string) => {
   const destination = encodeURIComponent(address)
   const provider = Platform.OS === "ios" ? "apple" : "google"
-  const link = `http://maps.${provider}.com/?daddr=${destination}`
+  const link = `https://maps.${provider}.com/?daddr=${destination}`
 
   try {
     // TODO come back here for canOpenURL and properly implement AndroidManifest.xml
