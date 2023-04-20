@@ -20,6 +20,7 @@ import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { SocialButton } from "../../components/SocialButton"
+import { translate } from "../../i18n"
 
 export type Variants = "workshop" | "talk"
 
@@ -78,15 +79,18 @@ const SCREEN_WIDTH = Dimensions.get("screen").width
 const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
   const talk = schedule.talk
 
+  const stringOrPlaceholder = (str?: string) =>
+    str && str.length > 1 ? str : translate("talkDetailsScreen.comingSoon")
+
   return {
     title: talk?.name,
     subtitle: formatDate(schedule["day-time"], "MMMM dd, h:mm aaa"),
     imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
     fullName: talk?.["speaker-s"][0]?.name,
     company: talk?.["speaker-s"][0]?.company,
-    description: talk?.description,
+    description: stringOrPlaceholder(talk?.description),
     firstName: talk?.["speaker-s"][0]["speaker-first-name"],
-    bio: talk?.["speaker-s"][0]["speaker-bio"],
+    bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"]),
     talkUrl: talk?.["talk-url"],
     eventTime: schedule["day-time"],
     socialButtons: [
