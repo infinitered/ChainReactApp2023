@@ -8,9 +8,10 @@ type Props = {
   children: string
   style?: ViewStyle
   openLink: string | ((event: GestureResponderEvent) => void)
+  preset?: "link" | "reversed" // "default" is not supported
 }
 
-export const ButtonLink: FC<Props> = ({ children, style, ...props }) => {
+export const ButtonLink: FC<Props> = ({ children, style, preset = "link", ...props }) => {
   const openLink = (e: GestureResponderEvent) => {
     if (typeof props.openLink === "function") {
       props.openLink(e)
@@ -21,7 +22,7 @@ export const ButtonLink: FC<Props> = ({ children, style, ...props }) => {
 
   return (
     <Button
-      preset="link"
+      preset={preset}
       onPress={openLink}
       accessibilityRole="link"
       style={style}

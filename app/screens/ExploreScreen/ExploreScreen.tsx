@@ -113,6 +113,7 @@ export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
                 )
               }
               style={$buttonLink}
+              preset="reversed"
             >
               {translate("exploreScreen.wantToSeeMore")}
             </ButtonLink>
