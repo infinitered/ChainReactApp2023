@@ -85,9 +85,9 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
     imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
     fullName: talk?.["speaker-s"][0]?.name,
     company: talk?.["speaker-s"][0]?.company,
-    description: stringOrPlaceholder(talk?.description, "talkDetailsScreen.comingSoon"),
+    description: stringOrPlaceholder(talk?.description),
     firstName: talk?.["speaker-s"][0]["speaker-first-name"],
-    bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"], "talkDetailsScreen.comingSoon"),
+    bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"]),
     talkUrl: talk?.["talk-url"],
     eventTime: schedule["day-time"],
     socialButtons: [

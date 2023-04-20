@@ -90,7 +90,6 @@ const en = {
   talkDetailsScreen: {
     watchTalk: "Watch talk",
     assistingTheWorkshop: "Assisting the workshop",
-    comingSoon: "Coming soon",
   },
   workshopDetailsScreen: {
     instructor: {
