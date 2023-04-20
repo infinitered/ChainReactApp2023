@@ -40,6 +40,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: "#081828",
     },
     googleServicesFile: `./google-services.json`,
+    intentFilters: [
+      {
+        action: "VIEW",
+        data: { scheme: "https" },
+      },
+      {
+        action: "VIEW",
+        data: { scheme: "google.navigation" },
+      },
+      {
+        action: "VIEW",
+        data: { scheme: "geo" },
+      },
+    ],
   },
   ios: {
     icon: "./assets/images/app-icon-ios.png",
