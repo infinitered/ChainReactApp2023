@@ -14,9 +14,9 @@ import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { useRecommendations } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
-import { groupBy } from "../../services/api/webflow-helpers"
 import { RawRecommendations } from "../../services/api/webflow-api.types"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
+import { groupBy } from "../../utils/groupBy"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = typeof recommendationTypes[number]

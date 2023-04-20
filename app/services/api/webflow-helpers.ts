@@ -1,5 +1,6 @@
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
 import { formatDate, sortByTime } from "../../utils/formatDate"
+import { groupBy } from "../../utils/groupBy"
 import type {
   RawScheduledEvent,
   RawSpeaker,
@@ -247,15 +248,3 @@ export const convertScheduleToScheduleCard = (
   const daySchedule: ScheduledEvent[] = groupBy("day")(scheduleData ?? [])?.[day] ?? []
   return daySchedule.sort(sortByTime).map(convertScheduleToCardProps).filter(Boolean)
 }
-
-// [NOTE] util function that might be needed in the future
-export const groupBy =
-  (key: string) =>
-  <T>(array: T[]) =>
-    array.reduce(
-      (objectsByKeyValue, obj) => ({
-        ...objectsByKeyValue,
-        [obj[key]]: (objectsByKeyValue[obj[key]] || []).concat(obj),
-      }),
-      {},
-    )

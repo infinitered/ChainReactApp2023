@@ -13,9 +13,9 @@ import { useAppNavigation, useHeader } from "../../hooks"
 import { useSponsors } from "../../services/api"
 import { RawSponsor } from "../../services/api/webflow-api.types"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
-import { groupBy } from "../../services/api/webflow-helpers"
 import { colors, spacing } from "../../theme"
 import { SponsorCard } from "./SponsorCard"
+import { groupBy } from "../../utils/groupBy"
 
 const sponsorTiers = Object.values(WEBFLOW_MAP.sponsorTier)
 type Tiers = typeof sponsorTiers[number]
