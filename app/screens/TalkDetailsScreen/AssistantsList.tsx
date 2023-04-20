@@ -1,10 +1,10 @@
 import React from "react"
 import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { AutoImage, IconButton, Text } from "../../components"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
+import { AutoImage, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
 import { Speaker } from "../../services/api/webflow-api.types"
+import { SocialButton } from "../../components/SocialButton"
 
 export interface AssistantsListProp {
   assistants: Speaker[]
@@ -32,9 +32,23 @@ export function AssistantsList(props: AssistantsListProp) {
               <Text preset="companionHeading" text={assistant.name} />
               <Text preset="label" style={$assistantCompany} text={assistant.company} />
               <View style={$assistantLinks}>
-                <IconButton
-                  icon={assistant.twitter ? "twitter" : "link"}
-                  onPress={() => openLinkInBrowser(assistant.twitter || assistant.externalURL)}
+                <SocialButton
+                  icon={"twitter"}
+                  style={$socialButton}
+                  url={assistant.twitter}
+                  size={24}
+                />
+                <SocialButton
+                  icon={"github"}
+                  style={$socialButton}
+                  url={assistant.github}
+                  size={24}
+                />
+                <SocialButton
+                  icon={"link"}
+                  style={$socialButton}
+                  url={assistant.externalURL}
+                  size={24}
                 />
               </View>
             </View>
@@ -85,4 +99,8 @@ const $assistantCompany: TextStyle = {
 const $assistantLinks: ViewStyle = {
   flexDirection: "row",
   marginTop: spacing.large,
+}
+
+const $socialButton: ViewStyle = {
+  marginEnd: spacing.medium,
 }
