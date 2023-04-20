@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo } from "react"
+import React, { Suspense, useEffect, useLayoutEffect, useMemo } from "react"
 import {
   AccessibilityInfo,
   ActivityIndicator,
@@ -64,13 +64,8 @@ const requestUserPermission = async () => {
   }
 }
 
-export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
-  const {
-    isLoading,
-    isRefetching,
-    schedules,
-    refetch: refetchScheduleScreenData,
-  } = useScheduleScreenData()
+const Layout: React.FC<TabScreenProps<"Schedule">> = () => {
+  const { schedules, refetch: refetchScheduleScreenData } = useScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
   useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
@@ -243,7 +238,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
             refreshControl={
               <RefreshControl
                 onRefresh={refetchScheduleScreenData}
-                refreshing={isRefetching}
+                refreshing={false}
                 tintColor={colors.palette.neutral100}
               />
             }
@@ -258,32 +253,35 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
   return (
     <>
-      <View style={$root}>
-        {isLoading && (
-          <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
-        )}
-        {!isLoading && schedules && (
-          <Animated.FlatList
-            ref={hScrollRef}
-            data={schedules}
-            keyExtractor={(item) => item.date}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            onScroll={scrollHandler}
-            onViewableItemsChanged={handleViewableScheduleIndexChanged}
-            bounces={false}
-            scrollEventThrottle={16}
-            decelerationRate="fast"
-            renderItem={renderSchedule}
-          />
-        )}
-      </View>
+      <Animated.FlatList
+        ref={hScrollRef}
+        data={schedules}
+        keyExtractor={(item) => item.date}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        pagingEnabled
+        onScroll={scrollHandler}
+        onViewableItemsChanged={handleViewableScheduleIndexChanged}
+        bounces={false}
+        scrollEventThrottle={16}
+        decelerationRate="fast"
+        renderItem={renderSchedule}
+      />
       <ScheduleDayPicker {...{ scrollX, onItemPress, schedules, selectedSchedule }} />
       <ScrollToButton navigateToCurrentEvent={navigateToCurrentEvent} {...scrollToButtonProps} />
     </>
   )
 }
+
+export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = (props) => (
+  <View style={$root}>
+    <Suspense
+      fallback={<ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />}
+    >
+      <Layout {...props} />
+    </Suspense>
+  </View>
+)
 
 const $root: ViewStyle = {
   flex: 1,

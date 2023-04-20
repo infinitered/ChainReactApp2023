@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, Suspense } from "react"
 import {
   ActivityIndicator,
   ImageSourcePropType,
@@ -38,10 +38,9 @@ const getVenueDate = (venueTag: string): string => {
 }
 
 const useVenuesSections = (): {
-  isLoading: boolean
   sections: Array<SectionListData<Array<VenuesSection>>>
 } => {
-  const { data: venues = [], isLoading: venuesLoading } = useVenues()
+  const { data: venues = [] } = useVenues()
   const sortedVenues = customSort(venues, "slug", [
     "the-armory",
     "after-party-expensify-office",
@@ -49,7 +48,6 @@ const useVenuesSections = (): {
   ])
 
   return {
-    isLoading: venuesLoading,
     sections: [
       {
         data: [
@@ -81,30 +79,35 @@ const VenueCard = ({ body, cta, imageSource, subtitle, title }: VenuesSection) =
   />
 )
 
+const Layout = () => {
+  const { sections } = useVenuesSections()
+
+  return (
+    <SectionList
+      showsVerticalScrollIndicator={false}
+      stickySectionHeadersEnabled={false}
+      sections={sections}
+      renderItem={({ item }) => (
+        <>
+          {item.map((venue, index) => (
+            <VenueCard key={index} {...venue} />
+          ))}
+        </>
+      )}
+    />
+  )
+}
+
 export const VenuesScreen: FC<TabScreenProps<"Venues">> = () => {
   useHeader({ title: translate("venuesScreen.title") })
 
-  const { sections, isLoading } = useVenuesSections()
-
   return (
     <Screen style={$root} preset="fixed">
-      {isLoading && (
-        <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
-      )}
-      {!isLoading && sections.length > 0 && (
-        <SectionList
-          showsVerticalScrollIndicator={false}
-          stickySectionHeadersEnabled={false}
-          sections={sections}
-          renderItem={({ item }) => (
-            <>
-              {item.map((venue, index) => (
-                <VenueCard key={index} {...venue} />
-              ))}
-            </>
-          )}
-        />
-      )}
+      <Suspense
+        fallback={<ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />}
+      >
+        <Layout />
+      </Suspense>
     </Screen>
   )
 }
