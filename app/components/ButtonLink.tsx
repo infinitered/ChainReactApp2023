@@ -1,27 +1,29 @@
 import React, { FC } from "react"
-import { GestureResponderEvent, Linking, ViewStyle } from "react-native"
+import { GestureResponderEvent, ViewStyle } from "react-native"
 import { Button } from "./Button"
 import { AutoImage } from "./AutoImage"
 import { spacing } from "../theme"
+import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 
 type Props = {
   children: string
   style?: ViewStyle
   openLink: string | ((event: GestureResponderEvent) => void)
+  preset?: "link" | "reversed" // "default" is not supported
 }
 
-export const ButtonLink: FC<Props> = ({ children, style, ...props }) => {
+export const ButtonLink: FC<Props> = ({ children, style, preset = "link", ...props }) => {
   const openLink = (e: GestureResponderEvent) => {
     if (typeof props.openLink === "function") {
       props.openLink(e)
       return
     }
-    Linking.openURL(props.openLink)
+    openLinkInBrowser(props.openLink)
   }
 
   return (
     <Button
-      preset="link"
+      preset={preset}
       onPress={openLink}
       accessibilityRole="link"
       style={style}

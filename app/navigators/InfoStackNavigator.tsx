@@ -4,12 +4,14 @@ import { InfoScreen } from "../screens"
 import { CodeOfConductScreen } from "../screens/InfoScreen/CodeOfConductScreen"
 import { ContactUsScreen } from "../screens/InfoScreen/ContactUsScreen"
 import { OurSponsorsScreen } from "../screens/InfoScreen/OurSponsorsScreen"
+import { CreditsScreen } from "../screens/InfoScreen/CreditsScreen"
 
 export type InfoStackParamList = {
   Info: undefined
   CodeOfConduct: undefined
   ContactUs: undefined
   OurSponsors: undefined
+  Credits: undefined
 }
 
 const Stack = createNativeStackNavigator<InfoStackParamList>()
@@ -21,6 +23,7 @@ export const InfoStackNavigator = () => {
       <Stack.Screen name="CodeOfConduct" component={CodeOfConductScreen} />
       <Stack.Screen name="ContactUs" component={ContactUsScreen} />
       <Stack.Screen name="OurSponsors" component={OurSponsorsScreen} />
+      <Stack.Screen name="Credits" component={CreditsScreen} />
     </Stack.Navigator>
   )
 }

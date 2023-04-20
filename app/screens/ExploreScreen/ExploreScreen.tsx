@@ -1,22 +1,24 @@
 import React, { FC } from "react"
 import {
   ActivityIndicator,
+  Linking,
   SectionList,
   SectionListData,
   TextStyle,
   View,
   ViewStyle,
 } from "react-native"
-import { Carousel, Screen, Text } from "../../components"
+import { ButtonLink, Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { translate } from "../../i18n"
 import { useRecommendations } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
-import { groupBy } from "../../services/api/webflow-helpers"
 import { RawRecommendations } from "../../services/api/webflow-api.types"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
+import { groupBy } from "../../utils/groupBy"
+import { customSortObjectKeys } from "../../utils/customSort"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = typeof recommendationTypes[number]
@@ -61,10 +63,11 @@ const useRecommendationSections = (): {
     }),
     initialRecs,
   )
+  const sortedRecs = customSortObjectKeys(recs, ["Food/Drink", "Unique/to/Portland"])
 
   return {
     isLoading,
-    sections: Object.entries(recs).map(
+    sections: Object.entries(sortedRecs).map(
       ([key, value]: [RecommendationType, RawRecommendations[]]) => ({
         title: sectionTitle(key),
         renderItem: RenderItem,
@@ -102,6 +105,19 @@ export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
       )}
       {!isLoading && sections.length > 0 && (
         <SectionList
+          ListFooterComponent={
+            <ButtonLink
+              openLink={() =>
+                Linking.openURL(
+                  "https://www.google.com/maps/d/viewer?mid=1QWdKaK186ufwRQR2m_oGSOIiRVMRjSs&hl=en_US&ll=45.52275389785826%2C-122.67765992521456&z=16",
+                )
+              }
+              style={$buttonLink}
+              preset="reversed"
+            >
+              {translate("exploreScreen.wantToSeeMore")}
+            </ButtonLink>
+          }
           stickySectionHeadersEnabled={false}
           sections={sections}
           renderSectionHeader={({ section: { title, data } }) =>
@@ -128,11 +144,15 @@ const $activityIndicator: ViewStyle = {
 }
 
 const $heading: TextStyle = {
-  marginTop: spacing.large,
   marginBottom: spacing.medium,
   paddingHorizontal: spacing.large,
 }
 
 const $carouselWrapper: ViewStyle = {
   marginBottom: spacing.large,
+}
+
+const $buttonLink: ViewStyle = {
+  marginBottom: spacing.large,
+  marginHorizontal: spacing.large,
 }
