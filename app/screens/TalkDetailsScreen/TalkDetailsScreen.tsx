@@ -9,6 +9,7 @@ import {
   Screen,
   MediaButton,
   IconProps,
+  Carousel,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
@@ -21,6 +22,7 @@ import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
+import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 
 export type Variants = "workshop" | "talk"
 
@@ -69,6 +71,14 @@ export interface TalkDetailsProps {
    * The social buttons of the speaker
    */
   socialButtons: Array<{ url: string; icon: IconProps["icon"] }>
+  /**
+   * If we have multiple speakers, we show them in a carousel
+   */
+  isMultipleSpeakers: boolean
+  /**
+   * The carousel data
+   */
+  carouselData?: Array<DynamicCarouselItem>
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
@@ -95,6 +105,19 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       { url: talk?.["speaker-s"][0]?.github, icon: "github" },
       { url: talk?.["speaker-s"][0]?.externalURL, icon: "link" },
     ],
+    isMultipleSpeakers: talk?.["speaker-s"].length > 1,
+    carouselData: talk?.["speaker-s"].map((speaker) => ({
+      image: { uri: speaker?.["speaker-photo"].url },
+      imageStyle: { height: 320 },
+      subtitle: speaker?.name,
+      label: speaker?.company,
+      body: stringOrPlaceholder(speaker?.["speaker-bio"]),
+      socialButtons: [
+        { url: speaker?.twitter, icon: "twitter" },
+        { url: speaker?.github, icon: "github" },
+        { url: speaker?.externalURL, icon: "link" },
+      ],
+    })),
   }
 }
 
@@ -124,6 +147,8 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     talkUrl,
     eventTime,
     socialButtons,
+    isMultipleSpeakers,
+    carouselData,
   } = talkDetailsProps(schedule)
 
   const isEventPassed = !isFuture(parseISO(eventTime))
@@ -157,30 +182,42 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
 
-            <View style={$containerSpacing}>
-              <Image source={talkCurve} style={$talkCurve} />
-              <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
-                <Image source={{ uri: imageUrl }} style={$speakerImage} />
-              </BoxShadow>
-              <Image source={talkBlob} style={$talkBlob} />
+            {!isMultipleSpeakers && (
+              <View style={$containerSpacing}>
+                <Image source={talkCurve} style={$talkCurve} />
+                <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
+                  <Image source={{ uri: imageUrl }} style={$speakerImage} />
+                </BoxShadow>
+                <Image source={talkBlob} style={$talkBlob} />
 
-              <Text preset="bold" style={$nameText} text={fullName} />
-              <Text style={$companyNameText} text={company} />
-            </View>
+                <Text preset="bold" style={$nameText} text={fullName} />
+                <Text style={$companyNameText} text={company} />
+              </View>
+            )}
 
             <View style={$detailsContainer}>
               <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
               <Text style={$bodyText} text={description} />
             </View>
 
-            <View style={$containerSpacing}>
-              <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
-              <Text style={$bodyText} text={bio} />
-            </View>
+            {!isMultipleSpeakers && (
+              <View style={$containerSpacing}>
+                <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
+                <Text style={$bodyText} text={bio} />
+              </View>
+            )}
 
-            <View style={$linksContainer}>
-              <SocialButtons socialButtons={socialButtons} />
-            </View>
+            {!isMultipleSpeakers && (
+              <View style={$linksContainer}>
+                <SocialButtons socialButtons={socialButtons} />
+              </View>
+            )}
+
+            {isMultipleSpeakers && (
+              <View style={$carouselContainer}>
+                <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
+              </View>
+            )}
           </View>
         </Animated.ScrollView>
       </Screen>
@@ -275,4 +312,8 @@ const $subtitle: TextStyle = {
 
 const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
+}
+
+const $carouselContainer: ViewStyle = {
+  marginHorizontal: -spacing.large,
 }
