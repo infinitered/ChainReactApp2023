@@ -152,8 +152,6 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     carouselData,
   } = talkDetailsProps(schedule)
 
-  console.tron.log({ schedule })
-
   const isEventPassed = !isFuture(parseISO(eventTime))
 
   return (
