@@ -33,6 +33,10 @@ const links: Links = [
     title: translate("infoScreen.ourSponsorsTitle"),
     link: "OurSponsors",
   },
+  {
+    title: translate("infoScreen.creditsTitle"),
+    link: "Credits",
+  },
 ]
 
 export const InfoScreen: React.FunctionComponent<TabScreenProps<"InfoStack">> = () => {
