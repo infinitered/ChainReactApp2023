@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Carousel, Screen, Text } from "../../components"
+import { ButtonLink, Carousel, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
@@ -18,6 +18,7 @@ import { RawRecommendations } from "../../services/api/webflow-api.types"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 import { groupBy } from "../../utils/groupBy"
 import { customSortObjectKeys } from "../../utils/customSort"
+import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = typeof recommendationTypes[number]
@@ -104,6 +105,18 @@ export const ExploreScreen: FC<TabScreenProps<"Explore">> = () => {
       )}
       {!isLoading && sections.length > 0 && (
         <SectionList
+          ListFooterComponent={
+            <ButtonLink
+              openLink={() =>
+                openLinkInBrowser(
+                  "https://www.google.com/maps/d/u/0/viewer?mid=1QWdKaK186ufwRQR2m_oGSOIiRVMRjSs&hl=en_US&ll=45.52275389785826%2C-122.67765992521456&z=16",
+                )
+              }
+              style={$buttonLink}
+            >
+              {translate("exploreScreen.wantToSeeMore")}
+            </ButtonLink>
+          }
           stickySectionHeadersEnabled={false}
           sections={sections}
           renderSectionHeader={({ section: { title, data } }) =>
@@ -136,4 +149,9 @@ const $heading: TextStyle = {
 
 const $carouselWrapper: ViewStyle = {
   marginBottom: spacing.large,
+}
+
+const $buttonLink: ViewStyle = {
+  marginBottom: spacing.large,
+  marginHorizontal: spacing.large,
 }
