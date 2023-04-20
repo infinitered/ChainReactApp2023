@@ -49,3 +49,47 @@ export const customSort = <T extends SortableObject>(
     }
   })
 }
+
+/**
+ * Sorts an object's keys by a given order
+ * 
+ * @param obj—object to sort
+ * @param order—array of keys to sort by
+ * 
+ * @example
+ * ```tsx
+ * const recommendations = customSortObjectKeys(
+ *  {
+ *    "Food/Drink": [],
+ *    "Unique/to/Portland": [],
+ *    "SightSee": []
+ *  },
+ *  ["SightSee", "Food/Drink", "Unique/to/Portland"]
+ * )
+ * ```
+ * output:
+ * ```tsx
+ * recommendations = {
+ *  "SightSee": [],
+ *  "Food/Drink": [],
+ *  "Unique/to/Portland": []
+ * }
+  ```
+ */
+export const customSortObjectKeys = <T extends Record<string, any>>(
+  obj: T,
+  order: Array<keyof T>,
+): T => {
+  const sortedObj = {} as T
+  for (const key of order) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      sortedObj[key] = obj[key]
+    }
+  }
+  for (const key in obj) {
+    if (!Object.prototype.hasOwnProperty.call(sortedObj, key)) {
+      sortedObj[key] = obj[key]
+    }
+  }
+  return sortedObj
+}

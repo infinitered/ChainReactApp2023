@@ -17,6 +17,7 @@ import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { RawRecommendations } from "../../services/api/webflow-api.types"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 import { groupBy } from "../../utils/groupBy"
+import { customSortObjectKeys } from "../../utils/customSort"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = typeof recommendationTypes[number]
@@ -61,10 +62,11 @@ const useRecommendationSections = (): {
     }),
     initialRecs,
   )
+  const sortedRecs = customSortObjectKeys(recs, ["Food/Drink", "Unique/to/Portland"])
 
   return {
     isLoading,
-    sections: Object.entries(recs).map(
+    sections: Object.entries(sortedRecs).map(
       ([key, value]: [RecommendationType, RawRecommendations[]]) => ({
         title: sectionTitle(key),
         renderItem: RenderItem,
@@ -128,7 +130,6 @@ const $activityIndicator: ViewStyle = {
 }
 
 const $heading: TextStyle = {
-  marginTop: spacing.large,
   marginBottom: spacing.medium,
   paddingHorizontal: spacing.large,
 }
