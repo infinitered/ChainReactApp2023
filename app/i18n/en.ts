@@ -3,6 +3,7 @@ const en = {
     ok: "OK!",
     cancel: "Cancel",
     back: "Back",
+    comingSoon: "Coming soon",
   },
   welcomeScreen: {
     heading: "Welcome to Chain React!",

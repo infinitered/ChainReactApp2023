@@ -1,10 +1,10 @@
 import React from "react"
 import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { AutoImage, IconButton, Text } from "../../components"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
+import { AutoImage, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
 import { Speaker } from "../../services/api/webflow-api.types"
+import { SocialButtons } from "../../components/SocialButton"
 
 export interface AssistantsListProp {
   assistants: Speaker[]
@@ -32,9 +32,12 @@ export function AssistantsList(props: AssistantsListProp) {
               <Text preset="companionHeading" text={assistant.name} />
               <Text preset="label" style={$assistantCompany} text={assistant.company} />
               <View style={$assistantLinks}>
-                <IconButton
-                  icon={assistant.twitter ? "twitter" : "link"}
-                  onPress={() => openLinkInBrowser(assistant.twitter || assistant.externalURL)}
+                <SocialButtons
+                  socialButtons={[
+                    { icon: "twitter", url: assistant.twitter },
+                    { icon: "github", url: assistant.github },
+                    { icon: "link", url: assistant.externalURL },
+                  ]}
                 />
               </View>
             </View>

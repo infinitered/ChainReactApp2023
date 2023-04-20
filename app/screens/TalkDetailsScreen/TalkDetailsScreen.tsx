@@ -4,14 +4,13 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
 import {
   Text,
-  IconButton,
   MIN_HEADER_HEIGHT,
   BoxShadow,
   Screen,
   MediaButton,
+  IconProps,
 } from "../../components"
 import { colors, spacing } from "../../theme"
-import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -20,6 +19,8 @@ import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
+import { SocialButtons } from "../../components/SocialButton"
+import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 
 export type Variants = "workshop" | "talk"
 
@@ -64,6 +65,10 @@ export interface TalkDetailsProps {
    * The time of the event
    */
   eventTime: string
+  /**
+   * The social buttons of the speaker
+   */
+  socialButtons: Array<{ url: string; icon: IconProps["icon"] }>
 }
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
@@ -80,18 +85,22 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
     imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
     fullName: talk?.["speaker-s"][0]?.name,
     company: talk?.["speaker-s"][0]?.company,
-    description: talk?.description,
+    description: stringOrPlaceholder(talk?.description),
     firstName: talk?.["speaker-s"][0]["speaker-first-name"],
-    bio: talk?.["speaker-s"][0]["speaker-bio"],
+    bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"]),
     talkUrl: talk?.["talk-url"],
     eventTime: schedule["day-time"],
+    socialButtons: [
+      { url: talk?.["speaker-s"][0]?.twitter, icon: "twitter" },
+      { url: talk?.["speaker-s"][0]?.github, icon: "github" },
+      { url: talk?.["speaker-s"][0]?.externalURL, icon: "link" },
+    ],
   }
 }
 
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = ({
   route: { params },
 }) => {
-  const onPress = (url) => openLinkInBrowser(url)
   const [headingHeight, setHeadingHeight] = React.useState(0)
 
   const { isScrolling, scrollHandlers } = useFloatingActionEvents()
@@ -114,6 +123,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
     title,
     talkUrl,
     eventTime,
+    socialButtons,
   } = talkDetailsProps(schedule)
 
   const isEventPassed = !isFuture(parseISO(eventTime))
@@ -169,9 +179,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             </View>
 
             <View style={$linksContainer}>
-              <IconButton icon="twitter" onPress={() => onPress("https://cr.infinite.red")} />
-              <IconButton icon="github" onPress={() => onPress("https://cr.infinite.red")} />
-              <IconButton icon="link" onPress={() => onPress("https://cr.infinite.red")} />
+              <SocialButtons socialButtons={socialButtons} />
             </View>
           </View>
         </Animated.ScrollView>
@@ -200,7 +208,6 @@ const $containerSpacing: ViewStyle = {
 
 const $linksContainer: ViewStyle = {
   flexDirection: "row",
-  justifyContent: "space-between",
   width: "50%",
 }
 
