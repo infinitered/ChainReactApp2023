@@ -86,7 +86,7 @@ const en = {
     silverSponsor: "Silver Sponsors",
     bronzeSponsor: "Bronze Sponsors",
     creditsTitle: "Credits",
-    creditsHeading: "Thank you to everyone who worked on the app this year!",
+    creditsHeading: "Special Thanks To",
   },
   talkDetailsScreen: {
     watchTalk: "Watch talk",
