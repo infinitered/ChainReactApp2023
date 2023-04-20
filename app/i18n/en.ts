@@ -43,6 +43,11 @@ const en = {
     venuesTab: "Venues",
     exploreTab: "Explore",
     infoTab: "Info",
+    chatTab: "AI Chat",
+  },
+  chatScreen: {
+    title: "AI Chat (experimental)",
+    reset: "Clear",
   },
   venuesScreen: {
     title: "Venues",
