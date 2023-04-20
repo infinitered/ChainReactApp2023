@@ -33,6 +33,7 @@ export interface DynamicCarouselItem {
   rightButton?: ButtonData
   socialButtons?: SocialButtonData[]
   subtitle: string
+  bodyLabel?: string
 }
 
 interface DynamicCarouselProps {

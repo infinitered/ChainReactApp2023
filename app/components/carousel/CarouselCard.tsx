@@ -46,7 +46,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   totalCardCount,
   variant,
 }) => {
-  const { label, subtitle, meta, body, image } = item as DynamicCarouselItem
+  const { label, subtitle, meta, body, image, bodyLabel } = item as DynamicCarouselItem
   const source = subtitle ? image : item
   const isMultipleCards = totalCardCount > 1 && index === totalCardCount
 
@@ -105,6 +105,21 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           {!!label && (
             <AnimatedText
               text={label}
+              style={[
+                $mb,
+                $animatedSlideData,
+                {
+                  fontSize: $label.fontSize,
+                  fontWeight: $label.fontWeight,
+                  lineHeight: $label.lineHeight,
+                  color: $label.color,
+                },
+              ]}
+            />
+          )}
+          {!!bodyLabel && (
+            <AnimatedText
+              text={bodyLabel}
               style={[
                 $mb,
                 $animatedSlideData,

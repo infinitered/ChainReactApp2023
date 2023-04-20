@@ -88,13 +88,21 @@ export const cleanedTalks = ({
   speakers?: RawSpeaker[]
   talks?: RawTalk[]
 }): Talk[] => {
-  return talks?.map((talk) => ({
-    ...talk,
-    "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
-    "speaker-s": talk["speaker-s"].map((speakerId) =>
-      cleanedSpeaker(speakers?.find(({ _id }) => _id === speakerId)),
-    ),
-  }))
+  return talks
+    ?.filter((talk) => !talk._archived && !talk._draft)
+    .map((talk) => ({
+      ...talk,
+      "talk-type": WEBFLOW_MAP.talkType[talk["talk-type"]],
+      "speaker-s": talk["speaker-s"]
+        .map((speakerId) =>
+          cleanedSpeaker(
+            speakers
+              ?.filter((speaker) => !speaker._archived && !speaker._draft)
+              .find(({ _id }) => _id === speakerId),
+          ),
+        )
+        .filter(Boolean),
+    }))
 }
 
 /*
