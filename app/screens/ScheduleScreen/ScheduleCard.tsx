@@ -23,8 +23,7 @@ interface FooterProps {
 const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderProps) => (
   <View style={$headerContainer}>
     <Text style={isPast ? $pastTimeText : $timeText}>
-      {formattedStartTime}
-      {!!formattedEndTime && ` - ${formattedEndTime}`}
+      {`${formattedStartTime}${formattedEndTime ? ` - ${formattedEndTime}` : ""} PT`}
     </Text>
     <Text preset="eventTitle" style={[$titleTextBase, isPast ? $pastTitleText : $titleText]}>
       {title}
