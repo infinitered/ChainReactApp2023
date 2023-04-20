@@ -2,6 +2,30 @@ interface SortableObject {
   [key: string]: any
 }
 
+/**
+ *
+ * @param arr—array of objects to sort
+ * @param property—key of the object to sort by
+ * @param order—array of keys to sort by
+ * @returns sorted array
+ *
+ * @example
+ * ```tsx
+ * const sortedVenues = customSort(venues, "slug", [
+ *   "the-armory",
+ *   "after-party-expensify-office",
+ *   "courtyard-portland-city-center",
+ * ])
+ * ```
+ * output:
+ * ```tsx
+ * sortedVenues = [
+ *  {}, // "the-armory"
+ *  {}, // "after-party-expensify-office"
+ *  {}, // "courtyard-portland-city-center"
+ *  ... // other venues
+ * ]
+ */
 export const customSort = <T extends SortableObject>(
   arr: T[],
   property: keyof T,
