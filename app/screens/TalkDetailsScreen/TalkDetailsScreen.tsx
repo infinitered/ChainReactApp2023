@@ -111,7 +111,6 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       imageStyle: { height: 320 },
       subtitle: speaker?.name,
       label: speaker?.company,
-      bodyLabel: `About ${talk?.["speaker-s"][0]["speaker-first-name"]}`,
       body: stringOrPlaceholder(speaker?.["speaker-bio"]),
       socialButtons: [
         { url: speaker?.twitter, icon: "twitter" },
