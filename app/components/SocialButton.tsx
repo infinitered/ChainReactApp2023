@@ -1,5 +1,6 @@
 import React from "react"
 import { Pressable, PressableProps, StyleProp, ViewStyle } from "react-native"
+import { spacing } from "../theme"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 import { Icon, IconProps } from "./Icon"
 
@@ -23,7 +24,7 @@ export interface SocialButtonProps extends PressableProps {
 }
 
 export function SocialButton(props: SocialButtonProps) {
-  const { size, url, icon, style: $styleOverride, ...rest } = props
+  const { size = 24, url, icon, style: $styleOverride, ...rest } = props
 
   if (!url) return null
 
@@ -40,6 +41,18 @@ export function SocialButton(props: SocialButtonProps) {
   )
 }
 
+interface SocialButtonsProps {
+  socialButtons: Array<SocialButtonProps>
+}
+
+export const SocialButtons = ({ socialButtons }: SocialButtonsProps) => (
+  <>
+    {socialButtons.map((socialButtonProps) => (
+      <SocialButton {...socialButtonProps} key={socialButtonProps.url} style={$socialButtons} />
+    ))}
+  </>
+)
+
 const $socialButton: ViewStyle = {
   backgroundColor: "#1C2B3D",
   width: 42,
@@ -47,4 +60,8 @@ const $socialButton: ViewStyle = {
   borderRadius: 21,
   alignItems: "center",
   justifyContent: "center",
+}
+
+const $socialButtons: ViewStyle = {
+  marginEnd: spacing.medium,
 }

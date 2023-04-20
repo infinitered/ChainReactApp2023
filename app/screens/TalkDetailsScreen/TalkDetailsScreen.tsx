@@ -19,7 +19,7 @@ import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
-import { SocialButton } from "../../components/SocialButton"
+import { SocialButtons } from "../../components/SocialButton"
 import { translate } from "../../i18n"
 
 export type Variants = "workshop" | "talk"
@@ -182,15 +182,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
             </View>
 
             <View style={$linksContainer}>
-              {socialButtons.map((socialButton) => (
-                <SocialButton
-                  icon={socialButton.icon}
-                  key={socialButton.icon}
-                  style={$socialButton}
-                  url={socialButton.url}
-                  size={24}
-                />
-              ))}
+              <SocialButtons socialButtons={socialButtons} />
             </View>
           </View>
         </Animated.ScrollView>
@@ -286,8 +278,4 @@ const $subtitle: TextStyle = {
 
 const $headingContainer: ViewStyle = {
   marginBottom: spacing.extraLarge,
-}
-
-const $socialButton: ViewStyle = {
-  marginEnd: spacing.medium,
 }

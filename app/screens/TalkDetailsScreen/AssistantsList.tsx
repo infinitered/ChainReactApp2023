@@ -4,7 +4,7 @@ import { AutoImage, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
 import { Speaker } from "../../services/api/webflow-api.types"
-import { SocialButton } from "../../components/SocialButton"
+import { SocialButtons } from "../../components/SocialButton"
 
 export interface AssistantsListProp {
   assistants: Speaker[]
@@ -32,23 +32,12 @@ export function AssistantsList(props: AssistantsListProp) {
               <Text preset="companionHeading" text={assistant.name} />
               <Text preset="label" style={$assistantCompany} text={assistant.company} />
               <View style={$assistantLinks}>
-                <SocialButton
-                  icon={"twitter"}
-                  style={$socialButton}
-                  url={assistant.twitter}
-                  size={24}
-                />
-                <SocialButton
-                  icon={"github"}
-                  style={$socialButton}
-                  url={assistant.github}
-                  size={24}
-                />
-                <SocialButton
-                  icon={"link"}
-                  style={$socialButton}
-                  url={assistant.externalURL}
-                  size={24}
+                <SocialButtons
+                  socialButtons={[
+                    { icon: "twitter", url: assistant.twitter },
+                    { icon: "github", url: assistant.github },
+                    { icon: "link", url: assistant.externalURL },
+                  ]}
                 />
               </View>
             </View>
@@ -99,8 +88,4 @@ const $assistantCompany: TextStyle = {
 const $assistantLinks: ViewStyle = {
   flexDirection: "row",
   marginTop: spacing.large,
-}
-
-const $socialButton: ViewStyle = {
-  marginEnd: spacing.medium,
 }
