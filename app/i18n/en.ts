@@ -86,6 +86,8 @@ const en = {
     goldSponsor: "Gold Sponsor",
     silverSponsor: "Silver Sponsors",
     bronzeSponsor: "Bronze Sponsors",
+    creditsTitle: "Credits",
+    creditsHeading: "Special Thanks To",
   },
   talkDetailsScreen: {
     watchTalk: "Watch talk",
