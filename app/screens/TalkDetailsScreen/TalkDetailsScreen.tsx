@@ -76,7 +76,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
 
   return {
     title: talk?.name,
-    subtitle: formatDate(schedule["day-time"], "MMMM dd, h:mm aaa"),
+    subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
     imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
     fullName: talk?.["speaker-s"][0]?.name,
     company: talk?.["speaker-s"][0]?.company,
