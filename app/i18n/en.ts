@@ -56,10 +56,11 @@ const en = {
   infoScreen: {
     title: "Info",
     contactUsTitle: "Contact Us",
-    screenHeading: "Hosted by the Infinite Red team",
+    screenHeading: "Chain React - Hosted by Infinite Red",
+    moreAboutIR: "More about Infinite Red",
     aboutTitle: "About Chain React",
     about:
-      'Sometimes called the "Fifth Quadrant", North Portland encompasses a range of neighborhoods and commercial districts. Some places to visit or things to see include: St John’s Bridge, Cathedral Park, or shopping and dining on Mississippi',
+      "Since 2017, people have attended Chain React to learn from the biggest names and companies in React Native.\n\nChain React is hosted by the team at Infinite Red.\n\nReact Native is central to everything Infinite Red creates, shares, and contributes to the community. As one of the most popular React Native consultancies, their team helps companies like GasBuddy, Zoom, and Microsoft on their most important projects.\n\nInfinite Red also hosts the React Native Radio podcast, maintains Ignite (the most popular boilerplate for Expo and React Native), and writes the React Native Newsletter.",
     emailLink: "Email our team",
     conductWarning:
       "All attendees, speakers, sponsors and volunteers at our conference are required to agree with the following code of conduct. Organizers will enforce this code throughout the event. We expect cooperation from all participants to help ensure a safe environment for everybody.",
