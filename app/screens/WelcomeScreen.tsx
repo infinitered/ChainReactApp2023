@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useLayoutEffect } from "react"
 import { Dimensions, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Button, Screen, Text } from "../components"
 import { useAppNavigation } from "../hooks"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
+import { prefetchScheduledEvents } from "../services/api"
 
 const welcomeLogo = require("../../assets/images/welcome-shapes.png")
 const { width: screenWidth } = Dimensions.get("screen")
@@ -17,6 +18,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   function goNext() {
     navigation.navigate("Tabs", { screen: "Schedule" })
   }
+
+  useLayoutEffect(() => {
+    prefetchScheduledEvents()
+  }, [])
 
   return (
     <Screen style={$container}>

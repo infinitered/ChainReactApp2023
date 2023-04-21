@@ -3,12 +3,12 @@ export const SITE_ID = "5ca38f35db5d2ea94aea469d"
 export const SPONSORS = {
   collectionId: "640a728fc24f8e73575fe189",
   key: "sponsors",
-}
+} as const
 
 export const SPEAKERS = {
   collectionId: "640a728fc24f8e94385fe188",
   key: "speakers",
-}
+} as const
 
 export const SPEAKER_NAMES = {
   collectionId: "640a728fc24f8e74d05fe18a",
@@ -23,32 +23,44 @@ export const WORKSHOPS = {
 export const SCHEDULE = {
   collectionId: "640a728fc24f8e63325fe185",
   key: "schedule",
-}
+} as const
 
 export const PAST_TALKS = {
   collectionId: "640a728fc24f8e76ef5fe186",
   key: "pastTalks",
-}
+} as const
 
 export const RECURRING_EVENTS = {
   collectionId: "640a728fc24f8e85a75fe18c",
   key: "recurringEvents",
-}
+} as const
 
 export const TALKS = {
   collectionId: "640a728fc24f8e31ee5fe18e",
   key: "talks",
-}
+} as const
 
 export const VENUES = {
   collectionId: "640a728fc24f8e553c5fe18d",
   key: "venues",
-}
+} as const
 
 export const RECOMMENDATIONS = {
   collectionId: "640a728fc24f8e083b5fe18f",
   key: "recommendations",
-}
+} as const
+
+export type CollectionConst =
+  | typeof SPONSORS
+  | typeof SPEAKERS
+  | typeof SPEAKER_NAMES
+  | typeof WORKSHOPS
+  | typeof SCHEDULE
+  | typeof PAST_TALKS
+  | typeof RECURRING_EVENTS
+  | typeof TALKS
+  | typeof VENUES
+  | typeof RECOMMENDATIONS
 
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys

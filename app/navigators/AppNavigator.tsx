@@ -16,6 +16,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
 import { DebugScreen, TalkDetailsScreen, WelcomeScreen, WorkshopDetailsScreen } from "../screens"
+import { colors } from "../theme"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
 
@@ -81,12 +82,19 @@ export const AppNavigator = (props: NavigationProps) => {
 
   useBackButtonHandler((routeName) => exitRoutes.includes(routeName))
 
+  const navTheme = React.useMemo(() => {
+    const theme = colorScheme === "dark" ? DarkTheme : DefaultTheme
+    return {
+      ...theme,
+      colors: {
+        ...theme.colors,
+        background: colors.background,
+      },
+    }
+  }, [colorScheme])
+
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-      {...props}
-    >
+    <NavigationContainer ref={navigationRef} theme={navTheme} {...props}>
       <AppStack />
     </NavigationContainer>
   )
