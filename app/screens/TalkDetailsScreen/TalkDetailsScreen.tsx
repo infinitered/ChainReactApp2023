@@ -18,15 +18,16 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEvents } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
-import { ScheduledEvent } from "../../services/api/webflow-api.types"
+import { ScheduledEvent, Speaker } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
+import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 
 export type Variants = "workshop" | "talk"
 
-export interface TalkDetailsProps {
+interface TalkDetailsBaseProps {
   /**
    * The title of the talk
    */
@@ -35,6 +36,40 @@ export interface TalkDetailsProps {
    * The location or date of the talk
    */
   subtitle: string
+  /**
+   * The description of the talk
+   */
+  description: string
+  /**
+   * The url of the talk
+   */
+  talkUrl?: string
+  /**
+   * The time of the event
+   */
+  eventTime: string
+}
+
+interface TalkDetailsMultipleSpeakersProps extends TalkDetailsBaseProps {
+  /**
+   * If we have multiple speakers, we show them in a carousel
+   */
+  isMultipleSpeakers: true
+  /**
+   * The carousel data
+   */
+  carouselData?: Array<DynamicCarouselItem>
+}
+
+interface TalkDetailsSingleSpeakerProps extends TalkDetailsBaseProps {
+  /**
+   * The first name of the speaker
+   */
+  firstName: string
+  /**
+   * The bio of the speaker
+   */
+  bio: string
   /**
    * The image of the speaker
    */
@@ -48,58 +83,65 @@ export interface TalkDetailsProps {
    */
   company: string
   /**
-   * The description of the talk
-   */
-  description: string
-  /**
-   * The first name of the speaker
-   */
-  firstName: string
-  /**
-   * The bio of the speaker
-   */
-  bio: string
-  /**
-   * The url of the talk
-   */
-  talkUrl?: string
-  /**
-   * The time of the event
-   */
-  eventTime: string
-  /**
    * The social buttons of the speaker
    */
   socialButtons: Array<{ url: string; icon: IconProps["icon"] }>
   /**
    * If we have multiple speakers, we show them in a carousel
    */
-  isMultipleSpeakers: boolean
-  /**
-   * The carousel data
-   */
-  carouselData?: Array<DynamicCarouselItem>
+  isMultipleSpeakers: false
 }
+
+export type TalkDetailsProps = TalkDetailsMultipleSpeakersProps | TalkDetailsSingleSpeakerProps
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
 const talkCurve = require("../../../assets/images/talk-curve.png")
 
 const SCREEN_WIDTH = Dimensions.get("screen").width
 
+const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
+  const talk = schedule.talk
+  const speakers = [schedule["speaker-2-2"], schedule["speaker-3"], schedule["speaker-3-2"]].filter(
+    Boolean,
+  )
+  return {
+    title: schedule["event-title"],
+    subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
+    description: stringOrPlaceholder(schedule["event-description"]),
+    talkUrl: talk?.["talk-url"],
+    eventTime: schedule["day-time"],
+    isMultipleSpeakers: true,
+    carouselData: speakers.map((speaker: Speaker) => ({
+      image: { uri: speaker?.["speaker-photo"].url },
+      imageStyle: { height: 320 },
+      subtitle: speaker?.name,
+      label: speaker?.company,
+      body: stringOrPlaceholder(speaker?.["speaker-bio"]),
+      socialButtons: [
+        { url: speaker?.twitter, icon: "twitter" },
+        { url: speaker?.github, icon: "github" },
+        { url: speaker?.externalURL || speaker?.website, icon: "link" },
+      ],
+    })),
+  }
+}
+
 const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
   const talk = schedule.talk
+
+  if (schedule["event-title"] === WEBFLOW_MAP.triviaShow.title) return triviaShowProps(schedule)
 
   return {
     title: talk?.name,
     subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
+    description: stringOrPlaceholder(talk?.description),
+    talkUrl: talk?.["talk-url"],
+    eventTime: schedule["day-time"],
+    bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"]),
     imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
     fullName: talk?.["speaker-s"][0]?.name,
     company: talk?.["speaker-s"][0]?.company,
-    description: stringOrPlaceholder(talk?.description),
     firstName: talk?.["speaker-s"][0]["speaker-first-name"],
-    bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"]),
-    talkUrl: talk?.["talk-url"],
-    eventTime: schedule["day-time"],
     socialButtons: [
       { url: talk?.["speaker-s"][0]?.twitter, icon: "twitter" },
       { url: talk?.["speaker-s"][0]?.github, icon: "github" },
@@ -115,11 +157,75 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       socialButtons: [
         { url: speaker?.twitter, icon: "twitter" },
         { url: speaker?.github, icon: "github" },
-        { url: speaker?.externalURL, icon: "link" },
+        { url: speaker?.externalURL || speaker?.website, icon: "link" },
       ],
     })),
   }
 }
+
+type TalkDetailsSingleSpeakerScreenProps = TalkDetailsSingleSpeakerProps & {
+  scheduleType: ScheduledEvent["type"]
+}
+
+const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeakerScreenProps> =
+  function TalkDetailsSingleSpeaker({
+    bio,
+    company,
+    description,
+    firstName,
+    fullName,
+    imageUrl,
+    scheduleType,
+    socialButtons,
+  }) {
+    return (
+      <>
+        <View style={$containerSpacing}>
+          <Image source={talkCurve} style={$talkCurve} />
+          <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
+            <Image source={{ uri: imageUrl }} style={$speakerImage} />
+          </BoxShadow>
+          <Image source={talkBlob} style={$talkBlob} />
+
+          <Text preset="bold" style={$nameText} text={fullName} />
+          <Text style={$companyNameText} text={company} />
+        </View>
+
+        <View style={$detailsContainer}>
+          <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
+          <Text style={$bodyText} text={description} />
+        </View>
+
+        <View style={$containerSpacing}>
+          <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
+          <Text style={$bodyText} text={bio} />
+        </View>
+
+        <View style={$linksContainer}>
+          <SocialButtons socialButtons={socialButtons} />
+        </View>
+      </>
+    )
+  }
+
+type TalkDetailsMultipleSpeakerScreenProps = TalkDetailsMultipleSpeakersProps & {
+  scheduleType: ScheduledEvent["type"]
+}
+
+const TalkDetailsMultipleSpeakers: React.FunctionComponent<TalkDetailsMultipleSpeakerScreenProps> =
+  function TalkDetailsMultipleSpeakers({ carouselData, description, scheduleType }) {
+    return (
+      <>
+        <View style={$detailsContainer}>
+          <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
+          <Text style={$bodyText} text={description} />
+        </View>
+        <View style={$carouselContainer}>
+          <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
+        </View>
+      </>
+    )
+  }
 
 export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDetails">> = ({
   route: { params },
@@ -135,21 +241,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   if (!schedule) return null
 
-  const {
-    bio,
-    company,
-    description,
-    firstName,
-    fullName,
-    imageUrl,
-    subtitle,
-    title,
-    talkUrl,
-    eventTime,
-    socialButtons,
-    isMultipleSpeakers,
-    carouselData,
-  } = talkDetailsProps(schedule)
+  const { subtitle, title, talkUrl, eventTime, isMultipleSpeakers } = talkDetailsProps(schedule)
 
   const isEventPassed = !isFuture(parseISO(eventTime))
 
@@ -182,41 +274,16 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
               <Text preset="companionHeading" style={$subtitle} text={subtitle} />
             </View>
 
-            {!isMultipleSpeakers && (
-              <View style={$containerSpacing}>
-                <Image source={talkCurve} style={$talkCurve} />
-                <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
-                  <Image source={{ uri: imageUrl }} style={$speakerImage} />
-                </BoxShadow>
-                <Image source={talkBlob} style={$talkBlob} />
-
-                <Text preset="bold" style={$nameText} text={fullName} />
-                <Text style={$companyNameText} text={company} />
-              </View>
-            )}
-
-            <View style={$detailsContainer}>
-              <Text preset="bold" style={$detailsText} text={`${schedule.type} details`} />
-              <Text style={$bodyText} text={description} />
-            </View>
-
-            {!isMultipleSpeakers && (
-              <View style={$containerSpacing}>
-                <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
-                <Text style={$bodyText} text={bio} />
-              </View>
-            )}
-
-            {!isMultipleSpeakers && (
-              <View style={$linksContainer}>
-                <SocialButtons socialButtons={socialButtons} />
-              </View>
-            )}
-
-            {isMultipleSpeakers && (
-              <View style={$carouselContainer}>
-                <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
-              </View>
+            {isMultipleSpeakers ? (
+              <TalkDetailsMultipleSpeakers
+                {...(talkDetailsProps(schedule) as TalkDetailsMultipleSpeakersProps)}
+                scheduleType={schedule.type}
+              />
+            ) : (
+              <TalkDetailsSingleSpeaker
+                {...(talkDetailsProps(schedule) as TalkDetailsSingleSpeakerProps)}
+                scheduleType={schedule.type}
+              />
             )}
           </View>
         </Animated.ScrollView>
