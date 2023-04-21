@@ -130,6 +130,7 @@ export interface RawSpeaker extends Item {
   title?: string
   twitter?: string
   externalURL?: string
+  website?: string
 }
 
 export type Speaker = RawSpeaker & {
