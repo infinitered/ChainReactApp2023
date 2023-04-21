@@ -93,7 +93,6 @@ export const WEBFLOW_MAP = {
   },
   scheduleType: {
     "4206976061fcd6327bd12ce6aac856eb": "Talk",
-    "8fc8810c6c61b7e3939280149fc5f84e": "Speaker Panel",
     dd977a70188a93af399ad496d6cf2785: "Recurring",
     b2f17244cf6bd0782c2a099568169219: "Party",
     "7ccbd551ac994b4489c4fe31ad985120": "Workshop",
@@ -108,7 +107,6 @@ export const WEBFLOW_MAP = {
   },
   talkType: {
     "38ba1361ae664a13e4a03f20ae153dc8": "Talk",
-    e66d50161e7027f9c8646ac4ec9c02a9: "Speaker Panel",
     "3aa9ece8012afed5d4e548180b2713e0": "Emcee",
   },
   location: {
