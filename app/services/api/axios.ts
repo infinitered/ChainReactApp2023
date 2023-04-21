@@ -1,4 +1,5 @@
 import axios from "axios"
+import { WEBFLOW_API_URL } from "./webflow-consts"
 
 interface PaginatedData {
   count: number
@@ -12,28 +13,29 @@ export type PaginatedItems<T> = PaginatedData & {
 }
 
 export const axiosInstance = axios.create({
-  baseURL: "https://chain-react-ai-chat.vercel.app/api/schedule/",
-  // baseURL: "http://localhost:3000/api/schedule/",
+  baseURL: WEBFLOW_API_URL,
   headers: {
     "Content-Type": "application/json",
     "User-Agent": "Webflow Javascript SDK / 1.0",
   },
 })
 
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error) => {
-    console.tron.log({ error })
-    return Promise.reject(error)
-  },
-)
+if (typeof __DEV__ !== "undefined" && __DEV__ === true) {
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response
+    },
+    (error) => {
+      console.tron.log({ error })
+      return Promise.reject(error)
+    },
+  )
 
-axiosInstance.interceptors.request.use(
-  (request) => request,
-  (error) => {
-    console.tron.log({ error })
-    return Promise.reject(error)
-  },
-)
+  axiosInstance.interceptors.request.use(
+    (request) => request,
+    (error) => {
+      console.tron.log({ error })
+      return Promise.reject(error)
+    },
+  )
+}

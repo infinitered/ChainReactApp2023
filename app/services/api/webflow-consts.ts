@@ -1,53 +1,77 @@
+import {
+  RecommendationsCollectionSchema,
+  RecurringEventsCollectionSchema,
+  ScheduledeventsCollectionSchema,
+  SpeakerNamesCollectionSchema,
+  SpeakersCollectionSchema,
+  SponsorsCollectionSchema,
+  TalksCollectionSchema,
+  VenuesCollectionSchema,
+  WorkshopsCollectionSchema,
+} from "./webflow-api.generated"
+
+export const WEBFLOW_API_URL = "https://chain-react-ai-chat.vercel.app/api/schedule/"
+
 export const SITE_ID = "5ca38f35db5d2ea94aea469d"
 
 export const SPONSORS = {
   collectionId: "640a728fc24f8e73575fe189",
   key: "sponsors",
+  schema: SponsorsCollectionSchema,
 } as const
 
 export const SPEAKERS = {
   collectionId: "640a728fc24f8e94385fe188",
   key: "speakers",
+  schema: SpeakersCollectionSchema,
 } as const
 
 export const SPEAKER_NAMES = {
   collectionId: "640a728fc24f8e74d05fe18a",
   key: "speakerNames",
-}
+  schema: SpeakerNamesCollectionSchema,
+} as const
 
 export const WORKSHOPS = {
   collectionId: "640a728fc24f8e7f635fe187",
   key: "workshops",
-}
+  schema: WorkshopsCollectionSchema,
+} as const
 
 export const SCHEDULE = {
   collectionId: "640a728fc24f8e63325fe185",
   key: "schedule",
+  schema: ScheduledeventsCollectionSchema,
 } as const
 
 export const PAST_TALKS = {
   collectionId: "640a728fc24f8e76ef5fe186",
   key: "pastTalks",
+  schema: TalksCollectionSchema,
 } as const
 
 export const RECURRING_EVENTS = {
   collectionId: "640a728fc24f8e85a75fe18c",
   key: "recurringEvents",
+  schema: RecurringEventsCollectionSchema,
 } as const
 
 export const TALKS = {
   collectionId: "640a728fc24f8e31ee5fe18e",
   key: "talks",
+  schema: TalksCollectionSchema,
 } as const
 
 export const VENUES = {
   collectionId: "640a728fc24f8e553c5fe18d",
   key: "venues",
+  schema: VenuesCollectionSchema,
 } as const
 
 export const RECOMMENDATIONS = {
   collectionId: "640a728fc24f8e083b5fe18f",
   key: "recommendations",
+  schema: RecommendationsCollectionSchema,
 } as const
 
 export type CollectionConst =
@@ -61,6 +85,33 @@ export type CollectionConst =
   | typeof TALKS
   | typeof VENUES
   | typeof RECOMMENDATIONS
+
+export const COLLECTIONS_MAP = {
+  [SPONSORS.key]: SPONSORS,
+  [SPONSORS.collectionId]: SPONSORS,
+  [SPEAKERS.key]: SPEAKERS,
+  [SPEAKERS.collectionId]: SPEAKERS,
+  [SPEAKER_NAMES.key]: SPEAKER_NAMES,
+  [SPEAKER_NAMES.collectionId]: SPEAKER_NAMES,
+  [WORKSHOPS.key]: WORKSHOPS,
+  [WORKSHOPS.collectionId]: WORKSHOPS,
+  [SCHEDULE.key]: SCHEDULE,
+  [SCHEDULE.collectionId]: SCHEDULE,
+  [PAST_TALKS.key]: PAST_TALKS,
+  [PAST_TALKS.collectionId]: PAST_TALKS,
+  [RECURRING_EVENTS.key]: RECURRING_EVENTS,
+  [RECURRING_EVENTS.collectionId]: RECURRING_EVENTS,
+  [TALKS.key]: TALKS,
+  [TALKS.collectionId]: TALKS,
+  [VENUES.key]: VENUES,
+  [VENUES.collectionId]: VENUES,
+  [RECOMMENDATIONS.key]: RECOMMENDATIONS,
+  [RECOMMENDATIONS.collectionId]: RECOMMENDATIONS,
+} as const
+
+export type CollectionKey = keyof typeof COLLECTIONS_MAP
+export type CollectionId = (typeof COLLECTIONS_MAP)[CollectionKey]["collectionId"]
+export type CollectionSchema = (typeof COLLECTIONS_MAP)[CollectionKey]["schema"]
 
 // [NOTE] these keys probably have to change when webflow is updated
 // `/collections/${collectionId}` api will the keys
@@ -137,3 +188,7 @@ export const WEBFLOW_MAP = {
     variant: "trivia-show",
   },
 } as const
+
+type ValueOf<T> = T[keyof T]
+
+export type ScheduleDay = ValueOf<(typeof WEBFLOW_MAP)["scheduleDay"]>

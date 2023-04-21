@@ -44,7 +44,7 @@ export const SpeakerPanelDetailsScreen: FC<
     socialButtons: [
       { url: speaker.twitter, icon: "twitter" },
       { url: speaker.github, icon: "github" },
-      { url: speaker.externalURL, icon: "link" },
+      { url: speaker.website, icon: "link" },
     ],
   })) as DynamicCarouselItem[]
 
