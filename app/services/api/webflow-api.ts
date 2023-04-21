@@ -13,6 +13,7 @@ import type {
   RawWorkshop,
 } from "./webflow-api.types"
 import {
+  CollectionConst,
   RECOMMENDATIONS,
   RECURRING_EVENTS,
   SCHEDULE,
@@ -38,105 +39,61 @@ const getCollectionById = async <T>(collectionId: string) => {
   return data.items
 }
 
-const useRecommendationsOptions = {
-  queryKey: [RECOMMENDATIONS.key, RECOMMENDATIONS.collectionId],
-  queryFn: async () => getCollectionById<RawRecommendations>(RECOMMENDATIONS.collectionId),
-} satisfies UseQueryOptions
+const webflowOptions = <Payload, Collection extends CollectionConst = CollectionConst>(
+  collection: Collection,
+) =>
+  ({
+    queryKey: [collection.key, collection.collectionId] as const,
+    queryFn: async () => getCollectionById<Payload>(collection.collectionId),
+  } satisfies UseQueryOptions)
 
-export const useRecommendations = () => {
-  return useQuery(useRecommendationsOptions)
-}
+const recommendationsOptions = webflowOptions<RawRecommendations>(RECOMMENDATIONS)
+export const useRecommendations = () => useQuery(recommendationsOptions)
 
-const useRecurringEventsOptions = {
-  queryKey: [RECURRING_EVENTS.key, RECURRING_EVENTS.collectionId],
-  queryFn: async () => getCollectionById<RawRecurringEvents>(RECURRING_EVENTS.collectionId),
-} satisfies UseQueryOptions
+const recurringEventsOptions = webflowOptions<RawRecurringEvents>(RECURRING_EVENTS)
+export const useRecurringEvents = () => useQuery(recurringEventsOptions)
 
-export const useRecurringEvents = () => {
-  return useQuery(useRecurringEventsOptions)
-}
+const speakersOptions = webflowOptions<RawSpeaker>(SPEAKERS)
+export const useSpeakers = () => useQuery(speakersOptions)
 
-const useSpeakersOptions = {
-  queryKey: [SPEAKERS.key, SPEAKERS.collectionId],
-  queryFn: async () => getCollectionById<RawSpeaker>(SPEAKERS.collectionId),
-} satisfies UseQueryOptions
+const speakerNamesOptions = webflowOptions<RawSpeakerName>(SPEAKER_NAMES)
+export const useSpeakerNames = () => useQuery(speakerNamesOptions)
 
-export const useSpeakers = () => {
-  return useQuery(useSpeakersOptions)
-}
-
-const useSpeakerNamesOptions = {
-  queryKey: [SPEAKER_NAMES.key, SPEAKER_NAMES.collectionId],
-  queryFn: async () => getCollectionById<RawSpeakerName>(SPEAKER_NAMES.collectionId),
-} satisfies UseQueryOptions
-
-export const useSpeakerNames = () => {
-  return useQuery(useSpeakerNamesOptions)
-}
-
-const useSponsorsOptions = {
-  queryKey: [SPONSORS.key, SPONSORS.collectionId],
-  queryFn: async () => getCollectionById<RawSponsor>(SPONSORS.collectionId),
-} satisfies UseQueryOptions
-
+const sponsorsOptions = webflowOptions<RawSponsor>(SPONSORS)
 export const useSponsors = () => {
-  const { data: sponsors, isLoading } = useQuery(useSponsorsOptions)
+  const { data: sponsors, ...rest } = useQuery(sponsorsOptions)
   const data = cleanedSponsors(sponsors)
 
-  return { isLoading, data }
+  return { data, ...rest }
 }
 
-const useTalksOptions = {
-  queryKey: [TALKS.key, TALKS.collectionId],
-  queryFn: async () => getCollectionById<RawTalk>(TALKS.collectionId),
-} satisfies UseQueryOptions
+const talksOptions = webflowOptions<RawTalk>(TALKS)
+export const useTalks = () => useQuery(talksOptions)
 
-export const useTalks = () => {
-  return useQuery(useTalksOptions)
-}
+const venuesOptions = webflowOptions<RawVenue>(VENUES)
+export const useVenues = () => useQuery(venuesOptions)
 
-const useVenuesOptions = {
-  queryKey: [VENUES.key, VENUES.collectionId],
-  queryFn: async () => getCollectionById<RawVenue>(VENUES.collectionId),
-} satisfies UseQueryOptions
+const workshopsOptions = webflowOptions<RawWorkshop>(WORKSHOPS)
+export const useWorkshops = () => useQuery(workshopsOptions)
 
-export const useVenues = () => {
-  return useQuery(useVenuesOptions)
-}
-
-const useWorkshopsOptions = {
-  queryKey: [WORKSHOPS.key, WORKSHOPS.collectionId],
-  queryFn: async () => getCollectionById<RawWorkshop>(WORKSHOPS.collectionId),
-} satisfies UseQueryOptions
-
-export const useWorkshops = () => {
-  return useQuery(useWorkshopsOptions)
-}
-
-const useScheduledEventsOptions = {
-  queryKey: [SCHEDULE.key, SCHEDULE.collectionId],
-  queryFn: async () => getCollectionById<RawScheduledEvent>(SCHEDULE.collectionId),
-} satisfies UseQueryOptions
-
-const useScheduledEventsQueries = [
-  useSpeakersOptions,
-  useWorkshopsOptions,
-  useRecurringEventsOptions,
-  useTalksOptions,
-  useScheduledEventsOptions,
+const scheduledEventsOptions = webflowOptions<RawScheduledEvent>(SCHEDULE)
+const scheduledEventsQueries = [
+  speakersOptions,
+  workshopsOptions,
+  recurringEventsOptions,
+  talksOptions,
+  scheduledEventsOptions,
 ] as const
-
 export const prefetchScheduledEvents = async () => {
   await Promise.all(
-    useScheduledEventsQueries.map(async (query) => {
+    scheduledEventsQueries.map(async (query) => {
       return queryClient.prefetchQuery(query)
     }),
   )
 }
-
 export const useScheduledEvents = () => {
   const queries = useQueries({
-    queries: useScheduledEventsQueries,
+    queries: scheduledEventsQueries,
   })
 
   const [speakers, workshops, recurringEvents, talks, scheduledEvents] = queries
