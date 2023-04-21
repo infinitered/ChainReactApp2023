@@ -92,7 +92,7 @@ interface TalkDetailsSingleSpeakerProps extends TalkDetailsBaseProps {
   isMultipleSpeakers: false
 }
 
-export type TalkDetailsProps = TalkDetailsMultipleSpeakersProps | TalkDetailsSingleSpeakerProps
+type TalkDetailsProps = TalkDetailsMultipleSpeakersProps | TalkDetailsSingleSpeakerProps
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
 const talkCurve = require("../../../assets/images/talk-curve.png")
