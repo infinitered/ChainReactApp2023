@@ -15,14 +15,7 @@ import { StackScreenProps } from "@react-navigation/stack"
 import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
-import {
-  DebugScreen,
-  PartyDetailsScreen,
-  SpeakerPanelDetailsScreen,
-  TalkDetailsScreen,
-  WelcomeScreen,
-  WorkshopDetailsScreen,
-} from "../screens"
+import { DebugScreen, TalkDetailsScreen, WelcomeScreen, WorkshopDetailsScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
 
@@ -41,8 +34,6 @@ import { TabNavigator, TabParamList } from "./TabNavigator"
  */
 export type AppStackParamList = {
   Debug: undefined
-  PartyDetails: { scheduleId: string }
-  SpeakerPanelDetails: { scheduleId: string }
   Tabs: NavigatorScreenParams<TabParamList>
   TalkDetails: { scheduleId: string }
   Welcome: undefined
@@ -67,16 +58,6 @@ const AppStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={"Welcome"}>
       <Stack.Screen name="Debug" component={DebugScreen} />
-      <Stack.Screen
-        name="PartyDetails"
-        component={PartyDetailsScreen}
-        options={{ fullScreenGestureEnabled: true }}
-      />
-      <Stack.Screen
-        name="SpeakerPanelDetails"
-        component={SpeakerPanelDetailsScreen}
-        options={{ fullScreenGestureEnabled: true }}
-      />
       <Stack.Screen name="Tabs" component={TabNavigator} />
       <Stack.Screen
         name="TalkDetails"

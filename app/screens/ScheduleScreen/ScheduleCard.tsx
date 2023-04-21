@@ -245,8 +245,6 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
     : ["speaker-panel"].includes(variant)
     ? () => navigation.navigate("SpeakerPanelDetails", { scheduleId: id })
-    : ["party"].includes(variant)
-    ? () => navigation.navigate("PartyDetails", { scheduleId: id })
     : undefined
 
   const cardProps = {
