@@ -239,9 +239,7 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     talkUrl,
   } = props
   const navigation = useAppNavigation()
-  const onPress = ["trivia-show"].includes(variant)
-    ? undefined
-    : ["talk"].includes(variant)
+  const onPress = ["talk", "trivia-show"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["workshop"].includes(variant)
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
