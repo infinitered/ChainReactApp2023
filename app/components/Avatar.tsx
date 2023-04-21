@@ -28,7 +28,12 @@ export type AvatarProps = {
  */
 export const Avatar: React.FC<AvatarProps> = (props) => {
   const { style: $styleOverride, imageStyle } = props
-  const preset: AvatarPresets = props.sources.length > 1 ? props.preset : "workshop"
+  const preset: AvatarPresets =
+    props.sources.length > 1
+      ? "multi-speaker"
+      : $viewPresets[props.preset]
+      ? props.preset
+      : "workshop"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
   const $containerStyle = [$baseContainerStyle, $styleOverride]
 
@@ -62,6 +67,12 @@ const $viewPresets = {
     width: 100,
     height: 100,
     borderRadius: 50,
+  } as StyleProp<ImageStyle>,
+
+  "multi-speaker": {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
   } as StyleProp<ImageStyle>,
 
   party: {} as StyleProp<ImageStyle>,
