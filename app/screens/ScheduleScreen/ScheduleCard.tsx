@@ -59,7 +59,6 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
             // assuming there will be other variants in the future I went with a switch statement
             {
               talk: <TalkCTA talkUrl={talkUrl} />,
-              "speaker-panel": <TalkCTA talkUrl={talkUrl} />,
             }[variant]}
         </>
       ) : (
@@ -69,7 +68,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
   )
 }
 
-export type Variants = "workshop" | "talk" | "party" | "recurring" | "speaker-panel" | "trivia-show"
+export type Variants = "workshop" | "talk" | "party" | "recurring" | "trivia-show"
 
 export interface ScheduleCardProps {
   /**
@@ -243,8 +242,6 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["workshop"].includes(variant)
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
-    : ["speaker-panel"].includes(variant)
-    ? () => navigation.navigate("SpeakerPanelDetails", { scheduleId: id })
     : undefined
 
   const cardProps = {

@@ -45,7 +45,6 @@ export interface ScheduledEvent extends Item {
   talk?: Talk
   type?:
     | "Talk"
-    | "Speaker Panel"
     | "Workshop"
     | "Party"
     | "Recurring"
@@ -91,7 +90,7 @@ export interface RawTalk extends Item {
 
 export interface Talk extends Item {
   "speaker-s": Speaker[]
-  "talk-type"?: "Talk" | "Speaker Panel" | "Emcee"
+  "talk-type"?: "Talk" | "Emcee"
   description?: string
   "talk-url"?: string
 }
@@ -171,7 +170,6 @@ export interface RawSpeakerName extends Item {
   "medium-url-2"?: string
   "next-url": string
   "previous-url": string
-  "session-type"?: "Speaker Panel"
   "speaker-photo-png": SpeakerPhotoPNG
   "talk-abstract-3": string
   "talk-title": string

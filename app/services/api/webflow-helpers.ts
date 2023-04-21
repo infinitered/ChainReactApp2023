@@ -212,18 +212,6 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
           .join(", ")
       }
       return baseItems
-    case "Speaker Panel":
-      return {
-        variant: "speaker-panel",
-        formattedStartTime: formatDate(schedule["day-time"], "h:mmaaa"),
-        startTime: schedule["day-time"],
-        eventTitle: schedule.type,
-        heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
-        subheading: "",
-        sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
-        id: schedule._id,
-        talkUrl: schedule.talk?.["talk-url"],
-      }
     case "Workshop":
       // eslint-disable-next-line no-case-declarations
       const workshop = schedule.workshop
