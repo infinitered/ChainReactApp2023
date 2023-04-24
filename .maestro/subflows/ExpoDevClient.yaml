@@ -9,7 +9,12 @@ appId: infinitered.stage.ChainReactConf
     clearState: true # Will clear our saved navigation state, we may not always want this
 - tapOn: "Enter URL manually"
 - inputText: "http://localhost:8081/?disableOnboarding=1"
+- tapOn:
+    point: "50%,50%"
 - tapOn: "Connect"
+- assertVisible: "Welcome to Chain React.*"
+- tapOn: "See the schedule"
+- assertVisible: "Tue, May 16" # TODO: THIS SHOULD BE "Wed, May 17"
 #
 # alternative method
 # use deep link and press open?
