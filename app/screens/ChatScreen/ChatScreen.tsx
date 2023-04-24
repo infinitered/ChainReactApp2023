@@ -126,6 +126,9 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
           user={{
             _id: uuid,
           }}
+          textInputProps={{
+            testID: "aiChatInput",
+          }}
         />
       )}
     </>
