@@ -21,7 +21,7 @@ import { colors, spacing } from "../../theme"
 import { useHeader } from "../../hooks/useHeader"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
-import { formatDate } from "../../utils/formatDate"
+import { parseDate } from "../../utils/formatDate"
 import { useAppState } from "../../hooks"
 import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
@@ -73,7 +73,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   } = useScheduleScreenData()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
-  useHeader({ title: formatDate(selectedSchedule.date, "EE, MMMM dd") }, [selectedSchedule])
+  useHeader({ title: format(parseDate(selectedSchedule.date), "EE, MMMM dd") }, [selectedSchedule])
 
   const getScheduleIndex = React.useCallback(
     () => schedules.findIndex((schedule) => schedule.date === selectedSchedule.date),
