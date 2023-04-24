@@ -14,7 +14,7 @@ appId: infinitered.stage.ChainReactConf
 - tapOn: "Connect"
 - assertVisible: "Welcome to Chain React.*"
 - tapOn: "See the schedule"
-- assertVisible: "Tue, May 16" # TODO: THIS SHOULD BE "Wed, May 17"
+- assertVisible: "Wed, May 17"
 #
 # alternative method
 # use deep link and press open?
