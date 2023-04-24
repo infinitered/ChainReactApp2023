@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from "@tanstack/react-query"
+import { useQueries, useQuery, UseQueryOptions } from "@tanstack/react-query"
 import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
 import type {
@@ -6,7 +6,6 @@ import type {
   RawRecurringEvents,
   RawScheduledEvent,
   RawSpeaker,
-  RawSpeakerName,
   RawSponsor,
   RawTalk,
   RawVenue,
@@ -17,7 +16,6 @@ import {
   RECOMMENDATIONS,
   RECURRING_EVENTS,
   SCHEDULE,
-  SPEAKER_NAMES,
   SPEAKERS,
   SPONSORS,
   TALKS,
@@ -50,15 +48,6 @@ const webflowOptions = <Payload, Collection extends CollectionConst = Collection
 const recommendationsOptions = webflowOptions<RawRecommendations>(RECOMMENDATIONS)
 export const useRecommendations = () => useQuery(recommendationsOptions)
 
-const recurringEventsOptions = webflowOptions<RawRecurringEvents>(RECURRING_EVENTS)
-export const useRecurringEvents = () => useQuery(recurringEventsOptions)
-
-const speakersOptions = webflowOptions<RawSpeaker>(SPEAKERS)
-export const useSpeakers = () => useQuery(speakersOptions)
-
-const speakerNamesOptions = webflowOptions<RawSpeakerName>(SPEAKER_NAMES)
-export const useSpeakerNames = () => useQuery(speakerNamesOptions)
-
 const sponsorsOptions = webflowOptions<RawSponsor>(SPONSORS)
 export const useSponsors = () => {
   const { data: sponsors, ...rest } = useQuery(sponsorsOptions)
@@ -67,55 +56,73 @@ export const useSponsors = () => {
   return { data, ...rest }
 }
 
-const talksOptions = webflowOptions<RawTalk>(TALKS)
-export const useTalks = () => useQuery(talksOptions)
-
 const venuesOptions = webflowOptions<RawVenue>(VENUES)
 export const useVenues = () => useQuery(venuesOptions)
 
+const speakersOptions = webflowOptions<RawSpeaker>(SPEAKERS)
 const workshopsOptions = webflowOptions<RawWorkshop>(WORKSHOPS)
-export const useWorkshops = () => useQuery(workshopsOptions)
-
+const recurringEventsOptions = webflowOptions<RawRecurringEvents>(RECURRING_EVENTS)
+const talksOptions = webflowOptions<RawTalk>(TALKS)
 const scheduledEventsOptions = webflowOptions<RawScheduledEvent>(SCHEDULE)
 
-export const prefetchScheduledEvents = async () => {
-  const prefetchQueryOptions = [
-    speakersOptions,
-    workshopsOptions,
-    recurringEventsOptions,
-    talksOptions,
-  ] as const
+const scheduledEventQueries = [
+  speakersOptions,
+  workshopsOptions,
+  recurringEventsOptions,
+  talksOptions,
+  scheduledEventsOptions,
+] as const
 
-  prefetchQueryOptions.forEach(async (query) => {
+export const prefetchScheduledEvents = async () => {
+  scheduledEventQueries.forEach(async (query) => {
     await queryClient.prefetchQuery(query)
   })
 }
 
-export const useScheduledEvents = () => {
-  const { data: speakers } = useSpeakers()
-  const { data: workshops } = useWorkshops()
-  const { data: recurringEvents } = useRecurringEvents()
-  const { data: talks } = useTalks()
-
-  const { data: scheduledEvents, ...rest } = useQuery({
-    ...scheduledEventsOptions,
-    enabled: !!speakers && !!workshops && !!recurringEvents && !!talks,
+export const useScheduledEventsData = () => {
+  const queries = useQueries({
+    queries: scheduledEventQueries,
   })
 
-  return {
-    data: cleanedSchedule({
-      recurringEvents,
-      scheduledEvents,
-      speakers: cleanedSpeakers(speakers),
-      talks: cleanedTalks({ speakers, talks }),
-      workshops: cleanedWorkshops(workshops, cleanedSpeakers(speakers)),
-    }),
-    ...rest,
+  const isLoading = queries.map((query) => query.isLoading).some((isLoading) => isLoading)
+  const isRefetching = queries
+    .map((query) => query.isRefetching)
+    .some((isRefetching) => isRefetching)
+  const refetch = async () => Promise.all(queries.map((query) => query.refetch()))
+
+  if (isLoading) {
+    return {
+      data: [],
+      isLoading,
+      isRefetching,
+      refetch,
+    }
+  } else {
+    const [speakers, workshops, recurringEvents, talks, scheduledEvents] = queries
+
+    return {
+      data: cleanedSchedule({
+        recurringEvents: recurringEvents.data as RawRecurringEvents[],
+        scheduledEvents: scheduledEvents.data as RawScheduledEvent[],
+        speakers: cleanedSpeakers(speakers.data as RawSpeaker[]),
+        talks: cleanedTalks({
+          speakers: speakers.data as RawSpeaker[],
+          talks: talks.data as RawTalk[],
+        }),
+        workshops: cleanedWorkshops(
+          workshops.data as RawWorkshop[],
+          cleanedSpeakers(speakers.data as RawSpeaker[]),
+        ),
+      }),
+      isLoading,
+      isRefetching,
+      refetch,
+    }
   }
 }
 
 export const useScheduleScreenData = () => {
-  const { data: events, isLoading, isRefetching, refetch } = useScheduledEvents()
+  const { data: events, isLoading, isRefetching, refetch } = useScheduledEventsData()
 
   return {
     isLoading,
