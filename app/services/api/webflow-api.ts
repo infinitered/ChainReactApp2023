@@ -1,4 +1,4 @@
-import { useQueries, useQuery, UseQueryOptions } from "@tanstack/react-query"
+import { useQuery, UseQueryOptions } from "@tanstack/react-query"
 import { Schedule } from "../../screens"
 import { axiosInstance, PaginatedItems } from "./axios"
 import type {
@@ -77,38 +77,40 @@ const workshopsOptions = webflowOptions<RawWorkshop>(WORKSHOPS)
 export const useWorkshops = () => useQuery(workshopsOptions)
 
 const scheduledEventsOptions = webflowOptions<RawScheduledEvent>(SCHEDULE)
-const scheduledEventsQueries = [
-  speakersOptions,
-  workshopsOptions,
-  recurringEventsOptions,
-  talksOptions,
-  scheduledEventsOptions,
-] as const
-export const prefetchScheduledEvents = async () => {
-  await Promise.all(
-    scheduledEventsQueries.map(async (query) => {
-      return queryClient.prefetchQuery(query)
-    }),
-  )
-}
-export const useScheduledEvents = () => {
-  const queries = useQueries({
-    queries: scheduledEventsQueries,
-  })
 
-  const [speakers, workshops, recurringEvents, talks, scheduledEvents] = queries
+export const prefetchScheduledEvents = async () => {
+  const prefetchQueryOptions = [
+    speakersOptions,
+    workshopsOptions,
+    recurringEventsOptions,
+    talksOptions,
+  ] as const
+
+  prefetchQueryOptions.forEach(async (query) => {
+    await queryClient.prefetchQuery(query)
+  })
+}
+
+export const useScheduledEvents = () => {
+  const { data: speakers } = useSpeakers()
+  const { data: workshops } = useWorkshops()
+  const { data: recurringEvents } = useRecurringEvents()
+  const { data: talks } = useTalks()
+
+  const { data: scheduledEvents, ...rest } = useQuery({
+    ...scheduledEventsOptions,
+    enabled: !!speakers && !!workshops && !!recurringEvents && !!talks,
+  })
 
   return {
     data: cleanedSchedule({
-      recurringEvents: recurringEvents.data,
-      scheduledEvents: scheduledEvents.data,
-      speakers: cleanedSpeakers(speakers.data),
-      talks: cleanedTalks({ speakers: speakers.data, talks: talks.data }),
-      workshops: cleanedWorkshops(workshops.data, cleanedSpeakers(speakers.data)),
+      recurringEvents,
+      scheduledEvents,
+      speakers: cleanedSpeakers(speakers),
+      talks: cleanedTalks({ speakers, talks }),
+      workshops: cleanedWorkshops(workshops, cleanedSpeakers(speakers)),
     }),
-    refetch: async () => Promise.all(queries.map((query) => query.refetch())),
-    isLoading: queries.map((query) => query.isLoading).some((isLoading) => isLoading),
-    isRefetching: queries.map((query) => query.isFetching).some((isFetching) => isFetching),
+    ...rest,
   }
 }
 
