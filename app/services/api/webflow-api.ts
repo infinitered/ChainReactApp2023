@@ -90,34 +90,27 @@ export const useScheduledEventsData = () => {
     .some((isRefetching) => isRefetching)
   const refetch = async () => Promise.all(queries.map((query) => query.refetch()))
 
-  if (isLoading) {
-    return {
-      data: [],
-      isLoading,
-      isRefetching,
-      refetch,
-    }
-  } else {
-    const [speakers, workshops, recurringEvents, talks, scheduledEvents] = queries
+  const [
+    { data: speakers },
+    { data: workshops },
+    { data: recurringEvents },
+    { data: talks },
+    { data: scheduledEvents },
+  ] = queries
 
-    return {
-      data: cleanedSchedule({
-        recurringEvents: recurringEvents.data as RawRecurringEvents[],
-        scheduledEvents: scheduledEvents.data as RawScheduledEvent[],
-        speakers: cleanedSpeakers(speakers.data as RawSpeaker[]),
-        talks: cleanedTalks({
-          speakers: speakers.data as RawSpeaker[],
-          talks: talks.data as RawTalk[],
+  return {
+    data: isLoading
+      ? []
+      : cleanedSchedule({
+          recurringEvents,
+          scheduledEvents,
+          speakers: cleanedSpeakers(speakers),
+          talks: cleanedTalks({ speakers, talks }),
+          workshops: cleanedWorkshops(workshops, cleanedSpeakers(speakers)),
         }),
-        workshops: cleanedWorkshops(
-          workshops.data as RawWorkshop[],
-          cleanedSpeakers(speakers.data as RawSpeaker[]),
-        ),
-      }),
-      isLoading,
-      isRefetching,
-      refetch,
-    }
+    isLoading,
+    isRefetching,
+    refetch,
   }
 }
 
