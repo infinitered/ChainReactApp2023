@@ -15,7 +15,7 @@ import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { useScheduledEvents } from "../../services/api"
+import { useScheduledEventsData } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent, Speaker } from "../../services/api/webflow-api.types"
@@ -236,7 +236,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
   const { scrollY, scrollHandler } = useScrollY()
   const { bottom: paddingBottom } = useSafeAreaInsets()
 
-  const { data: scheduleData } = useScheduledEvents()
+  const { data: scheduleData } = useScheduledEventsData()
   const schedule = scheduleData?.find((s) => s._id === params?.scheduleId)
 
   if (!schedule) return null
