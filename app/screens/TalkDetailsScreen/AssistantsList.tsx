@@ -1,10 +1,13 @@
 import React from "react"
-import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { Dimensions, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { AutoImage, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
 import { Speaker } from "../../services/api/webflow-api.types"
 import { SocialButtons } from "../../components/SocialButton"
+
+const ASSISTANT_GAP = spacing.medium
+const ASSISTANT_WIDTH = (Dimensions.get("window").width - ASSISTANT_GAP * 3) / 2
 
 export interface AssistantsListProp {
   assistants: Speaker[]
@@ -36,7 +39,7 @@ export function AssistantsList(props: AssistantsListProp) {
                   socialButtons={[
                     { icon: "twitter", url: assistant.twitter },
                     { icon: "github", url: assistant.github },
-                    { icon: "link", url: assistant.externalURL },
+                    { icon: "link", url: assistant.externalURL || assistant.website },
                   ]}
                 />
               </View>
@@ -50,12 +53,11 @@ export function AssistantsList(props: AssistantsListProp) {
 
 const $assistantsContainerWithOne: ViewStyle = {
   flexDirection: "row",
-  marginStart: spacing.large,
 }
 
 const $assistantsContainerWithMore: ViewStyle = {
   flexDirection: "row",
-  justifyContent: "space-around",
+  flexWrap: "wrap",
 }
 
 const $assistantContainer: ViewStyle = {
@@ -65,10 +67,13 @@ const $assistantContainer: ViewStyle = {
 
 const $assistant: ViewStyle = {
   alignItems: "center",
+  marginTop: spacing.large,
+  width: ASSISTANT_WIDTH,
+  justifyContent: "center",
 }
 
 const $assistantHeading: TextStyle = {
-  marginVertical: spacing.large,
+  marginTop: spacing.large,
 }
 
 const $assistantImage: ImageStyle = {
