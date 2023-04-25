@@ -1,0 +1,23 @@
+# flow: Test the AI Chat feature
+
+appId: infinitered.stage.ChainReactConf
+---
+- runFlow: subflows/ExpoDevClient.yaml
+- tapOn: "AI Chat, tab, 5 of 5"
+- tapOn:
+    id: "aiChatInput"
+- "eraseText"
+- inputText: "Who are the speakers from Meta?"
+- tapOn: "Send"
+- assertVisible: "Riccardo Cipolleschi and Christoph Purrer are the speakers from Meta.*"
+- inputText: "When are their talks?"
+- tapOn: "Send"
+- assertVisible: "Riccardo Cipolleschi's talk is on Thursday, May 18 at 2:30 pm. Christoph Purrer's talk is on Friday, May 19 at 10:30 am.*"
+- inputText: "Where is the conference?"
+- tapOn: "Send"
+- assertVisible: "The conference is being held at The Gerding Theater at The Armory in Portland, Oregon.*"
+- inputText: "What are some good places to eat near there?"
+- tapOn: "Send"
+- assertVisible: "There are many great places to eat near The Armory, including Tasty n Alder, Lardo, and Blue Star Donuts.*"
+- tapOn:
+    point: "50%,35%"

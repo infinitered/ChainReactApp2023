@@ -1,3 +1,4 @@
+import { format } from "date-fns"
 import React, { FC, MutableRefObject } from "react"
 import { Dimensions, Pressable, PressableProps, TextStyle, View, ViewStyle } from "react-native"
 import Animated, {
@@ -8,7 +9,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { colors, spacing, typography } from "../../theme"
 import { reportCrash } from "../../utils/crashReporting"
-import { formatDate } from "../../utils/formatDate"
+import { parseDate } from "../../utils/formatDate"
 import { Schedule } from "./ScheduleScreen"
 
 const { width } = Dimensions.get("window")
@@ -113,8 +114,8 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
           onPress={() => {
             onItemPress(index)
           }}
-          text={formatDate(schedule.date, "EE")}
-          accessibilityLabel={formatDate(schedule.date, "EEEE")}
+          text={format(parseDate(schedule.date), "EE")}
+          accessibilityLabel={format(parseDate(schedule.date), "EEEE")}
           {...{ index, scrollX, inputRange, schedules }}
         />
       ))}
