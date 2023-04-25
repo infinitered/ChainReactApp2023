@@ -382,5 +382,5 @@ const $headingContainer: ViewStyle = {
 }
 
 const $carouselContainer: ViewStyle = {
-  marginHorizontal: -spacing.large,
+  marginHorizontal: -spacing.medium,
 }
