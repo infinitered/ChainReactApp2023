@@ -141,11 +141,13 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
 
           <View style={$containerSpacing}>
             <Text preset="eventTitle" style={$heading} tx="breakDetailsScreen.hostedBy" />
-            <Image
-              source={{ uri: sponsor.logo.url }}
-              accessibilityLabel={sponsor.name}
-              style={$logo}
-            />
+            {sponsor && (
+              <Image
+                source={{ uri: sponsor.logo.url }}
+                accessibilityLabel={sponsor.name}
+                style={$logo}
+              />
+            )}
           </View>
 
           <View style={$containerSpacing}>
