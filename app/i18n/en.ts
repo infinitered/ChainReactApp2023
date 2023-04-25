@@ -9,7 +9,7 @@ const en = {
     heading: "Welcome to Chain React!",
     topBlurb:
       "Welcome to the 4th annual React Native Conference! This app is your official companion for all things Chain React.\n\nYou can do it all in the app: View the schedule, find directions to the afterparty, or even recommendations to grab food. It's all here in the app!",
-    bottomBlurb: "Let's Get Started </>",
+    bottomBlurb: "Let's Get Started",
     scheduleButton: "See the schedule",
   },
   errorScreen: {
@@ -104,6 +104,14 @@ const en = {
     talkRecordingPosted: "Talk recording posted",
     videoComingSoon: "Video coming soon",
     workshopBanner: "Events for workshop ticket-holders",
+  },
+  breakDetailsScreen: {
+    description:
+      "Hosted upstairs in the mezzanine, TestDouble will be providing coffee and pair programming in a friendly cafe experience. Bring your toughest code problems, grab a coffee, and visit us for Coffee & Code!",
+    location: "Upstairs mezzanine",
+    hostedBy: "Hosted by",
+    locationLabel: "Location",
+    moreInfo: "More info",
   },
 }
 
