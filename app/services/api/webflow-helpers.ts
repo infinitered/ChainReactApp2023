@@ -67,6 +67,7 @@ export const cleanedSpeaker = (speaker?: RawSpeaker): Speaker | null => {
     ...speaker,
     "speaker-type": WEBFLOW_MAP.speakersType[speaker["speaker-type"]],
     "talk-level": WEBFLOW_MAP.speakersTalk[speaker["talk-level"]],
+    externalURL: speaker["external-url"] ?? speaker.website,
   }
 }
 

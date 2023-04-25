@@ -157,7 +157,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       socialButtons: [
         { url: speaker?.twitter, icon: "twitter" },
         { url: speaker?.github, icon: "github" },
-        { url: speaker?.externalURL || speaker?.website, icon: "link" },
+        { url: speaker?.externalURL, icon: "link" },
       ],
     })),
   }

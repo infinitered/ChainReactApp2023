@@ -51,7 +51,7 @@ export const SocialButtons = ({ socialButtons }: SocialButtonsProps) => (
       <SocialButton
         {...socialButtonProps}
         key={`${socialButtonProps.icon}-${index}`}
-        style={$socialButtons}
+        style={socialButtons.length - 1 > index && $socialButtons}
       />
     ))}
   </>
