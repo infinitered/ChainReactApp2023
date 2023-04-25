@@ -13,7 +13,12 @@ import {
 import { AppStackParamList } from "../../navigators"
 import { useScheduledEventsData, useSponsors } from "../../services/api"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
-import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-api.types"
+import {
+  ImageRef,
+  RecurringEvents,
+  ScheduledEvent,
+  Sponsor,
+} from "../../services/api/webflow-api.types"
 import { ButtonLink, MIN_HEADER_HEIGHT, Screen, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
@@ -37,7 +42,7 @@ interface BreakDetailsProps {
   /**
    * The banner image
    */
-  imageUrl: ImageRequireSource | ImageRef
+  imageUrl: RecurringEvents["secondary-callout-banner"]
   /**
    * The Break Sponsor
    */
@@ -126,7 +131,7 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
                   ? { uri: (imageUrl as ImageRef).url }
                   : (imageUrl as ImageRequireSource)
               }
-              style={$speakerImage}
+              style={$bannerImage}
             />
           </View>
 
@@ -195,7 +200,7 @@ const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
 }
 
-const $speakerImage: ImageStyle = {
+const $bannerImage: ImageStyle = {
   borderRadius: 4,
   height: 315,
   width: "100%",
