@@ -22,7 +22,7 @@ export function AssistantsList(props: AssistantsListProp) {
           text={translate("talkDetailsScreen.assistingTheWorkshop")}
           style={$assistantHeading}
         />
-        <View style={[$assistantContainer, assistants.length > 1 && $assistantsContainerWithMore]}>
+        <View style={$assistantContainer}>
           {assistants.map((assistant) => (
             <View style={$assistant} key={assistant._id}>
               <AutoImage source={{ uri: assistant["speaker-photo"].url }} style={$assistantImage} />
@@ -47,11 +47,8 @@ export function AssistantsList(props: AssistantsListProp) {
 
 const $assistantContainer: ViewStyle = {
   flexDirection: "row",
-  justifyContent: "space-between",
-}
-
-const $assistantsContainerWithMore: ViewStyle = {
   flexWrap: "wrap",
+  justifyContent: "space-between",
 }
 
 const $assistantRoot: ViewStyle = {
