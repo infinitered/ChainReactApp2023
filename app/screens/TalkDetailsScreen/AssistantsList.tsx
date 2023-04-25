@@ -1,14 +1,10 @@
 import React from "react"
-import { Dimensions, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { AutoImage, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
 import { Speaker } from "../../services/api/webflow-api.types"
 import { SocialButtons } from "../../components/SocialButton"
-
-const ASSISTANT_GAP = spacing.medium
-const ASSISTANT_WIDTH = (Dimensions.get("window").width - ASSISTANT_GAP * 3) / 2
-
 export interface AssistantsListProp {
   assistants: Speaker[]
 }
@@ -20,15 +16,13 @@ export function AssistantsList(props: AssistantsListProp) {
 
   return (
     <>
-      <View style={$assistantContainer}>
+      <View style={$assistantRoot}>
         <Text
           preset="listHeading"
           text={translate("talkDetailsScreen.assistingTheWorkshop")}
           style={$assistantHeading}
         />
-        <View
-          style={assistants.length < 2 ? $assistantsContainerWithOne : $assistantsContainerWithMore}
-        >
+        <View style={[$assistantContainer, assistants.length > 1 && $assistantsContainerWithMore]}>
           {assistants.map((assistant) => (
             <View style={$assistant} key={assistant._id}>
               <AutoImage source={{ uri: assistant["speaker-photo"].url }} style={$assistantImage} />
@@ -51,16 +45,16 @@ export function AssistantsList(props: AssistantsListProp) {
   )
 }
 
-const $assistantsContainerWithOne: ViewStyle = {
+const $assistantContainer: ViewStyle = {
   flexDirection: "row",
+  justifyContent: "space-between",
 }
 
 const $assistantsContainerWithMore: ViewStyle = {
-  flexDirection: "row",
   flexWrap: "wrap",
 }
 
-const $assistantContainer: ViewStyle = {
+const $assistantRoot: ViewStyle = {
   marginTop: spacing.large,
   marginBottom: spacing.huge,
 }
@@ -68,7 +62,7 @@ const $assistantContainer: ViewStyle = {
 const $assistant: ViewStyle = {
   alignItems: "center",
   marginTop: spacing.large,
-  width: ASSISTANT_WIDTH,
+  width: "48%",
   justifyContent: "center",
 }
 
