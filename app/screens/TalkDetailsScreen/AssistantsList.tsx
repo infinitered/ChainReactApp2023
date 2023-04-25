@@ -15,33 +15,31 @@ export function AssistantsList(props: AssistantsListProp) {
   if (!assistants) return null
 
   return (
-    <>
-      <View style={$assistantRoot}>
-        <Text
-          preset="listHeading"
-          text={translate("talkDetailsScreen.assistingTheWorkshop")}
-          style={$assistantHeading}
-        />
-        <View style={$assistantContainer}>
-          {assistants.map((assistant) => (
-            <View style={$assistant} key={assistant._id}>
-              <AutoImage source={{ uri: assistant["speaker-photo"].url }} style={$assistantImage} />
-              <Text preset="companionHeading" text={assistant.name} />
-              <Text preset="label" style={$assistantCompany} text={assistant.company} />
-              <View style={$assistantLinks}>
-                <SocialButtons
-                  socialButtons={[
-                    { icon: "twitter", url: assistant.twitter },
-                    { icon: "github", url: assistant.github },
-                    { icon: "link", url: assistant.externalURL },
-                  ]}
-                />
-              </View>
+    <View style={$assistantRoot}>
+      <Text
+        preset="listHeading"
+        text={translate("talkDetailsScreen.assistingTheWorkshop")}
+        style={$assistantHeading}
+      />
+      <View style={$assistantContainer}>
+        {assistants.map((assistant) => (
+          <View style={$assistant} key={assistant._id}>
+            <AutoImage source={{ uri: assistant["speaker-photo"].url }} style={$assistantImage} />
+            <Text preset="companionHeading" text={assistant.name} />
+            <Text preset="label" style={$assistantCompany} text={assistant.company} />
+            <View style={$assistantLinks}>
+              <SocialButtons
+                socialButtons={[
+                  { icon: "twitter", url: assistant.twitter },
+                  { icon: "github", url: assistant.github },
+                  { icon: "link", url: assistant.externalURL },
+                ]}
+              />
             </View>
-          ))}
-        </View>
+          </View>
+        ))}
       </View>
-    </>
+    </View>
   )
 }
 
