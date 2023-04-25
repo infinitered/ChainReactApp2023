@@ -17,7 +17,7 @@ import type {
 } from "./webflow-api.types"
 import { WEBFLOW_MAP } from "./webflow-consts"
 
-const breakBannerImage = require("../../../assets/images/info-ir2.png")
+const breakBannerImage = require("../../../assets/images/testdouble-breaks.png")
 
 /*
  * Converting schedule data from "type ids" to "type names"
