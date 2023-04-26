@@ -1,6 +1,7 @@
 import { ImageSourcePropType, ImageStyle } from "react-native"
 import { ButtonProps } from "../Button"
 import { IconProps } from "../Icon"
+import { spacing } from "../../theme"
 
 interface StaticCarouselProps {
   body: string
@@ -41,7 +42,7 @@ interface DynamicCarouselProps {
 }
 
 export interface Spacer {
-  spacer: boolean
+  spacer: keyof typeof spacing
 }
 
 export type CarouselProps =

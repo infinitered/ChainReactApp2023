@@ -91,33 +91,35 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
         </View>
       )}
       {!!subtitle && (
-        <Animated.View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $slideWrapper, $animatedSlideData]}>
-          {!!meta && <Text preset="primaryLabel" text={meta} style={$meta} />}
-          <Text
-            preset={isSpeaker ? "cardFooterHeading" : "subheading"}
-            text={subtitle}
-            style={[$mb, $mr, !label && $mbLarge]}
-          />
-          {!!label && (
+        <Animated.View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $animatedSlideData]}>
+          <View style={$slideWrapper}>
+            {!!meta && <Text preset="primaryLabel" text={meta} style={$meta} />}
             <Text
-              text={label}
-              style={[
-                $mbLarge,
-                {
-                  fontSize: $label.fontSize,
-                  fontWeight: $label.fontWeight,
-                  lineHeight: $label.lineHeight,
-                  color: $label.color,
-                },
-              ]}
+              preset={isSpeaker ? "cardFooterHeading" : "subheading"}
+              text={subtitle}
+              style={[$mb, $mr, !label && $mbLarge]}
             />
-          )}
-          {!!socialButtons && <View style={[$mr, $mbLarge]}>{socialButtons}</View>}
-          {!!body && <Text text={body} style={$mr} />}
-          <View style={$ctaContainer}>
-            {!!leftButton && <View style={$leftButton}>{leftButton}</View>}
-            {!!rightButton && <View>{rightButton}</View>}
-            {!!button && <View style={$button}>{button}</View>}
+            {!!label && (
+              <Text
+                text={label}
+                style={[
+                  $mbLarge,
+                  {
+                    fontSize: $label.fontSize,
+                    fontWeight: $label.fontWeight,
+                    lineHeight: $label.lineHeight,
+                    color: $label.color,
+                  },
+                ]}
+              />
+            )}
+            {!!socialButtons && <View style={$mbLarge}>{socialButtons}</View>}
+            {!!body && <Text text={body} />}
+            <View style={$ctaContainer}>
+              {!!leftButton && <View style={$leftButton}>{leftButton}</View>}
+              {!!rightButton && <View>{rightButton}</View>}
+              {!!button && <View style={$button}>{button}</View>}
+            </View>
           </View>
         </Animated.View>
       )}
@@ -143,7 +145,7 @@ const $carouselCard: ViewStyle = {
 const $cardWrapper: ViewStyle = {
   overflow: "hidden",
   borderRadius: 4,
-  marginHorizontal: SPACING,
+  marginRight: SPACING,
 }
 
 const $image: ImageStyle = {
@@ -182,7 +184,7 @@ const $button: ViewStyle = {
 
 const $slideWrapper: ViewStyle = {
   marginTop: spacing.medium,
-  marginHorizontal: spacing.medium,
+  paddingRight: spacing.large,
 }
 
 const $otherCards: ViewStyle = {

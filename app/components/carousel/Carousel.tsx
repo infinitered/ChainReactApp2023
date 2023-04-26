@@ -8,7 +8,7 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { openMap } from "../../utils/openMap"
 import { SocialButton } from "../SocialButton"
-import { CAROUSEL_IMAGE_WIDTH, SPACER_WIDTH } from "./constants"
+import { CAROUSEL_IMAGE_WIDTH } from "./constants"
 import { CarouselProps, DynamicCarouselItem, Spacer } from "./carousel.types"
 import { ButtonLink } from "../ButtonLink"
 
@@ -25,7 +25,7 @@ export function Carousel(props: CarouselProps) {
   const onScroll = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
 
   const items: Array<ImageSourcePropType | DynamicCarouselItem | Spacer> = useMemo(() => {
-    return [{ spacer: true }, ...data, { spacer: true }]
+    return [{ spacer: "large" }, ...data, { spacer: "large" }]
   }, [data.length])
 
   return (
@@ -50,7 +50,7 @@ export function Carousel(props: CarouselProps) {
             return (
               <View
                 style={{
-                  width: SPACER_WIDTH,
+                  width: spacing[spacer],
                 }}
               />
             )
