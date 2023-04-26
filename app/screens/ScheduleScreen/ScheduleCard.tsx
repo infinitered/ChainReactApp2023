@@ -46,12 +46,11 @@ const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
   return (
     <View style={$footerContainer}>
-      <Text
-        preset="cardFooterHeading"
-        style={isPast ? $pastFooterHeading : (heading ?? "").length > 0 ? $footerHeading : {}}
-      >
-        {heading}
-      </Text>
+      {(heading ?? "").length > 0 && (
+        <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
+          {heading}
+        </Text>
+      )}
       {isPast ? (
         <>
           <Text style={$pastFooterSubheading}>{subheading}</Text>

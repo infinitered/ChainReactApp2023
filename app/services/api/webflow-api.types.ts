@@ -120,7 +120,7 @@ export interface RawRecurringEvents extends Item, BaseRecurringEvents {
   "event-description"?: string
 }
 
-export interface RecurringEvents extends RawRecurringEvents, BaseRecurringEvents {}
+export interface RecurringEvents extends RawRecurringEvents {}
 
 export interface RawSpeaker extends Item {
   "abstract-2"?: string
