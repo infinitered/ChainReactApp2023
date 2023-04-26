@@ -1,5 +1,28 @@
 import React, { useLayoutEffect, useState } from "react"
-import { Image, ImageProps, ImageURISource, Platform } from "react-native"
+import {
+  Image,
+  ImageProps,
+  ImageSourcePropType,
+  ImageStyle,
+  ImageURISource,
+  Platform,
+} from "react-native"
+import { SCREEN_CONTENT_WIDTH } from "./carousel/constants"
+
+/**
+ * Get the dimensions of an image, scaled to fit the screen content width.
+ *
+ * @param image ImageSourcePropType—can be a remote image or a local image
+ * @returns { height: number, width: number } as ImageStyle
+ */
+export const getFullWidthImageDimensions = (image: ImageSourcePropType) => {
+  const { height, width } = Image.resolveAssetSource(image)
+  const imageRatio = SCREEN_CONTENT_WIDTH / width
+  return {
+    height: height * imageRatio,
+    width: SCREEN_CONTENT_WIDTH,
+  } as ImageStyle
+}
 
 // TODO: document new props
 export interface AutoImageProps extends ImageProps {

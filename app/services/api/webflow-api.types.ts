@@ -1,3 +1,5 @@
+import { ImageRequireSource } from "react-native"
+
 interface Item {
   _archived: boolean
   _cid: string
@@ -105,7 +107,16 @@ export interface RawVenue extends Item {
 
 export interface Venue extends RawVenue {}
 
-export interface RawRecurringEvents extends Item {
+interface BaseRecurringEvents {
+  "secondary-callout": string
+  "secondary-callout-description": string
+  "secondary-callout-link": string
+  "sponsor-for-secondary-callout-optional": string
+  "secondary-callout-banner"?: ImageRequireSource | ImageRef
+  "secondary-callout-location"?: string
+}
+
+export interface RawRecurringEvents extends Item, BaseRecurringEvents {
   "event-description"?: string
 }
 
@@ -178,7 +189,7 @@ export interface RawSpeakerName extends Item {
   title: string
 }
 
-interface ImageRef {
+export interface ImageRef {
   alt: string | null
   field: string
   url: string

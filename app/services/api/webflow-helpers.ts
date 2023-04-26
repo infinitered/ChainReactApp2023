@@ -1,3 +1,4 @@
+import { translate } from "../../i18n"
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
 import { formatDate, sortByTime } from "../../utils/formatDate"
 import { groupBy } from "../../utils/groupBy"
@@ -15,6 +16,8 @@ import type {
   Workshop,
 } from "./webflow-api.types"
 import { WEBFLOW_MAP } from "./webflow-consts"
+
+const breakBannerImage = require("../../../assets/images/testdouble-breaks.png")
 
 /*
  * Converting schedule data from "type ids" to "type names"
@@ -36,10 +39,21 @@ export const cleanedSchedule = ({
     ?.filter((schedule) => !schedule._archived && !schedule._draft)
     .map((schedule) => {
       const isTriviaShow = schedule["event-title"] === WEBFLOW_MAP.triviaShow.title
+      const recurringEvent: RecurringEvents | undefined = recurringEvents?.find(
+        ({ _id }) => _id === schedule["recurring-event"],
+      )
       return {
         ...schedule,
         location: WEBFLOW_MAP.location[schedule.location],
-        "recurring-event": recurringEvents?.find(({ _id }) => _id === schedule["recurring-event"]),
+        "recurring-event": {
+          ...recurringEvent,
+          "secondary-callout-description": translate("breakDetailsScreen.description"),
+          "secondary-callout-location":
+            recurringEvent?.["secondary-callout-location"] ??
+            translate("breakDetailsScreen.location"),
+          "secondary-callout-banner":
+            recurringEvent?.["secondary-callout-banner"] ?? breakBannerImage,
+        },
         "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
         "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
         "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
@@ -166,6 +180,7 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
         subheading: schedule["recurring-event"]?.["event-description"],
         sources: schedule["speaker-3"] ? [schedule["speaker-3"]["speaker-photo"].url] : [],
         id: schedule._id,
+        isSecondaryCallout: schedule["sponsor-is-for-a-callout"],
       }
     case "Party":
       return {
