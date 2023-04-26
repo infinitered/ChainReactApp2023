@@ -24,7 +24,7 @@ export interface SocialButtonData {
 }
 
 export interface DynamicCarouselItem {
-  body: string
+  body?: string
   image: ImageSourcePropType
   imageStyle?: ImageStyle
   label?: string

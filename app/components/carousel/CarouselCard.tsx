@@ -100,14 +100,14 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           <AnimatedText
             preset={isSpeaker ? "cardFooterHeading" : "subheading"}
             text={subtitle}
-            style={[$mb, $mr, $animatedSlideData]}
+            style={[$mb, $mr, $animatedSlideData, !label && $mbLarge]}
           />
           {!!label && (
             <AnimatedText
               text={label}
               style={[
-                $mb,
                 $animatedSlideData,
+                $mbLarge,
                 {
                   fontSize: $label.fontSize,
                   fontWeight: $label.fontWeight,
@@ -117,7 +117,12 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
               ]}
             />
           )}
-          <AnimatedText text={body} style={[$mr, $animatedSlideData]} />
+          {!!socialButtons && (
+            <Animated.View style={[$mr, $animatedSlideData, $mbLarge]}>
+              {socialButtons}
+            </Animated.View>
+          )}
+          {!!body && <AnimatedText text={body} style={[$mr, $animatedSlideData]} />}
           <View style={$ctaContainer}>
             {!!leftButton && (
               <Animated.View style={[$leftButton, $animatedSlideData]}>{leftButton}</Animated.View>
@@ -127,9 +132,6 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
             )}
             {!!button && (
               <Animated.View style={[$button, $animatedSlideData]}>{button}</Animated.View>
-            )}
-            {!!socialButtons && (
-              <Animated.View style={[$mr, $animatedSlideData]}>{socialButtons}</Animated.View>
             )}
           </View>
         </View>
@@ -211,4 +213,8 @@ const $label: TextStyle = {
   fontSize: 16,
   fontWeight: "300",
   lineHeight: 22.4,
+}
+
+const $mbLarge: ViewStyle = {
+  marginBottom: spacing.large,
 }
