@@ -191,7 +191,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
           <Image source={talkBlob} style={$talkBlob} />
 
           <Text preset="bold" style={$nameText} text={fullName} />
-          <Text style={$companyNameText} text={company} />
+          {company?.length > 0 && <Text style={$companyNameText} text={company} />}
         </View>
 
         {hasSocialButtons && (
