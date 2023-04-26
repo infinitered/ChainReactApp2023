@@ -287,7 +287,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
 const $root: ViewStyle = {
   flex: 1,
-  backgroundColor: colors.background,
+  backgroundColor: "red", // colors.background,
 }
 
 const $activityIndicator: ViewStyle = {
