@@ -22,7 +22,7 @@ import { ScheduledEvent, Speaker } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
-import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
+import { DynamicCarouselItem, SocialButtonData } from "../../components/carousel/carousel.types"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 
 export type Variants = "workshop" | "talk"
@@ -148,18 +148,22 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       { url: talk?.["speaker-s"][0]?.externalURL, icon: "link" },
     ],
     isMultipleSpeakers: talk?.["speaker-s"].length > 1,
-    carouselData: talk?.["speaker-s"].map((speaker) => ({
-      image: { uri: speaker?.["speaker-photo"].url },
-      imageStyle: { height: 320 },
-      subtitle: speaker?.name,
-      label: speaker?.company,
-      body: stringOrPlaceholder(speaker?.["speaker-bio"]),
-      socialButtons: [
+    carouselData: talk?.["speaker-s"].map((speaker) => {
+      const socialButtons = [
         { url: speaker?.twitter, icon: "twitter" },
         { url: speaker?.github, icon: "github" },
         { url: speaker?.externalURL, icon: "link" },
-      ],
-    })),
+      ] as SocialButtonData[]
+      const hasSocialButtons = socialButtons.some((button) => button.url)
+      return {
+        image: { uri: speaker?.["speaker-photo"].url },
+        imageStyle: { height: 320 },
+        subtitle: speaker?.name,
+        label: speaker?.company,
+        socialButtons,
+        bodyLabel: hasSocialButtons && `Follow ${talk?.["speaker-s"][0]["speaker-first-name"]}`,
+      }
+    }),
   }
 }
 
@@ -169,7 +173,6 @@ type TalkDetailsSingleSpeakerScreenProps = TalkDetailsSingleSpeakerProps & {
 
 const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeakerScreenProps> =
   function TalkDetailsSingleSpeaker({
-    bio,
     company,
     description,
     firstName,
@@ -178,6 +181,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
     scheduleType,
     socialButtons,
   }) {
+    const hasSocialButtons = socialButtons.some((button) => button.url)
     return (
       <>
         <View style={$containerSpacing}>
@@ -196,14 +200,14 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
           <Text style={$bodyText} text={description} />
         </View>
 
-        <View style={$containerSpacing}>
-          <Text preset="eventTitle" style={$aboutHeading} text={`About ${firstName}`} />
-          <Text style={$bodyText} text={bio} />
-        </View>
-
-        <View style={$linksContainer}>
-          <SocialButtons socialButtons={socialButtons} />
-        </View>
+        {hasSocialButtons && (
+          <View style={$containerSpacing}>
+            <Text preset="eventTitle" style={$aboutHeading} text={`Follow ${firstName}`} />
+            <View style={$linksContainer}>
+              <SocialButtons socialButtons={socialButtons} />
+            </View>
+          </View>
+        )}
       </>
     )
   }
