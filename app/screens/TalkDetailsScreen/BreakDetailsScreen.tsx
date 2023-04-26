@@ -5,6 +5,7 @@ import {
   Dimensions,
   Image,
   ImageRequireSource,
+  ImageSourcePropType,
   ImageStyle,
   TextStyle,
   View,
@@ -13,12 +14,7 @@ import {
 import { AppStackParamList } from "../../navigators"
 import { useScheduledEventsData, useSponsors } from "../../services/api"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
-import {
-  ImageRef,
-  RecurringEvents,
-  ScheduledEvent,
-  Sponsor,
-} from "../../services/api/webflow-api.types"
+import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-api.types"
 import { ButtonLink, MIN_HEADER_HEIGHT, Screen, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
@@ -42,7 +38,7 @@ interface BreakDetailsProps {
   /**
    * The banner image
    */
-  imageUrl: RecurringEvents["secondary-callout-banner"]
+  image: ImageSourcePropType
   /**
    * The Break Sponsor
    */
@@ -66,10 +62,17 @@ const breakDetailsProps = (schedule: ScheduledEvent, sponsors: Sponsor[]): Break
   const sponsor = sponsors.find(
     (s) => s._id === recurringEvent["sponsor-for-secondary-callout-optional"],
   )
+  const imageBanner = recurringEvent["secondary-callout-banner"]
+
+  // (image as ImageRef).url
+  //     ? { uri: (image as ImageRef).url }
+  //     : (image as ImageRequireSource)
   return {
     title: recurringEvent["secondary-callout"],
     subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
-    imageUrl: recurringEvent["secondary-callout-banner"],
+    image: (imageBanner as ImageRef).url
+      ? { uri: (imageBanner as ImageRef).url }
+      : (imageBanner as ImageRequireSource),
     sponsor,
     description: recurringEvent["secondary-callout-description"],
     location: recurringEvent["secondary-callout-location"],
@@ -92,8 +95,10 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
 
   if (!schedule) return null
 
-  const { title, subtitle, imageUrl, sponsor, description, location, calloutLink } =
-    breakDetailsProps(schedule, sponsors)
+  const { title, subtitle, image, sponsor, description, location, calloutLink } = breakDetailsProps(
+    schedule,
+    sponsors,
+  )
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
@@ -125,30 +130,23 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
 
           <View style={$containerSpacing}>
             <Image source={imageCurve} style={$imageCurve} />
-            <Image
-              source={
-                (imageUrl as ImageRef).url
-                  ? { uri: (imageUrl as ImageRef).url }
-                  : (imageUrl as ImageRequireSource)
-              }
-              style={$bannerImage}
-            />
+            <Image source={image} style={$bannerImage} />
           </View>
 
           <View style={$descriptionContainer}>
             <Text style={$text} text={description} />
           </View>
 
-          <View style={$containerSpacing}>
-            <Text preset="eventTitle" style={$heading} tx="breakDetailsScreen.hostedBy" />
-            {sponsor && (
+          {sponsor && (
+            <View style={$containerSpacing}>
+              <Text preset="eventTitle" style={$heading} tx="breakDetailsScreen.hostedBy" />
               <Image
                 source={{ uri: sponsor.logo.url }}
                 accessibilityLabel={sponsor.name}
                 style={$logo}
               />
-            )}
-          </View>
+            </View>
+          )}
 
           <View style={$containerSpacing}>
             <Text preset="eventTitle" style={$heading} tx="breakDetailsScreen.locationLabel" />
