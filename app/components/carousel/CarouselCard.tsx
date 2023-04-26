@@ -32,8 +32,6 @@ type SubComponents = {
   Link: typeof Link
 }
 
-const AnimatedText = Animated.createAnimatedComponent(Text)
-
 export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubComponents = ({
   button,
   imageStyle,
@@ -93,20 +91,17 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
         </View>
       )}
       {!!subtitle && (
-        <View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $slideWrapper]}>
-          {!!meta && (
-            <AnimatedText preset="primaryLabel" text={meta} style={[$meta, $animatedSlideData]} />
-          )}
-          <AnimatedText
+        <Animated.View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $slideWrapper, $animatedSlideData]}>
+          {!!meta && <Text preset="primaryLabel" text={meta} style={$meta} />}
+          <Text
             preset={isSpeaker ? "cardFooterHeading" : "subheading"}
             text={subtitle}
-            style={[$mb, $mr, $animatedSlideData, !label && $mbLarge]}
+            style={[$mb, $mr, !label && $mbLarge]}
           />
           {!!label && (
-            <AnimatedText
+            <Text
               text={label}
               style={[
-                $animatedSlideData,
                 $mbLarge,
                 {
                   fontSize: $label.fontSize,
@@ -117,24 +112,14 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
               ]}
             />
           )}
-          {!!socialButtons && (
-            <Animated.View style={[$mr, $animatedSlideData, $mbLarge]}>
-              {socialButtons}
-            </Animated.View>
-          )}
-          {!!body && <AnimatedText text={body} style={[$mr, $animatedSlideData]} />}
+          {!!socialButtons && <View style={[$mr, $mbLarge]}>{socialButtons}</View>}
+          {!!body && <Text text={body} style={$mr} />}
           <View style={$ctaContainer}>
-            {!!leftButton && (
-              <Animated.View style={[$leftButton, $animatedSlideData]}>{leftButton}</Animated.View>
-            )}
-            {!!rightButton && (
-              <Animated.View style={$animatedSlideData}>{rightButton}</Animated.View>
-            )}
-            {!!button && (
-              <Animated.View style={[$button, $animatedSlideData]}>{button}</Animated.View>
-            )}
+            {!!leftButton && <View style={$leftButton}>{leftButton}</View>}
+            {!!rightButton && <View>{rightButton}</View>}
+            {!!button && <View style={$button}>{button}</View>}
           </View>
-        </View>
+        </Animated.View>
       )}
     </View>
   )
@@ -197,6 +182,7 @@ const $button: ViewStyle = {
 
 const $slideWrapper: ViewStyle = {
   marginTop: spacing.medium,
+  marginHorizontal: spacing.medium,
 }
 
 const $otherCards: ViewStyle = {

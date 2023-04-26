@@ -1,5 +1,5 @@
 import React from "react"
-import { ImageStyle, TextStyle, View, ViewStyle, Image } from "react-native"
+import { TextStyle, View, ViewStyle, Image } from "react-native"
 import { Screen, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { translate } from "../../i18n"
@@ -29,7 +29,7 @@ export const CodeOfConductScreen = () => {
       </View>
 
       <View style={$imageContainer}>
-        <Image style={$infoImage} source={confImage} />
+        <Image source={confImage} />
       </View>
 
       <View style={$content}>
@@ -59,11 +59,7 @@ const $content: ViewStyle = {
 }
 
 const $imageContainer: ViewStyle = {
-  marginVertical: spacing.large,
-}
-
-const $infoImage: ImageStyle = {
-  marginHorizontal: spacing.extraSmall,
+  margin: spacing.large,
 }
 
 const $mb: ViewStyle = {
