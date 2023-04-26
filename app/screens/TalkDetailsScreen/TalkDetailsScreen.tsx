@@ -175,7 +175,6 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
   function TalkDetailsSingleSpeaker({
     company,
     description,
-    firstName,
     fullName,
     imageUrl,
     scheduleType,
@@ -195,19 +194,18 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
           <Text style={$companyNameText} text={company} />
         </View>
 
-        <View style={$detailsContainer}>
-          <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
-          <Text style={$bodyText} text={description} />
-        </View>
-
         {hasSocialButtons && (
           <View style={$containerSpacing}>
-            <Text preset="eventTitle" style={$aboutHeading} text={`Follow ${firstName}`} />
             <View style={$linksContainer}>
               <SocialButtons socialButtons={socialButtons} />
             </View>
           </View>
         )}
+
+        <View style={$detailsContainer}>
+          <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
+          <Text style={$bodyText} text={description} />
+        </View>
       </>
     )
   }
@@ -330,7 +328,7 @@ const $subheadingColor: TextStyle = {
 }
 
 const $detailsContainer: ViewStyle = {
-  marginVertical: spacing.large,
+  marginBottom: spacing.large,
 }
 
 const $speakerImage: ImageStyle = {
@@ -347,12 +345,6 @@ const $detailsText: TextStyle = {
   fontSize: 26,
   lineHeight: 28.6,
   ...$containerSpacing,
-}
-
-const $aboutHeading: TextStyle = {
-  ...$containerSpacing,
-  color: colors.palette.primary500,
-  textTransform: "uppercase",
 }
 
 const $bodyText: TextStyle = {

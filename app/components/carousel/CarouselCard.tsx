@@ -46,7 +46,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   totalCardCount,
   variant,
 }) => {
-  const { label, subtitle, meta, body, image, bodyLabel } = item as DynamicCarouselItem
+  const { label, subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
   const isMultipleCards = totalCardCount > 1 && index === totalCardCount
 
@@ -100,14 +100,14 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
           <AnimatedText
             preset={isSpeaker ? "cardFooterHeading" : "subheading"}
             text={subtitle}
-            style={[$mb, $mr, $animatedSlideData]}
+            style={[$mb, $mr, $animatedSlideData, !label && $mbLarge]}
           />
           {!!label && (
             <AnimatedText
               text={label}
               style={[
-                $mb,
                 $animatedSlideData,
+                $mbLarge,
                 {
                   fontSize: $label.fontSize,
                   fontWeight: $label.fontWeight,
@@ -117,20 +117,10 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
               ]}
             />
           )}
-          {!!bodyLabel && (
-            <AnimatedText
-              text={bodyLabel}
-              style={[
-                $mb,
-                $animatedSlideData,
-                {
-                  fontSize: $label.fontSize,
-                  fontWeight: $label.fontWeight,
-                  lineHeight: $label.lineHeight,
-                  color: $label.color,
-                },
-              ]}
-            />
+          {!!socialButtons && (
+            <Animated.View style={[$mr, $animatedSlideData, $mbLarge]}>
+              {socialButtons}
+            </Animated.View>
           )}
           {!!body && <AnimatedText text={body} style={[$mr, $animatedSlideData]} />}
           <View style={$ctaContainer}>
@@ -142,9 +132,6 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
             )}
             {!!button && (
               <Animated.View style={[$button, $animatedSlideData]}>{button}</Animated.View>
-            )}
-            {!!socialButtons && (
-              <Animated.View style={[$mr, $animatedSlideData]}>{socialButtons}</Animated.View>
             )}
           </View>
         </View>
@@ -226,4 +213,8 @@ const $label: TextStyle = {
   fontSize: 16,
   fontWeight: "300",
   lineHeight: 22.4,
+}
+
+const $mbLarge: ViewStyle = {
+  marginBottom: spacing.large,
 }
