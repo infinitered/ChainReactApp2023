@@ -2,11 +2,11 @@ import React, { FC } from "react"
 import { StackScreenProps } from "@react-navigation/stack"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import {
-  Dimensions,
   Image,
   ImageRequireSource,
   ImageSourcePropType,
   ImageStyle,
+  StyleProp,
   TextStyle,
   View,
   ViewStyle,
@@ -15,16 +15,22 @@ import { AppStackParamList } from "../../navigators"
 import { useScheduledEventsData, useSponsors } from "../../services/api"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-api.types"
-import { ButtonLink, MIN_HEADER_HEIGHT, Screen, Text } from "../../components"
+import {
+  ButtonLink,
+  getFullWidthImageDimensions,
+  MIN_HEADER_HEIGHT,
+  Screen,
+  Text,
+} from "../../components"
 import { colors, spacing } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { translate } from "../../i18n"
+import { SCREEN_WIDTH } from "../../components/carousel/constants"
 
 const imageCurve = require("../../../assets/images/workshop-curve.png")
-const SCREEN_WIDTH = Dimensions.get("screen").width
 
 interface BreakDetailsProps {
   /**
@@ -63,10 +69,6 @@ const breakDetailsProps = (schedule: ScheduledEvent, sponsors: Sponsor[]): Break
     (s) => s._id === recurringEvent["sponsor-for-secondary-callout-optional"],
   )
   const imageBanner = recurringEvent["secondary-callout-banner"]
-
-  // (image as ImageRef).url
-  //     ? { uri: (image as ImageRef).url }
-  //     : (image as ImageRequireSource)
   return {
     title: recurringEvent["secondary-callout"],
     subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
@@ -99,6 +101,7 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
     schedule,
     sponsors,
   )
+  const $bannerImage: StyleProp<ImageStyle> = [$bannerImageBase, getFullWidthImageDimensions(image)]
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
@@ -200,10 +203,8 @@ const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
 }
 
-const $bannerImage: ImageStyle = {
+const $bannerImageBase: ImageStyle = {
   borderRadius: 4,
-  height: 315,
-  width: "100%",
 }
 
 const $text: TextStyle = {
