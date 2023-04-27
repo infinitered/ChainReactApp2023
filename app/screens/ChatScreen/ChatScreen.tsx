@@ -14,7 +14,7 @@ const chatbotName = "Chain React Bot"
 const INITIAL_MESSAGES: IMessage[] = [
   {
     _id: 1,
-    text: `Hello there! I'm ${chatbotName}. How can I help you with questions about the Chain React conference and the surrounding Portland area?`,
+    text: `Hello there! I'm ${chatbotName}. How can I help you with questions about the Chain React conference and the surrounding Portland area? Please note I'm an experimental feature and if something goes wrong, just let an Infinite Red team member know!`,
     createdAt: new Date(),
     user: {
       _id: 2,
