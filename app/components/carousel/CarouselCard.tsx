@@ -13,7 +13,7 @@ import { ButtonLink } from "../ButtonLink"
 import { Text } from "../Text"
 import { colors, spacing } from "../../theme"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { CAROUSEL_CARD_WIDTH, CAROUSEL_GAP } from "./constants"
+import { CAROUSEL_CARD_WIDTH, CAROUSEL_GAP, CAROUSEL_INTERVAL } from "./constants"
 import { DynamicCarouselItem } from "./carousel.types"
 
 export type CarouselCardProps = {
@@ -50,12 +50,12 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   // const isMultipleCards = totalCardCount > 1 && index === totalCardCount
 
   const inputRange = [
-    (index - 2) * CAROUSEL_CARD_WIDTH,
-    (index - 1) * CAROUSEL_CARD_WIDTH,
-    index * CAROUSEL_CARD_WIDTH,
+    (index - 2) * CAROUSEL_INTERVAL,
+    (index - 1) * CAROUSEL_INTERVAL,
+    index * CAROUSEL_INTERVAL,
   ]
 
-  console.tron.log({ index, inputRange })
+  // console.tron.log({ index, inputRange })
 
   const $animatedImage = useAnimatedStyle(() => {
     const scale = interpolate(scrollX.value, inputRange, [1, 1.1, 1])
