@@ -42,12 +42,10 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   rightButton,
   scrollX,
   socialButtons,
-  // totalCardCount,
   variant,
 }) => {
   const { label, subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
-  // const isMultipleCards = totalCardCount > 1 && index === totalCardCount
 
   const inputRange = [
     (index - 2) * CAROUSEL_INTERVAL,
@@ -55,26 +53,22 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
     index * CAROUSEL_INTERVAL,
   ]
 
-  // console.tron.log({ index, inputRange })
-
   const $animatedImage = useAnimatedStyle(() => {
     const scale = interpolate(scrollX.value, inputRange, [1, 1.1, 1])
     return { transform: [{ scale }] }
   })
 
-  // const $animatedSlideData = useAnimatedStyle(() => {
-  //   const translateX = interpolate(scrollX.value, inputRange, [
-  //     CAROUSEL_IMAGE_WIDTH,
-  //     isMultipleCards ? -spacing.extraSmall : spacing.medium,
-  //     -CAROUSEL_IMAGE_WIDTH,
-  //   ])
+  const $animatedSlideData = useAnimatedStyle(() => {
+    const translateX = interpolate(scrollX.value, inputRange, [
+      CAROUSEL_INTERVAL,
+      0,
+      -CAROUSEL_INTERVAL,
+    ])
 
-  //   return {
-  //     transform: [{ translateX }],
-  //   }
-  // })
-
-  const $animatedSlideData = {}
+    return {
+      transform: [{ translateX }],
+    }
+  })
 
   const isSpeaker = variant === "speaker"
   const offset = 5
