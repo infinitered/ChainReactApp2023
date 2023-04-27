@@ -30,19 +30,15 @@ const data: Person[] = [
   },
   {
     name: "Simran Sachdeva",
-    role: "CFP Committee, Workshop Assistant, & App Testing",
-  },
-  {
-    name: "Darin Wilson",
-    role: "CFP Committe",
+    role: "Workshop Assistant & App Testing",
   },
   {
     name: "Josh Yoes",
-    role: "CFP Committee & App Development",
+    role: "App Development",
   },
   {
     name: "Kate Kim",
-    role: "CFP Committee & App Development",
+    role: "App Development",
   },
   {
     name: "Robin Heinze",
