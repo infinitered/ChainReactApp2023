@@ -30,7 +30,7 @@ const data: Person[] = [
   },
   {
     name: "Simran Sachdeva",
-    role: "Workshop Assistant, & App Testing",
+    role: "Workshop Assistant & App Testing",
   },
   {
     name: "Josh Yoes",
