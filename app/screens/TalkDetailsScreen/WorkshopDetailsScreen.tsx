@@ -117,8 +117,8 @@ const $contentSpacing: ViewStyle = {
 }
 
 const $speakerPanelTitle: TextStyle = {
-  marginTop: spacing.medium,
   ...$containerSpacing,
+  marginTop: spacing.medium,
 }
 
 const $speakerPanelDescription: TextStyle = {

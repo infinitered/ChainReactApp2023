@@ -343,9 +343,9 @@ const $companyNameText: TextStyle = {
 }
 
 const $detailsText: TextStyle = {
+  ...$containerSpacing,
   fontSize: 26,
   lineHeight: 28.6,
-  ...$containerSpacing,
 }
 
 const $bodyText: TextStyle = {
