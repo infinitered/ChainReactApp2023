@@ -1,7 +1,6 @@
 import React from "react"
 import {
   GestureResponderEvent,
-  Image,
   ImageSourcePropType,
   ImageStyle,
   TextStyle,
@@ -71,23 +70,19 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   })
 
   const isSpeaker = variant === "speaker"
-  const offset = 5
 
   return (
     <View style={$carouselCard}>
       {isSpeaker && (
-        <Animated.View style={$otherCards}>
-          <BoxShadow preset="primary" offset={offset}>
-            <Image
-              source={source}
-              style={[$image, imageStyle, { width: CAROUSEL_CARD_WIDTH - offset }]}
-            />
-          </BoxShadow>
-        </Animated.View>
+        <BoxShadow preset="primary" offset={5}>
+          <View style={[$image, imageStyle, $boxShadowImageWrapper]}>
+            <Animated.Image source={source} style={[$image, imageStyle, $animatedImage]} />
+          </View>
+        </BoxShadow>
       )}
       {!isSpeaker && (
-        <View style={$cardWrapper}>
-          <Animated.Image source={source} style={[$image, $animatedImage]} />
+        <View style={$imageWrapper}>
+          <Animated.Image source={source} style={[$image, imageStyle, $animatedImage]} />
         </View>
       )}
       {!!subtitle && (
@@ -143,21 +138,18 @@ const $carouselCard: ViewStyle = {
   marginRight: CAROUSEL_GAP,
 }
 
-const $cardWrapper: ViewStyle = {
+const $imageWrapper: ViewStyle = {
   overflow: "hidden",
   borderRadius: 4,
-}
-
-const $otherCards: ViewStyle = {
-  ...$cardWrapper,
-  borderRadius: 0,
-  paddingTop: spacing.small + spacing.micro,
-  paddingBottom: spacing.medium,
 }
 
 const $image: ImageStyle = {
   height: 274,
   width: CAROUSEL_CARD_WIDTH,
+}
+
+const $boxShadowImageWrapper: ImageStyle = {
+  overflow: "hidden",
 }
 
 const $mb: TextStyle = {
