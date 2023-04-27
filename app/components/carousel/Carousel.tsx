@@ -8,7 +8,12 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { openMap } from "../../utils/openMap"
 import { SocialButton } from "../SocialButton"
-import { CAROUSEL_IMAGE_WIDTH } from "./constants"
+import {
+  CAROUSEL_CARD_WIDTH,
+  CAROUSEL_GAP,
+  SCREEN_CONTENT_GUTTER,
+  SCREEN_CONTENT_WIDTH,
+} from "./constants"
 import { CarouselProps, DynamicCarouselItem, Spacer } from "./carousel.types"
 import { ButtonLink } from "../ButtonLink"
 
@@ -24,8 +29,11 @@ export function Carousel(props: CarouselProps) {
   const scrollX = useSharedValue(0)
   const onScroll = useAnimatedScrollHandler((event) => (scrollX.value = event.contentOffset.x))
 
+  const endingSpacer =
+    SCREEN_CONTENT_WIDTH - (CAROUSEL_CARD_WIDTH + CAROUSEL_GAP) + SCREEN_CONTENT_GUTTER
+
   const items: Array<ImageSourcePropType | DynamicCarouselItem | Spacer> = useMemo(() => {
-    return [{ spacer: "large" }, ...data, { spacer: "large" }]
+    return [{ spacer: SCREEN_CONTENT_GUTTER }, ...data, { spacer: endingSpacer }]
   }, [data.length])
 
   return (
@@ -41,7 +49,7 @@ export function Carousel(props: CarouselProps) {
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         scrollEventThrottle={16}
-        snapToInterval={CAROUSEL_IMAGE_WIDTH}
+        snapToInterval={CAROUSEL_CARD_WIDTH + CAROUSEL_GAP}
         snapToAlignment="start"
         style={props.preset === "dynamic" && $carousel}
         renderItem={({ item, index }) => {
@@ -50,7 +58,7 @@ export function Carousel(props: CarouselProps) {
             return (
               <View
                 style={{
-                  width: spacing[spacer],
+                  width: spacer,
                 }}
               />
             )

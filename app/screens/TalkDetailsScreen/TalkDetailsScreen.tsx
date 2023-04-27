@@ -182,7 +182,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
   }) {
     const hasSocialButtons = socialButtons.some((button) => button.url)
     return (
-      <>
+      <View style={$contentSpacing}>
         <View style={$containerSpacing}>
           <Image source={talkCurve} style={$talkCurve} />
           <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
@@ -206,7 +206,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
           <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
           <Text style={$bodyText} text={description} />
         </View>
-      </>
+      </View>
     )
   }
 
@@ -218,13 +218,11 @@ const TalkDetailsMultipleSpeakers: React.FunctionComponent<TalkDetailsMultipleSp
   function TalkDetailsMultipleSpeakers({ carouselData, description, scheduleType }) {
     return (
       <>
-        <View style={$detailsContainer}>
+        <View style={[$contentSpacing, $detailsContainer]}>
           <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
           <Text style={$bodyText} text={description} />
         </View>
-        <View style={$carouselContainer}>
-          <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
-        </View>
+        <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
       </>
     )
   }
@@ -304,12 +302,15 @@ const $scrollView: ViewStyle = {
 }
 
 const $container = {
-  paddingHorizontal: spacing.large,
   paddingBottom: spacing.large,
 }
 
 const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
+}
+
+const $contentSpacing: ViewStyle = {
+  paddingHorizontal: spacing.large,
 }
 
 const $linksContainer: ViewStyle = {
@@ -374,9 +375,6 @@ const $subtitle: TextStyle = {
 }
 
 const $headingContainer: ViewStyle = {
+  ...$contentSpacing,
   marginBottom: spacing.extraLarge,
-}
-
-const $carouselContainer: ViewStyle = {
-  marginHorizontal: -spacing.medium,
 }

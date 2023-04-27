@@ -1,6 +1,7 @@
 import React from "react"
 import {
   GestureResponderEvent,
+  Image,
   ImageSourcePropType,
   ImageStyle,
   TextStyle,
@@ -12,7 +13,7 @@ import { ButtonLink } from "../ButtonLink"
 import { Text } from "../Text"
 import { colors, spacing } from "../../theme"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { CAROUSEL_IMAGE_WIDTH, SPACING } from "./constants"
+import { CAROUSEL_CARD_WIDTH, CAROUSEL_GAP } from "./constants"
 import { DynamicCarouselItem } from "./carousel.types"
 
 export type CarouselCardProps = {
@@ -41,46 +42,51 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   rightButton,
   scrollX,
   socialButtons,
-  totalCardCount,
+  // totalCardCount,
   variant,
 }) => {
   const { label, subtitle, meta, body, image } = item as DynamicCarouselItem
   const source = subtitle ? image : item
-  const isMultipleCards = totalCardCount > 1 && index === totalCardCount
+  // const isMultipleCards = totalCardCount > 1 && index === totalCardCount
 
   const inputRange = [
-    (index - 2) * CAROUSEL_IMAGE_WIDTH,
-    (index - 1) * CAROUSEL_IMAGE_WIDTH,
-    index * CAROUSEL_IMAGE_WIDTH,
+    (index - 2) * CAROUSEL_CARD_WIDTH,
+    (index - 1) * CAROUSEL_CARD_WIDTH,
+    index * CAROUSEL_CARD_WIDTH,
   ]
+
+  console.tron.log({ index, inputRange })
 
   const $animatedImage = useAnimatedStyle(() => {
     const scale = interpolate(scrollX.value, inputRange, [1, 1.1, 1])
     return { transform: [{ scale }] }
   })
 
-  const $animatedSlideData = useAnimatedStyle(() => {
-    const translateX = interpolate(scrollX.value, inputRange, [
-      CAROUSEL_IMAGE_WIDTH,
-      isMultipleCards ? -spacing.extraSmall : spacing.medium,
-      -CAROUSEL_IMAGE_WIDTH,
-    ])
+  // const $animatedSlideData = useAnimatedStyle(() => {
+  //   const translateX = interpolate(scrollX.value, inputRange, [
+  //     CAROUSEL_IMAGE_WIDTH,
+  //     isMultipleCards ? -spacing.extraSmall : spacing.medium,
+  //     -CAROUSEL_IMAGE_WIDTH,
+  //   ])
 
-    return {
-      transform: [{ translateX }],
-    }
-  })
+  //   return {
+  //     transform: [{ translateX }],
+  //   }
+  // })
+
+  const $animatedSlideData = {}
 
   const isSpeaker = variant === "speaker"
+  const offset = 5
 
   return (
     <View style={$carouselCard}>
       {isSpeaker && (
-        <Animated.View style={[$otherCards, $animatedImage]}>
-          <BoxShadow preset="primary" offset={5}>
-            <Animated.Image
+        <Animated.View style={$otherCards}>
+          <BoxShadow preset="primary" offset={offset}>
+            <Image
               source={source}
-              style={[$image, imageStyle, { width: CAROUSEL_IMAGE_WIDTH - 36 }]}
+              style={[$image, imageStyle, { width: CAROUSEL_CARD_WIDTH - offset }]}
             />
           </BoxShadow>
         </Animated.View>
@@ -91,7 +97,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
         </View>
       )}
       {!!subtitle && (
-        <Animated.View style={[{ width: CAROUSEL_IMAGE_WIDTH }, $animatedSlideData]}>
+        <Animated.View style={$animatedSlideData}>
           <View style={$slideWrapper}>
             {!!meta && <Text preset="primaryLabel" text={meta} style={$meta} />}
             <Text
@@ -139,18 +145,25 @@ const Link: React.FunctionComponent<LinkProps> = ({ openLink, text }) => {
 CarouselCard.Link = Link
 
 const $carouselCard: ViewStyle = {
-  width: CAROUSEL_IMAGE_WIDTH,
+  width: CAROUSEL_CARD_WIDTH,
+  marginRight: CAROUSEL_GAP,
 }
 
 const $cardWrapper: ViewStyle = {
   overflow: "hidden",
   borderRadius: 4,
-  marginRight: SPACING,
+}
+
+const $otherCards: ViewStyle = {
+  ...$cardWrapper,
+  borderRadius: 0,
+  paddingTop: spacing.small + spacing.micro,
+  paddingBottom: spacing.medium,
 }
 
 const $image: ImageStyle = {
   height: 274,
-  width: CAROUSEL_IMAGE_WIDTH,
+  width: CAROUSEL_CARD_WIDTH,
 }
 
 const $mb: TextStyle = {
@@ -184,16 +197,7 @@ const $button: ViewStyle = {
 
 const $slideWrapper: ViewStyle = {
   marginTop: spacing.medium,
-  paddingRight: spacing.large,
-}
-
-const $otherCards: ViewStyle = {
-  ...$cardWrapper,
-  borderRadius: 0,
-  paddingTop: spacing.small + spacing.micro,
-  paddingBottom: spacing.medium,
-  marginLeft: spacing.medium,
-  width: CAROUSEL_IMAGE_WIDTH - 32,
+  paddingHorizontal: spacing.medium,
 }
 
 const $label: TextStyle = {
