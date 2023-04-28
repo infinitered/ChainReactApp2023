@@ -62,9 +62,9 @@ export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () 
       </View>
       <View style={$footer}>
         <Text preset="companionHeading" text={"Specs:"} />
-        {Updates.channel.length > 0 ?? (
+        {Updates.channel.length > 0 ? (
           <Text preset="label" text={`Channel: ${Updates.channel}`} style={$spec} />
-        )}
+        ) : null}
         {Updates.updateId ? (
           <Text preset="label" text={`Update ID: ${Updates.updateId}`} style={$spec} />
         ) : null}

@@ -97,12 +97,18 @@ const OTAUpdates = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   async function fetchAndRestartApp() {
-    await Updates.fetchUpdateAsync()
-    await Updates.reloadAsync()
+    const fetchUpdate = await Updates.fetchUpdateAsync()
+    if (fetchUpdate.isNew) {
+      await Updates.reloadAsync()
+    } else {
+      setIsModalVisible(false)
+      reportCrash("Fetch Update failed")
+    }
   }
 
   async function onFetchUpdateAsync() {
     if (!Device.isDevice && __DEV__) return
+    console.log("HERE")
     try {
       const update = await Updates.checkForUpdateAsync()
       setIsModalVisible(update.isAvailable)
