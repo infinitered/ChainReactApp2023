@@ -75,7 +75,7 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
             <Text preset="companionHeading" style={$subtitle} text={subtitle} />
           </View>
 
-          <View>
+          <View style={$contentSpacing}>
             <Text
               text={`${schedule.type} details`}
               preset="boldHeading"
@@ -83,9 +83,9 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
             />
             <Text text={description} style={$speakerPanelDescription} />
             <Text preset="boldHeading" tx={instructor} txOptions={{ count: instructors.length }} />
-            <View style={{ marginHorizontal: -spacing.large }}>
-              <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
-            </View>
+          </View>
+          <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
+          <View style={$contentSpacing}>
             {assistants?.length && <AssistantsList assistants={assistants} />}
           </View>
         </View>
@@ -103,7 +103,6 @@ const $scrollView: ViewStyle = {
 }
 
 const $container = {
-  paddingHorizontal: spacing.large,
   paddingBottom: spacing.large,
 }
 
@@ -111,9 +110,13 @@ const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
 }
 
+const $contentSpacing: ViewStyle = {
+  paddingHorizontal: spacing.large,
+}
+
 const $speakerPanelTitle: TextStyle = {
-  marginTop: spacing.medium,
   ...$containerSpacing,
+  marginTop: spacing.medium,
 }
 
 const $speakerPanelDescription: TextStyle = {
@@ -130,5 +133,6 @@ const $subtitle: TextStyle = {
 }
 
 const $headingContainer: ViewStyle = {
+  ...$contentSpacing,
   marginBottom: spacing.extraLarge,
 }

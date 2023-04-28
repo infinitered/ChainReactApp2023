@@ -386,10 +386,9 @@ const $footerContainer: ViewStyle = {
 
 const $rightContainer: ViewStyle = {
   position: "absolute",
-  right: -spacing.extraSmall,
+  right: 0,
   top: 0,
   bottom: 0,
-  width: 200,
 }
 
 const $arrowContainer: ViewStyle = {
@@ -399,8 +398,8 @@ const $arrowContainer: ViewStyle = {
 }
 
 const $partyArrowContainer: ViewStyle = {
-  bottom: -spacing.large,
-  right: -spacing.medium,
+  bottom: 0,
+  right: 0,
   position: "absolute",
 }
 

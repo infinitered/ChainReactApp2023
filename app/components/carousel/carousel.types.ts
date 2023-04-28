@@ -41,7 +41,7 @@ interface DynamicCarouselProps {
 }
 
 export interface Spacer {
-  spacer: boolean
+  spacer: number
 }
 
 export type CarouselProps =
