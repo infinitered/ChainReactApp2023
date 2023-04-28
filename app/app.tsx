@@ -121,7 +121,6 @@ function App(props: AppProps) {
         console.tron.log(error)
       }
     }
-
     onFetchUpdateAsync()
   })
 
