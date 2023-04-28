@@ -94,6 +94,7 @@ const CustomToast = () => {
 // Setting up our OTA Updates component
 const OTAUpdates = () => {
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   async function fetchAndRestartApp() {
     const fetchUpdate = await Updates.fetchUpdateAsync()
@@ -101,6 +102,7 @@ const OTAUpdates = () => {
       await Updates.reloadAsync()
     } else {
       setIsModalVisible(false)
+      setIsUpdating(false)
       reportCrash("Fetch Update failed")
     }
   }
@@ -126,11 +128,12 @@ const OTAUpdates = () => {
       title="ota.title"
       subtitle="ota.subtitle"
       confirmOnPress={{
-        cta: () => {
-          fetchAndRestartApp()
-          setIsModalVisible(false)
+        cta: async () => {
+          setIsUpdating(true)
+          await fetchAndRestartApp()
         },
-        label: "ota.confirmLabel",
+        label: isUpdating ? "ota.confirmLabelUpdating" : "ota.confirmLabel",
+        disabled: isUpdating,
       }}
       cancelOnPress={{
         cta: () => {

@@ -119,6 +119,7 @@ const en = {
       "Good things come to those who update! Check out the newest version of our app! Blame Jamon for any bugs!",
     cancelLabel: "Maybe Later",
     confirmLabel: "Update",
+    confirmLabelUpdating: "Updating...",
   },
 }
 
