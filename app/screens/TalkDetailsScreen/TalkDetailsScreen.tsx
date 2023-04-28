@@ -24,6 +24,7 @@ import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 import { DynamicCarouselItem, SocialButtonData } from "../../components/carousel/carousel.types"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
+import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
 export type Variants = "workshop" | "talk"
 
@@ -181,12 +182,16 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
     socialButtons,
   }) {
     const hasSocialButtons = socialButtons.some((button) => button.url)
+    const offset = 6
     return (
       <View style={$contentSpacing}>
         <View style={$containerSpacing}>
           <Image source={talkCurve} style={$talkCurve} />
-          <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
-            <Image source={{ uri: imageUrl }} style={$speakerImage} />
+          <BoxShadow preset="primary" style={$containerSpacing} offset={offset}>
+            <Image
+              source={{ uri: imageUrl }}
+              style={[$speakerImage, { width: SCREEN_CONTENT_WIDTH - offset }]}
+            />
           </BoxShadow>
           <Image source={talkBlob} style={$talkBlob} />
 

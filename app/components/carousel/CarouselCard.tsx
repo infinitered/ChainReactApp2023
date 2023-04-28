@@ -71,18 +71,26 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
 
   const isSpeaker = variant === "speaker"
 
+  const offset = 5
+  const imageStyleWithOffset: ImageStyle = isSpeaker
+    ? { ...imageStyle, width: CAROUSEL_CARD_WIDTH - offset }
+    : imageStyle
+
   return (
     <View style={$carouselCard}>
       {isSpeaker && (
         <BoxShadow preset="primary" offset={5}>
-          <View style={[$image, imageStyle, $boxShadowImageWrapper]}>
-            <Animated.Image source={source} style={[$image, imageStyle, $animatedImage]} />
+          <View style={[$image, imageStyleWithOffset, $boxShadowImageWrapper]}>
+            <Animated.Image
+              source={source}
+              style={[$image, imageStyleWithOffset, $animatedImage]}
+            />
           </View>
         </BoxShadow>
       )}
       {!isSpeaker && (
         <View style={$imageWrapper}>
-          <Animated.Image source={source} style={[$image, imageStyle, $animatedImage]} />
+          <Animated.Image source={source} style={[$image, imageStyleWithOffset, $animatedImage]} />
         </View>
       )}
       {!!subtitle && (
