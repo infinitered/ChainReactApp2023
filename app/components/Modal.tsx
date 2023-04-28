@@ -24,30 +24,27 @@ export const Modal = ({
   confirmOnPress,
   cancelOnPress,
   isVisible,
-}: ModalProps) => {
-  console.log({ subtitle })
-  return (
-    <RNModal animationType="slide" transparent={true} visible={isVisible}>
-      <View style={$wrapper}>
-        <View style={$card}>
-          <Text preset="subheading" tx={title} style={$textColor} />
-          {subtitle ? <Text text="body" style={$subtitle} tx={subtitle} /> : null}
-          <Button
-            shadowStyle={$confirmButton}
-            onPress={confirmOnPress.cta}
-            tx={confirmOnPress.label}
-          />
-          <Button
-            preset="link"
-            style={$cancelButton}
-            onPress={cancelOnPress.cta}
-            tx={cancelOnPress.label}
-          />
-        </View>
+}: ModalProps) => (
+  <RNModal animationType="slide" transparent={true} visible={isVisible}>
+    <View style={$wrapper}>
+      <View style={$card}>
+        <Text preset="subheading" tx={title} style={$textColor} />
+        {subtitle ? <Text text="body" style={$subtitle} tx={subtitle} /> : null}
+        <Button
+          shadowStyle={$confirmButton}
+          onPress={confirmOnPress.cta}
+          tx={confirmOnPress.label}
+        />
+        <Button
+          preset="link"
+          style={$cancelButton}
+          onPress={cancelOnPress.cta}
+          tx={cancelOnPress.label}
+        />
       </View>
-    </RNModal>
-  )
-}
+    </View>
+  </RNModal>
+)
 
 const $wrapper: ViewStyle = {
   flex: 1,
