@@ -84,9 +84,7 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
             <Text text={description} style={$speakerPanelDescription} />
             <Text preset="boldHeading" tx={instructor} txOptions={{ count: instructors.length }} />
           </View>
-          <View style={$carouselContainer}>
-            <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
-          </View>
+          <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
           <View style={$contentSpacing}>
             {assistants?.length && <AssistantsList assistants={assistants} />}
           </View>
@@ -138,5 +136,3 @@ const $headingContainer: ViewStyle = {
   ...$contentSpacing,
   marginBottom: spacing.extraLarge,
 }
-
-const $carouselContainer: ViewStyle = {}
