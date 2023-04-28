@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { TextStyle, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../navigators/AppNavigator"
 import { resetRoot } from "../navigators/navigationUtilities"
@@ -12,6 +12,8 @@ import { translate } from "../i18n"
 import { clear } from "../utils/storage"
 import { useQueryClient } from "@tanstack/react-query"
 import { BackButton } from "../navigators/BackButton"
+import * as Updates from "expo-updates"
+import * as Application from "expo-application"
 
 export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () => {
   const navigation = useAppNavigation()
@@ -44,18 +46,34 @@ export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () 
 
   return (
     <Screen
+      contentContainerStyle={$rootContainer}
       style={$root}
-      preset="scroll"
-      ScrollViewProps={{ showsVerticalScrollIndicator: false }}
+      preset="fixed"
       safeAreaEdges={["bottom"]}
     >
-      <Text preset="bold" tx="debugScreen.pushToken" style={$subtitle} />
-      <Text text={fcmToken} selectable />
-      <Button
-        shadowStyle={$resetStateButtonShadow}
-        tx="debugScreen.resetState"
-        onPress={() => clearState()}
-      />
+      <View>
+        <Text preset="bold" tx="debugScreen.pushToken" style={$subtitle} />
+        <Text text={fcmToken} selectable />
+        <Button
+          shadowStyle={$resetStateButtonShadow}
+          tx="debugScreen.resetState"
+          onPress={() => clearState()}
+        />
+      </View>
+      <View style={$footer}>
+        <Text preset="companionHeading" text={"Specs:"} />
+        {Updates.channel.length > 0 ?? (
+          <Text preset="label" text={`Channel: ${Updates.channel}`} style={$spec} />
+        )}
+        {Updates.updateId ? (
+          <Text preset="label" text={`Update ID: ${Updates.updateId}`} style={$spec} />
+        ) : null}
+        <Text
+          preset="label"
+          text={`App Version: ${Application.nativeApplicationVersion}`}
+          style={$spec}
+        />
+      </View>
     </Screen>
   )
 }
@@ -65,10 +83,23 @@ const $root: ViewStyle = {
   paddingHorizontal: spacing.large,
 }
 
+const $rootContainer: ViewStyle = {
+  flex: 1,
+  justifyContent: "space-between",
+}
+
 const $resetStateButtonShadow: ViewStyle = {
   marginTop: spacing.large,
 }
 
 const $subtitle: TextStyle = {
   marginBottom: spacing.medium,
+}
+
+const $footer: ViewStyle = {
+  marginBottom: spacing.medium,
+}
+
+const $spec: TextStyle = {
+  marginTop: spacing.extraSmall,
 }

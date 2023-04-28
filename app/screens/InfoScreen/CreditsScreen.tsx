@@ -1,7 +1,5 @@
 import React from "react"
 import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
-import * as Updates from "expo-updates"
-import * as Application from "expo-application"
 import { Screen, Text } from "../../components"
 import { translate } from "../../i18n"
 import { useAppNavigation, useHeader } from "../../hooks"
@@ -121,22 +119,6 @@ export const CreditsScreen = () => {
           ListHeaderComponent={
             <Text preset="screenHeading" tx="infoScreen.creditsHeading" style={$heading} />
           }
-          ListFooterComponent={
-            <View style={$footer}>
-              <Text preset="companionHeading" text={"Specs:"} />
-              {Updates.channel.length > 0 ?? (
-                <Text preset="label" text={`Channel: ${Updates.channel}`} style={$spec} />
-              )}
-              {Updates.updateId ? (
-                <Text preset="label" text={`Update ID: ${Updates.updateId}`} style={$spec} />
-              ) : null}
-              <Text
-                preset="label"
-                text={`App Version: ${Application.nativeApplicationVersion}`}
-                style={$spec}
-              />
-            </View>
-          }
           data={data}
           renderItem={({ item }) => {
             return (
@@ -176,13 +158,4 @@ const $person: TextStyle = {
 const $role: TextStyle = {
   marginTop: spacing.tiny,
   color: colors.palette.primary500,
-}
-
-const $footer: ViewStyle = {
-  marginTop: spacing.extraLarge,
-  paddingHorizontal: spacing.large,
-}
-
-const $spec: TextStyle = {
-  marginTop: spacing.extraSmall,
 }
