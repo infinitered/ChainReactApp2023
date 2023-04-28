@@ -12,13 +12,14 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React, { useLayoutEffect } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import {
   initialWindowMetrics,
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context"
 import * as Updates from "expo-updates"
+import * as Device from "expo-device"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
@@ -29,10 +30,11 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import messaging from "@react-native-firebase/messaging"
 import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
 import { $baseSecondaryStyle, $baseStyle } from "./components"
-import { Alert, Dimensions, ViewStyle } from "react-native"
+import { Dimensions, ViewStyle } from "react-native"
 import { queryClient } from "./services/api/react-query"
 import { reportCrash } from "./utils/crashReporting"
 import { useAppState } from "./hooks"
+import { Modal } from "./components/Modal"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -92,26 +94,18 @@ const CustomToast = () => {
 
 // Setting up our OTA Updates component
 const OTAUpdates = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+  async function fetchAndRestartApp() {
+    await Updates.fetchUpdateAsync()
+    await Updates.reloadAsync()
+  }
+
   async function onFetchUpdateAsync() {
+    if (!Device.isDevice && __DEV__) return
     try {
       const update = await Updates.checkForUpdateAsync()
-      if (update.isAvailable) {
-        // Device.isDevice && !__DEV__
-        Alert.alert(
-          "NEW UPDATE AVAILABLE",
-          "Press the Update button abd get the latest and greatest features!",
-          [
-            { text: "Cancel", style: "cancel" },
-            {
-              text: "Update",
-              onPress: async () => {
-                await Updates.fetchUpdateAsync()
-                await Updates.reloadAsync()
-              },
-            },
-          ],
-        )
-      }
+      setIsModalVisible(update.isAvailable)
     } catch (error) {
       reportCrash(error)
     }
@@ -123,7 +117,26 @@ const OTAUpdates = () => {
     callback: onFetchUpdateAsync,
   })
 
-  return null
+  return (
+    <Modal
+      title="ota.title"
+      subtitle="ota.subtitle"
+      confirmOnPress={{
+        cta: () => {
+          fetchAndRestartApp()
+          setIsModalVisible(false)
+        },
+        label: "ota.confirmLabel",
+      }}
+      cancelOnPress={{
+        cta: () => {
+          setIsModalVisible(false)
+        },
+        label: "ota.cancelLabel",
+      }}
+      isVisible={isModalVisible}
+    />
+  )
 }
 
 /**
