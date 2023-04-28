@@ -134,8 +134,7 @@ There is a `preview` build of version 1.0 out in the wild, lacking a new feature
 git checkout -b feat/my-new-feature
 # make some changes to code
 git commit -a -m "feature complete"
-eas update --branch preview-1.1 --message "added new feature"
-eas channel:update preview --branch preview-1.1
+eas update --branch preview --message "added new feature"
 # from a device with the preview build, open the app to grab the update, and reload it to use the new feature
 ```
 

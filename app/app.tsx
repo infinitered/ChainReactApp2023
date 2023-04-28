@@ -12,7 +12,7 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React, { useEffect, useLayoutEffect, useState } from "react"
+import React, { useLayoutEffect } from "react"
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -32,6 +32,7 @@ import { $baseSecondaryStyle, $baseStyle } from "./components"
 import { Alert, Dimensions, ViewStyle } from "react-native"
 import { queryClient } from "./services/api/react-query"
 import { reportCrash } from "./utils/crashReporting"
+import { useAppState } from "./hooks"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -91,40 +92,36 @@ const CustomToast = () => {
 
 // Setting up our OTA Updates component
 const OTAUpdates = () => {
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false)
-
-  useEffect(() => {
-    async function onFetchUpdateAsync() {
-      try {
-        const update = await Updates.checkForUpdateAsync()
-        setIsUpdateAvailable(update.isAvailable)
-      } catch (error) {
-        reportCrash(error)
-      }
-    }
-    if (!__DEV__) {
-      onFetchUpdateAsync()
-    }
-  }, [])
-
-  useEffect(() => {
-    if (isUpdateAvailable) {
-      Alert.alert(
-        "NEW UPDATE AVAILABLE",
-        "Press the Update button abd get the latest and greatest features!",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Update",
-            onPress: async () => {
-              await Updates.fetchUpdateAsync()
-              await Updates.reloadAsync()
+  async function onFetchUpdateAsync() {
+    try {
+      const update = await Updates.checkForUpdateAsync()
+      if (update.isAvailable) {
+        // Device.isDevice && !__DEV__
+        Alert.alert(
+          "NEW UPDATE AVAILABLE",
+          "Press the Update button abd get the latest and greatest features!",
+          [
+            { text: "Cancel", style: "cancel" },
+            {
+              text: "Update",
+              onPress: async () => {
+                await Updates.fetchUpdateAsync()
+                await Updates.reloadAsync()
+              },
             },
-          },
-        ],
-      )
+          ],
+        )
+      }
+    } catch (error) {
+      reportCrash(error)
     }
-  }, [isUpdateAvailable])
+  }
+
+  useAppState({
+    match: /background/,
+    nextAppState: "active",
+    callback: onFetchUpdateAsync,
+  })
 
   return null
 }

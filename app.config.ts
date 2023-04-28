@@ -17,6 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     backgroundColor: "#081828",
   },
   updates: {
+    checkAutomatically: "ON_ERROR_RECOVERY",
     enabled: true,
     fallbackToCacheTimeout: 0,
     url: "https://u.expo.dev/b72c79d7-7c87-4aa7-b964-998dcff69e07",
@@ -90,5 +91,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "@react-native-firebase/app",
     "@react-native-firebase/crashlytics",
     ["expo-build-properties", { ios: { useFrameworks: "static" } }],
+    ["expo-updates", { username: "infinitered" }],
   ],
 })
