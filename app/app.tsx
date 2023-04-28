@@ -12,12 +12,13 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React, { useLayoutEffect } from "react"
+import React, { useLayoutEffect, useState } from "react"
 import {
   initialWindowMetrics,
   SafeAreaProvider,
   useSafeAreaInsets,
 } from "react-native-safe-area-context"
+import * as Updates from "expo-updates"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
@@ -30,6 +31,9 @@ import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
 import { $baseSecondaryStyle, $baseStyle } from "./components"
 import { Dimensions, ViewStyle } from "react-native"
 import { queryClient } from "./services/api/react-query"
+import { reportCrash } from "./utils/crashReporting"
+import { useAppState } from "./hooks"
+import { Modal } from "./components/Modal"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -87,6 +91,61 @@ const CustomToast = () => {
   return <Toast config={toastConfig} topOffset={insets.top} />
 }
 
+// Setting up our OTA Updates component
+const OTAUpdates = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+
+  async function fetchAndRestartApp() {
+    const fetchUpdate = await Updates.fetchUpdateAsync()
+    if (fetchUpdate.isNew) {
+      await Updates.reloadAsync()
+    } else {
+      setIsModalVisible(false)
+      setIsUpdating(false)
+      reportCrash("Fetch Update failed")
+    }
+  }
+
+  async function onFetchUpdateAsync() {
+    if (__DEV__ || process.env.NODE_ENV === "development") return
+    try {
+      const update = await Updates.checkForUpdateAsync()
+      setIsModalVisible(update.isAvailable)
+    } catch (error) {
+      reportCrash(error)
+    }
+  }
+
+  useAppState({
+    match: /background/,
+    nextAppState: "active",
+    callback: onFetchUpdateAsync,
+  })
+
+  return (
+    <Modal
+      title="ota.title"
+      subtitle="ota.subtitle"
+      confirmOnPress={{
+        cta: async () => {
+          setIsUpdating(true)
+          await fetchAndRestartApp()
+        },
+        label: isUpdating ? "ota.confirmLabelUpdating" : "ota.confirmLabel",
+        disabled: isUpdating,
+      }}
+      cancelOnPress={{
+        cta: () => {
+          setIsModalVisible(false)
+        },
+        label: "ota.cancelLabel",
+      }}
+      isVisible={isModalVisible}
+    />
+  )
+}
+
 /**
  * This is the root component of our app.
  */
@@ -129,6 +188,7 @@ function App(props: AppProps) {
             onStateChange={onNavigationStateChange}
           />
           <CustomToast />
+          <OTAUpdates />
         </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
