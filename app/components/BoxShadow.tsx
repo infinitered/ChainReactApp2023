@@ -32,20 +32,21 @@ export function BoxShadow(props: BoxShadowProps): React.ReactElement {
   const $offset = [$offsetPresets[preset]]
   const offsetAmount = props.offset || spacing.tiny
   const $offsetContainerSpacing = { left: offsetAmount, top: offsetAmount }
-  const $childrenWrapper = { marginEnd: offsetAmount }
 
   return (
-    <View
-      onLayout={(e) => {
-        setHeight(e.nativeEvent.layout.height)
-        setWidth(e.nativeEvent.layout.width)
-      }}
-      style={props.style}
-    >
-      <View style={[$offsetContainer, $offsetContainerSpacing]}>
-        <Image style={[$offset, { height, width: width - offsetAmount }]} source={cardOffset} />
+    <View style={props.style}>
+      <View
+        onLayout={(e) => {
+          setHeight(e.nativeEvent.layout.height)
+          setWidth(e.nativeEvent.layout.width)
+        }}
+        style={{ marginEnd: offsetAmount, marginBottom: offsetAmount }}
+      >
+        <View style={[$offsetContainer, $offsetContainerSpacing]}>
+          <Image style={[$offset, { height, width }]} source={cardOffset} />
+        </View>
+        <View>{props.children}</View>
       </View>
-      <View style={$childrenWrapper}>{props.children}</View>
     </View>
   )
 }

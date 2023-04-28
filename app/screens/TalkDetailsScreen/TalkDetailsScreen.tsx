@@ -24,6 +24,7 @@ import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 import { DynamicCarouselItem, SocialButtonData } from "../../components/carousel/carousel.types"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
+import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
 export type Variants = "workshop" | "talk"
 
@@ -181,12 +182,16 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
     socialButtons,
   }) {
     const hasSocialButtons = socialButtons.some((button) => button.url)
+    const offset = 6
     return (
-      <>
+      <View style={$contentSpacing}>
         <View style={$containerSpacing}>
           <Image source={talkCurve} style={$talkCurve} />
-          <BoxShadow preset="primary" style={$containerSpacing} offset={6}>
-            <Image source={{ uri: imageUrl }} style={$speakerImage} />
+          <BoxShadow preset="primary" style={$containerSpacing} offset={offset}>
+            <Image
+              source={{ uri: imageUrl }}
+              style={[$speakerImage, { width: SCREEN_CONTENT_WIDTH - offset }]}
+            />
           </BoxShadow>
           <Image source={talkBlob} style={$talkBlob} />
 
@@ -206,7 +211,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
           <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
           <Text style={$bodyText} text={description} />
         </View>
-      </>
+      </View>
     )
   }
 
@@ -218,13 +223,11 @@ const TalkDetailsMultipleSpeakers: React.FunctionComponent<TalkDetailsMultipleSp
   function TalkDetailsMultipleSpeakers({ carouselData, description, scheduleType }) {
     return (
       <>
-        <View style={$detailsContainer}>
+        <View style={[$contentSpacing, $detailsContainer]}>
           <Text preset="bold" style={$detailsText} text={`${scheduleType} details`} />
           <Text style={$bodyText} text={description} />
         </View>
-        <View style={$carouselContainer}>
-          <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
-        </View>
+        <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
       </>
     )
   }
@@ -304,12 +307,15 @@ const $scrollView: ViewStyle = {
 }
 
 const $container = {
-  paddingHorizontal: spacing.large,
   paddingBottom: spacing.large,
 }
 
 const $containerSpacing: ViewStyle = {
   marginBottom: spacing.large,
+}
+
+const $contentSpacing: ViewStyle = {
+  paddingHorizontal: spacing.large,
 }
 
 const $linksContainer: ViewStyle = {
@@ -342,9 +348,9 @@ const $companyNameText: TextStyle = {
 }
 
 const $detailsText: TextStyle = {
+  ...$containerSpacing,
   fontSize: 26,
   lineHeight: 28.6,
-  ...$containerSpacing,
 }
 
 const $bodyText: TextStyle = {
@@ -374,9 +380,6 @@ const $subtitle: TextStyle = {
 }
 
 const $headingContainer: ViewStyle = {
+  ...$contentSpacing,
   marginBottom: spacing.extraLarge,
-}
-
-const $carouselContainer: ViewStyle = {
-  marginHorizontal: -spacing.large,
 }
