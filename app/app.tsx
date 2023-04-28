@@ -12,7 +12,7 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React, { useEffect, useLayoutEffect } from "react"
+import React, { useLayoutEffect } from "react"
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -104,15 +104,11 @@ function App(props: AppProps) {
   useLayoutEffect(() => {
     // hide splash screen after 500ms
     setTimeout(hideSplashScreen, 500)
-  })
-
-  useLayoutEffect(() => {
+    // if recovered from error, reset the state
     if (recoveredFromError) {
       setRecoveredFromError(false)
     }
-  })
-
-  useEffect(() => {
+    // OTA updates
     async function onFetchUpdateAsync() {
       try {
         const update = await Updates.checkForUpdateAsync()
@@ -127,7 +123,7 @@ function App(props: AppProps) {
     }
 
     onFetchUpdateAsync()
-  }, [])
+  })
 
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
