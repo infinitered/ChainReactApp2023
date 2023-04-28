@@ -12,7 +12,7 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React, { useEffect, useLayoutEffect } from "react"
+import React, { useEffect, useLayoutEffect, useState } from "react"
 import {
   initialWindowMetrics,
   SafeAreaProvider,
@@ -29,8 +29,9 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import messaging from "@react-native-firebase/messaging"
 import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
 import { $baseSecondaryStyle, $baseStyle } from "./components"
-import { Dimensions, ViewStyle } from "react-native"
+import { Alert, Dimensions, ViewStyle } from "react-native"
 import { queryClient } from "./services/api/react-query"
+import { reportCrash } from "./utils/crashReporting"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -88,6 +89,46 @@ const CustomToast = () => {
   return <Toast config={toastConfig} topOffset={insets.top} />
 }
 
+// Setting up our OTA Updates component
+const OTAUpdates = () => {
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false)
+
+  useEffect(() => {
+    async function onFetchUpdateAsync() {
+      try {
+        const update = await Updates.checkForUpdateAsync()
+        setIsUpdateAvailable(update.isAvailable)
+      } catch (error) {
+        reportCrash(error)
+      }
+    }
+    if (!__DEV__) {
+      onFetchUpdateAsync()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isUpdateAvailable) {
+      Alert.alert(
+        "NEW UPDATE AVAILABLE",
+        "Press the Update button abd get the latest and greatest features!",
+        [
+          { text: "Cancel", style: "cancel" },
+          {
+            text: "Update",
+            onPress: async () => {
+              await Updates.fetchUpdateAsync()
+              await Updates.reloadAsync()
+            },
+          },
+        ],
+      )
+    }
+  }, [isUpdateAvailable])
+
+  return null
+}
+
 /**
  * This is the root component of our app.
  */
@@ -112,22 +153,6 @@ function App(props: AppProps) {
     }
   })
 
-  useEffect(() => {
-    async function onFetchUpdateAsync() {
-      try {
-        const update = await Updates.checkForUpdateAsync()
-
-        if (update.isAvailable) {
-          await Updates.fetchUpdateAsync()
-          await Updates.reloadAsync()
-        }
-      } catch (error) {
-        console.tron.log(error)
-      }
-    }
-    onFetchUpdateAsync()
-  }, [])
-
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
   // color set in native by rootView's background color.
@@ -146,6 +171,7 @@ function App(props: AppProps) {
             onStateChange={onNavigationStateChange}
           />
           <CustomToast />
+          <OTAUpdates />
         </QueryClientProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
