@@ -19,7 +19,6 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context"
 import * as Updates from "expo-updates"
-import * as Device from "expo-device"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
@@ -107,8 +106,7 @@ const OTAUpdates = () => {
   }
 
   async function onFetchUpdateAsync() {
-    if (!Device.isDevice && __DEV__) return
-    console.log("HERE")
+    if (__DEV__ || process.env.NODE_ENV === "development") return
     try {
       const update = await Updates.checkForUpdateAsync()
       setIsModalVisible(update.isAvailable)
