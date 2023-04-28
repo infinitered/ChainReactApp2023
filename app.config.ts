@@ -92,5 +92,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     "@react-native-firebase/crashlytics",
     ["expo-build-properties", { ios: { useFrameworks: "static" } }],
     ["expo-updates", { username: "infinitered" }],
+    ["expo-localization"],
   ],
 })
