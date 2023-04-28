@@ -46,12 +46,11 @@ const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
   return (
     <View style={$footerContainer}>
-      <Text
-        preset="cardFooterHeading"
-        style={isPast ? $pastFooterHeading : (heading ?? "").length > 0 ? $footerHeading : {}}
-      >
-        {heading}
-      </Text>
+      {(heading ?? "").length > 0 && (
+        <Text preset="cardFooterHeading" style={isPast ? $pastFooterHeading : $footerHeading}>
+          {heading}
+        </Text>
+      )}
       {isPast ? (
         <>
           <Text style={$pastFooterSubheading}>{subheading}</Text>
@@ -121,6 +120,10 @@ export interface ScheduleCardProps {
    * Talk url
    */
   talkUrl?: string
+  /**
+   * Whether the card is clickable, usually for our Recurring Events
+   */
+  isSecondaryCallout?: boolean
 }
 
 interface SpeakingEventProps {
@@ -142,6 +145,7 @@ interface RecurringEventProps {
   sources: string[]
   eventTitle: string
   variant: Variants
+  isClickable: boolean
 }
 
 interface BaseEventProps {
@@ -207,6 +211,7 @@ const baseRecurringEventProps = ({
   sources,
   eventTitle,
   variant,
+  isClickable,
 }: RecurringEventProps) => {
   const props = {
     preset: eventTitle,
@@ -217,6 +222,14 @@ const baseRecurringEventProps = ({
     RightComponent: (
       <View style={$rightContainer}>
         <Avatar style={$avatar} {...props} />
+        {isClickable && (
+          <Icon
+            icon="arrow"
+            size={24}
+            color={colors.palette.primary500}
+            containerStyle={$arrowContainer}
+          />
+        )}
       </View>
     ),
     FooterComponent: <Footer {...{ subheading, isPast, heading, variant }} />,
@@ -236,12 +249,15 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     id,
     isPast,
     talkUrl,
+    isSecondaryCallout,
   } = props
   const navigation = useAppNavigation()
   const onPress = ["talk", "trivia-show"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["workshop"].includes(variant)
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })
+    : ["recurring"].includes(variant) && isSecondaryCallout
+    ? () => navigation.navigate("BreakDetails", { scheduleId: id })
     : undefined
 
   const cardProps = {
@@ -249,7 +265,15 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
   }
   const variantProps =
     variant === "recurring"
-      ? baseRecurringEventProps({ subheading, isPast, sources, eventTitle, heading, variant })
+      ? baseRecurringEventProps({
+          subheading,
+          isPast,
+          sources,
+          eventTitle,
+          heading,
+          variant,
+          isClickable: !!onPress,
+        })
       : variant === "party"
       ? {
           content: subheading,

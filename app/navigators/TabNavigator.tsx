@@ -66,7 +66,7 @@ const screens: Screen[] = [
     name: "Chat",
     component: ChatScreen,
     txLabel: "tabNavigator.chatTab",
-    icon: "ladybug",
+    icon: "chat",
   },
 ]
 

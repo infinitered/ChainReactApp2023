@@ -6,6 +6,7 @@ import { GiftedChat, IMessage } from "react-native-gifted-chat"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { aiPrompt } from "./ai"
 
+const NUMBER_OF_MESSAGES_TO_SEND = 8
 const chatbotAvatarURL =
   "https://pbs.twimg.com/profile_images/1638277840352456704/g7sdYc76_400x400.jpg"
 const chatbotName = "Chain React Bot"
@@ -13,7 +14,7 @@ const chatbotName = "Chain React Bot"
 const INITIAL_MESSAGES: IMessage[] = [
   {
     _id: 1,
-    text: `Hello there! I'm ${chatbotName}. How can I help you with questions about the Chain React conference and the surrounding Portland area?`,
+    text: `Hello there! I'm ${chatbotName}. How can I help you with questions about the Chain React conference and the surrounding Portland area? Please note I'm an experimental feature and if something goes wrong, just let an Infinite Red team member know!`,
     createdAt: new Date(),
     user: {
       _id: 2,
@@ -100,7 +101,7 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
             // ask Claude for AI response
             // first, build the prompt using the last 15 messages
             const prompt = appendedMessages
-              .slice(0, 15)
+              .slice(0, NUMBER_OF_MESSAGES_TO_SEND)
               .reverse()
               .map(
                 (message) => (message.user._id === uuid ? "Human: " : "Assistant: ") + message.text,

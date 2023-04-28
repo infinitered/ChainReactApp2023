@@ -16,6 +16,7 @@ import React from "react"
 import { useColorScheme } from "react-native"
 import Config from "../config"
 import { DebugScreen, TalkDetailsScreen, WelcomeScreen, WorkshopDetailsScreen } from "../screens"
+import { BreakDetailsScreen } from "../screens/TalkDetailsScreen/BreakDetailsScreen"
 import { colors } from "../theme"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 import { TabNavigator, TabParamList } from "./TabNavigator"
@@ -39,6 +40,7 @@ export type AppStackParamList = {
   TalkDetails: { scheduleId: string }
   Welcome: undefined
   WorkshopDetails: { scheduleId: string }
+  BreakDetails: { scheduleId: string }
 }
 
 /**
@@ -69,6 +71,11 @@ const AppStack = () => {
       <Stack.Screen
         name="WorkshopDetails"
         component={WorkshopDetailsScreen}
+        options={{ fullScreenGestureEnabled: true }}
+      />
+      <Stack.Screen
+        name="BreakDetails"
+        component={BreakDetailsScreen}
         options={{ fullScreenGestureEnabled: true }}
       />
     </Stack.Navigator>
