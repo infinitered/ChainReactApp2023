@@ -12,28 +12,17 @@
 import "./i18n"
 import "./utils/ignoreWarnings"
 import { useFonts } from "expo-font"
-import React, { useLayoutEffect, useState } from "react"
-import {
-  initialWindowMetrics,
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context"
-import * as Updates from "expo-updates"
+import React, { useLayoutEffect } from "react"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import * as storage from "./utils/storage"
-import { colors, customFontsToLoad, spacing } from "./theme"
+import { customFontsToLoad } from "./theme"
 import { setupReactotron } from "./services/reactotron/reactotron"
 import Config from "./config"
 import { QueryClientProvider } from "@tanstack/react-query"
-import messaging from "@react-native-firebase/messaging"
-import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
-import { $baseSecondaryStyle, $baseStyle } from "./components"
-import { Dimensions, ViewStyle } from "react-native"
 import { queryClient } from "./services/api/react-query"
-import { reportCrash } from "./utils/crashReporting"
-import { useAppState } from "./hooks"
-import { Modal } from "./components/Modal"
+import { CustomToast, OTAUpdates } from "./components"
 
 // Set up Reactotron, which is a free desktop app for inspecting and debugging
 // React Native apps. Learn more here: https://github.com/infinitered/reactotron
@@ -54,96 +43,6 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 interface AppProps {
   hideSplashScreen: () => Promise<void>
-}
-
-// Setting up our custom Toast component
-const CustomToast = () => {
-  const insets = useSafeAreaInsets()
-
-  useLayoutEffect(() => {
-    // handle a new push notification received while the app is in "foreground" state
-    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      if (
-        remoteMessage.notification &&
-        (remoteMessage.notification.title || remoteMessage.notification.body)
-      ) {
-        Toast.show({
-          text1: remoteMessage.notification.title,
-          text2: remoteMessage.notification.body,
-        })
-      }
-    })
-    return unsubscribe
-  })
-
-  const toastConfig: ToastConfig = {
-    success: (props) => (
-      <BaseToast
-        {...props}
-        contentContainerStyle={$toastContainer}
-        style={$toast}
-        text1Style={$baseStyle}
-        text2Style={$baseSecondaryStyle}
-      />
-    ),
-  }
-
-  return <Toast config={toastConfig} topOffset={insets.top} />
-}
-
-// Setting up our OTA Updates component
-const OTAUpdates = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [isUpdating, setIsUpdating] = useState(false)
-
-  async function fetchAndRestartApp() {
-    const fetchUpdate = await Updates.fetchUpdateAsync()
-    if (fetchUpdate.isNew) {
-      await Updates.reloadAsync()
-    } else {
-      setIsModalVisible(false)
-      setIsUpdating(false)
-      reportCrash("Fetch Update failed")
-    }
-  }
-
-  async function onFetchUpdateAsync() {
-    if (__DEV__ || process.env.NODE_ENV === "development") return
-    try {
-      const update = await Updates.checkForUpdateAsync()
-      setIsModalVisible(update.isAvailable)
-    } catch (error) {
-      reportCrash(error)
-    }
-  }
-
-  useAppState({
-    match: /background/,
-    nextAppState: "active",
-    callback: onFetchUpdateAsync,
-  })
-
-  return (
-    <Modal
-      title="ota.title"
-      subtitle="ota.subtitle"
-      confirmOnPress={{
-        cta: async () => {
-          setIsUpdating(true)
-          await fetchAndRestartApp()
-        },
-        label: isUpdating ? "ota.confirmLabelUpdating" : "ota.confirmLabel",
-        disabled: isUpdating,
-      }}
-      cancelOnPress={{
-        cta: () => {
-          setIsModalVisible(false)
-        },
-        label: "ota.cancelLabel",
-      }}
-      isVisible={isModalVisible}
-    />
-  )
 }
 
 /**
@@ -196,15 +95,3 @@ function App(props: AppProps) {
 }
 
 export default App
-
-const $toast: ViewStyle = {
-  backgroundColor: colors.palette.neutral400,
-  borderLeftWidth: 0,
-  borderRadius: spacing.extraSmall,
-  width: Dimensions.get("window").width - spacing.extraSmall * 2,
-}
-
-const $toastContainer: ViewStyle = {
-  paddingHorizontal: spacing.large,
-  paddingVertical: spacing.medium,
-}

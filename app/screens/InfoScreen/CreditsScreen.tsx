@@ -141,7 +141,6 @@ const $container: ViewStyle = {
 }
 
 const $heading: TextStyle = {
-  marginTop: spacing.extraLarge,
   paddingHorizontal: spacing.large,
   marginBottom: spacing.large,
 }

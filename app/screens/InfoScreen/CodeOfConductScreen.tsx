@@ -72,6 +72,5 @@ const $phoneNumber: TextStyle = {
 }
 
 const $codeOfConductHeading: TextStyle = {
-  marginTop: spacing.extraLarge * 2,
   marginBottom: spacing.extraSmall,
 }

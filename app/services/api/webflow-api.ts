@@ -75,7 +75,7 @@ const scheduledEventQueries = [
 
 export const prefetchScheduledEvents = async () => {
   scheduledEventQueries.forEach(async (query) => {
-    await queryClient.prefetchQuery(query)
+    await queryClient.prefetchQuery(query as UseQueryOptions)
   })
 }
 

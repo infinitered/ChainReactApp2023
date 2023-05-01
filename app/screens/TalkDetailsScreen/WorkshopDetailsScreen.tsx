@@ -124,7 +124,6 @@ const $speakerPanelDescription: TextStyle = {
 }
 
 const $title: TextStyle = {
-  marginTop: spacing.extraLarge,
   marginBottom: spacing.extraSmall,
 }
 

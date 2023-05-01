@@ -83,7 +83,6 @@ const $root: ViewStyle = {
 }
 
 const $screenHeading: ViewStyle = {
-  marginTop: spacing.extraLarge,
   marginBottom: spacing.medium,
   paddingHorizontal: spacing.large,
 }
