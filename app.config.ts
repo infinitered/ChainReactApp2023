@@ -58,7 +58,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     icon: "./assets/images/app-icon-ios.png",
-    supportsTablet: true,
+    supportsTablet: false,
     bundleIdentifier: "infinitered.stage.ChainReactConf",
     buildNumber: String(BUILD_NUMBER),
     splash: {
