@@ -5,6 +5,7 @@ import { translate } from "../../i18n"
 import { GiftedChat, IMessage } from "react-native-gifted-chat"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { aiPrompt } from "./ai"
+import { View, ViewStyle } from "react-native"
 
 const NUMBER_OF_MESSAGES_TO_SEND = 8
 const chatbotAvatarURL =
@@ -87,51 +88,59 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
   return (
     <>
       {uuid && (
-        <GiftedChat
-          messages={messages}
-          isTyping={typingIndicator}
-          onSend={async (newMessages) => {
-            const appendedMessages = [
-              ...newMessages.map((message) => ({ ...message, _id: Date.now() })),
-              ...messages,
-            ]
-            saveMessages(() => appendedMessages)
-            setTypingIndicator(true)
+        <View style={$root}>
+          <GiftedChat
+            messages={messages}
+            isTyping={typingIndicator}
+            onSend={async (newMessages) => {
+              const appendedMessages = [
+                ...newMessages.map((message) => ({ ...message, _id: Date.now() })),
+                ...messages,
+              ]
+              saveMessages(() => appendedMessages)
+              setTypingIndicator(true)
 
-            // ask Claude for AI response
-            // first, build the prompt using the last 15 messages
-            const prompt = appendedMessages
-              .slice(0, NUMBER_OF_MESSAGES_TO_SEND)
-              .reverse()
-              .map(
-                (message) => (message.user._id === uuid ? "Human: " : "Assistant: ") + message.text,
-              )
-              .join("\n\n")
+              // ask Claude for AI response
+              // first, build the prompt using the last 15 messages
+              const prompt = appendedMessages
+                .slice(0, NUMBER_OF_MESSAGES_TO_SEND)
+                .reverse()
+                .map(
+                  (message) =>
+                    (message.user._id === uuid ? "Human: " : "Assistant: ") + message.text,
+                )
+                .join("\n\n")
 
-            // turn on the GiftedChat "typing" indicator
-            // then, ask Claude for a response
-            const response = await aiPrompt({ prompt, userId: uuid })
-            const claudeMessage = {
-              _id: Date.now(),
-              text: response.completion.trim(),
-              createdAt: new Date(),
-              user: {
-                _id: 2,
-                name: chatbotName,
-                avatar: chatbotAvatarURL,
-              },
-            }
-            setTypingIndicator(false)
-            saveMessages(() => [claudeMessage, ...appendedMessages])
-          }}
-          user={{
-            _id: uuid,
-          }}
-          textInputProps={{
-            testID: "aiChatInput",
-          }}
-        />
+              // turn on the GiftedChat "typing" indicator
+              // then, ask Claude for a response
+              const response = await aiPrompt({ prompt, userId: uuid })
+              const claudeMessage = {
+                _id: Date.now(),
+                text: response.completion.trim(),
+                createdAt: new Date(),
+                user: {
+                  _id: 2,
+                  name: chatbotName,
+                  avatar: chatbotAvatarURL,
+                },
+              }
+              setTypingIndicator(false)
+              saveMessages(() => [claudeMessage, ...appendedMessages])
+            }}
+            user={{
+              _id: uuid,
+            }}
+            textInputProps={{
+              testID: "aiChatInput",
+            }}
+            listViewProps={{ keyboardDismissMode: "on-drag" }}
+          />
+        </View>
       )}
     </>
   )
+}
+
+const $root: ViewStyle = {
+  flex: 1,
 }
