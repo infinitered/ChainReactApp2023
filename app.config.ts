@@ -1,7 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config"
 import { version } from "./package.json"
 
-const BUILD_NUMBER = 4
+const BUILD_NUMBER = 5
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -93,5 +93,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ["expo-build-properties", { ios: { useFrameworks: "static" } }],
     ["expo-updates", { username: "infinitered" }],
     ["expo-localization"],
+    [
+      "expo-build-properties",
+      {
+        android: {
+          enableProguardInReleaseBuilds: true,
+          enableShrinkResourcesInReleaseBuilds: true,
+        },
+      },
+    ],
   ],
 })
