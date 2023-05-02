@@ -107,7 +107,6 @@
     "jest-circus": "26",
     "jest-environment-node": "26",
     "jest-expo": "^47.0.0",
-    "lint-staged": "^13.1.0",
     "mocha": "6",
     "patch-package": "6.4.7",
     "postinstall-prepare": "1.0.1",
@@ -124,11 +123,6 @@
   "resolutions": {
     "@types/react": "^18",
     "@types/react-dom": "^18"
-  },
-  "lint-staged": {
-    "*.js": "yarn lint",
-    "*.ts": "yarn lint",
-    "*.tsx": "yarn lint"
   },
   "prettier": {
     "printWidth": 100,
