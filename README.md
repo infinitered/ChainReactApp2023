@@ -4,6 +4,10 @@ Coming soon! This will be the home for the app for [Chain React 2023](https://cr
 
 <img src="./assets/branding-banner.jpg" alt="branding-banner" /><br />
 
+# Download the App
+
+[iOS](https://apps.apple.com/us/app/chain-react-conf/id1239112816) | [Android](https://play.google.com/store/apps/details?id=com.chainreactapp)
+
 # Building app
 
 ## Pre-reqs
