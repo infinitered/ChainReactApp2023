@@ -23,14 +23,3 @@ jobs:
 
       - name: Run linter
         run: yarn lint
-
-      - name: Setup Expo and EAS
-        uses: expo/expo-github-action@v7
-        with:
-          expo-version: 5.x
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Build on EAS
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: eas build --platform all --profile preview:device --non-interactive --clear-cache
