@@ -6,7 +6,7 @@ Coming soon! This will be the home for the app for [Chain React 2023](https://cr
 
 # Download the App
 
-[iOS](https://apps.apple.com/us/app/chain-react-conf/id1239112816) | [Android](https://play.google.com/store/apps/details?id=com.chainreactapp)
+[<img alt="Download on the App Store" width="150" height="80" src="./assets/download-on-app-store.svg" />](https://apps.apple.com/us/app/chain-react-conf/id1239112816) [<img alt="Get it on Google Play" width="200" height="80" src="./assets/google-play-badge.png" />](https://play.google.com/store/apps/details?id=com.chainreactapp)
 
 # Building app
 
