@@ -1,5 +1,5 @@
 import React from "react"
-import { TextStyle, View, ViewStyle, Image } from "react-native"
+import { TextStyle, View, ViewStyle, Image, ImageStyle } from "react-native"
 import { Screen, Text } from "../../components"
 import { colors, spacing } from "../../theme"
 import { translate } from "../../i18n"
@@ -8,7 +8,7 @@ import { useAppNavigation, useHeader } from "../../hooks"
 
 const phoneNumber = "360-450-4752"
 
-const confImage = require("../../../assets/images/info-conf.png")
+const confImage = require("../../../assets/images/info-conf.jpg")
 
 export const CodeOfConductScreen = () => {
   const callPhoneNumber = () => openLinkInBrowser(`tel:${phoneNumber}`)
@@ -26,13 +26,9 @@ export const CodeOfConductScreen = () => {
       <View style={$content}>
         <Text preset="screenHeading" text="Code of conduct" style={$codeOfConductHeading} />
         <Text tx="infoScreen.conductWarning" />
-      </View>
 
-      <View style={$imageContainer}>
-        <Image source={confImage} />
-      </View>
+        <Image style={$image} source={confImage} />
 
-      <View style={$content}>
         <Text preset="primaryLabel" tx="infoScreen.codeOfConductTitle" style={$mb} />
         <Text tx="infoScreen.codeOfConduct" style={$mb} />
 
@@ -58,8 +54,10 @@ const $content: ViewStyle = {
   paddingHorizontal: spacing.large,
 }
 
-const $imageContainer: ViewStyle = {
-  margin: spacing.large,
+const $image: ImageStyle = {
+  marginVertical: spacing.large,
+  width: "100%",
+  borderRadius: 4,
 }
 
 const $mb: ViewStyle = {
