@@ -1,7 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config"
 import { version } from "./package.json"
 
-const BUILD_NUMBER = 3
+const BUILD_NUMBER = 4
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -58,7 +58,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     icon: "./assets/images/app-icon-ios.png",
-    supportsTablet: true,
+    supportsTablet: false,
     bundleIdentifier: "infinitered.stage.ChainReactConf",
     buildNumber: String(BUILD_NUMBER),
     splash: {
