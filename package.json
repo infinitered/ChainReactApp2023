@@ -1,6 +1,6 @@
 {
   "name": "chain-react-app-2023",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "private": true,
   "scripts": {
     "start": "expo start --dev-client",
