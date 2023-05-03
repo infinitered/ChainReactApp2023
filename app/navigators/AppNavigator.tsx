@@ -1,8 +1,9 @@
 /**
  * The app navigator (formerly "AppNavigator" and "MainNavigator") is used for the primary
  * navigation flows of your app.
- * Generally speaking, it will contain an auth flow (registration, login, forgot password)
- * and a "main" flow which the user will use once logged in.
+ * Usually this will contain an auth flow (registration, login, forgot password)
+ * and a "main" flow which the user will use once logged in, but in this case we
+ * just have a single flow.
  */
 import {
   DarkTheme,
