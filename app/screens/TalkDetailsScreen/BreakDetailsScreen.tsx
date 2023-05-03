@@ -223,7 +223,3 @@ const $heading: TextStyle = {
   color: colors.palette.primary500,
   textTransform: "uppercase",
 }
-
-const $logo: ImageStyle = {
-  ...$containerSpacing,
-}
