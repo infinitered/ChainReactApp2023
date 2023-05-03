@@ -3,7 +3,7 @@ name: Preview
 on: [workflow_dispatch]
 
 jobs:
-  build-test-and-lint:
+  preview:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
@@ -24,10 +24,6 @@ jobs:
       - name: Run linter
         run: yarn lint
 
-  preview:
-    runs-on: ubuntu-latest
-    needs: [build-test-and-lint]
-    steps:
       - name: Setup Expo and EAS
         uses: expo/expo-github-action@v7
         with:
