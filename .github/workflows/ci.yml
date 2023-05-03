@@ -1,9 +1,9 @@
-name: ci
+name: CI — Yarn test and lint
 
 on: [workflow_dispatch, push]
 
 jobs:
-  build-and-test:
+  build-test-and-lint:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
