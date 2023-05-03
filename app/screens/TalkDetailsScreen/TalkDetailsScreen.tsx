@@ -117,7 +117,6 @@ const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       imageStyle: { height: 320 },
       subtitle: speaker?.name,
       label: speaker?.company,
-      body: stringOrPlaceholder(speaker?.["speaker-bio"]),
       socialButtons: [
         { url: speaker?.twitter, icon: "twitter" },
         { url: speaker?.github, icon: "github" },
