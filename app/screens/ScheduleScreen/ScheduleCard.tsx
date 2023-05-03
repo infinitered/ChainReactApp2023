@@ -252,7 +252,9 @@ const ScheduleCard: FC<ScheduleCardProps> = (props) => {
     isSecondaryCallout,
   } = props
   const navigation = useAppNavigation()
-  const onPress = ["talk", "trivia-show"].includes(variant)
+  const onPress = !heading
+    ? undefined
+    : ["talk", "trivia-show"].includes(variant)
     ? () => navigation.navigate("TalkDetails", { scheduleId: id })
     : ["workshop"].includes(variant)
     ? () => navigation.navigate("WorkshopDetails", { scheduleId: id })

@@ -202,13 +202,13 @@ const convertScheduleToCardProps = (schedule: ScheduledEvent): ScheduleCardProps
       const baseItems = {
         formattedStartTime: formatDate(schedule["day-time"], "h:mmaaa"),
         startTime: schedule["day-time"],
-        heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? "",
+        heading: schedule.talk?.["speaker-s"]?.map((s) => s.name).join(", ") ?? undefined,
         sources: schedule.talk?.["speaker-s"]?.map((s) => s["speaker-photo"]?.url) ?? [],
         id: schedule._id,
         talkUrl: schedule.talk?.["talk-url"],
         variant: "talk",
         eventTitle: schedule.type,
-        subheading: schedule.talk?.name,
+        subheading: schedule.talk?.name ?? schedule["event-title"],
       } as ScheduleCardProps
       if (isTriviaShow) {
         baseItems.variant = WEBFLOW_MAP.triviaShow.variant
