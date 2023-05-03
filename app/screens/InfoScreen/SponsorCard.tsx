@@ -95,16 +95,18 @@ export const SponsorCard = ({
           <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.silverSponsor" />
           <View style={$silverTierWrapper}>
             {sponsorImages.map(({ uri, sponsor, externalURL }, index) => (
-              <View key={index} style={$silverTierButtonWrapper}>
-                <Pressable style={$silverTierButton} onPress={() => openLinkInBrowser(externalURL)}>
-                  <AutoImage
-                    {...maxImageDimensions(tier)}
-                    accessibilityLabel={sponsor}
-                    source={{ uri }}
-                  />
-                  <Icon icon="arrow" containerStyle={$iconButton} />
-                </Pressable>
-              </View>
+              <Pressable
+                key={index}
+                style={$silverTierButton}
+                onPress={() => openLinkInBrowser(externalURL)}
+              >
+                <AutoImage
+                  {...maxImageDimensions(tier)}
+                  accessibilityLabel={sponsor}
+                  source={{ uri }}
+                />
+                <Icon icon="arrow" containerStyle={$iconButton} />
+              </Pressable>
             ))}
           </View>
         </View>
@@ -137,13 +139,9 @@ const $silverTierWrapper: ViewStyle = {
   justifyContent: "space-between",
 }
 
-const $silverTierButtonWrapper: ViewStyle = {
+const $silverTierButton: ViewStyle = {
   width: "45%",
   marginVertical: spacing.small,
-}
-
-const $silverTierButton: ViewStyle = {
-  flex: 1,
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
