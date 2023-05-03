@@ -20,6 +20,7 @@ import {
   getFullWidthImageDimensions,
   MIN_HEADER_HEIGHT,
   Screen,
+  SCREEN_WIDTH,
   Text,
 } from "../../components"
 import { colors, spacing } from "../../theme"
@@ -28,7 +29,6 @@ import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { translate } from "../../i18n"
-import { SCREEN_WIDTH } from "../../components/carousel/constants"
 
 const imageCurve = require("../../../assets/images/workshop-curve.png")
 

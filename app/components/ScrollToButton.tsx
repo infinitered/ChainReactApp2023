@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from "react"
 import { ViewStyle, ViewToken, TextStyle, View } from "react-native"
-import { Button, ButtonProps } from "./Button"
-import { Icon } from "./Icon"
+import { Button, ButtonProps, Icon } from "./"
 import { colors, spacing } from "../theme"
 import Animated, {
   useAnimatedStyle,

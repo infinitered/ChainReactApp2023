@@ -1,8 +1,7 @@
 import React from "react"
 import { colors } from "../theme"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
-import { FloatingButton, FloatingButtonProps } from "./Button"
-import { Icon } from "./Icon"
+import { FloatingButton, FloatingButtonProps, Icon } from "./"
 
 export interface MediaButtonProps extends FloatingButtonProps {
   /**

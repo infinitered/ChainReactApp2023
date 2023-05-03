@@ -2,7 +2,7 @@ import React from "react"
 import { Pressable, PressableProps, StyleProp, ViewStyle } from "react-native"
 import { spacing } from "../theme"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
-import { Icon, IconProps } from "./Icon"
+import { Icon, IconProps } from "./"
 
 export interface SocialButtonProps extends PressableProps {
   /**
