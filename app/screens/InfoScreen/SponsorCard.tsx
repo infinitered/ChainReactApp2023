@@ -4,6 +4,7 @@ import { AutoImage, Icon, Text } from "../../components"
 import { spacing } from "../../theme"
 import { translate } from "../../i18n"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
+import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
 export type CommonProps = {
   containerStyle?: ViewStyle
@@ -33,25 +34,27 @@ function maxImageDimensions(tier: SponsorCardProps["tier"]): {
   maxWidth: number
   maxHeight: number
 } {
+  const iconWidth = spacing.large + spacing.medium
+
   switch (tier) {
     case "Platinum":
       return {
-        maxWidth: 280,
+        maxWidth: SCREEN_CONTENT_WIDTH * 0.9 - iconWidth,
         maxHeight: 60,
       }
     case "Gold":
       return {
-        maxWidth: 240,
+        maxWidth: SCREEN_CONTENT_WIDTH * 0.7 - iconWidth,
         maxHeight: 48,
       }
     case "Silver":
       return {
-        maxWidth: 135,
-        maxHeight: 26,
+        maxWidth: SCREEN_CONTENT_WIDTH * 0.4 - iconWidth,
+        maxHeight: 48,
       }
     case "Bronze":
       return {
-        maxWidth: 155,
+        maxWidth: SCREEN_CONTENT_WIDTH * 0.4,
         maxHeight: 36,
       }
   }
@@ -90,7 +93,7 @@ export const SponsorCard = ({
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.silverSponsor" />
-          <View style={$silverTierButtonWrapper}>
+          <View style={$silverTierWrapper}>
             {sponsorImages.map(({ uri, sponsor, externalURL }, index) => (
               <Pressable
                 key={index}
@@ -100,7 +103,6 @@ export const SponsorCard = ({
                 <AutoImage
                   {...maxImageDimensions(tier)}
                   accessibilityLabel={sponsor}
-                  style={$silverTierImage}
                   source={{ uri }}
                 />
                 <Icon icon="arrow" containerStyle={$iconButton} />
@@ -119,10 +121,7 @@ export const SponsorCard = ({
                 <AutoImage
                   {...maxImageDimensions(tier)}
                   accessibilityLabel={sponsor}
-                  style={[
-                    $sponsorImageBottomTier,
-                    index % 2 === 0 ? $sponsorImageBottomTierStart : $sponsorImageBottomTierEnd,
-                  ]}
+                  style={$sponsorImageBottomTier}
                   source={{ uri }}
                 />
               </View>
@@ -133,20 +132,19 @@ export const SponsorCard = ({
   }
 }
 
-const $silverTierImage: ImageStyle = {
-  marginVertical: spacing.small,
+const $silverTierWrapper: ViewStyle = {
+  flex: 1,
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "space-between",
 }
 
 const $silverTierButton: ViewStyle = {
+  width: "45%",
+  marginVertical: spacing.small,
+  flexDirection: "row",
   alignItems: "center",
-  flex: 1,
-  flexDirection: "row",
-}
-
-const $silverTierButtonWrapper: ViewStyle = {
-  flex: 1,
-  flexDirection: "row",
-  marginHorizontal: spacing.large,
+  justifyContent: "space-between",
 }
 
 const $sponsorTitle: ViewStyle = {
@@ -185,12 +183,4 @@ const $sponsorBottomTierLogoWrapper: ViewStyle = {
 
 const $sponsorImageBottomTier: ImageStyle = {
   marginVertical: spacing.small,
-}
-
-const $sponsorImageBottomTierStart: ImageStyle = {
-  marginEnd: spacing.large,
-}
-
-const $sponsorImageBottomTierEnd: ImageStyle = {
-  marginEnd: 0,
 }

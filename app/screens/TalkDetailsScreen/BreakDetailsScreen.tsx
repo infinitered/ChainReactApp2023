@@ -16,10 +16,12 @@ import { useScheduledEventsData, useSponsors } from "../../services/api"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-api.types"
 import {
+  AutoImage,
   ButtonLink,
   getFullWidthImageDimensions,
   MIN_HEADER_HEIGHT,
   Screen,
+  SCREEN_CONTENT_WIDTH,
   SCREEN_WIDTH,
   Text,
 } from "../../components"
@@ -143,10 +145,11 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
           {sponsor && (
             <View style={$containerSpacing}>
               <Text preset="eventTitle" style={$heading} tx="breakDetailsScreen.hostedBy" />
-              <Image
+              <AutoImage
+                maxHeight={45}
+                maxWidth={SCREEN_CONTENT_WIDTH}
                 source={{ uri: sponsor.logo.url }}
                 accessibilityLabel={sponsor.name}
-                style={$logo}
               />
             </View>
           )}
@@ -220,9 +223,4 @@ const $heading: TextStyle = {
   ...$containerSpacing,
   color: colors.palette.primary500,
   textTransform: "uppercase",
-}
-
-const $logo: ImageStyle = {
-  height: 45,
-  width: 45,
 }
