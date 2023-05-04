@@ -40,13 +40,15 @@ export function useScrollToEvent({
   const handleViewableEventIndexChanged = useRef(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
       if (!isFocused.value) return
-      currentlyViewingEvents.value = viewableItems.map((item) => item.index)
+      currentlyViewingEvents.value = viewableItems
+        .map((item) => item.index)
+        .filter((i) => typeof i === "number") as Array<number>
     },
   ).current
 
   const handleViewableScheduleIndexChanged = useRef(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      currentlyViewingSchedule.value = viewableItems[0]?.index ?? 0
+      currentlyViewingSchedule.value = viewableItems[0].index ?? 0
     },
   ).current
 

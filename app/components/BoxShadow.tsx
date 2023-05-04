@@ -26,10 +26,10 @@ interface BoxShadowProps {
 }
 
 export function BoxShadow(props: BoxShadowProps): React.ReactElement {
-  const [height, setHeight] = React.useState(null)
-  const [width, setWidth] = React.useState(null)
-  const preset: Presets = $offsetPresets[props.preset] ? props.preset : "default"
-  const $offset = [$offsetPresets[preset]]
+  const [height, setHeight] = React.useState<number | undefined>(undefined)
+  const [width, setWidth] = React.useState<number | undefined>(undefined)
+  const preset: Presets = props.preset ?? "default"
+  const $offset: StyleProp<ImageStyle> = [$offsetPresets[preset], { height, width }]
   const offsetAmount = props.offset || spacing.tiny
   const $offsetContainerSpacing = { left: offsetAmount, top: offsetAmount }
 
@@ -43,7 +43,7 @@ export function BoxShadow(props: BoxShadowProps): React.ReactElement {
         style={{ marginEnd: offsetAmount, marginBottom: offsetAmount }}
       >
         <View style={[$offsetContainer, $offsetContainerSpacing]}>
-          <Image style={[$offset, { height, width }]} source={cardOffset} />
+          <Image style={$offset} source={cardOffset} />
         </View>
         <View>{props.children}</View>
       </View>

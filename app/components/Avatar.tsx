@@ -31,7 +31,7 @@ export const Avatar: React.FC<AvatarProps> = (props) => {
   const preset: AvatarPresets =
     props.sources.length > 1
       ? "multi-speaker"
-      : $viewPresets[props.preset]
+      : props.preset && $viewPresets[props.preset]
       ? props.preset
       : "workshop"
   const $imageStyle = Object.assign({}, $viewPresets[preset], imageStyle)
