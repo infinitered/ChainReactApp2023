@@ -6,8 +6,7 @@ import {
   NavigationAction,
   createNavigationContainerRef,
 } from "@react-navigation/native"
-import Config from "../config"
-import type { PersistNavigationConfig } from "../config/config.base"
+import Config, { type PersistNavigationConfig } from "../config"
 import { useIsMounted } from "../utils/isMounted"
 
 /* eslint-disable */

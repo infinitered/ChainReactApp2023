@@ -24,13 +24,6 @@ const en = {
     pushToken: "FCM Token",
     resetState: "Reset App State",
   },
-  emptyStateComponent: {
-    generic: {
-      heading: "So empty... so sad",
-      content: "No data found yet. Try clicking the button to refresh or reload the app.",
-      button: "Let's try this again",
-    },
-  },
   exploreScreen: {
     title: "Explore",
     nearbyFoodAndDrink: "Nearby food and drink",

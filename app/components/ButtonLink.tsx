@@ -1,7 +1,6 @@
 import React, { FC } from "react"
 import { GestureResponderEvent, ViewStyle } from "react-native"
-import { Button } from "./Button"
-import { AutoImage } from "./AutoImage"
+import { AutoImage, Button } from "./"
 import { spacing } from "../theme"
 import { openLinkInBrowser } from "../utils/openLinkInBrowser"
 

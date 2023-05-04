@@ -1,10 +1,9 @@
 import React from "react"
 import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
-import { AutoImage, Text } from "../../components"
+import { AutoImage, SocialButtons, Text } from "../../components"
 import { translate } from "../../i18n"
 import { colors, spacing } from "../../theme"
 import { Speaker } from "../../services/api/webflow-api.types"
-import { SocialButtons } from "../../components/SocialButton"
 export interface AssistantsListProp {
   assistants: Speaker[]
 }

@@ -1,16 +1,13 @@
 import React, { useMemo } from "react"
 import { View, FlatList, ViewStyle, ImageSourcePropType, TextStyle } from "react-native"
-import { Button } from "../Button"
 import { CarouselCard } from "./CarouselCard"
-import { Text } from "../Text"
 import { spacing } from "../../theme"
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { openMap } from "../../utils/openMap"
-import { SocialButton } from "../SocialButton"
+import { Button, ButtonLink, SocialButton, Text } from "../"
 import { CAROUSEL_END_SPACER, CAROUSEL_INTERVAL, CAROUSEL_START_SPACER } from "./constants"
 import { CarouselProps, DynamicCarouselItem, Spacer } from "./carousel.types"
-import { ButtonLink } from "../ButtonLink"
 
 // ! https://github.com/software-mansion/react-native-reanimated/issues/457
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList)

@@ -27,13 +27,13 @@ export const ContactUsScreen = () => {
         <Text preset="screenHeading" tx="infoScreen.haveQuestions" style={$mb} />
         <Text style={$mb}>
           {translate("infoScreen.reachOut")}
-          <Text onPress={contactByEmail} text={emailAddress} />
+          <Text style={$linkText} onPress={contactByEmail} text={emailAddress} selectable />
         </Text>
 
         <Text preset="screenHeading" tx="infoScreen.reportingIncidentTitle" style={$mb} />
         <Text>
           {translate("infoScreen.reportingIncidentPart1")}
-          <Text style={$phoneNumber} onPress={callPhoneNumber} text={phoneNumber} />
+          <Text style={$linkText} onPress={callPhoneNumber} text={phoneNumber} selectable />
           {translate("infoScreen.reportingIncidentPart2")}
         </Text>
       </View>
@@ -49,11 +49,11 @@ const $content: ViewStyle = {
   paddingHorizontal: spacing.large,
 }
 
-const $phoneNumber: TextStyle = {
-  textDecorationLine: "underline",
-  textDecorationColor: colors.text,
-}
-
 const $mb: TextStyle = {
   marginBottom: spacing.medium,
+}
+
+const $linkText: TextStyle = {
+  textDecorationLine: "underline",
+  textDecorationColor: colors.text,
 }

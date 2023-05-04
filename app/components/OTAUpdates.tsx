@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import * as Updates from "expo-updates"
 import { reportCrash } from "../utils/crashReporting"
 import { useAppState } from "../hooks"
-import { Modal } from "./Modal"
+import { Modal } from "./"
 
 // Setting up our OTA Updates component
 export const OTAUpdates = () => {

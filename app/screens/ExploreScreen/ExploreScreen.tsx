@@ -8,15 +8,14 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { ButtonLink, Carousel, Screen, Text } from "../../components"
+import { ButtonLink, Carousel, DynamicCarouselItem, Screen, Text } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
-import { useHeader } from "../../hooks/useHeader"
+import { useHeader } from "../../hooks"
 import { translate } from "../../i18n"
 import { useRecommendations } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { RawRecommendations } from "../../services/api/webflow-api.types"
-import { DynamicCarouselItem } from "../../components/carousel/carousel.types"
 import { groupBy } from "../../utils/groupBy"
 import { customSortObjectKeys } from "../../utils/customSort"
 

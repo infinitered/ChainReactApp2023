@@ -9,7 +9,7 @@ import {
 import { Carousel, Screen } from "../../components"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors } from "../../theme"
-import { useHeader } from "../../hooks/useHeader"
+import { useHeader } from "../../hooks"
 import { translate } from "../../i18n"
 import { useVenues } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"

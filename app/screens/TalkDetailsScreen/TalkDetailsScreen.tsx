@@ -10,6 +10,10 @@ import {
   MediaButton,
   IconProps,
   Carousel,
+  DynamicCarouselItem,
+  SCREEN_CONTENT_WIDTH,
+  SocialButtons,
+  SocialButtonData,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
@@ -20,11 +24,8 @@ import { formatDate } from "../../utils/formatDate"
 import { isFuture, parseISO } from "date-fns"
 import { ScheduledEvent, Speaker } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
-import { SocialButtons } from "../../components/SocialButton"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
-import { DynamicCarouselItem, SocialButtonData } from "../../components/carousel/carousel.types"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
-import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
 export type Variants = "workshop" | "talk"
 

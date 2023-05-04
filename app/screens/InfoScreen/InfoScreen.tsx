@@ -1,11 +1,10 @@
 import React from "react"
 import { ViewStyle, ImageSourcePropType, ImageStyle, Pressable } from "react-native"
-import { AutoImage, ButtonLink, Screen, Text } from "../../components"
+import { AutoImage, ButtonLink, Carousel, Screen, Text } from "../../components"
 import { useAppNavigation, useHeader } from "../../hooks"
 import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { translate } from "../../i18n"
-import { Carousel } from "../../components/carousel/Carousel"
 import { InfoStackParamList } from "../../navigators/InfoStackNavigator"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
