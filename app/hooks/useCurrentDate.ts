@@ -23,9 +23,5 @@ export function useCurrentDate() {
     checkCurrentDate()
   }, [])
 
-  useEffect(() => {
-    console.tron.log("currentDate", currentDate)
-  }, [currentDate])
-
   return currentDate
 }
