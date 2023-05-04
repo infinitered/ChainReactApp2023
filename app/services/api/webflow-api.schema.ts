@@ -89,7 +89,7 @@ export const BoolSchema = z.boolean()
 /** @see https://developers.webflow.com/docs/field-types#datetime */
 export const DateSchema = DateStringSchema.nullable()
 /** @see https://developers.webflow.com/docs/field-types#user */
-export const UserSchema = z.string()
+export const UserSchema = z.string().nullable()
 /** @see https://developers.webflow.com/docs/field-types#rich-text */
 export const RichTextSchema = z.string()
 /** @see https://developers.webflow.com/docs/field-types#video-link */
