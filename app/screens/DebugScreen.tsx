@@ -21,7 +21,7 @@ export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () 
     LeftActionComponent: <BackButton />,
     title: translate("debugScreen.title"),
   })
-  const [fcmToken, setFcmToken] = React.useState<string | null>(null)
+  const [fcmToken, setFcmToken] = React.useState<string | undefined>(undefined)
   const queryClient = useQueryClient()
 
   const clearState = () => {
@@ -62,7 +62,7 @@ export const DebugScreen: FC<StackScreenProps<AppStackParamList, "Debug">> = () 
       </View>
       <View style={$footer}>
         <Text preset="companionHeading" text={"Specs:"} />
-        {Updates.channel.length > 0 ? (
+        {(Updates.channel ?? "").length > 0 ? (
           <Text preset="label" text={`Channel: ${Updates.channel}`} style={$spec} />
         ) : null}
         {Updates.updateId ? (

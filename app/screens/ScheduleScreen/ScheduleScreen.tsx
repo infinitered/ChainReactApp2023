@@ -109,14 +109,14 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const isFocused = useIsFocused()
 
   const updateSchedule = React.useCallback(
-    (index) => {
+    (index: number) => {
       setSelectedSchedule(schedules[index])
     },
     [schedules],
   )
 
   const onItemPress = React.useCallback(
-    (itemIndex) => {
+    (itemIndex: number) => {
       const currentIndex = getScheduleIndex()
 
       if (currentIndex === itemIndex) {

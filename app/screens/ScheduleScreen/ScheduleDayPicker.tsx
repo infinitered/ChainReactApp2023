@@ -50,7 +50,7 @@ AnimatedDayButton.displayName = "AnimatedDayButton"
 
 type ScheduleDayPickerProps = {
   scrollX: SharedValue<number>
-  onItemPress: (itemIndex) => void
+  onItemPress: (itemIndex: number) => void
   schedules: Schedule[]
   selectedSchedule: Schedule
 }
@@ -65,12 +65,12 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   const widthSize = wrapperWidth / schedules.length
   const index = schedules.findIndex((s) => s.date === selectedSchedule.date)
 
-  const containerRef = React.useRef()
+  const containerRef = React.useRef<View>(null)
   const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
   const itemRefs = schedules.map((_) => React.createRef<View>())
 
   const onLayout = React.useCallback(() => {
-    const m = []
+    const m: Array<{ x: number; y: number; width: number; height: number }> = []
     schedules.every((_, index) => {
       itemRefs[index].current.measureLayout(
         containerRef.current,

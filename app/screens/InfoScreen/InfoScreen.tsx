@@ -2,10 +2,9 @@ import React from "react"
 import { ViewStyle, ImageSourcePropType, ImageStyle, Pressable } from "react-native"
 import { AutoImage, ButtonLink, Carousel, Screen, Text } from "../../components"
 import { useAppNavigation, useHeader } from "../../hooks"
-import { TabScreenProps } from "../../navigators/TabNavigator"
 import { colors, spacing } from "../../theme"
 import { translate } from "../../i18n"
-import { InfoStackParamList } from "../../navigators/InfoStackNavigator"
+import { InfoStackParamList, InfoStackScreenProps } from "../../navigators/InfoStackNavigator"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 const irImage1 = require("../../../assets/images/info-ir1.png")
@@ -38,7 +37,7 @@ const links: Links = [
   },
 ]
 
-export const InfoScreen: React.FunctionComponent<TabScreenProps<"InfoStack">> = () => {
+export const InfoScreen: React.FunctionComponent<InfoStackScreenProps<"Info">> = () => {
   const mainNavigation = useAppNavigation()
   const infoStackNavigation = useAppNavigation<InfoStackParamList>()
 

@@ -25,14 +25,14 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
 
   if (!schedule) return null
 
-  const title = schedule.workshop?.name
+  const title = schedule.workshop?.name ?? ""
   const subtitle = `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`
   const description = schedule.workshop?.abstract
   const instructors = schedule.workshop?.["instructor-s-2"]
   const assistants = schedule.workshop?.assistants
 
-  const carouselData = instructors.map((speaker) => ({
-    image: { uri: speaker["speaker-photo"].url },
+  const carouselData = instructors?.map((speaker) => ({
+    image: { uri: speaker["speaker-photo"]?.url },
     imageStyle: { height: 320 },
     subtitle: speaker.name,
     label: speaker.company,
@@ -81,7 +81,11 @@ export const WorkshopDetailsScreen: FC<StackScreenProps<AppStackParamList, "Work
               style={$speakerPanelTitle}
             />
             <Text text={description} style={$speakerPanelDescription} />
-            <Text preset="boldHeading" tx={instructor} txOptions={{ count: instructors.length }} />
+            <Text
+              preset="boldHeading"
+              tx={instructor}
+              txOptions={{ count: instructors?.length ?? 0 }}
+            />
           </View>
           <Carousel preset="dynamic" data={carouselData} carouselCardVariant="speaker" />
           <View style={$contentSpacing}>

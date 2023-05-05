@@ -14,6 +14,7 @@ import { translate } from "../../i18n"
 import { useVenues } from "../../services/api"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { customSort } from "../../utils/customSort"
+import { RawVenue } from "../../services/api/webflow-api.types"
 
 interface VenuesSection {
   body: string
@@ -26,7 +27,7 @@ interface VenuesSection {
   title: string
 }
 
-const getVenueDate = (venueTag: string): string => {
+const getVenueDate = (venueTag: RawVenue["tag"]): string => {
   switch (WEBFLOW_MAP.venueTag[venueTag]) {
     case "Workshop":
       return "May 17"
