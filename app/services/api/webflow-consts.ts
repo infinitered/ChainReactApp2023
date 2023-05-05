@@ -75,6 +75,12 @@ export const WEBFLOW_MAP = {
     d9770c43cd59f01f2d60b288d65c1f90: "New",
     c8af4236d64f5c25c09e61e4633badb0: "Top Seller",
   },
+  workshopYear: {
+    "4f94582394abff4ed4dec0f1a27abf32": "2023",
+    "96a6b94b94afb3a981dddbfab1e32a31": "2019",
+    "0b3b05a9f43de273fc88d5b74aa4596e": "2018",
+    "64ee2179ea49572e201495acdcd77453": "2017",
+  },
   speakersType: {
     "97dae28f90a767132ee88e80a8537af8": "Speaker",
     "079e51435c82a91426f9c3acc7b0343a": "Panelist",
@@ -89,15 +95,16 @@ export const WEBFLOW_MAP = {
   scheduleDay: {
     "63ac4ade8b2d5a981780570e01bed34d": "Wednesday",
     ed2cfa99e27dce5d1a425a419f170eb3: "Thursday",
-    "2e399bc3": "Friday",
+    "93f921892f42ef212e824c80e0db4da0": "Friday",
   },
   scheduleType: {
     "4206976061fcd6327bd12ce6aac856eb": "Talk",
     dd977a70188a93af399ad496d6cf2785: "Recurring",
-    b2f17244cf6bd0782c2a099568169219: "Party",
+    "8fc8810c6c61b7e3939280149fc5f84e": "Speaker Panel",
     "7ccbd551ac994b4489c4fe31ad985120": "Workshop",
     a46728e5ac2795216173113b4cd6d91a: "Sponsored",
     "67acc937d6af3a65b7b349a2bec4f701": "Lightning Talk",
+    "123abc": "Trivia Show", // adding a dummy value for the trivia show
   },
   recurringEventType: {
     "63b8a530a5f15f0d26539f07": "Check-in & Registration",
@@ -108,6 +115,7 @@ export const WEBFLOW_MAP = {
   talkType: {
     "38ba1361ae664a13e4a03f20ae153dc8": "Talk",
     "3aa9ece8012afed5d4e548180b2713e0": "Emcee",
+    e66d50161e7027f9c8646ac4ec9c02a9: "Speaker Panel",
   },
   location: {
     "63b8a958a5f15f379953e0da": "Courtyard Portland City Center",

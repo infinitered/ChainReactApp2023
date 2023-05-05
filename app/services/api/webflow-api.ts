@@ -140,17 +140,3 @@ export const useScheduleScreenData = () => {
     refetch,
   }
 }
-
-// [NOTE] JUST FOR REFERENCE
-// webflowAPI.site({ siteId: SITE_ID }).then((site) => {
-//   console.tron.log({ site })
-// })
-// webflowAPI.collections({ siteId: SITE_ID }).then((collections) => {
-//   console.tron.log({ collections })
-// })
-// webflowAPI.collection({ collectionId: SPEAKER_NAMES.collectionId }).then((speakerNames) => {
-//   console.tron.log({ speakerNames })
-// })
-// webflowAPI.collection({ collectionId: PAST_TALKS.collectionId }).then((pastTalks) => {
-//   console.tron.log({ pastTalks })
-// })
