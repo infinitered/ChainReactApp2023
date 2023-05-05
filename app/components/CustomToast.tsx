@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { colors, spacing } from "../theme"
 import messaging from "@react-native-firebase/messaging"
 import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
-import { $baseSecondaryStyle, $baseStyle } from "./"
+import { $baseSecondaryStyle, $baseStyle } from "./Text"
 import { Dimensions, ViewStyle } from "react-native"
 
 // Setting up our custom Toast component

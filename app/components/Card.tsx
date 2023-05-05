@@ -8,7 +8,8 @@ import {
   ViewStyle,
 } from "react-native"
 import { colors, spacing } from "../theme"
-import { BoxShadow, Text, TextProps } from "./"
+import { BoxShadow } from "./BoxShadow"
+import { Text, TextProps } from "./Text"
 
 type Presets = keyof typeof $containerPresets
 

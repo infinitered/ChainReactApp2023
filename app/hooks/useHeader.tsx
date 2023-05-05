@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react"
 import { useNavigation } from "@react-navigation/native"
-import { Header, HeaderProps } from "../components"
+import { Header, HeaderProps } from "../components/Header"
 
 /**
  * A hook to set the header for a screen.
