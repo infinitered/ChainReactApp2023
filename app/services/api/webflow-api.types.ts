@@ -180,7 +180,7 @@ export interface RawRecommendations extends Item {
   description: string
   descriptor: string
   images: ImageRef[]
-  type: string
+  type: keyof typeof WEBFLOW_MAP.recommendationType
 }
 
 export interface Recommendations extends Omit<RawRecommendations, "type"> {
