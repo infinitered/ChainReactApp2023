@@ -1,4 +1,4 @@
-import { format } from "date-fns"
+import { format, isSameDay } from "date-fns"
 import React, { FC, MutableRefObject } from "react"
 import { Dimensions, Pressable, PressableProps, TextStyle, View, ViewStyle } from "react-native"
 import Animated, {
@@ -10,7 +10,6 @@ import Animated, {
 import { colors, spacing, typography } from "../../theme"
 import { reportCrash } from "../../utils/crashReporting"
 import { parseDate } from "../../utils/formatDate"
-import { Schedule } from "./ScheduleScreen"
 
 const { width } = Dimensions.get("window")
 
@@ -20,13 +19,13 @@ interface AnimatedDayButtonProps extends PressableProps {
   text: string
   scrollX: SharedValue<number>
   inputRange: number[]
-  schedules: Schedule[]
+  scheduleDates: Date[]
 }
 
 const AnimatedDayButton = React.forwardRef(
   (props: AnimatedDayButtonProps, ref: MutableRefObject<View>) => {
-    const { onPress, index, text, scrollX, inputRange, schedules, ...rest } = props
-    const outputRange = schedules.map((_, scheduleIndex) =>
+    const { onPress, index, text, scrollX, inputRange, scheduleDates, ...rest } = props
+    const outputRange = scheduleDates.map((_, scheduleIndex) =>
       index === scheduleIndex ? colors.palette.neutral800 : colors.palette.neutral100,
     )
 
@@ -51,33 +50,34 @@ AnimatedDayButton.displayName = "AnimatedDayButton"
 type ScheduleDayPickerProps = {
   scrollX: SharedValue<number>
   onItemPress: (itemIndex) => void
-  schedules: Schedule[]
-  selectedSchedule: Schedule
+  scheduleDates: Date[]
+  selectedScheduleDate: Date
 }
 
 export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   scrollX,
   onItemPress,
-  schedules,
-  selectedSchedule,
+  scheduleDates,
+  selectedScheduleDate,
 }) => {
   const wrapperWidth = width - spacing.extraSmall * 2
-  const widthSize = wrapperWidth / schedules.length
-  const index = schedules.findIndex((s) => s.date === selectedSchedule.date)
-
+  const widthSize = wrapperWidth / scheduleDates.length
+  const selectedScheduleIndex = scheduleDates.findIndex((date) =>
+    isSameDay(date, selectedScheduleDate),
+  )
   const containerRef = React.useRef()
   const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
-  const itemRefs = schedules.map((_) => React.createRef<View>())
+  const itemRefs = scheduleDates.map((_) => React.createRef<View>())
 
   const onLayout = React.useCallback(() => {
     const m = []
-    schedules.every((_, index) => {
+    scheduleDates.every((_, index) => {
       itemRefs[index].current.measureLayout(
         containerRef.current,
         (x, y, width, height) => {
           m.push({ x, y, width, height })
 
-          if (m.length === schedules.length) {
+          if (m.length === scheduleDates.length) {
             setMeasures(m)
           }
         },
@@ -89,13 +89,13 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
     })
   }, [itemRefs])
 
-  const inputRange = schedules.map((_, index) => index * width)
+  const inputRange = scheduleDates.map((_, index) => index * width)
 
   const $animatedLeftStyle = useAnimatedStyle(() => {
     const translateX = interpolate(
       scrollX.value,
       inputRange,
-      measures.map((measure) => measure.x + (index - spacing.micro)),
+      measures.map((measure) => measure.x + (selectedScheduleIndex - spacing.micro)),
     )
 
     return {
@@ -107,16 +107,16 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   return (
     <View ref={containerRef} style={$wrapperStyle} onLayout={onLayout}>
       {measures.length > 0 && <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />}
-      {schedules.map((schedule, index) => (
+      {scheduleDates.map((date, index) => (
         <AnimatedDayButton
-          key={schedule.date}
+          key={index}
           ref={itemRefs[index]}
           onPress={() => {
             onItemPress(index)
           }}
-          text={format(parseDate(schedule.date), "EE")}
-          accessibilityLabel={format(parseDate(schedule.date), "EEEE")}
-          {...{ index, scrollX, inputRange, schedules }}
+          text={format(date, "EE")}
+          accessibilityLabel={format(date, "EEEE")}
+          {...{ index, scrollX, inputRange, scheduleDates }}
         />
       ))}
     </View>
