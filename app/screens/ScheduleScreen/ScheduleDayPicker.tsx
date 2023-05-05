@@ -9,7 +9,6 @@ import Animated, {
 } from "react-native-reanimated"
 import { colors, spacing, typography } from "../../theme"
 import { reportCrash } from "../../utils/crashReporting"
-import { parseDate } from "../../utils/formatDate"
 
 const { width } = Dimensions.get("window")
 
