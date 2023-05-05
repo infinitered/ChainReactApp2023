@@ -277,7 +277,11 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           />
         )}
       </View>
-      <ScheduleDayPicker {...{ scrollX, onItemPress, schedules, selectedSchedule }} />
+      <ScheduleDayPicker
+        {...{ scrollX, onItemPress }}
+        scheduleDates={schedules.map((s) => parseDate(s.date))}
+        selectedScheduleDate={parseDate(selectedSchedule.date)}
+      />
       <ScrollToButton navigateToCurrentEvent={navigateToCurrentEvent} {...scrollToButtonProps} />
     </>
   )
