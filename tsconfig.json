@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "strict": true
   },
-  "exclude": ["node_modules"],
-  "include": ["index.js", "App.js", "app", "test"],
+  "exclude": ["node_modules", "test"],
+  "include": ["index.js", "App.js", "app"],
   "extends": "expo/tsconfig.base"
 }
