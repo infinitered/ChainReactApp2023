@@ -2,7 +2,8 @@ import React from "react"
 import { Modal as RNModal, TextStyle, View, ViewStyle } from "react-native"
 import { TxKeyPath } from "../i18n"
 import { colors, spacing } from "../theme"
-import { Button, ButtonProps, Text } from "./"
+import { Button, ButtonProps } from "./Button"
+import { Text } from "./Text"
 
 interface OnPressProps extends ButtonProps {
   cta: () => void

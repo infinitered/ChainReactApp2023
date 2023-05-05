@@ -12,7 +12,7 @@ import {
 } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 import { colors, spacing, typography } from "../theme"
-import { Text, TextProps } from "./"
+import { Text, TextProps } from "./Text"
 
 type Presets = keyof typeof $viewPresets
 
