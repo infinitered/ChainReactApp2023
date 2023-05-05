@@ -53,6 +53,13 @@ type ScheduleDayPickerProps = {
   selectedScheduleDate: Date
 }
 
+type Measurement = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   scrollX,
   onItemPress,
@@ -65,27 +72,29 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
     isSameDay(date, selectedScheduleDate),
   )
   const containerRef = React.useRef<View>()
-  const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
   const itemRefs = scheduleDates.map((_) => React.createRef<View>())
+  const [measures, setMeasures] = React.useState<Measurement[]>(
+    itemRefs.map((_) => {
+      return { x: 0, y: 0, width: 0, height: 0 }
+    }),
+  )
 
   const onLayout = React.useCallback(() => {
-    const m: Array<{ x: number; y: number; width: number; height: number }> = []
-    scheduleDates.every((_, index) => {
-      itemRefs[index].current.measureLayout(
+    const m: Measurement[] = measures
+    itemRefs.forEach((itemRef, index) => {
+      itemRef.current?.measureLayout(
         containerRef.current,
         (x, y, width, height) => {
-          m.push({ x, y, width, height })
-
-          if (m.length === scheduleDates.length) {
-            setMeasures(m)
-          }
+          m[index] = { x, y, width, height }
         },
         () => {
+          m[index] = { x: 0, y: 0, width: 0, height: 0 }
           reportCrash("ScheduleDayPicker-unable to measureLayout")
         },
       )
-      return true
     })
+
+    setMeasures(m)
   }, [itemRefs])
 
   const inputRange = scheduleDates.map((_, index) => index * width)
