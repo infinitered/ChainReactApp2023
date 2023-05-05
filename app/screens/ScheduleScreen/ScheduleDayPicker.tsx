@@ -1,6 +1,14 @@
 import { format, isSameDay } from "date-fns"
 import React, { FC, ForwardedRef, useCallback } from "react"
-import { Dimensions, Pressable, PressableProps, TextStyle, View, ViewStyle } from "react-native"
+import {
+  Dimensions,
+  LayoutChangeEvent,
+  Pressable,
+  PressableProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import Animated, {
   useAnimatedStyle,
   SharedValue,
@@ -60,6 +68,9 @@ type Measurement = {
   height: number
 }
 
+const initialMeasures = (size: number): Measurement[] =>
+  Array(size).fill({ x: 0, y: 0, width: 0, height: 0 })
+
 export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   scrollX,
   onItemPress,
@@ -72,14 +83,10 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
     isSameDay(date, selectedScheduleDate),
   )
   const itemRefs = scheduleDates.map((_) => React.createRef<View>())
-  const [measures, setMeasures] = React.useState<Measurement[]>(
-    itemRefs.map((_) => {
-      return { x: 0, y: 0, width: 0, height: 0 }
-    }),
-  )
+  const [measures, setMeasures] = React.useState<Measurement[]>(initialMeasures(itemRefs.length))
 
   const onLayout = useCallback(
-    ({ target }: { target: number }) => {
+    ({ target }: LayoutChangeEvent) => {
       const m: Measurement[] = measures
       itemRefs.forEach((itemRef, index) => {
         itemRef.current?.measureLayout(
