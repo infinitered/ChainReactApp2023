@@ -5,13 +5,15 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
   View,
+  ViewProps,
   ViewStyle,
 } from "react-native"
-import { Edge, SafeAreaView, SafeAreaViewProps } from "react-native-safe-area-context"
+import { Edge } from "react-native-safe-area-context"
 import { colors, spacing } from "../theme"
 import { Text, TextProps } from "./Text"
 import { Icon, IconTypes } from "./Icon"
 import { isRTL, translate } from "../i18n"
+import SafeAreaViewFixed from "./SafeAreaViewFixed"
 
 export const MIN_HEADER_HEIGHT = 56
 
@@ -118,9 +120,9 @@ export interface HeaderProps {
    */
   safeAreaEdges?: Edge[]
   /**
-   * Pass any additional props directly to the SafeAreaView component.
+   * Pass any additional props directly to the Header View component.
    */
-  SafeAreaViewProps?: SafeAreaViewProps
+  HeaderViewProps?: ViewProps
 }
 
 interface HeaderActionProps {
@@ -158,7 +160,7 @@ export function Header(props: HeaderProps) {
     rightTx,
     rightTxOptions,
     safeAreaEdges = ["top"],
-    SafeAreaViewProps,
+    HeaderViewProps,
     title,
     titleMode = "center",
     titleTx,
@@ -167,15 +169,13 @@ export function Header(props: HeaderProps) {
     containerStyle: $containerStyleOverride,
   } = props
 
-  const Wrapper = safeAreaEdges?.length ? SafeAreaView : View
-
   const titleContent = titleTx ? translate(titleTx, titleTxOptions) : title
 
   return (
-    <Wrapper
+    <SafeAreaViewFixed
       edges={safeAreaEdges}
-      {...SafeAreaViewProps}
-      style={[$safeArea, SafeAreaViewProps?.style, { backgroundColor }]}
+      {...HeaderViewProps}
+      style={[$safeArea, HeaderViewProps?.style, { backgroundColor }]}
     >
       <View style={[$container, $containerStyleOverride]}>
         <HeaderAction
@@ -213,7 +213,7 @@ export function Header(props: HeaderProps) {
           ActionComponent={RightActionComponent}
         />
       </View>
-    </Wrapper>
+    </SafeAreaViewFixed>
   )
 }
 
