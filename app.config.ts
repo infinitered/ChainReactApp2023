@@ -54,6 +54,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         action: "VIEW",
         data: { scheme: "geo" },
       },
+      {
+        action: "SEND",
+        data: { scheme: "mailto" },
+      },
     ],
   },
   ios: {
