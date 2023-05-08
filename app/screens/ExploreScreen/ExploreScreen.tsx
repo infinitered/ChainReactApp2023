@@ -21,6 +21,7 @@ import { customSortObjectKeys } from "../../utils/customSort"
 
 const recommendationTypes = Object.values(WEBFLOW_MAP.recommendationType)
 type RecommendationType = (typeof recommendationTypes)[number]
+type RecommendationTypeId = keyof typeof WEBFLOW_MAP.recommendationType
 type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
 
 const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
@@ -56,9 +57,10 @@ const useRecommendationSections = (): {
 
   const rawRecs = groupBy("type")(recommendations)
   const recs = Object.keys(rawRecs).reduce<GroupedRecommendations>(
-    (acc, recommendationType) => ({
+    (acc, recommendationTypeId) => ({
       ...acc,
-      [WEBFLOW_MAP.recommendationType[recommendationType]]: rawRecs[recommendationType] ?? [],
+      [WEBFLOW_MAP.recommendationType[recommendationTypeId as RecommendationTypeId]]:
+        rawRecs[recommendationTypeId] ?? [],
     }),
     initialRecs,
   )
@@ -66,30 +68,28 @@ const useRecommendationSections = (): {
 
   return {
     isLoading,
-    sections: Object.entries(sortedRecs).map(
-      ([key, value]: [RecommendationType, RawRecommendations[]]) => ({
-        title: sectionTitle(key),
-        renderItem: RenderItem,
-        data: [
-          value.map(
-            (item) =>
-              ({
-                image: item.images.map((image) => ({ uri: image.url })),
-                subtitle: item.name,
-                meta: item.descriptor,
-                body: item.description,
-                leftButton:
-                  item["street-address"] && item["city-state-zip"]
-                    ? {
-                        text: translate("exploreScreen.openInMaps"),
-                        link: `${item["street-address"]},${item["city-state-zip"]}`,
-                      }
-                    : undefined,
-              } as DynamicCarouselItem),
-          ),
-        ],
-      }),
-    ),
+    sections: Object.entries(sortedRecs).map(([key, value]: [string, RawRecommendations[]]) => ({
+      title: sectionTitle(key as RecommendationType),
+      renderItem: RenderItem,
+      data: [
+        value.map(
+          (item) =>
+            ({
+              image: item.images.map((image) => ({ uri: image.url })),
+              subtitle: item.name,
+              meta: item.descriptor,
+              body: item.description,
+              leftButton:
+                item["street-address"] && item["city-state-zip"]
+                  ? {
+                      text: translate("exploreScreen.openInMaps"),
+                      link: `${item["street-address"]},${item["city-state-zip"]}`,
+                    }
+                  : undefined,
+            } as DynamicCarouselItem),
+        ),
+      ],
+    })),
   }
 }
 
