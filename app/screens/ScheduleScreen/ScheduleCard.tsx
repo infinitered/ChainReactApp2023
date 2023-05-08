@@ -79,7 +79,7 @@ export interface ScheduleCardProps {
   /**
    * Start time of the event
    */
-  startTime?: Date
+  startTime: Date
   /**
    * End time of the recurring event
    */
