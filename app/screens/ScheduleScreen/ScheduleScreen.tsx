@@ -145,8 +145,8 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     setTimeout(() => {
       if (eventIndex > -1) {
         const scheduleListRef = scheduleListRefs[schedule?.date]?.current
-        const eventRef = eventRefs[schedule?.date][eventIndex]?.current
-        eventRef && AccessibilityInfo.setAccessibilityFocus(findNodeHandle(eventRef))
+        const eventNodeHandle = findNodeHandle(eventRefs[schedule?.date][eventIndex]?.current)
+        eventNodeHandle && AccessibilityInfo.setAccessibilityFocus(eventNodeHandle)
 
         scheduleListRef?.scrollToIndex({
           animated: true,
