@@ -20,7 +20,7 @@ export interface ButtonData {
 
 export interface SocialButtonData {
   icon: IconProps["icon"]
-  url: string
+  url?: string
 }
 
 export interface DynamicCarouselItem {
@@ -32,7 +32,7 @@ export interface DynamicCarouselItem {
   meta?: string
   rightButton?: ButtonData
   socialButtons?: SocialButtonData[]
-  subtitle: string
+  subtitle?: string
 }
 
 interface DynamicCarouselProps {
