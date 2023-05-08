@@ -31,9 +31,6 @@ const cleanUrl = (url: string) => {
   if (url.includes("twitter.com")) {
     return `twitter://user?screen_name=${getSocialUsername(url)}`
   }
-  if (url.includes("github.com")) {
-    return `github://user/${getSocialUsername(url)}`
-  }
   return url
 }
 
