@@ -5,7 +5,7 @@
  *
  * @example
  * ```tsx
- * const grouped = groupBy('id')([
+ * const grouped = groupBy('type')([
  *  { type: "Food/Drink", name: 'Starbucks Reserve' },
  *  { type: "Unique/to/Portland", name: 'Ground Kontrol Arcade' },
  *  { type: "Food/Drink", name: 'Hotel Restaurant - The Original Dinerant' },
@@ -30,7 +30,7 @@ export const groupBy =
     array.reduce<Record<string, T[]>>(
       (objectsByKeyValue, obj) => ({
         ...objectsByKeyValue,
-        [obj[key]]: (objectsByKeyValue[obj[key]] || []).concat(obj),
+        [obj[key as keyof T] as string]: (objectsByKeyValue[obj[key as keyof T] as string] || []).concat(obj),
       }),
       {},
     )
