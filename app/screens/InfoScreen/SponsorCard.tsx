@@ -6,42 +6,27 @@ import { translate } from "../../i18n"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
-type CommonProps = {
+type CommonProps<T> = {
   containerStyle?: ViewStyle
+  tier: T
 }
 
-type TierOneLevelProps = CommonProps & {
+type TierOneLevelProps<T> = CommonProps<T> & {
   externalURL: string
   logo: { uri: string }
   promoSummary: string
   sponsor: string
 }
 
-type TierTwoLevelProps = CommonProps & {
+type TierTwoLevelProps<T> = CommonProps<T> & {
   sponsorImages: { uri: string; sponsor: string; externalURL?: string }[]
 }
 
-type PlatinumTierLevelProps = TierOneLevelProps & {
-  tier: "Platinum"
-}
-
-type GoldTierLevelProps = TierOneLevelProps & {
-  tier: "Gold"
-}
-
-type SilverTierLevelProps = TierTwoLevelProps & {
-  tier: "Silver"
-}
-
-type BronzeTierLevelProps = TierTwoLevelProps & {
-  tier: "Bronze"
-}
-
 type SponsorCardProps =
-  | PlatinumTierLevelProps
-  | GoldTierLevelProps
-  | SilverTierLevelProps
-  | BronzeTierLevelProps
+  | TierOneLevelProps<"Platinum">
+  | TierOneLevelProps<"Gold">
+  | TierTwoLevelProps<"Silver">
+  | TierTwoLevelProps<"Bronze">
 
 function maxImageDimensions(tier: SponsorCardProps["tier"]): {
   maxWidth: number
