@@ -7,11 +7,11 @@ const EXCEPTIONS: Array<string> = [
   // "welcomeScreen.readyForLaunch",
 ]
 
-function iterate(obj: typeof en, stack: string, array: Array<any>) {
-  for (const property in obj) {
+function iterate(obj: Record<string, any>, stack: string, array: Array<any>) {
+  for (const [property, value] of Object.entries(obj)) {
     if (Object.prototype.hasOwnProperty.call(obj, property)) {
-      if (typeof obj[property] === "object") {
-        iterate(obj[property], `${stack}.${property}`, array)
+      if (typeof value === "object") {
+        iterate(value, `${stack}.${property}`, array)
       } else {
         array.push(`${stack.slice(1)}.${property}`)
       }
