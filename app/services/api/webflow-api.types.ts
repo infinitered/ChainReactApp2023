@@ -52,11 +52,11 @@ export interface ScheduledEvent
   > {
   "event-type"?: (typeof WEBFLOW_MAP.scheduleType)[keyof typeof WEBFLOW_MAP.scheduleType]
   "recurring-event"?: RecurringEvents
-  "speaker-2-2"?: Speaker | RawSpeakerName
-  "speaker-3"?: Speaker | RawSpeakerName
-  "speaker-3-2"?: Speaker | RawSpeakerName
-  "speaker-4"?: Speaker | RawSpeakerName
-  "speaker-5"?: Speaker | RawSpeakerName
+  "speaker-2-2"?: Speaker
+  "speaker-3"?: Speaker
+  "speaker-3-2"?: Speaker
+  "speaker-4"?: Speaker
+  "speaker-5"?: Speaker
   day: (typeof WEBFLOW_MAP.scheduleDay)[keyof typeof WEBFLOW_MAP.scheduleDay]
   type?: (typeof WEBFLOW_MAP.scheduleType)[keyof typeof WEBFLOW_MAP.scheduleType]
   workshop?: Workshop
