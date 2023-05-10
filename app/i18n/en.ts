@@ -97,6 +97,7 @@ const en = {
     talkRecordingPosted: "Talk recording posted",
     videoComingSoon: "Video coming soon",
     workshopBanner: "Events for workshop ticket-holders",
+    scrollToButton: "scroll to current"
   },
   breakDetailsScreen: {
     description:
