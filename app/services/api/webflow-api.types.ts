@@ -1,166 +1,178 @@
 import { ImageRequireSource } from "react-native"
+import { WEBFLOW_MAP } from "./webflow-consts"
 
 interface Item {
   _archived: boolean
   _cid: string
   _draft: boolean
   _id: string
-  "created-by": string
-  "created-on": string
+  "created-by"?: string
+  "created-on"?: string
   "published-by"?: string | null
   "published-on"?: string | null
-  "updated-by": string
-  "updated-on": string
+  "updated-by"?: string
+  "updated-on"?: string
   name: string
   slug: string
 }
 
 export interface RawScheduledEvent extends Item {
-  "break-card-color"?: string
-  "break-party-description"?: string
+  "event-description"?: string
+  "sponsor-is-for-a-callout"?: boolean
   "day-time": string
   "end-time"?: string
-  "is-a-talk"?: boolean
+  "event-type"?: keyof typeof WEBFLOW_MAP.scheduleType
   "recurring-event"?: string
-  "speaker-2"?: string
-  day: string
-  talk?: string
-  type: string
+  "speaker-3"?: string
+  "speaker-3-2"?: string
+  "speaker-2-2"?: string
+  "speaker-4"?: string
+  "speaker-5"?: string
+  day: keyof typeof WEBFLOW_MAP.scheduleDay
+  "talk-2"?: string
   workshop?: string
-  location?: string
+  location?: keyof typeof WEBFLOW_MAP.location
+  "sponsor-for-event"?: string
+  "event-title"?: string
 }
 
-export interface ScheduledEvent extends Item {
-  "break-card-color"?: string
-  "break-party-description"?: string
-  "day-time": string
-  "end-time"?: string
-  "is-a-talk"?: boolean
+export interface ScheduledEvent
+  extends Omit<
+    RawScheduledEvent,
+    | "day"
+    | "day-time"
+    | "end-time"
+    | "location"
+    | "recurring-event"
+    | "speaker-2-2"
+    | "speaker-3"
+    | "speaker-3-2"
+    | "speaker-4"
+    | "speaker-5"
+    | "workshop"
+  > {
+  day: (typeof WEBFLOW_MAP.scheduleDay)[keyof typeof WEBFLOW_MAP.scheduleDay]
+  "day-time": Date
+  "end-time"?: Date
+  location?: (typeof WEBFLOW_MAP.location)[keyof typeof WEBFLOW_MAP.location]
   "recurring-event"?: RecurringEvents
-  "speaker-2"?: Speaker | RawSpeakerName
-  "speaker-3"?: Speaker | RawSpeakerName
-  "speaker-2-2"?: Speaker | RawSpeakerName
-  "speaker-3-2"?: Speaker | RawSpeakerName
-  "event-title"?: string
-  "event-description"?: string
-  day: "Wednesday" | "Thursday" | "Friday"
+  "speaker-2-2"?: Speaker
+  "speaker-3"?: Speaker
+  "speaker-3-2"?: Speaker
+  "speaker-4"?: Speaker
+  "speaker-5"?: Speaker
   talk?: Talk
-  type?:
-    | "Talk"
-    | "Workshop"
-    | "Party"
-    | "Recurring"
-    | "Sponsored"
-    | "Lightning Talk"
-    | "Trivia Show"
+  type: (typeof WEBFLOW_MAP.scheduleType)[keyof typeof WEBFLOW_MAP.scheduleType]
   workshop?: Workshop
-  location?: string
 }
 
 export interface RawWorkshop extends Item {
-  "day-time": string
-  "has-more-than-one-instructor"?: boolean
-  "instructor-info"?: string
+  "instructor-info": string
+  "second-instructor-3"?: string
   "instructor-s-2": string[]
-  "ticket-link": string
   abstract: string
   assistants?: string[]
-  level: string
-  prerequisites: string
-  talk?: string
+  level: keyof typeof WEBFLOW_MAP.workshopLevel
+  "pre-requites"?: string
+  "is-sold-out"?: boolean
+  "show-ticket-count"?: boolean
+  "ticket-count"?: string
+  "description-quote": string
+  summary: string
+  "instructors-are-from-the-same-company"?: boolean
+  "card-list-item-1"?: string
+  "card-list-item-2"?: string
+  "card-list-item-3"?: string
+  year?: keyof typeof WEBFLOW_MAP.workshopYear
 }
 
-export interface Workshop extends Item {
-  "day-time": string
-  "has-more-than-one-instructor"?: boolean
+export interface Workshop
+  extends Omit<
+    RawWorkshop,
+    "second-instructor-3" | "instructor-s-2" | "assistants" | "level" | "year" | "instructor-info"
+  > {
+  "second-instructor-3"?: Speaker
   "instructor-info": Speaker
   "instructor-s-2": Speaker[]
-  "ticket-link": string
-  abstract: string
   assistants?: Speaker[]
-  level: "Beginner" | "Intermediate" | "Advanced"
-  prerequisites: string
+  level: (typeof WEBFLOW_MAP.workshopLevel)[keyof typeof WEBFLOW_MAP.workshopLevel]
+  year?: (typeof WEBFLOW_MAP.workshopYear)[keyof typeof WEBFLOW_MAP.workshopYear]
 }
 
 export interface RawTalk extends Item {
   "speaker-s": string[]
-  "talk-type": string
+  "talk-type": keyof typeof WEBFLOW_MAP.talkType
   description?: string
+  descriptionPreview?: string
   year: string
   "talk-url"?: string
+  speaker: string
 }
 
-export interface Talk extends Item {
+export interface Talk extends Omit<RawTalk, "speaker-s" | "talk-type"> {
   "speaker-s": Speaker[]
-  "talk-type"?: "Talk" | "Emcee"
-  description?: string
-  "talk-url"?: string
+  "talk-type": (typeof WEBFLOW_MAP.talkType)[keyof typeof WEBFLOW_MAP.talkType]
 }
 
 export interface RawVenue extends Item {
   "city-state-zip": string
-  "dircetions-url"?: string
+  "directions-url"?: string
   "street-address": string
   "venue-image-s": ImageRef[]
-  tag: string
+  tag: keyof typeof WEBFLOW_MAP.venueTag
 }
 
-export interface Venue extends RawVenue {}
+export interface Venue extends Omit<RawVenue, "tag"> {
+  tag: (typeof WEBFLOW_MAP.venueTag)[keyof typeof WEBFLOW_MAP.venueTag]
+}
 
-interface BaseRecurringEvents {
-  "secondary-callout": string
-  "secondary-callout-description": string
-  "secondary-callout-link": string
-  "sponsor-for-secondary-callout-optional": string
+export interface RawRecurringEvents extends Item {
+  "event-description": string
+  "secondary-callout"?: string
+  "secondary-callout-description"?: string
+  "secondary-callout-link"?: string
+  "sponsor-for-secondary-callout-optional"?: string
   "secondary-callout-banner"?: ImageRequireSource | ImageRef
   "secondary-callout-location"?: string
-}
-
-export interface RawRecurringEvents extends Item, BaseRecurringEvents {
-  "event-description"?: string
 }
 
 export interface RecurringEvents extends RawRecurringEvents {}
 
 export interface RawSpeaker extends Item {
-  "abstract-2"?: string
-  "is-a-workshop"?: boolean
-  "second-company"?: string
-  "second-title"?: string
   "speaker-bio"?: string
   "speaker-first-name"?: string
-  "speaker-name": string
-  "speaker-photo": ImageRef
-  "speaker-type": string
-  "talk-details-url"?: string
-  "talk-level"?: string
-  "talk-title"?: string
+  "speaker-photo"?: ImageRef
+  "speaker-type": keyof typeof WEBFLOW_MAP.speakersType
   company?: string
   github?: string
   title?: string
   twitter?: string
-  externalURL?: string
+  "external-url"?: string
   website?: string
+  "talks-s"?: string[]
+  "workshop-s"?: string[]
+  "is-a-current-speaker"?: boolean
+  "talk-details-url"?: string
 }
 
-export type Speaker = RawSpeaker & {
-  "speaker-type"?: "Speaker" | "Panelist" | "Workshop" | "Emcee"
-  "talk-level"?: "Beginner" | "Intermediate" | "Advanced"
+export interface Speaker extends Omit<RawSpeaker, "speaker-type"> {
+  "speaker-type": (typeof WEBFLOW_MAP.speakersType)[keyof typeof WEBFLOW_MAP.speakersType]
+  externalURL?: string
 }
 
 export interface RawSponsor extends Item {
-  "conference-years-2"?: string
+  "conference-years-2": string
   "external-url"?: string
-  "feature-as-a-past-sponsor"?: boolean
+  "2020-sponsor"?: boolean
   "is-a-current-sponsor"?: boolean
   "promo-summary"?: string
-  "sponsor-tier": string
+  "sponsor-tier": keyof typeof WEBFLOW_MAP.sponsorTier
   "sponsorship-type"?: string
   logo: ImageRef
 }
 
-export type Sponsor = RawSponsor & {
-  "sponsor-tier"?: "Platinum" | "Gold" | "Silver" | "Bronze" | "Other"
+export interface Sponsor extends Omit<RawSponsor, "sponsor-tier"> {
+  "sponsor-tier": (typeof WEBFLOW_MAP.sponsorTier)[keyof typeof WEBFLOW_MAP.sponsorTier]
 }
 
 export interface RawRecommendations extends Item {
@@ -170,10 +182,12 @@ export interface RawRecommendations extends Item {
   description: string
   descriptor: string
   images: ImageRef[]
-  type: string
+  type: keyof typeof WEBFLOW_MAP.recommendationType
 }
 
-export interface Recommendations extends RawRecommendations {}
+export interface Recommendations extends Omit<RawRecommendations, "type"> {
+  type: (typeof WEBFLOW_MAP.recommendationType)[keyof typeof WEBFLOW_MAP.recommendationType]
+}
 
 export interface RawSpeakerName extends Item {
   "close-anchor"?: string

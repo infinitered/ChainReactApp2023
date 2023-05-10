@@ -1,6 +1,6 @@
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
-import React, { ComponentType } from "react"
+import React, { ComponentType, FC } from "react"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon, IconTypes } from "../components"
@@ -30,9 +30,16 @@ export type TabScreenProps<T extends keyof TabParamList> = CompositeScreenProps<
 
 const Tab = createBottomTabNavigator<TabParamList>()
 
+type ScreenComponentType =
+  | FC<TabScreenProps<"Schedule">>
+  | FC<TabScreenProps<"Venues">>
+  | FC<TabScreenProps<"Explore">>
+  | FC<TabScreenProps<"Chat">>
+  | ComponentType
+
 interface Screen {
   name: keyof TabParamList
-  component: ComponentType
+  component: ScreenComponentType
   txLabel: TxKeyPath
   icon: IconTypes
 }
@@ -90,7 +97,7 @@ export function TabNavigator() {
         <Tab.Screen
           key={screen.name}
           name={screen.name}
-          component={screen.component}
+          component={screen.component as ComponentType}
           options={{
             tabBarLabel: translate(screen.txLabel),
             tabBarIcon: ({ focused }) => (

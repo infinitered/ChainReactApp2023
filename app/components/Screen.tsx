@@ -95,8 +95,8 @@ function useAutoPreset(props: AutoScreenProps) {
   const { preset, scrollEnabledToggleThreshold } = props
   const { percent = 0.92, point = 0 } = scrollEnabledToggleThreshold || {}
 
-  const scrollViewHeight = useRef(null)
-  const scrollViewContentHeight = useRef(null)
+  const scrollViewHeight = useRef<number | null>(null)
+  const scrollViewContentHeight = useRef<number | null>(null)
   const [scrollEnabled, setScrollEnabled] = useState(true)
 
   function updateScrollState() {
@@ -159,7 +159,7 @@ function ScreenWithScrolling(props: ScreenProps) {
     style,
   } = props as ScrollScreenProps
 
-  const ref = useRef<ScrollView>()
+  const ref = useRef<ScrollView>(null)
 
   const { scrollEnabled, onContentSizeChange, onLayout } = useAutoPreset(props as AutoScreenProps)
 

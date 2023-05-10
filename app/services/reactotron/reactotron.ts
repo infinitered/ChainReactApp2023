@@ -39,16 +39,16 @@ declare global {
      * Reactotron client for logging, displaying, measuring performance,
      * and more. See https://github.com/infinitered/reactotron for more!
      */
-    tron: typeof Reactotron
+    tron: Required<typeof Reactotron>
   }
 }
 
 // in dev, we attach Reactotron, in prod we attach a interface-compatible mock.
 if (__DEV__) {
-  console.tron = Reactotron // attach reactotron to `console.tron`
+  console.tron = Reactotron as Required<typeof Reactotron> // attach reactotron to `console.tron`
 } else {
   // attach a mock so if things sneak by our __DEV__ guards, we won't crash.
-  console.tron = fakeReactotron
+  console.tron = fakeReactotron as Required<typeof Reactotron>
 }
 
 const config = DEFAULT_REACTOTRON_CONFIG
@@ -83,7 +83,7 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
 
     // hookup middleware
     if (Platform.OS !== "web") {
-      if (config.useAsyncStorage) {
+      if (config.useAsyncStorage && Reactotron.setAsyncStorageHandler !== undefined) {
         Reactotron.setAsyncStorageHandler(AsyncStorage)
       }
       Reactotron.use(reactotronReactQuery(queryClientManager))
@@ -161,7 +161,7 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
       description: "Resets the navigation state",
       command: "resetNavigation",
       handler: () => {
-        Reactotron.log("resetting navigation state")
+        Reactotron.log?.("resetting navigation state")
         resetRoot({ index: 0, routes: [] })
       },
     })
@@ -192,7 +192,7 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
       description: "Goes back",
       command: "goBack",
       handler: () => {
-        Reactotron.log("Going back")
+        Reactotron.log?.("Going back")
         goBack()
       },
     })
@@ -217,7 +217,7 @@ export function setupReactotron(customConfig: ReactotronConfig = {}) {
 
     // clear if we should
     if (config.clearOnLoad) {
-      Reactotron.clear()
+      Reactotron.clear?.()
     }
 
     _reactotronIsSetUp = true

@@ -73,7 +73,7 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
   }, [])
 
   async function saveMessages(messagesCallback: (old: IMessage[]) => IMessage[]) {
-    let newMessages = []
+    let newMessages: IMessage[] = []
     setMessages((old) => {
       newMessages = messagesCallback(old)
       return newMessages
@@ -125,12 +125,8 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
               setTypingIndicator(false)
               saveMessages(() => [claudeMessage, ...appendedMessages])
             }}
-            user={{
-              _id: uuid,
-            }}
-            textInputProps={{
-              testID: "aiChatInput",
-            }}
+            user={{ _id: uuid }}
+            textInputProps={{ testID: "aiChatInput" }}
             listViewProps={{ keyboardDismissMode: "on-drag" }}
           />
         </View>

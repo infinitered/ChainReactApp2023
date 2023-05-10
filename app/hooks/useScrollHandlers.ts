@@ -20,7 +20,7 @@ export const useFloatingActionEvents = () => {
   }
 
   React.useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>
+    let timeout!: ReturnType<typeof setTimeout>
 
     if (scrollState === Scroll.onScrollBeginDrag) {
       setIsScrolling(true)

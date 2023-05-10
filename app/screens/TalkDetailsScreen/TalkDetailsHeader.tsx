@@ -9,11 +9,11 @@ interface TalkDetailsHeaderProps {
   /**
    * Title of workshop/talk
    */
-  title: string
+  title?: string
   /**
    * Workshop location or talk date/time
    */
-  subtitle: string
+  subtitle?: string
   /**
    * The Y position from the <ScrollView />
    */

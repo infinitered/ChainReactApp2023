@@ -74,7 +74,7 @@ export const CarouselCard: React.FunctionComponent<CarouselCardProps> & SubCompo
   const offset = 5
   const imageStyleWithOffset: ImageStyle = isSpeaker
     ? { ...imageStyle, width: CAROUSEL_CARD_WIDTH - offset }
-    : imageStyle
+    : imageStyle || {}
 
   return (
     <View style={$carouselCard}>

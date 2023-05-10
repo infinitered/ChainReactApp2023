@@ -44,7 +44,7 @@ export interface TextProps extends RNTextProps {
   children?: React.ReactNode
 }
 
-const letterSpacing = (value) => {
+const letterSpacing = (value: number) => {
   /*
    * If this is true... https://forum.figma.com/t/letter-spacing-should-not-be-percentage-based/3062/13
    * then 0.01em is 1%, than the size would be 16/100=0.16 pixels which means letter spacing would be 1.28 when converted.
@@ -64,12 +64,12 @@ export const Text = forwardRef<RNText, TextProps>(function Text(props, ref) {
   const i18nText = tx && translate(tx, txOptions)
   const content = i18nText || text || children
 
-  const preset: Presets = $presets[props.preset] ? props.preset : "default"
+  const preset: Presets = props.preset ?? "default"
   const $styles: StyleProp<TextStyle> | undefined = [
     $rtlStyle,
     $presets[preset],
-    $fontWeightStyles[weight],
-    $sizeStyles[size],
+    weight && $fontWeightStyles[weight],
+    size && $sizeStyles[size],
     $styleOverride,
   ]
 

@@ -56,7 +56,7 @@ export function Carousel(props: CarouselProps) {
             )
           }
 
-          let leftButton = null
+          let leftButton: JSX.Element | undefined
           if (props.preset === "dynamic") {
             const { leftButton: leftButtonData } = item as DynamicCarouselItem
             leftButton = leftButtonData && (
@@ -67,7 +67,7 @@ export function Carousel(props: CarouselProps) {
             )
           }
 
-          let rightButton = null
+          let rightButton: JSX.Element | undefined
           if (props.preset === "dynamic") {
             const { rightButton: rightButtonData } = item as DynamicCarouselItem
             rightButton = rightButtonData && (
@@ -78,7 +78,7 @@ export function Carousel(props: CarouselProps) {
             )
           }
 
-          let socialButtons = null
+          let socialButtons: JSX.Element | undefined
           if (props.preset === "dynamic") {
             const { socialButtons: socialButtonsData } = item as DynamicCarouselItem
             socialButtons = socialButtonsData && (
@@ -105,7 +105,7 @@ export function Carousel(props: CarouselProps) {
                 variant: props.carouselCardVariant,
                 imageStyle: (item as DynamicCarouselItem).imageStyle,
                 index,
-                item,
+                item: item as DynamicCarouselItem | ImageSourcePropType,
                 leftButton,
                 rightButton,
                 scrollX,
@@ -127,12 +127,18 @@ export function Carousel(props: CarouselProps) {
           />
           <Text text={props.body} style={$body} selectable={props.isBodySelectable} />
           {props.link && (
-            <ButtonLink openLink={() => openLink(props.link.link)} style={$buttonLink}>
+            <ButtonLink
+              openLink={() => props.link?.link && openLink(props.link.link)}
+              style={$buttonLink}
+            >
               {props.link.text}
             </ButtonLink>
           )}
           {props.button && (
-            <Button text={props.button.text} onPress={() => openLink(props.button.link)} />
+            <Button
+              text={props.button.text}
+              onPress={() => props.button?.link && openLink(props.button.link)}
+            />
           )}
         </View>
       )}

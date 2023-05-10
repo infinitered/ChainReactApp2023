@@ -50,37 +50,37 @@ interface BreakDetailsProps {
   /**
    * The Break Sponsor
    */
-  sponsor: Sponsor
+  sponsor?: Sponsor
   /**
    * The description of the break
    */
-  description: string
+  description?: string
   /**
    * The location of the break
    */
-  location: string
+  location?: string
   /**
    * The calloutLink of the break
    */
-  calloutLink: string
+  calloutLink?: string
 }
 
 const breakDetailsProps = (schedule: ScheduledEvent, sponsors: Sponsor[]): BreakDetailsProps => {
   const recurringEvent = schedule["recurring-event"]
   const sponsor = sponsors.find(
-    (s) => s._id === recurringEvent["sponsor-for-secondary-callout-optional"],
+    (s) => s._id === recurringEvent?.["sponsor-for-secondary-callout-optional"],
   )
-  const imageBanner = recurringEvent["secondary-callout-banner"]
+  const imageBanner = recurringEvent?.["secondary-callout-banner"]
   return {
-    title: recurringEvent["secondary-callout"],
+    title: recurringEvent?.["secondary-callout"] ?? "",
     subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
     image: (imageBanner as ImageRef).url
       ? { uri: (imageBanner as ImageRef).url }
       : (imageBanner as ImageRequireSource),
     sponsor,
-    description: recurringEvent["secondary-callout-description"],
-    location: recurringEvent["secondary-callout-location"],
-    calloutLink: recurringEvent["secondary-callout-link"],
+    description: recurringEvent?.["secondary-callout-description"],
+    location: recurringEvent?.["secondary-callout-location"],
+    calloutLink: recurringEvent?.["secondary-callout-link"],
   }
 }
 
@@ -159,11 +159,13 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
             <Text style={$text} text={location} />
           </View>
 
-          <View style={$containerSpacing}>
-            <ButtonLink openLink={() => openLinkInBrowser(calloutLink)}>
-              {translate("breakDetailsScreen.moreInfo")}
-            </ButtonLink>
-          </View>
+          {calloutLink && (
+            <View style={$containerSpacing}>
+              <ButtonLink openLink={() => openLinkInBrowser(calloutLink)}>
+                {translate("breakDetailsScreen.moreInfo")}
+              </ButtonLink>
+            </View>
+          )}
         </View>
       </Animated.ScrollView>
     </Screen>

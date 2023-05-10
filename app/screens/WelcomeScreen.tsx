@@ -99,13 +99,14 @@ const $bottomContentContainer: ViewStyle = Platform.select({
     paddingHorizontal: screenWidth * 0.25,
     paddingBottom: spacing.large,
     justifyContent: "flex-end",
-  },
+  } as ViewStyle,
   android: {
     flex: 1,
     paddingBottom: spacing.large,
     justifyContent: "center",
     alignItems: "center",
-  },
+  } as ViewStyle,
+  default: {} as ViewStyle,
 })
 
 const $welcomeLogo: ImageStyle = {

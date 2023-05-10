@@ -5,8 +5,8 @@ import { colors, spacing } from "../../theme"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
 export interface ErrorDetailsProps {
-  error: Error
-  errorInfo: ErrorInfo
+  error: Error | null
+  errorInfo: ErrorInfo | null
   onReset(): void
 }
 
@@ -14,7 +14,7 @@ export function ErrorDetails(props: ErrorDetailsProps) {
   const { error, errorInfo } = props
   const errorTitle = `${error}`.trim()
   // Issue body that is the first 10 lines of the error stack
-  const issueBodyStacktrace = errorInfo.componentStack.split("\n").slice(0, 10).join("\n")
+  const issueBodyStacktrace = errorInfo?.componentStack.split("\n").slice(0, 10).join("\n")
   const githubURL = encodeURI(
     `https://github.com/infinitered/ChainReactApp2023/issues/new?title=(CRASH) ${errorTitle}&body=What were you doing when the app crashed?\n\n\nTruncated Stacktrace:\n\`\`\`${issueBodyStacktrace}\`\`\``,
   )
@@ -41,7 +41,7 @@ export function ErrorDetails(props: ErrorDetailsProps) {
 
       <ScrollView style={$errorSection} contentContainerStyle={$errorSectionContentContainer}>
         <Text weight="bold" text={`${error}`.trim()} />
-        <Text selectable style={$errorBacktrace} text={`${errorInfo.componentStack}`.trim()} />
+        <Text selectable style={$errorBacktrace} text={`${errorInfo?.componentStack}`.trim()} />
       </ScrollView>
 
       <Button

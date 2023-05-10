@@ -1,6 +1,14 @@
 import { format, isSameDay } from "date-fns"
-import React, { FC, MutableRefObject } from "react"
-import { Dimensions, Pressable, PressableProps, TextStyle, View, ViewStyle } from "react-native"
+import React, { FC, ForwardedRef, useCallback } from "react"
+import {
+  Dimensions,
+  LayoutChangeEvent,
+  Pressable,
+  PressableProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from "react-native"
 import Animated, {
   useAnimatedStyle,
   SharedValue,
@@ -22,7 +30,7 @@ interface AnimatedDayButtonProps extends PressableProps {
 }
 
 const AnimatedDayButton = React.forwardRef(
-  (props: AnimatedDayButtonProps, ref: MutableRefObject<View>) => {
+  (props: AnimatedDayButtonProps, ref: ForwardedRef<View>) => {
     const { onPress, index, text, scrollX, inputRange, scheduleDates, ...rest } = props
     const outputRange = scheduleDates.map((_, scheduleIndex) =>
       index === scheduleIndex ? colors.palette.neutral800 : colors.palette.neutral100,
@@ -48,10 +56,20 @@ AnimatedDayButton.displayName = "AnimatedDayButton"
 
 type ScheduleDayPickerProps = {
   scrollX: SharedValue<number>
-  onItemPress: (itemIndex) => void
+  onItemPress: (itemIndex: number) => void
   scheduleDates: Date[]
   selectedScheduleDate: Date
 }
+
+type Measurement = {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+const initialMeasures = (size: number): Measurement[] =>
+  Array(size).fill({ x: 0, y: 0, width: 0, height: 0 })
 
 export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   scrollX,
@@ -61,32 +79,32 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
 }) => {
   const wrapperWidth = width - spacing.extraSmall * 2
   const widthSize = wrapperWidth / scheduleDates.length
-  const selectedScheduleIndex = scheduleDates.findIndex((date) =>
+  const selectedScheduleIndex = scheduleDates.findIndex((date: Date) =>
     isSameDay(date, selectedScheduleDate),
   )
-  const containerRef = React.useRef()
-  const [measures, setMeasures] = React.useState([{ x: 0 }, { x: 0 }, { x: 0 }])
   const itemRefs = scheduleDates.map((_) => React.createRef<View>())
+  const [measures, setMeasures] = React.useState<Measurement[]>(initialMeasures(itemRefs.length))
 
-  const onLayout = React.useCallback(() => {
-    const m = []
-    scheduleDates.every((_, index) => {
-      itemRefs[index].current.measureLayout(
-        containerRef.current,
-        (x, y, width, height) => {
-          m.push({ x, y, width, height })
+  const onLayout = useCallback(
+    ({ target }: LayoutChangeEvent) => {
+      const m: Measurement[] = measures
+      itemRefs.forEach((itemRef, index) => {
+        itemRef.current?.measureLayout(
+          target,
+          (x, y, width, height) => {
+            m[index] = { x, y, width, height }
+          },
+          () => {
+            m[index] = { x: 0, y: 0, width: 0, height: 0 }
+            reportCrash("ScheduleDayPicker-unable to measureLayout")
+          },
+        )
+      })
 
-          if (m.length === scheduleDates.length) {
-            setMeasures(m)
-          }
-        },
-        () => {
-          reportCrash("ScheduleDayPicker-unable to measureLayout")
-        },
-      )
-      return true
-    })
-  }, [itemRefs])
+      setMeasures(m)
+    },
+    [itemRefs],
+  )
 
   const inputRange = scheduleDates.map((_, index) => index * width)
 
@@ -104,7 +122,7 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   }, [inputRange, scrollX, measures])
 
   return (
-    <View ref={containerRef} style={$wrapperStyle} onLayout={onLayout}>
+    <View style={$wrapperStyle} onLayout={onLayout}>
       {measures.length > 0 && <Animated.View style={[$animatedViewStyle, $animatedLeftStyle]} />}
       {scheduleDates.map((date, index) => (
         <AnimatedDayButton
