@@ -118,16 +118,16 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
 
       if (previousRouteName !== currentRouteName) {
         // track screens.
-        if (__DEV__) {
+        if (__DEV__ || process.env.NODE_ENV === "development") {
           console.tron.log(currentRouteName)
         }
+
+        // Save the current route name for later comparision
+        routeNameRef.current = currentRouteName
+
+        // Persist state to storage
+        storage.save(persistenceKey, state)
       }
-
-      // Save the current route name for later comparision
-      routeNameRef.current = currentRouteName
-
-      // Persist state to storage
-      storage.save(persistenceKey, state)
     }
   }
 
