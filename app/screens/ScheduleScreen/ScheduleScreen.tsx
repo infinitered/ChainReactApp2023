@@ -78,7 +78,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [schedules, selectedSchedule],
   )
 
-  const hScrollRef = React.useRef(null)
+  const hScrollRef = React.useRef<Animated.FlatList<Schedule>>(null)
   const scheduleListRefs = React.useRef(
     Object.fromEntries(
       schedules.map((s) => [s.date, React.createRef<FlashList<ScheduleCardProps>>()]),
@@ -125,7 +125,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           offset: 0,
         })
       } else {
-        hScrollRef?.current?.scrollToOffset({ offset: itemIndex * width })
+        ;(hScrollRef?.current as unknown as FlashList<Schedule>)?.scrollToOffset({
+          offset: itemIndex * width,
+        })
       }
     },
     [hScrollRef, getScheduleIndex],
@@ -261,7 +263,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
         )}
         {!isLoading && schedules && (
-          <Animated.FlatList
+          <Animated.FlatList<Schedule>
             ref={hScrollRef}
             data={schedules}
             keyExtractor={(item) => item.date}
