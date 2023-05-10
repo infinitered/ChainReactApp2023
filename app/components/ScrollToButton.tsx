@@ -108,7 +108,7 @@ export function ScrollToButton(props: ScrollToButtonProps) {
         )}
         preset="reversed"
         style={$scrollButton}
-        text="scroll to current"
+        tx="scheduleScreen.scrollToButton"
         textStyle={$scrollButtonText}
         onPress={navigateToCurrentEvent}
         {...rest}
