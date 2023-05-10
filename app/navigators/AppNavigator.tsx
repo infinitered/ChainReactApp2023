@@ -60,7 +60,10 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 
 const AppStack = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={"Welcome"}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, navigationBarColor: colors.background }}
+      initialRouteName={"Welcome"}
+    >
       <Stack.Screen name="Debug" component={DebugScreen} />
       <Stack.Screen name="Tabs" component={TabNavigator} />
       <Stack.Screen
