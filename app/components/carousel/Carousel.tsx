@@ -128,7 +128,7 @@ export function Carousel(props: CarouselProps) {
           <Text text={props.body} style={$body} selectable={props.isBodySelectable} />
           {props.link && (
             <ButtonLink
-              openLink={() => props.link?.link && openLink(props.link?.link)}
+              openLink={() => props.link?.link && openLink(props.link.link)}
               style={$buttonLink}
             >
               {props.link.text}
@@ -137,7 +137,7 @@ export function Carousel(props: CarouselProps) {
           {props.button && (
             <Button
               text={props.button.text}
-              onPress={() => props.button?.link && openLink(props.button?.link)}
+              onPress={() => props.button?.link && openLink(props.button.link)}
             />
           )}
         </View>
