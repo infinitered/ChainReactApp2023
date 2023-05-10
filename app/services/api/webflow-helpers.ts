@@ -1,3 +1,4 @@
+import { parseISO } from "date-fns"
 import { translate } from "../../i18n"
 import { ScheduleCardProps } from "../../screens/ScheduleScreen/ScheduleCard"
 import { formatDate, sortByTime } from "../../utils/formatDate"
@@ -45,6 +46,9 @@ export const cleanedSchedule = ({
       )
       return {
         ...schedule,
+        day: WEBFLOW_MAP.scheduleDay[schedule.day],
+        "day-time": parseISO(schedule["day-time"]),
+        "end-time": schedule["end-time"] ? parseISO(schedule["end-time"]) : undefined,
         location: WEBFLOW_MAP.location[schedule.location ?? "63b8a958a5f15f379953e0da"],
         "recurring-event": {
           ...recurringEvent,
@@ -55,11 +59,9 @@ export const cleanedSchedule = ({
           "secondary-callout-banner":
             recurringEvent?.["secondary-callout-banner"] ?? breakBannerImage,
         },
-        // "speaker-2": speakers?.find(({ _id }) => _id === schedule["speaker-2"]),
         "speaker-3": speakers?.find(({ _id }) => _id === schedule["speaker-3"]),
         "speaker-2-2": speakers?.find(({ _id }) => _id === schedule["speaker-2-2"]),
         "speaker-3-2": speakers?.find(({ _id }) => _id === schedule["speaker-3-2"]),
-        day: WEBFLOW_MAP.scheduleDay[schedule.day],
         talk: talks?.find((talk) => talk._id === schedule["talk-2"]),
         type: isTriviaShow
           ? WEBFLOW_MAP.triviaShow.title

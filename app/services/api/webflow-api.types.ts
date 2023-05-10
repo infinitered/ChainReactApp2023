@@ -19,8 +19,8 @@ interface Item {
 export interface RawScheduledEvent extends Item {
   "event-description"?: string
   "sponsor-is-for-a-callout"?: boolean
-  "day-time": Date
-  "end-time"?: Date
+  "day-time": string
+  "end-time"?: string
   "event-type"?: keyof typeof WEBFLOW_MAP.scheduleType
   "recurring-event"?: string
   "speaker-3"?: string
@@ -39,29 +39,31 @@ export interface RawScheduledEvent extends Item {
 export interface ScheduledEvent
   extends Omit<
     RawScheduledEvent,
-    | "event-type"
+    | "day"
+    | "day-time"
+    | "end-time"
+    | "location"
+    | "recurring-event"
     | "speaker-2-2"
     | "speaker-3"
     | "speaker-3-2"
     | "speaker-4"
     | "speaker-5"
-    | "day"
-    | "location"
     | "workshop"
-    | "recurring-event"
   > {
-  "event-type"?: (typeof WEBFLOW_MAP.scheduleType)[keyof typeof WEBFLOW_MAP.scheduleType]
+  day: (typeof WEBFLOW_MAP.scheduleDay)[keyof typeof WEBFLOW_MAP.scheduleDay]
+  "day-time": Date
+  "end-time"?: Date
+  location?: (typeof WEBFLOW_MAP.location)[keyof typeof WEBFLOW_MAP.location]
   "recurring-event"?: RecurringEvents
   "speaker-2-2"?: Speaker
   "speaker-3"?: Speaker
   "speaker-3-2"?: Speaker
   "speaker-4"?: Speaker
   "speaker-5"?: Speaker
-  day: (typeof WEBFLOW_MAP.scheduleDay)[keyof typeof WEBFLOW_MAP.scheduleDay]
-  type?: (typeof WEBFLOW_MAP.scheduleType)[keyof typeof WEBFLOW_MAP.scheduleType]
-  workshop?: Workshop
-  location?: (typeof WEBFLOW_MAP.location)[keyof typeof WEBFLOW_MAP.location]
   talk?: Talk
+  type: (typeof WEBFLOW_MAP.scheduleType)[keyof typeof WEBFLOW_MAP.scheduleType]
+  workshop?: Workshop
 }
 
 export interface RawWorkshop extends Item {
