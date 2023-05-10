@@ -1,6 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from "react"
 import { reportCrash } from "../../utils/crashReporting"
-import { ErrorDetails } from "./ErrorDetails"
+import { ErrorDetails, ErrorDetailsProps } from "./ErrorDetails"
 
 interface Props {
   children: ReactNode
@@ -23,7 +23,7 @@ interface State {
  * - [React Error Boundaries](https://reactjs.org/docs/error-boundaries.html)
  */
 export class ErrorBoundary extends Component<Props, State> {
-  state = { error: null, errorInfo: null }
+  state: Omit<ErrorDetailsProps, "onReset"> = { error: null, errorInfo: null }
 
   // If an error in a child is encountered, this will run
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {

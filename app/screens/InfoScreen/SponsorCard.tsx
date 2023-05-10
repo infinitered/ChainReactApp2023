@@ -6,29 +6,27 @@ import { translate } from "../../i18n"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
-export type CommonProps = {
+type CommonProps<T> = {
   containerStyle?: ViewStyle
+  tier: T
 }
 
-export type TierLevelProps =
-  | {
-      externalURL: string
-      logo: { uri: string }
-      promoSummary: string
-      sponsor: string
-      sponsorImages?: never
-      tier: "Platinum" | "Gold"
-    }
-  | {
-      externalURL: never
-      logo?: never
-      promoSummary?: never
-      sponsor?: never
-      sponsorImages: { uri: string; sponsor: string; externalURL?: string }[]
-      tier: "Silver" | "Bronze"
-    }
+type TierOneLevelProps<T> = CommonProps<T> & {
+  externalURL: string
+  logo: { uri: string }
+  promoSummary: string
+  sponsor: string
+}
 
-export type SponsorCardProps = CommonProps & TierLevelProps
+type TierTwoLevelProps<T> = CommonProps<T> & {
+  sponsorImages: { uri: string; sponsor: string; externalURL?: string }[]
+}
+
+type SponsorCardProps =
+  | TierOneLevelProps<"Platinum">
+  | TierOneLevelProps<"Gold">
+  | TierTwoLevelProps<"Silver">
+  | TierTwoLevelProps<"Bronze">
 
 function maxImageDimensions(tier: SponsorCardProps["tier"]): {
   maxWidth: number
@@ -60,18 +58,12 @@ function maxImageDimensions(tier: SponsorCardProps["tier"]): {
   }
 }
 
-export const SponsorCard = ({
-  containerStyle,
-  externalURL,
-  logo,
-  promoSummary,
-  sponsor,
-  sponsorImages,
-  tier = "Gold",
-}: SponsorCardProps) => {
-  switch (tier) {
+export const SponsorCard = (props: SponsorCardProps) => {
+  switch (props.tier) {
     case "Platinum":
-    case "Gold":
+    case "Gold": {
+      const { containerStyle, externalURL, logo, promoSummary, sponsor, tier } = props
+
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Pressable style={$sponsorTitle} onPress={() => openLinkInBrowser(externalURL)}>
@@ -89,7 +81,10 @@ export const SponsorCard = ({
           <Text>{promoSummary}</Text>
         </View>
       )
-    case "Silver":
+    }
+    case "Silver": {
+      const { containerStyle, sponsorImages, tier } = props
+
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.silverSponsor" />
@@ -98,20 +93,23 @@ export const SponsorCard = ({
               <Pressable
                 key={index}
                 style={$silverTierButton}
-                onPress={() => openLinkInBrowser(externalURL)}
+                onPress={() => !!externalURL && openLinkInBrowser(externalURL)}
               >
                 <AutoImage
                   {...maxImageDimensions(tier)}
                   accessibilityLabel={sponsor}
                   source={{ uri }}
                 />
-                <Icon icon="arrow" containerStyle={$iconButton} />
+                {externalURL ? <Icon icon="arrow" containerStyle={$iconButton} /> : null}
               </Pressable>
             ))}
           </View>
         </View>
       )
-    case "Bronze":
+    }
+    case "Bronze": {
+      const { containerStyle, sponsorImages, tier } = props
+
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Text preset="primaryLabel" style={$sponsorType} tx="infoScreen.bronzeSponsor" />
@@ -129,6 +127,7 @@ export const SponsorCard = ({
           </View>
         </View>
       )
+    }
   }
 }
 

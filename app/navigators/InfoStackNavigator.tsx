@@ -5,6 +5,7 @@ import { CodeOfConductScreen } from "../screens/InfoScreen/CodeOfConductScreen"
 import { ContactUsScreen } from "../screens/InfoScreen/ContactUsScreen"
 import { OurSponsorsScreen } from "../screens/InfoScreen/OurSponsorsScreen"
 import { CreditsScreen } from "../screens/InfoScreen/CreditsScreen"
+import { StackScreenProps } from "@react-navigation/stack"
 
 export type InfoStackParamList = {
   Info: undefined
@@ -15,6 +16,11 @@ export type InfoStackParamList = {
 }
 
 const Stack = createNativeStackNavigator<InfoStackParamList>()
+
+export type InfoStackScreenProps<T extends keyof InfoStackParamList> = StackScreenProps<
+  InfoStackParamList,
+  T
+>
 
 export const InfoStackNavigator = () => {
   return (

@@ -24,7 +24,7 @@ export function useAppState({ match, nextAppState, callback }: UseAppStateProps)
     }
   }, [])
 
-  const _handleAppStateChange = (newAppState) => {
+  const _handleAppStateChange = (newAppState: AppStateStatus) => {
     // If the state we're coming from matches and
     // the next state is the desired one, fire callback
     if (appState.current.match(match) && newAppState === nextAppState) {

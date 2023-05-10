@@ -20,7 +20,7 @@ export interface SocialButtonProps extends PressableProps {
   /**
    * The url to open when the button is pressed.
    */
-  url: string
+  url?: string
 }
 
 export function SocialButton(props: SocialButtonProps) {

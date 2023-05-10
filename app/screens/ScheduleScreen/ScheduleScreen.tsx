@@ -78,7 +78,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     [schedules, selectedSchedule],
   )
 
-  const hScrollRef = React.useRef(null)
+  const hScrollRef = React.useRef<Animated.FlatList<Schedule>>(null)
   const scheduleListRefs = React.useRef(
     Object.fromEntries(
       schedules.map((s) => [s.date, React.createRef<FlashList<ScheduleCardProps>>()]),
@@ -109,14 +109,14 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const isFocused = useIsFocused()
 
   const updateSchedule = React.useCallback(
-    (index) => {
+    (index: number) => {
       setSelectedSchedule(schedules[index])
     },
     [schedules],
   )
 
   const onItemPress = React.useCallback(
-    (itemIndex) => {
+    (itemIndex: number) => {
       const currentIndex = getScheduleIndex()
 
       if (currentIndex === itemIndex) {
@@ -125,7 +125,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           offset: 0,
         })
       } else {
-        hScrollRef?.current?.scrollToOffset({ offset: itemIndex * width })
+        ;(hScrollRef?.current as unknown as FlashList<Schedule>)?.scrollToOffset({
+          offset: itemIndex * width,
+        })
       }
     },
     [hScrollRef, getScheduleIndex],
@@ -145,8 +147,8 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     setTimeout(() => {
       if (eventIndex > -1) {
         const scheduleListRef = scheduleListRefs[schedule?.date]?.current
-        const eventRef = eventRefs[schedule?.date][eventIndex]?.current
-        eventRef && AccessibilityInfo.setAccessibilityFocus(findNodeHandle(eventRef))
+        const eventNodeHandle = findNodeHandle(eventRefs[schedule?.date][eventIndex]?.current)
+        eventNodeHandle && AccessibilityInfo.setAccessibilityFocus(eventNodeHandle)
 
         scheduleListRef?.scrollToIndex({
           animated: true,
@@ -261,7 +263,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
           <ActivityIndicator color={colors.tint} size="large" style={$activityIndicator} />
         )}
         {!isLoading && schedules && (
-          <Animated.FlatList
+          <Animated.FlatList<Schedule>
             ref={hScrollRef}
             data={schedules}
             keyExtractor={(item) => item.date}

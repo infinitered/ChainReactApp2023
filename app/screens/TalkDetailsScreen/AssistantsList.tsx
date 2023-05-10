@@ -23,7 +23,7 @@ export function AssistantsList(props: AssistantsListProp) {
       <View style={$assistantContainer}>
         {assistants.map((assistant) => (
           <View style={$assistant} key={assistant._id}>
-            <AutoImage source={{ uri: assistant["speaker-photo"].url }} style={$assistantImage} />
+            <AutoImage source={{ uri: assistant["speaker-photo"]?.url }} style={$assistantImage} />
             <Text preset="companionHeading" text={assistant.name} />
             <Text preset="label" style={$assistantCompany} text={assistant.company} />
             <View style={$assistantLinks}>

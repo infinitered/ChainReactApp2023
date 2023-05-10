@@ -1,5 +1,4 @@
-import * as React from "react"
-import { ComponentType } from "react"
+import React, { ComponentType } from "react"
 import {
   Image,
   ImageStyle,
@@ -61,9 +60,16 @@ export function Icon(props: IconProps) {
   } = props
 
   const isPressable = !!WrapperProps.onPress
-  const Wrapper: ComponentType<TouchableOpacityProps> = WrapperProps?.onPress
-    ? TouchableOpacity
-    : View
+  const Wrapper: ComponentType<TouchableOpacityProps> = (
+    isPressable ? TouchableOpacity : View
+  ) as ComponentType<TouchableOpacityProps>
+
+  const $imageStyle: StyleProp<ImageStyle> = [
+    $imageStyleBase,
+    color ? { tintColor: color } : undefined,
+    size ? { width: size, height: size } : undefined,
+    $imageStyleOverride,
+  ]
 
   return (
     <Wrapper
@@ -71,15 +77,7 @@ export function Icon(props: IconProps) {
       {...WrapperProps}
       style={$containerStyleOverride}
     >
-      <Image
-        style={[
-          $imageStyle,
-          color && { tintColor: color },
-          size && { width: size, height: size },
-          $imageStyleOverride,
-        ]}
-        source={iconRegistry[icon]}
-      />
+      <Image style={$imageStyle} source={iconRegistry[icon]} />
     </Wrapper>
   )
 }
@@ -104,6 +102,6 @@ export const iconRegistry = {
   youtube: require("../../assets/icons/youtube.png"),
 }
 
-const $imageStyle: ImageStyle = {
+const $imageStyleBase: ImageStyle = {
   resizeMode: "contain",
 }

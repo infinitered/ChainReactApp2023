@@ -13,7 +13,7 @@ interface HeaderProps {
 }
 
 interface FooterProps {
-  heading: string
+  heading?: string
   subheading: string
   isPast?: boolean
   talkUrl?: string
@@ -31,8 +31,8 @@ const Header = ({ formattedEndTime, formattedStartTime, title, isPast }: HeaderP
   </View>
 )
 
-const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
-  isConferencePassed() && (
+const TalkCTA = ({ talkUrl, variant }: Pick<FooterProps, "talkUrl" | "variant">) =>
+  talkUrl && variant === "talk" && isConferencePassed() ? (
     <View style={$talkRecording}>
       <Icon icon="youtube" />
       <Text
@@ -41,7 +41,7 @@ const TalkCTA = ({ talkUrl }: { talkUrl?: string }) =>
         tx={talkUrl ? "scheduleScreen.talkRecordingPosted" : "scheduleScreen.videoComingSoon"}
       />
     </View>
-  )
+  ) : null
 
 const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) => {
   return (
@@ -54,11 +54,7 @@ const Footer = ({ heading, subheading, isPast, talkUrl, variant }: FooterProps) 
       {isPast ? (
         <>
           <Text style={$pastFooterSubheading}>{subheading}</Text>
-          {talkUrl ??
-            // assuming there will be other variants in the future I went with a switch statement
-            {
-              talk: <TalkCTA talkUrl={talkUrl} />,
-            }[variant]}
+          <TalkCTA talkUrl={talkUrl} variant={variant} />
         </>
       ) : (
         <Text style={$footerSubheading}>{subheading}</Text>
@@ -83,7 +79,7 @@ export interface ScheduleCardProps {
   /**
    * Start time of the event
    */
-  startTime?: string
+  startTime: Date
   /**
    * End time of the recurring event
    */
@@ -127,7 +123,7 @@ export interface ScheduleCardProps {
 }
 
 interface SpeakingEventProps {
-  heading: string
+  heading?: string
   subheading: string
   eventTitle: string
   sources: string[]
@@ -139,7 +135,7 @@ interface SpeakingEventProps {
 }
 
 interface RecurringEventProps {
-  heading: string
+  heading?: string
   subheading: string
   isPast?: boolean
   sources: string[]

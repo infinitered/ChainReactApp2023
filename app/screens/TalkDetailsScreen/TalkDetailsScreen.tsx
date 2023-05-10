@@ -13,7 +13,6 @@ import {
   DynamicCarouselItem,
   SCREEN_CONTENT_WIDTH,
   SocialButtons,
-  SocialButtonData,
 } from "../../components"
 import { colors, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
@@ -21,11 +20,12 @@ import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useScheduledEventsData } from "../../services/api"
 import { formatDate } from "../../utils/formatDate"
-import { isFuture, parseISO } from "date-fns"
-import { ScheduledEvent, Speaker } from "../../services/api/webflow-api.types"
+import { isFuture } from "date-fns"
+import { ScheduledEvent } from "../../services/api/webflow-api.types"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
+import { notEmpty } from "../../utils/notEmpty"
 
 export type Variants = "workshop" | "talk"
 
@@ -33,11 +33,11 @@ interface TalkDetailsBaseProps {
   /**
    * The title of the talk
    */
-  title: string
+  title?: string
   /**
    * The location or date of the talk
    */
-  subtitle: string
+  subtitle?: string
   /**
    * The description of the talk
    */
@@ -49,7 +49,7 @@ interface TalkDetailsBaseProps {
   /**
    * The time of the event
    */
-  eventTime: string
+  eventTime: Date
 }
 
 interface TalkDetailsMultipleSpeakersProps extends TalkDetailsBaseProps {
@@ -60,14 +60,14 @@ interface TalkDetailsMultipleSpeakersProps extends TalkDetailsBaseProps {
   /**
    * The carousel data
    */
-  carouselData?: Array<DynamicCarouselItem>
+  carouselData: DynamicCarouselItem[]
 }
 
 interface TalkDetailsSingleSpeakerProps extends TalkDetailsBaseProps {
   /**
    * The first name of the speaker
    */
-  firstName: string
+  firstName?: string
   /**
    * The bio of the speaker
    */
@@ -75,19 +75,19 @@ interface TalkDetailsSingleSpeakerProps extends TalkDetailsBaseProps {
   /**
    * The image of the speaker
    */
-  imageUrl: string
+  imageUrl?: string
   /**
    * The name of the speaker
    */
-  fullName: string
+  fullName?: string
   /**
    * The company where the speaker works
    */
-  company: string
+  company?: string
   /**
    * The social buttons of the speaker
    */
-  socialButtons: Array<{ url: string; icon: IconProps["icon"] }>
+  socialButtons: Array<{ url?: string; icon: IconProps["icon"] }>
   /**
    * If we have multiple speakers, we show them in a carousel
    */
@@ -104,8 +104,9 @@ const SCREEN_WIDTH = Dimensions.get("screen").width
 const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
   const talk = schedule.talk
   const speakers = [schedule["speaker-2-2"], schedule["speaker-3"], schedule["speaker-3-2"]].filter(
-    Boolean,
+    notEmpty,
   )
+
   return {
     title: schedule["event-title"],
     subtitle: `${formatDate(schedule["day-time"], "MMMM dd, h:mmaaa")} PT`,
@@ -113,8 +114,8 @@ const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
     talkUrl: talk?.["talk-url"],
     eventTime: schedule["day-time"],
     isMultipleSpeakers: true,
-    carouselData: speakers.map((speaker: Speaker) => ({
-      image: { uri: speaker?.["speaker-photo"].url },
+    carouselData: speakers.map((speaker) => ({
+      image: { uri: speaker?.["speaker-photo"]?.url },
       imageStyle: { height: 320 },
       subtitle: speaker?.name,
       label: speaker?.company,
@@ -139,7 +140,7 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
     talkUrl: talk?.["talk-url"],
     eventTime: schedule["day-time"],
     bio: stringOrPlaceholder(talk?.["speaker-s"][0]["speaker-bio"]),
-    imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"].url,
+    imageUrl: talk?.["speaker-s"][0]?.["speaker-photo"]?.url,
     fullName: talk?.["speaker-s"][0]?.name,
     company: talk?.["speaker-s"][0]?.company,
     firstName: talk?.["speaker-s"][0]["speaker-first-name"],
@@ -148,21 +149,18 @@ const talkDetailsProps = (schedule: ScheduledEvent): TalkDetailsProps => {
       { url: talk?.["speaker-s"][0]?.github, icon: "github" },
       { url: talk?.["speaker-s"][0]?.externalURL, icon: "link" },
     ],
-    isMultipleSpeakers: talk?.["speaker-s"].length > 1,
-    carouselData: talk?.["speaker-s"].map((speaker) => {
-      const socialButtons = [
-        { url: speaker?.twitter, icon: "twitter" },
-        { url: speaker?.github, icon: "github" },
-        { url: speaker?.externalURL, icon: "link" },
-      ] as SocialButtonData[]
-      const hasSocialButtons = socialButtons.some((button) => button.url)
+    isMultipleSpeakers: !!talk?.["speaker-s"] && talk["speaker-s"].length > 1,
+    carouselData: (talk?.["speaker-s"] ?? []).map((speaker) => {
       return {
-        image: { uri: speaker?.["speaker-photo"].url },
+        image: { uri: speaker?.["speaker-photo"]?.url },
         imageStyle: { height: 320 },
         subtitle: speaker?.name,
         label: speaker?.company,
-        socialButtons,
-        bodyLabel: hasSocialButtons && `Follow ${talk?.["speaker-s"][0]["speaker-first-name"]}`,
+        socialButtons: [
+          { url: speaker?.twitter, icon: "twitter" },
+          { url: speaker?.github, icon: "github" },
+          { url: speaker?.externalURL, icon: "link" },
+        ],
       }
     }),
   }
@@ -196,7 +194,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
           <Image source={talkBlob} style={$talkBlob} />
 
           <Text preset="bold" style={$nameText} text={fullName} />
-          {company?.length > 0 && <Text style={$companyNameText} text={company} />}
+          {company && company.length > 0 && <Text style={$companyNameText} text={company} />}
         </View>
 
         {hasSocialButtons && (
@@ -248,7 +246,7 @@ export const TalkDetailsScreen: FC<StackScreenProps<AppStackParamList, "TalkDeta
 
   const { subtitle, title, talkUrl, eventTime, isMultipleSpeakers } = talkDetailsProps(schedule)
 
-  const isEventPassed = !isFuture(parseISO(eventTime))
+  const isEventPassed = !isFuture(eventTime)
 
   return (
     <>

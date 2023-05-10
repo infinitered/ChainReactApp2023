@@ -6,7 +6,7 @@
     "jsx": "react-native",
     "module": "es2015",
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": false,
@@ -14,7 +14,8 @@
     "target": "esnext",
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "strict": true
   },
   "exclude": ["node_modules"],
   "include": ["index.js", "App.js", "app", "test"],
