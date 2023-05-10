@@ -24,6 +24,11 @@ type RecommendationType = (typeof recommendationTypes)[number]
 type RecommendationTypeId = keyof typeof WEBFLOW_MAP.recommendationType
 type GroupedRecommendations = Record<RecommendationType, RawRecommendations[]>
 
+type Entries<Obj extends Record<string, unknown>> = Obj extends Record<infer Key, infer Value>
+  ? [Key, Value][]
+  : never
+type GroupedRecommendationsEntries = Entries<GroupedRecommendations>
+
 const initialRecs = recommendationTypes.reduce<GroupedRecommendations>(
   (acc, recommendationType) => ({ ...acc, [recommendationType]: [] }),
   {} as GroupedRecommendations,
@@ -68,7 +73,7 @@ const useRecommendationSections = (): {
 
   return {
     isLoading,
-    sections: Object.entries(sortedRecs).map(([key, value]: [string, RawRecommendations[]]) => ({
+    sections: (Object.entries(sortedRecs) as GroupedRecommendationsEntries).map(([key, value]) => ({
       title: sectionTitle(key as RecommendationType),
       renderItem: RenderItem,
       data: [
