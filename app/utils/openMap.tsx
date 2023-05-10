@@ -11,7 +11,5 @@ export const openMap = async (address: string) => {
     // https://developer.android.com/training/package-visibility
     // https://github.com/facebook/react-native/issues/32311
     Linking.openURL(link)
-  } catch (error) {
-    console.error(error)
-  }
+  } catch (error) {}
 }

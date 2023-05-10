@@ -1,4 +1,5 @@
 import axios from "axios"
+import { reportCrash } from "../../utils/crashReporting"
 
 interface PaginatedData {
   count: number
@@ -25,7 +26,7 @@ axiosInstance.interceptors.response.use(
     return response
   },
   (error) => {
-    console.tron.log({ error })
+    reportCrash(error)
     return Promise.reject(error)
   },
 )
@@ -33,7 +34,7 @@ axiosInstance.interceptors.response.use(
 axiosInstance.interceptors.request.use(
   (request) => request,
   (error) => {
-    console.tron.log({ error })
+    reportCrash(error)
     return Promise.reject(error)
   },
 )

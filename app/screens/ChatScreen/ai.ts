@@ -1,4 +1,5 @@
 import axios from "axios"
+import { reportCrash } from "../../utils/crashReporting"
 
 export async function aiPrompt({ prompt, userId }: { prompt: string; userId: string }) {
   try {
@@ -18,7 +19,7 @@ export async function aiPrompt({ prompt, userId }: { prompt: string; userId: str
 
     return response.data
   } catch (error) {
-    console.error(error)
+    reportCrash(error)
     return { completion: "Hm, I seem to be having some trouble right now." }
   }
 }

@@ -79,8 +79,6 @@ export const ChatScreen: React.FunctionComponent<TabScreenProps<"Chat">> = () =>
       return newMessages
     })
 
-    // console.log("saving messages", newMessages)
-
     // persist to AsyncStorage
     AsyncStorage.setItem("chat/messages", JSON.stringify(newMessages))
   }

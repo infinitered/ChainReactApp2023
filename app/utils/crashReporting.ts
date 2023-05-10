@@ -22,7 +22,7 @@ export enum ErrorType {
  * Manually report a handled error.
  */
 export const reportCrash = (error: any, type: ErrorType = ErrorType.FATAL) => {
-  if (__DEV__) {
+  if (__DEV__ || process.env.NODE_ENV === "development") {
     // Log to console and Reactotron in development
     const message = error.message || "Unknown"
     console.error(error)
