@@ -24,7 +24,7 @@ import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
 import { parseDate } from "../../utils/formatDate"
 import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
-import { ScrollToButton, Text, useScrollToEvent } from "../../components"
+import { SCREEN_WIDTH, ScrollToButton, Text, useScrollToEvent } from "../../components"
 import { isConferencePassed } from "../../utils/isConferencePassed"
 import * as Device from "expo-device"
 import messaging from "@react-native-firebase/messaging"
@@ -321,6 +321,7 @@ const $workshopBanner: ViewStyle = {
   backgroundColor: colors.palette.primary400,
   paddingHorizontal: spacing.large,
   paddingVertical: spacing.extraSmall,
+  width: SCREEN_WIDTH,
 }
 
 const $workshopBannerText: TextStyle = {
