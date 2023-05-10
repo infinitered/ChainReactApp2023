@@ -30,7 +30,9 @@ export const groupBy =
     array.reduce<Record<string, T[]>>(
       (objectsByKeyValue, obj) => ({
         ...objectsByKeyValue,
-        [obj[key as keyof T] as string]: (objectsByKeyValue[obj[key as keyof T] as string] || []).concat(obj),
+        [obj[key as keyof T] as string]: (
+          objectsByKeyValue[obj[key as keyof T] as string] || []
+        ).concat(obj),
       }),
       {},
     )
