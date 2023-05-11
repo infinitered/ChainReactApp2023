@@ -95,9 +95,11 @@ If you'd like to fork this repo and use it on your own Expo account to be able t
 4. Click on `Create a Project`
 5. In `/app.config.ts` update the following values from your newly generated project found at https://expo.dev/accounts/{username}/projects/{slug}:
    1. `owner`
-   2. `plugins.expo-updates.username`,
+   2. `plugins.expo-updates.username` (same as `owner`)
    3. `slug`
    4. `extra.eas.projectId`
+   5. `ios.bundleIdentifier` (your Apple Bundle ID)
+   6. `android.package` (your Android Package Name)
 6. Follow above steps for building app on either simulator/emulator or device on your platform of choice
 7. Happy Coding!
 
