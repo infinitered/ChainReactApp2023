@@ -85,6 +85,22 @@ This is for distributing the app to internal testers to run on their devices. Th
 5. Install via QR Code (make sure you don't have any development builds already installed)
 6. You're good to go!
 
+## Moving to your own Expo account
+
+If you'd like to fork this repo and use it on your own Expo account to be able to leverage builds on your own devices, you'll need to do the following:
+
+1. [Fork this repo](https://github.com/infinitered/ChainReactApp2023/fork)
+2. `yarn install`
+3. Head to the `expo.dev` projects dashboard: https://expo.dev/accounts/{username}/projects (Be sure to update `{username}` with your Expo username)
+4. Click on `Create a Project`
+5. In `/app.config.ts` update the following values from your newly generated project found at https://expo.dev/accounts/{username}/projects/{slug}:
+   1. `owner`
+   2. `plugins.expo-updates.username`,
+   3. `slug`
+   4. `extra.eas.projectId`
+6. Follow above steps for building app on either simulator/emulator or device on your platform of choice
+7. Happy Coding!
+
 # E2E Tests
 
 ## Maestro Installation
