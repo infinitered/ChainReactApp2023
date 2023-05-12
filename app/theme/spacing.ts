@@ -15,7 +15,7 @@ export const spacing = {
 
 export const layout = {
   // Horizontal padding used for the app
-  horizontalGutter: spacing.large
+  horizontalGutter: spacing.large,
 }
 
 export type Spacing = keyof typeof spacing
