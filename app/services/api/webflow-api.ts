@@ -125,6 +125,7 @@ export const useScheduleScreenData = () => {
         bannerTx: "scheduleScreen.workshopBanner",
         date: "2023-05-17",
         title: "React Native Workshops",
+        bannerTx: "scheduleScreen.workshopBanner",
         events: convertScheduleToScheduleCard(events, "Wednesday"),
       },
       {
