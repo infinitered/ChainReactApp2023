@@ -28,9 +28,10 @@ import { SCREEN_WIDTH, ScrollToButton, Text, useScrollToEvent } from "../../comp
 import { isConferencePassed } from "../../utils/isConferencePassed"
 import * as Device from "expo-device"
 import messaging from "@react-native-firebase/messaging"
-import { translate } from "../../i18n"
+import { TxKeyPath } from "../../i18n"
 
 export interface Schedule {
+  bannerTx?: TxKeyPath
   date: string
   title: string
   events: ScheduleCardProps[]
@@ -207,9 +208,9 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const renderSchedule = React.useCallback(
     ({ index, item: schedule }: { index: number; item: Schedule }) => (
       <>
-        {index === 0 && (
+        {schedule.bannerTx && (
           <View style={$workshopBanner}>
-            <Text style={$workshopBannerText}>{translate("scheduleScreen.workshopBanner")}</Text>
+            <Text style={$workshopBannerText} tx={schedule.bannerTx} />
           </View>
         )}
         <View style={[$container, { width }]}>
