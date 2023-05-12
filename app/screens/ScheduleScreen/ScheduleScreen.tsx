@@ -17,7 +17,7 @@ import Animated, {
 } from "react-native-reanimated"
 import { useIsFocused } from "@react-navigation/native"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { colors, spacing, screen } from "../../theme"
+import { colors, spacing, layout } from "../../theme"
 import { useAppState, useCurrentDate, useHeader } from "../../hooks"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
@@ -193,7 +193,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
         const contentOffset = event.contentOffset
 
         // Divide the horizontal offset by the width of the view to see which page is visible
-        const adjustedWidth = screenWidth - screen.horizontalGutter * 2
+        const adjustedWidth = screenWidth - layout.horizontalGutter * 2
         const index = Math.floor(contentOffset.x / adjustedWidth)
 
         // ! isFocused check for iOS, see details here: https://github.com/software-mansion/react-native-screens/issues/1183

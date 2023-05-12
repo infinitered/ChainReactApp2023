@@ -8,7 +8,7 @@ import {
   useWindowDimensions,
 } from "react-native"
 import { AutoImage, Icon, Text } from "../../components"
-import { spacing, screen } from "../../theme"
+import { spacing, layout } from "../../theme"
 import { translate } from "../../i18n"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 
@@ -71,7 +71,7 @@ export const SponsorCard = (props: SponsorCardProps) => {
   const { width: screenWidth } = useWindowDimensions()
 
   function maxImageDimensionsForContent(tier: SponsorCardProps["tier"]) {
-    return maxImageDimensions(tier, screenWidth - screen.horizontalGutter * 2)
+    return maxImageDimensions(tier, screenWidth - layout.horizontalGutter * 2)
   }
 
   switch (props.tier) {

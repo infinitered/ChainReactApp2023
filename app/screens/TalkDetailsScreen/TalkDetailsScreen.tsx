@@ -13,7 +13,7 @@ import {
   DynamicCarouselItem,
   SocialButtons,
 } from "../../components"
-import { colors, spacing, screen } from "../../theme"
+import { colors, spacing, layout } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -25,7 +25,6 @@ import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { notEmpty } from "../../utils/notEmpty"
-import { SCREEN_CONTENT_WIDTH, SCREEN_WIDTH } from "../../constants"
 
 export type Variants = "workshop" | "talk"
 
@@ -180,7 +179,7 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
     const hasSocialButtons = socialButtons.some((button) => button.url)
     const offset = 6
     const { width: screenWidth } = useWindowDimensions()
-    const screenContentWidth = screenWidth - screen.horizontalGutter * 2
+    const screenContentWidth = screenWidth - layout.horizontalGutter * 2
 
     return (
       <View style={$contentSpacing}>
