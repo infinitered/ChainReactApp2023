@@ -1,0 +1,23 @@
+# flow: Test the Welcome Screen appears and transitions to schedule
+# env: Prod Android APK
+
+appId: com.chainreactapp
+---
+- launchApp:
+    clearState: true # Will clear our saved navigation state, we may not always want this
+- assertVisible: "Welcome to Chain React.*"
+- tapOn: "See the schedule"
+- assertVisible: "Schedule"
+- assertVisible: "Wed, May 17"
+- tapOn: "Testing React Native apps"
+- back
+- tapOn: "Thu"
+- assertVisible: "Thu, May 18"
+- scroll
+- tapOn: "Theo Browne"
+- back
+- tapOn: "Fri"
+- assertVisible: "Fri, May 19"
+- scroll
+- tapOn: "Lorenzo Sciandra"
+- back
