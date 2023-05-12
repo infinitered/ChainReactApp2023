@@ -18,11 +18,9 @@ import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-ap
 import {
   AutoImage,
   ButtonLink,
-  getFullWidthImageDimensions,
+  getImageDimensionsForWidth,
   MIN_HEADER_HEIGHT,
   Screen,
-  SCREEN_CONTENT_WIDTH,
-  SCREEN_WIDTH,
   Text,
 } from "../../components"
 import { colors, spacing } from "../../theme"
@@ -31,6 +29,7 @@ import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
 import { translate } from "../../i18n"
+import { SCREEN_CONTENT_WIDTH, SCREEN_WIDTH } from "../../constants"
 
 const imageCurve = require("../../../assets/images/workshop-curve.png")
 
@@ -103,7 +102,10 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
     schedule,
     sponsors,
   )
-  const $bannerImage: StyleProp<ImageStyle> = [$bannerImageBase, getFullWidthImageDimensions(image)]
+  const $bannerImage: StyleProp<ImageStyle> = [
+    $bannerImageBase,
+    getImageDimensionsForWidth(image, SCREEN_CONTENT_WIDTH),
+  ]
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
