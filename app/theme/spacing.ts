@@ -13,4 +13,9 @@ export const spacing = {
   massive: 64,
 } as const
 
+export const screen = {
+  // Horizontal padding used for the app
+  horizontalGutter: spacing.extraLarge
+}
+
 export type Spacing = keyof typeof spacing

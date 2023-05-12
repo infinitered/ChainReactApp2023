@@ -1,13 +1,13 @@
 import { format, isSameDay } from "date-fns"
 import React, { FC, ForwardedRef, useCallback } from "react"
 import {
-  Dimensions,
   LayoutChangeEvent,
   Pressable,
   PressableProps,
   TextStyle,
   View,
   ViewStyle,
+  useWindowDimensions,
 } from "react-native"
 import Animated, {
   useAnimatedStyle,
@@ -17,8 +17,6 @@ import Animated, {
 } from "react-native-reanimated"
 import { colors, spacing, typography } from "../../theme"
 import { reportCrash } from "../../utils/crashReporting"
-
-const { width } = Dimensions.get("window")
 
 interface AnimatedDayButtonProps extends PressableProps {
   onPress: () => void
@@ -77,7 +75,8 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
   scheduleDates,
   selectedScheduleDate,
 }) => {
-  const wrapperWidth = width - spacing.extraSmall * 2
+  const { width: screenWidth } = useWindowDimensions()
+  const wrapperWidth = screenWidth - spacing.extraSmall * 2
   const widthSize = wrapperWidth / scheduleDates.length
   const selectedScheduleIndex = scheduleDates.findIndex((date: Date) =>
     isSameDay(date, selectedScheduleDate),
@@ -106,7 +105,7 @@ export const ScheduleDayPicker: FC<ScheduleDayPickerProps> = ({
     [itemRefs],
   )
 
-  const inputRange = scheduleDates.map((_, index) => index * width)
+  const inputRange = scheduleDates.map((_, index) => index * screenWidth)
 
   const $animatedLeftStyle = useAnimatedStyle(() => {
     const translateX = interpolate(

@@ -1,5 +1,5 @@
 import React, { FC } from "react"
-import { ViewStyle, View, TextStyle, ImageStyle, Image, Dimensions } from "react-native"
+import { ViewStyle, View, TextStyle, ImageStyle, Image, useWindowDimensions } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
 import {
@@ -11,10 +11,9 @@ import {
   IconProps,
   Carousel,
   DynamicCarouselItem,
-  SCREEN_CONTENT_WIDTH,
   SocialButtons,
 } from "../../components"
-import { colors, spacing } from "../../theme"
+import { colors, spacing, screen } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -26,6 +25,7 @@ import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { stringOrPlaceholder } from "../../utils/stringOrPlaceholder"
 import { WEBFLOW_MAP } from "../../services/api/webflow-consts"
 import { notEmpty } from "../../utils/notEmpty"
+import { SCREEN_CONTENT_WIDTH, SCREEN_WIDTH } from "../../constants"
 
 export type Variants = "workshop" | "talk"
 
@@ -98,8 +98,6 @@ type TalkDetailsProps = TalkDetailsMultipleSpeakersProps | TalkDetailsSingleSpea
 
 const talkBlob = require("../../../assets/images/talk-shape.png")
 const talkCurve = require("../../../assets/images/talk-curve.png")
-
-const SCREEN_WIDTH = Dimensions.get("screen").width
 
 const triviaShowProps = (schedule: ScheduledEvent): TalkDetailsProps => {
   const talk = schedule.talk
@@ -181,14 +179,17 @@ const TalkDetailsSingleSpeaker: React.FunctionComponent<TalkDetailsSingleSpeaker
   }) {
     const hasSocialButtons = socialButtons.some((button) => button.url)
     const offset = 6
+    const { width: screenWidth } = useWindowDimensions()
+    const screenContentWidth = screenWidth - screen.horizontalGutter * 2
+
     return (
       <View style={$contentSpacing}>
         <View style={$containerSpacing}>
-          <Image source={talkCurve} style={$talkCurve} />
+          <Image source={talkCurve} style={[$talkCurve, { width: screenWidth }]} />
           <BoxShadow preset="primary" style={$containerSpacing} offset={offset}>
             <Image
               source={{ uri: imageUrl }}
-              style={[$speakerImage, { width: SCREEN_CONTENT_WIDTH - offset }]}
+              style={[$speakerImage, { width: screenContentWidth - offset }]}
             />
           </BoxShadow>
           <Image source={talkBlob} style={$talkBlob} />
@@ -365,7 +366,6 @@ const $talkBlob: ImageStyle = {
 const $talkCurve: ImageStyle = {
   position: "absolute",
   left: -spacing.large,
-  width: SCREEN_WIDTH,
   resizeMode: "stretch",
 }
 

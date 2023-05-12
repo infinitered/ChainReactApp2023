@@ -1,5 +1,5 @@
 import React from "react"
-import { Dimensions, TextStyle, View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle, useWindowDimensions } from "react-native"
 import { Screen, Text } from "../../components"
 import { translate } from "../../i18n"
 import { useAppNavigation, useHeader } from "../../hooks"
@@ -100,7 +100,7 @@ const data: Person[] = [
 
 export const CreditsScreen = () => {
   const navigation = useAppNavigation()
-  const { width } = Dimensions.get("window")
+  const { width } = useWindowDimensions()
 
   useHeader({
     title: translate("infoScreen.creditsTitle"),

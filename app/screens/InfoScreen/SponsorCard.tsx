@@ -1,10 +1,16 @@
 import React from "react"
-import { ImageStyle, TextStyle, ViewStyle, View, Pressable } from "react-native"
+import {
+  ImageStyle,
+  TextStyle,
+  ViewStyle,
+  View,
+  Pressable,
+  useWindowDimensions,
+} from "react-native"
 import { AutoImage, Icon, Text } from "../../components"
-import { spacing } from "../../theme"
+import { spacing, screen } from "../../theme"
 import { translate } from "../../i18n"
 import { openLinkInBrowser } from "../../utils/openLinkInBrowser"
-import { SCREEN_CONTENT_WIDTH } from "../../components/carousel/constants"
 
 type CommonProps<T> = {
   containerStyle?: ViewStyle
@@ -28,7 +34,10 @@ type SponsorCardProps =
   | TierTwoLevelProps<"Silver">
   | TierTwoLevelProps<"Bronze">
 
-function maxImageDimensions(tier: SponsorCardProps["tier"]): {
+function maxImageDimensions(
+  tier: SponsorCardProps["tier"],
+  width: number,
+): {
   maxWidth: number
   maxHeight: number
 } {
@@ -37,28 +46,34 @@ function maxImageDimensions(tier: SponsorCardProps["tier"]): {
   switch (tier) {
     case "Platinum":
       return {
-        maxWidth: SCREEN_CONTENT_WIDTH * 0.9 - iconWidth,
+        maxWidth: width * 0.9 - iconWidth,
         maxHeight: 60,
       }
     case "Gold":
       return {
-        maxWidth: SCREEN_CONTENT_WIDTH * 0.7 - iconWidth,
+        maxWidth: width * 0.7 - iconWidth,
         maxHeight: 48,
       }
     case "Silver":
       return {
-        maxWidth: SCREEN_CONTENT_WIDTH * 0.4 - iconWidth,
+        maxWidth: width * 0.4 - iconWidth,
         maxHeight: 48,
       }
     case "Bronze":
       return {
-        maxWidth: SCREEN_CONTENT_WIDTH * 0.4,
+        maxWidth: width * 0.4,
         maxHeight: 36,
       }
   }
 }
 
 export const SponsorCard = (props: SponsorCardProps) => {
+  const { width: screenWidth } = useWindowDimensions()
+
+  function maxImageDimensionsForContent(tier: SponsorCardProps["tier"]) {
+    return maxImageDimensions(tier, screenWidth - screen.horizontalGutter * 2)
+  }
+
   switch (props.tier) {
     case "Platinum":
     case "Gold": {
@@ -67,7 +82,11 @@ export const SponsorCard = (props: SponsorCardProps) => {
       return (
         <View style={[$sponsorContainer, containerStyle]}>
           <Pressable style={$sponsorTitle} onPress={() => openLinkInBrowser(externalURL)}>
-            <AutoImage {...maxImageDimensions(tier)} accessibilityLabel={sponsor} source={logo} />
+            <AutoImage
+              {...maxImageDimensionsForContent(tier)}
+              accessibilityLabel={sponsor}
+              source={logo}
+            />
             <Icon icon="arrow" containerStyle={$iconButton} />
           </Pressable>
           <Text preset="primaryLabel" style={$sponsorType}>
@@ -96,7 +115,7 @@ export const SponsorCard = (props: SponsorCardProps) => {
                 onPress={() => !!externalURL && openLinkInBrowser(externalURL)}
               >
                 <AutoImage
-                  {...maxImageDimensions(tier)}
+                  {...maxImageDimensionsForContent(tier)}
                   accessibilityLabel={sponsor}
                   source={{ uri }}
                 />
@@ -117,7 +136,7 @@ export const SponsorCard = (props: SponsorCardProps) => {
             {sponsorImages.map(({ uri, sponsor }, index) => (
               <View key={index} style={$sponsorBottomTierLogoWrapper}>
                 <AutoImage
-                  {...maxImageDimensions(tier)}
+                  {...maxImageDimensionsForContent(tier)}
                   accessibilityLabel={sponsor}
                   style={$sponsorImageBottomTier}
                   source={{ uri }}
