@@ -7,20 +7,21 @@ import {
   ImageURISource,
   Platform,
 } from "react-native"
-import { SCREEN_CONTENT_WIDTH } from "./carousel/constants"
 
 /**
- * Get the dimensions of an image, scaled to fit the screen content width.
+ * Get the dimensions of an image, scaled to fit the specified width
+ * while maintaining the image's original ratio.
  *
  * @param image ImageSourcePropType—can be a remote image or a local image
+ * @param width number—width of the space you want image to fill
  * @returns { height: number, width: number } as ImageStyle
  */
-export const getFullWidthImageDimensions = (image: ImageSourcePropType) => {
-  const { height, width } = Image.resolveAssetSource(image)
-  const imageRatio = SCREEN_CONTENT_WIDTH / width
+export const getImageDimensionsForWidth = (image: ImageSourcePropType, width: number) => {
+  const { height: rawImageHeight, width: rawImageWidth } = Image.resolveAssetSource(image)
+  const imageRatio = width / rawImageWidth
   return {
-    height: height * imageRatio,
-    width: SCREEN_CONTENT_WIDTH,
+    height: rawImageHeight * imageRatio,
+    width,
   } as ImageStyle
 }
 

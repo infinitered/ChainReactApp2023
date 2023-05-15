@@ -4,11 +4,13 @@ import { colors, spacing } from "../theme"
 import messaging from "@react-native-firebase/messaging"
 import Toast, { BaseToast, ToastConfig } from "react-native-toast-message"
 import { $baseSecondaryStyle, $baseStyle } from "./Text"
-import { Dimensions, ViewStyle } from "react-native"
+import { ViewStyle, useWindowDimensions } from "react-native"
 
 // Setting up our custom Toast component
 export const CustomToast = () => {
   const insets = useSafeAreaInsets()
+  const { width: screenWidth } = useWindowDimensions()
+  const width = screenWidth - spacing.extraSmall * 2
 
   useLayoutEffect(() => {
     // handle a new push notification received while the app is in "foreground" state
@@ -31,7 +33,7 @@ export const CustomToast = () => {
       <BaseToast
         {...props}
         contentContainerStyle={$toastContainer}
-        style={$toast}
+        style={[$toast, { width }]}
         text1Style={$baseStyle}
         text2Style={$baseSecondaryStyle}
       />
@@ -45,7 +47,6 @@ const $toast: ViewStyle = {
   backgroundColor: colors.palette.neutral400,
   borderLeftWidth: 0,
   borderRadius: spacing.extraSmall,
-  width: Dimensions.get("window").width - spacing.extraSmall * 2,
 }
 
 const $toastContainer: ViewStyle = {

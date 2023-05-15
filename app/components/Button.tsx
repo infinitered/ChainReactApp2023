@@ -8,7 +8,7 @@ import {
   View,
   ViewStyle,
   TextProps as RNTextProps,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 import { colors, spacing, typography } from "../theme"
@@ -151,11 +151,16 @@ export function Button(props: ButtonProps) {
 export type FloatingButtonProps = ButtonProps & { isVisible?: boolean }
 
 export const FloatingButton = ({ isVisible, ...props }: FloatingButtonProps) => {
+  const { width } = useWindowDimensions()
   return (
     <View>
       {/* <View> must be here as the parent for Layout Animations to work. (entering/exiting animations) */}
       {isVisible ? (
-        <Animated.View entering={FadeInDown} exiting={FadeOutDown} style={$floatingAction}>
+        <Animated.View
+          entering={FadeInDown}
+          exiting={FadeOutDown}
+          style={[$floatingAction, { width }]}
+        >
           <Button {...props}></Button>
         </Animated.View>
       ) : null}
@@ -274,6 +279,5 @@ const $shadowPresets = {
 const $floatingAction: ViewStyle = {
   position: "absolute",
   bottom: spacing.large,
-  width: Dimensions.get("window").width,
   paddingHorizontal: spacing.large,
 }
