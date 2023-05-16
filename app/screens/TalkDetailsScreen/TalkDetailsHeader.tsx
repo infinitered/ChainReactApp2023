@@ -1,9 +1,9 @@
 import React from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { MIN_HEADER_HEIGHT, Text } from "../../components"
+import { Text } from "../../components"
 import { BackButton } from "../../navigators/BackButton"
-import { colors, spacing } from "../../theme"
+import { colors, layout, spacing } from "../../theme"
 
 interface TalkDetailsHeaderProps {
   /**
@@ -50,7 +50,7 @@ export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> 
   }
 
 const $rowContainer: ViewStyle = {
-  height: MIN_HEADER_HEIGHT,
+  height: layout.headerHeight,
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",

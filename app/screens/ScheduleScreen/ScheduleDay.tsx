@@ -8,10 +8,11 @@ import {
   ViewToken,
   useWindowDimensions,
 } from "react-native"
-import { colors, spacing } from "../../theme"
+import { colors, layout, spacing } from "../../theme"
 import { Text } from "../../components"
 import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
 import { ContentStyle, FlashList } from "@shopify/flash-list"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const BUTTON_HEIGHT = 48
 const ITEM_HEIGHT = 242
@@ -41,7 +42,9 @@ const ScheduleDay: FC<ScheduleDayProps> = (props) => {
     scheduleListRef,
   } = props
 
-  const { width: screenWidth } = useWindowDimensions()
+  const { height: screenHeight, width: screenWidth } = useWindowDimensions()
+  const { bottom } = useSafeAreaInsets()
+  const listHeight = screenHeight - bottom - layout.headerHeight - layout.tabHeight
 
   return (
     <View style={[$container, { width: screenWidth }]}>
@@ -54,7 +57,7 @@ const ScheduleDay: FC<ScheduleDayProps> = (props) => {
         <FlashList<ScheduleCardProps>
           data={schedule.events}
           estimatedItemSize={ITEM_HEIGHT}
-          estimatedListSize={{ height: schedule.events.length * ITEM_HEIGHT, width: screenWidth }}
+          estimatedListSize={{ height: listHeight, width: screenWidth }}
           // To achieve better performance, specify the type based on the item
           getItemType={(item) => item.variant}
           keyExtractor={(item) => item.id}

@@ -16,14 +16,7 @@ import { AppStackParamList } from "../../navigators"
 import { useScheduledEventsData, useSponsors } from "../../services/api"
 import { useFloatingActionEvents, useScrollY } from "../../hooks"
 import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-api.types"
-import {
-  AutoImage,
-  ButtonLink,
-  getImageDimensionsForWidth,
-  MIN_HEADER_HEIGHT,
-  Screen,
-  Text,
-} from "../../components"
+import { AutoImage, ButtonLink, getImageDimensionsForWidth, Screen, Text } from "../../components"
 import { colors, layout, spacing } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
@@ -181,7 +174,7 @@ const $root: ViewStyle = {
 }
 
 const $scrollView: ViewStyle = {
-  marginBottom: MIN_HEADER_HEIGHT,
+  marginBottom: layout.headerHeight,
 }
 
 const $container = {

@@ -2,8 +2,8 @@ import React, { FC } from "react"
 import { ViewStyle, View, TextStyle } from "react-native"
 import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
-import { DynamicCarouselItem, Text, MIN_HEADER_HEIGHT, Screen, Carousel } from "../../components"
-import { colors, spacing } from "../../theme"
+import { DynamicCarouselItem, Text, Screen, Carousel } from "../../components"
+import { colors, layout, spacing } from "../../theme"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -102,7 +102,7 @@ const $root: ViewStyle = {
 }
 
 const $scrollView: ViewStyle = {
-  marginBottom: MIN_HEADER_HEIGHT,
+  marginBottom: layout.headerHeight,
 }
 
 const $container = {
