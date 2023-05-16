@@ -3,7 +3,7 @@
   "version": "4.0.2",
   "private": true,
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "cross-env EXPO_USE_CUSTOM_INSPECTOR_PROXY=true expo start --dev-client",
     "build:local:ios": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development -p ios --local",
     "build:local:android": "cross-env EAS_LOCAL_BUILD_ARTIFACTS_DIR=build eas build --profile development -p android --local",
     "build:dev": "eas build --profile development",
