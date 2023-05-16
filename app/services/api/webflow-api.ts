@@ -122,6 +122,7 @@ export const useScheduleScreenData = () => {
     isRefetching,
     schedules: [
       {
+        bannerTx: "scheduleScreen.workshopBanner",
         date: "2023-05-17",
         title: "React Native Workshops",
         events: convertScheduleToScheduleCard(events, "Wednesday"),

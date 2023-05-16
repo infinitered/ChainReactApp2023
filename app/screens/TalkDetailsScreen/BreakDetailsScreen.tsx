@@ -10,6 +10,7 @@ import {
   TextStyle,
   View,
   ViewStyle,
+  useWindowDimensions,
 } from "react-native"
 import { AppStackParamList } from "../../navigators"
 import { useScheduledEventsData, useSponsors } from "../../services/api"
@@ -18,14 +19,12 @@ import { ImageRef, ScheduledEvent, Sponsor } from "../../services/api/webflow-ap
 import {
   AutoImage,
   ButtonLink,
-  getFullWidthImageDimensions,
+  getImageDimensionsForWidth,
   MIN_HEADER_HEIGHT,
   Screen,
-  SCREEN_CONTENT_WIDTH,
-  SCREEN_WIDTH,
   Text,
 } from "../../components"
-import { colors, spacing } from "../../theme"
+import { colors, layout, spacing } from "../../theme"
 import { formatDate } from "../../utils/formatDate"
 import { TalkDetailsHeader } from "./TalkDetailsHeader"
 import Animated from "react-native-reanimated"
@@ -87,6 +86,8 @@ const breakDetailsProps = (schedule: ScheduledEvent, sponsors: Sponsor[]): Break
 export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDetails">> = ({
   route: { params },
 }) => {
+  const { width: screenWidth } = useWindowDimensions()
+  const screenContentWidth = screenWidth - layout.horizontalGutter * 2
   const [headingHeight, setHeadingHeight] = React.useState(0)
 
   const { scrollHandlers } = useFloatingActionEvents()
@@ -103,7 +104,10 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
     schedule,
     sponsors,
   )
-  const $bannerImage: StyleProp<ImageStyle> = [$bannerImageBase, getFullWidthImageDimensions(image)]
+  const $bannerImage: StyleProp<ImageStyle> = [
+    $bannerImageBase,
+    getImageDimensionsForWidth(image, screenContentWidth),
+  ]
 
   return (
     <Screen safeAreaEdges={["top", "bottom"]} style={$root}>
@@ -134,7 +138,7 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
           </View>
 
           <View style={$containerSpacing}>
-            <Image source={imageCurve} style={$imageCurve} />
+            <Image source={imageCurve} style={[$imageCurve, { width: screenWidth }]} />
             <Image source={image} style={$bannerImage} />
           </View>
 
@@ -147,7 +151,7 @@ export const BreakDetailsScreen: FC<StackScreenProps<AppStackParamList, "BreakDe
               <Text preset="eventTitle" style={$heading} tx="breakDetailsScreen.hostedBy" />
               <AutoImage
                 maxHeight={45}
-                maxWidth={SCREEN_CONTENT_WIDTH}
+                maxWidth={screenContentWidth}
                 source={{ uri: sponsor.logo.url }}
                 accessibilityLabel={sponsor.name}
               />
@@ -200,7 +204,6 @@ const $headingContainer: ViewStyle = {
 const $imageCurve: ImageStyle = {
   position: "absolute",
   left: -spacing.large,
-  width: SCREEN_WIDTH,
   resizeMode: "stretch",
 }
 

@@ -4,10 +4,10 @@ import {
   ActivityIndicator,
   View,
   ViewStyle,
-  Dimensions,
   findNodeHandle,
   RefreshControl,
   TextStyle,
+  useWindowDimensions,
 } from "react-native"
 import { FlashList, ContentStyle } from "@shopify/flash-list"
 import Animated, {
@@ -17,27 +17,27 @@ import Animated, {
 } from "react-native-reanimated"
 import { useIsFocused } from "@react-navigation/native"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { colors, spacing } from "../../theme"
+import { colors, spacing, layout } from "../../theme"
 import { useAppState, useCurrentDate, useHeader } from "../../hooks"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
 import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
 import { parseDate } from "../../utils/formatDate"
 import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
-import { SCREEN_WIDTH, ScrollToButton, Text, useScrollToEvent } from "../../components"
+import { ScrollToButton, Text, useScrollToEvent } from "../../components"
 import { isConferencePassed } from "../../utils/isConferencePassed"
 import * as Device from "expo-device"
 import messaging from "@react-native-firebase/messaging"
-import { translate } from "../../i18n"
+import { TxKeyPath } from "../../i18n"
 
 export interface Schedule {
+  bannerTx?: TxKeyPath
   date: string
   title: string
   events: ScheduleCardProps[]
 }
 
 const BUTTON_HEIGHT = 48
-const { width } = Dimensions.get("window")
 
 /** Get the current time's event index */
 const getCurrentEventIndex = (schedule: Schedule, currentTime = new Date()) => {
@@ -69,6 +69,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
     schedules,
     refetch: refetchScheduleScreenData,
   } = useScheduleScreenData()
+  const { width: screenWidth } = useWindowDimensions()
   const [selectedSchedule, setSelectedSchedule] = React.useState<Schedule>(schedules[0])
 
   useHeader({ title: format(parseDate(selectedSchedule.date), "EE, MMMM dd") }, [selectedSchedule])
@@ -126,7 +127,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
         })
       } else {
         ;(hScrollRef?.current as unknown as FlashList<Schedule>)?.scrollToOffset({
-          offset: itemIndex * width,
+          offset: itemIndex * screenWidth,
         })
       }
     },
@@ -192,7 +193,7 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
         const contentOffset = event.contentOffset
 
         // Divide the horizontal offset by the width of the view to see which page is visible
-        const adjustedWidth = width - spacing.large * 2
+        const adjustedWidth = screenWidth - layout.horizontalGutter * 2
         const index = Math.floor(contentOffset.x / adjustedWidth)
 
         // ! isFocused check for iOS, see details here: https://github.com/software-mansion/react-native-screens/issues/1183
@@ -207,16 +208,16 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
   const renderSchedule = React.useCallback(
     ({ index, item: schedule }: { index: number; item: Schedule }) => (
       <>
-        {index === 0 && (
-          <View style={$workshopBanner}>
-            <Text style={$workshopBannerText}>{translate("scheduleScreen.workshopBanner")}</Text>
+        {schedule.bannerTx && (
+          <View style={[$banner, { width: screenWidth }]}>
+            <Text style={$bannerText} tx={schedule.bannerTx} />
           </View>
         )}
-        <View style={[$container, { width }]}>
+        <View style={[$container, { width: screenWidth }]}>
           <FlashList<ScheduleCardProps>
             data={schedule.events}
             estimatedItemSize={242}
-            estimatedListSize={{ height: schedules.length * 242, width }}
+            estimatedListSize={{ height: schedules.length * 242, width: screenWidth }}
             // To achieve better performance, specify the type based on the item
             getItemType={(item) => item.variant}
             keyExtractor={(item) => item.id}
@@ -317,13 +318,12 @@ const $cardContainer: ViewStyle = {
   paddingBottom: spacing.large,
 }
 
-const $workshopBanner: ViewStyle = {
+const $banner: ViewStyle = {
   backgroundColor: colors.palette.primary400,
   paddingHorizontal: spacing.large,
   paddingVertical: spacing.extraSmall,
-  width: SCREEN_WIDTH,
 }
 
-const $workshopBannerText: TextStyle = {
+const $bannerText: TextStyle = {
   color: colors.palette.neutral800,
 }

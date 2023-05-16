@@ -1,5 +1,13 @@
 import React, { useLayoutEffect } from "react"
-import { Dimensions, Image, ImageStyle, Platform, TextStyle, View, ViewStyle } from "react-native"
+import {
+  Image,
+  ImageStyle,
+  Platform,
+  TextStyle,
+  View,
+  ViewStyle,
+  useWindowDimensions,
+} from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Button, Screen, Text } from "../components"
 import { useAppNavigation } from "../hooks"
@@ -8,12 +16,12 @@ import { colors, spacing } from "../theme"
 import { prefetchScheduledEvents } from "../services/api"
 
 const welcomeLogo = require("../../assets/images/welcome-shapes.png")
-const { width: screenWidth } = Dimensions.get("screen")
 
 interface WelcomeScreenProps extends AppStackScreenProps<"Welcome"> {}
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   const navigation = useAppNavigation()
+  const { width } = useWindowDimensions()
 
   function goNext() {
     navigation.navigate("Tabs", { screen: "Schedule" })
@@ -51,7 +59,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
       </View>
 
       <SafeAreaView style={$bottomContainer} edges={["bottom"]}>
-        <View style={$bottomContentContainer}>
+        <View
+          style={[
+            $bottomContentContainer,
+            Platform.select({ ios: { paddingHorizontal: width * 0.25 } }),
+          ]}
+        >
           <Button
             testID="see-the-schedule-button"
             tx="welcomeScreen.scheduleButton"
@@ -93,21 +106,20 @@ const $bottomContainer: ViewStyle = {
   borderTopRightRadius: 16,
 }
 
-const $bottomContentContainer: ViewStyle = Platform.select({
-  ios: {
-    flex: 1,
-    paddingHorizontal: screenWidth * 0.25,
-    paddingBottom: spacing.large,
-    justifyContent: "flex-end",
-  } as ViewStyle,
-  android: {
-    flex: 1,
-    paddingBottom: spacing.large,
-    justifyContent: "center",
-    alignItems: "center",
-  } as ViewStyle,
-  default: {} as ViewStyle,
-})
+const $bottomContentContainer: ViewStyle = {
+  flex: 1,
+  paddingBottom: spacing.large,
+  ...Platform.select({
+    ios: {
+      justifyContent: "flex-end",
+    } as ViewStyle,
+    android: {
+      justifyContent: "center",
+      alignItems: "center",
+    } as ViewStyle,
+    default: {} as ViewStyle,
+  }),
+}
 
 const $welcomeLogo: ImageStyle = {
   width: "100%",
