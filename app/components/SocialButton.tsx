@@ -34,6 +34,9 @@ export function SocialButton(props: SocialButtonProps) {
         openLinkInBrowser(url)
       }}
       style={[$socialButton, $styleOverride]}
+      accessibilityRole="button"
+      accessibilityLabel={icon}
+      accessibilityHint={`Navigates to ${icon}`}
       {...rest}
     >
       <Icon icon={icon} size={size} />
