@@ -74,7 +74,7 @@ export const Text = forwardRef<RNText, TextProps>(function Text(props, ref) {
   ]
 
   return (
-    <RNText ref={ref} {...rest} style={$styles}>
+    <RNText ref={ref} {...rest} style={$styles} selectable>
       {content}
     </RNText>
   )
