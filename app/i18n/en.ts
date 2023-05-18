@@ -101,11 +101,11 @@ const en = {
   },
   breakDetailsScreen: {
     description:
-      "Hosted upstairs in the mezzanine, TestDouble will be providing coffee and pair programming in a friendly cafe experience. Bring your toughest code problems, grab a coffee, and visit us for Coffee & Code!",
+      "Hosted upstairs in the mezzanine, Test Double will be providing coffee and pair programming in a friendly cafe experience. Bring your toughest code problems, grab a coffee, and visit us for Coffee & Code!",
     location: "Upstairs mezzanine",
     hostedBy: "Hosted by",
     locationLabel: "Location",
-    moreInfo: "More info",
+    moreInfo: "Reservations",
   },
   ota: {
     title: "Update Available",
