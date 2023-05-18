@@ -44,7 +44,7 @@ const ScheduleDay: FC<ScheduleDayProps> = (props) => {
 
   const { height: screenHeight, width: screenWidth } = useWindowDimensions()
   const { bottom } = useSafeAreaInsets()
-  const listHeight = screenHeight - bottom - layout.headerHeight - layout.tabHeight
+  const listHeight = screenHeight - bottom - layout.headerHeight - layout.tabBarHeight
 
   return (
     <View style={[$container, { width: screenWidth }]}>
