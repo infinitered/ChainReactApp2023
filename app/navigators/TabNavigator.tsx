@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon, IconTypes } from "../components"
 import { translate, TxKeyPath } from "../i18n"
 import { ExploreScreen, ScheduleScreen, VenuesScreen, ChatScreen } from "../screens"
-import { colors, spacing, typography } from "../theme"
+import { colors, layout, spacing, typography } from "../theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { InfoStackNavigator } from "./InfoStackNavigator"
 
@@ -85,7 +85,7 @@ export function TabNavigator() {
       screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: [$tabBar, { height: bottom + 70 }],
+        tabBarStyle: [$tabBar, { height: bottom + layout.tabBarHeight }],
         tabBarActiveTintColor: colors.text,
         tabBarInactiveTintColor: colors.text,
         tabBarLabelStyle: $tabBarLabel,

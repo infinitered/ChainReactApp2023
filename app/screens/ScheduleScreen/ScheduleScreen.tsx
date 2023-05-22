@@ -5,11 +5,9 @@ import {
   View,
   ViewStyle,
   findNodeHandle,
-  RefreshControl,
-  TextStyle,
   useWindowDimensions,
 } from "react-native"
-import { FlashList, ContentStyle } from "@shopify/flash-list"
+import { FlashList } from "@shopify/flash-list"
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -17,27 +15,26 @@ import Animated, {
 } from "react-native-reanimated"
 import { useIsFocused } from "@react-navigation/native"
 import { TabScreenProps } from "../../navigators/TabNavigator"
-import { colors, spacing, layout } from "../../theme"
+import { colors, layout } from "../../theme"
 import { useAppState, useCurrentDate, useHeader } from "../../hooks"
 import { ScheduleDayPicker } from "./ScheduleDayPicker"
-import ScheduleCard, { ScheduleCardProps } from "./ScheduleCard"
+import { ScheduleCardProps } from "./ScheduleCard"
 import { parseDate } from "../../utils/formatDate"
 import { format, isAfter } from "date-fns"
 import { useScheduleScreenData } from "../../services/api/webflow-api"
-import { ScrollToButton, Text, useScrollToEvent } from "../../components"
+import { ScrollToButton, useScrollToEvent } from "../../components"
 import { isConferencePassed } from "../../utils/isConferencePassed"
 import * as Device from "expo-device"
 import messaging from "@react-native-firebase/messaging"
+import ScheduleDay from "./ScheduleDay"
 import { TxKeyPath } from "../../i18n"
 
 export interface Schedule {
   bannerTx?: TxKeyPath
   date: string
-  title: string
   events: ScheduleCardProps[]
+  title: string
 }
-
-const BUTTON_HEIGHT = 48
 
 /** Get the current time's event index */
 const getCurrentEventIndex = (schedule: Schedule, currentTime = new Date()) => {
@@ -207,50 +204,12 @@ export const ScheduleScreen: React.FC<TabScreenProps<"Schedule">> = () => {
 
   const renderSchedule = React.useCallback(
     ({ index, item: schedule }: { index: number; item: Schedule }) => (
-      <>
-        {schedule.bannerTx && (
-          <View style={[$banner, { width: screenWidth }]}>
-            <Text style={$bannerText} tx={schedule.bannerTx} />
-          </View>
-        )}
-        <View style={[$container, { width: screenWidth }]}>
-          <FlashList<ScheduleCardProps>
-            data={schedule.events}
-            estimatedItemSize={242}
-            estimatedListSize={{ height: schedules.length * 242, width: screenWidth }}
-            // To achieve better performance, specify the type based on the item
-            getItemType={(item) => item.variant}
-            keyExtractor={(item) => item.id}
-            onViewableItemsChanged={handleViewableEventIndexChanged}
-            ref={scheduleListRefs[schedule.date]}
-            scrollEventThrottle={16}
-            showsVerticalScrollIndicator={false}
-            viewabilityConfig={{ itemVisiblePercentThreshold: 1, minimumViewTime: 100 }}
-            contentContainerStyle={
-              scheduleIndex === index && eventIndex !== 0 ? $list : $listWithoutButton
-            }
-            renderItem={({ item, index: itemIndex }) => (
-              <View style={$cardContainer}>
-                <ScheduleCard
-                  {...item}
-                  isPast={
-                    index < scheduleIndex ||
-                    (index === scheduleIndex && itemIndex < eventIndex) ||
-                    isConfOver
-                  }
-                />
-              </View>
-            )}
-            refreshControl={
-              <RefreshControl
-                onRefresh={refetchScheduleScreenData}
-                refreshing={isRefetching}
-                tintColor={colors.palette.neutral100}
-              />
-            }
-          />
-        </View>
-      </>
+      <ScheduleDay
+        {...{ index, isConfOver, isRefetching, schedule, eventIndex, scheduleIndex }}
+        scheduleListRef={scheduleListRefs[schedule.date]}
+        onRefresh={refetchScheduleScreenData}
+        onViewableItemsChanged={handleViewableEventIndexChanged}
+      />
     ),
     [scheduleIndex, eventIndex, isConfOver, isFocused],
   )
@@ -297,33 +256,4 @@ const $root: ViewStyle = {
 
 const $activityIndicator: ViewStyle = {
   flex: 1,
-}
-
-const $container: ViewStyle = {
-  flex: 1,
-  paddingHorizontal: spacing.large,
-}
-
-const $list: ContentStyle = {
-  paddingTop: BUTTON_HEIGHT + spacing.extraLarge + spacing.extraSmall,
-  paddingBottom: BUTTON_HEIGHT + spacing.medium,
-}
-
-const $listWithoutButton: ContentStyle = {
-  paddingTop: spacing.extraLarge,
-  paddingBottom: BUTTON_HEIGHT + spacing.medium,
-}
-
-const $cardContainer: ViewStyle = {
-  paddingBottom: spacing.large,
-}
-
-const $banner: ViewStyle = {
-  backgroundColor: colors.palette.primary400,
-  paddingHorizontal: spacing.large,
-  paddingVertical: spacing.extraSmall,
-}
-
-const $bannerText: TextStyle = {
-  color: colors.palette.neutral800,
 }
