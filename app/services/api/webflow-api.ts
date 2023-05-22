@@ -1,6 +1,5 @@
 import { useQueries, useQuery, UseQueryOptions } from "@tanstack/react-query"
 import { Schedule } from "../../screens"
-import { axiosInstance, PaginatedItems } from "./axios"
 import type {
   RawRecommendations,
   RawRecurringEvents,
@@ -31,10 +30,10 @@ import {
   convertScheduleToScheduleCard,
 } from "./webflow-helpers"
 import { queryClient } from "./react-query"
+import webflowData from "./webflow-data"
 
 const getCollectionById = async <T>(collectionId: string) => {
-  const { data } = await axiosInstance.get<PaginatedItems<T>>(`/collections/${collectionId}/items`)
-  return data.items
+  return (webflowData as unknown as Record<string, Array<T>>)[collectionId]
 }
 
 const webflowOptions = <Payload, Collection extends CollectionConst = CollectionConst>(
