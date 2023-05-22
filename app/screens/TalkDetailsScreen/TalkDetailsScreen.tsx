@@ -4,7 +4,6 @@ import { StackScreenProps } from "@react-navigation/stack"
 import { AppStackParamList } from "../../navigators"
 import {
   Text,
-  MIN_HEADER_HEIGHT,
   BoxShadow,
   Screen,
   MediaButton,
@@ -301,7 +300,7 @@ const $root: ViewStyle = {
 }
 
 const $scrollView: ViewStyle = {
-  marginBottom: MIN_HEADER_HEIGHT,
+  marginBottom: layout.headerHeight,
 }
 
 const $container = {

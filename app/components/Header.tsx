@@ -9,13 +9,11 @@ import {
   ViewStyle,
 } from "react-native"
 import { Edge } from "react-native-safe-area-context"
-import { colors, spacing } from "../theme"
+import { colors, layout, spacing } from "../theme"
 import { Text, TextProps } from "./Text"
 import { Icon, IconTypes } from "./Icon"
 import { isRTL, translate } from "../i18n"
 import SafeAreaViewFixed from "./SafeAreaViewFixed"
-
-export const MIN_HEADER_HEIGHT = 56
 
 export interface HeaderProps {
   /**
@@ -265,7 +263,7 @@ const $safeArea: ViewStyle = {
 }
 
 const $container: ViewStyle = {
-  height: MIN_HEADER_HEIGHT,
+  height: layout.headerHeight,
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "space-between",
