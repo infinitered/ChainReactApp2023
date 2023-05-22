@@ -1,5 +1,6 @@
 import { useQueries, useQuery, UseQueryOptions } from "@tanstack/react-query"
 import { Schedule } from "../../screens"
+import { axiosInstance, PaginatedItems } from "./axios"
 import type {
   RawRecommendations,
   RawRecurringEvents,
@@ -32,7 +33,13 @@ import {
 import { queryClient } from "./react-query"
 import webflowData from "./webflow-data"
 
-const getCollectionById = async <T>(collectionId: string) => {
+// This function isn't currently being used but it's the one we used to use to fetch data from Webflow
+const _getCollectionById = async <T>(collectionId: string) => {
+  const { data } = await axiosInstance.get<PaginatedItems<T>>(`/collections/${collectionId}/items`)
+  return data.items
+}
+
+const getLocalCollectionById = async <T>(collectionId: string) => {
   return (webflowData as unknown as Record<string, Array<T>>)[collectionId]
 }
 
@@ -41,7 +48,7 @@ const webflowOptions = <Payload, Collection extends CollectionConst = Collection
 ) =>
   ({
     queryKey: [collection.key, collection.collectionId] as const,
-    queryFn: async () => getCollectionById<Payload>(collection.collectionId),
+    queryFn: async () => getLocalCollectionById<Payload>(collection.collectionId),
   } satisfies UseQueryOptions)
 
 const recommendationsOptions = webflowOptions<RawRecommendations>(RECOMMENDATIONS)
