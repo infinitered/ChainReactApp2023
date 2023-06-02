@@ -304,7 +304,7 @@ const $scrollView: ViewStyle = {
 }
 
 const $container = {
-  paddingBottom: spacing.large,
+  paddingBottom: layout.mediaButtonGutter,
 }
 
 const $containerSpacing: ViewStyle = {

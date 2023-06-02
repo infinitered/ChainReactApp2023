@@ -13,6 +13,7 @@ import {
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 import { colors, spacing, typography } from "../theme"
 import { Text, TextProps } from "./Text"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 type Presets = keyof typeof $viewPresets
 
@@ -152,6 +153,7 @@ export type FloatingButtonProps = ButtonProps & { isVisible?: boolean }
 
 export const FloatingButton = ({ isVisible, ...props }: FloatingButtonProps) => {
   const { width } = useWindowDimensions()
+  const { bottom: paddingBottom } = useSafeAreaInsets()
   return (
     <View>
       {/* <View> must be here as the parent for Layout Animations to work. (entering/exiting animations) */}
@@ -159,7 +161,7 @@ export const FloatingButton = ({ isVisible, ...props }: FloatingButtonProps) => 
         <Animated.View
           entering={FadeInDown}
           exiting={FadeOutDown}
-          style={[$floatingAction, { width }]}
+          style={[$floatingAction, { bottom: paddingBottom + spacing.extraSmall, width }]}
         >
           <Button {...props}></Button>
         </Animated.View>
@@ -278,6 +280,5 @@ const $shadowPresets = {
 
 const $floatingAction: ViewStyle = {
   position: "absolute",
-  bottom: spacing.large,
   paddingHorizontal: spacing.large,
 }

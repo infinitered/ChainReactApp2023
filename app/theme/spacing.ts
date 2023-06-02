@@ -18,6 +18,7 @@ export const layout = {
   horizontalGutter: spacing.large,
   headerHeight: 56,
   tabBarHeight: 70,
+  mediaButtonGutter: spacing.medium * 2 + 16 + spacing.small, // 16 for the font size, medium * 2 for the vertical padding, small for extra breathing room
 }
 
 export type Spacing = keyof typeof spacing
