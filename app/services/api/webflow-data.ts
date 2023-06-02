@@ -856,6 +856,8 @@ export default {
       "published-by": "Person_5ca77d28397726353bf26f69",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "645b059e4a84d4a82744c652",
+      "talk-url":
+        "https://www.youtube.com/watch?v=LVMGwMp2MZo&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=9",
     },
     {
       _archived: false,
@@ -898,6 +900,8 @@ export default {
       "published-by": "Person_57fc009927a6922a35903a0b",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64486c391444d3c31d42f20c",
+      "talk-url":
+        "https://www.youtube.com/watch?v=3wo09W7Dp08&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=10",
     },
     {
       _archived: false,
@@ -920,6 +924,8 @@ export default {
         'This talk will propose a new model for how we think about "complexity" as we build. If you\'ve ever struggled to convince someone to adopt React, RN, Next.js, etc., this talk is for you.',
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383918c839045c1046441d",
+      "talk-url":
+        "https://www.youtube.com/watch?v=dXDxa9YdqFA&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=2",
     },
     {
       _archived: false,
@@ -942,6 +948,8 @@ export default {
         "Learn how today’s Expo adapts as you need to customize your native projects, speeds up local development, and provides complex build setups to a simple configuration file.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383903a874467e74cf8f3d",
+      "talk-url":
+        "https://www.youtube.com/watch?v=YufZFVL-BJc&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=12",
     },
     {
       _archived: false,
@@ -964,6 +972,8 @@ export default {
         "VoiceOver is a screen reader built into every Mac and iOS device, allowing users with visual impairments to navigate and interact with their devices using only sound. In this talk, we will explore how to utilize VoiceOver on an iPhone to improve the accessibility of a React Native mobile application. By implementing VoiceOver in a React Native app, developers can ensure that their app is accessible to a wider range of users. We will cover best practices for testing and debugging with VoiceOver, as well as strategies for ensuring a seamless and intuitive user experience for all users.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "643838a3591f74a56babc5f3",
+      "talk-url":
+        "https://www.youtube.com/watch?v=gmte6NfxjcA&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=8",
     },
     {
       _archived: false,
@@ -986,6 +996,8 @@ export default {
         "Learn about the team's process at NTWRK building a React Native app and discover how React Native can be reliably used to build complicated applications that heavily lean into media and real-time mechanics.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "643838774be4827a90c74189",
+      "talk-url":
+        "https://www.youtube.com/watch?v=ik1eMi0Raro&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=6",
     },
     {
       _archived: false,
@@ -1006,6 +1018,8 @@ export default {
       "description-preview": "Dynamic and Scalable User Experiences",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383852c904fe72d6be2848",
+      "talk-url":
+        "https://www.youtube.com/watch?v=vpwAh6NnaU0&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=7",
     },
     {
       _archived: false,
@@ -1028,6 +1042,8 @@ export default {
         "Learn from our experience scaling the PUMA App from zero to a million downloads over 6 months. We will review the tools, tasks, and processes used to get and keep the app working effectively.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "6438382582b8a95bf3b0b090",
+      "talk-url":
+        "https://www.youtube.com/watch?v=teuZZTsl_F8&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=17",
     },
     {
       _archived: false,
@@ -1050,6 +1066,8 @@ export default {
         "How Shopify uses multiple strategies for building React Native screens at scale.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "6438380435831c7675cbe8cd",
+      "talk-url":
+        "https://www.youtube.com/watch?v=bEfTgM6QL1E&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=20",
     },
     {
       _archived: false,
@@ -1072,6 +1090,8 @@ export default {
         " Find out if and how we can overcome challenges from moving fast and efficiently in big teams on a large product with complex functionality.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "643837e229d88cd4ab80af80",
+      "talk-url":
+        "https://www.youtube.com/watch?v=g7UV2yWlg3g&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=19",
     },
     {
       _archived: false,
@@ -1094,6 +1114,8 @@ export default {
         "Let’s face it, we all have a little bit of outrage inside us. But did you know you can channel that energy into creating amazing React Native apps? Join this talk to learn the basics of “Outrage Driven Development” (ODD) and discover how to become an ODD developer. Don’t suppress your outrage any longer - let’s turn it into a productive force and become ODD masters together! Get ready to revolutionize your app development game with the power of ODD.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "643837c3762b5b6ee68b1561",
+      "talk-url":
+        "https://www.youtube.com/watch?v=vk0XdVuzxyo&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=4",
     },
     {
       _archived: false,
@@ -1115,6 +1137,8 @@ export default {
       "description-preview": "The past, present, and future of how Expensify sees React Native.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "643837a84be4821bafc738ce",
+      "talk-url":
+        "https://www.youtube.com/watch?v=SYWIk9jFSp4&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=1",
     },
     {
       _archived: false,
@@ -1137,6 +1161,8 @@ export default {
         "In this talk, he’ll dive into the skepticism of building React Native Apps for the Web, including everything from design systems and navigation to ExpoGL and Reanimated, from how they’ve successfully built Guild on top of this architecture.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383760937ac9aec1f5a5ab",
+      "talk-url":
+        "https://www.youtube.com/watch?v=z9KNu7cYHBI&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=18",
     },
     {
       _archived: false,
@@ -1159,6 +1185,8 @@ export default {
         "React Native is often subject to drama and a lack of communication, leading to a lack of trust. In my conference talk, I'll shed light on the under-appreciated work of developers improving the technology, with the hope of restoring your faith in its future.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "6438374a936be79f59adca08",
+      "talk-url":
+        "https://www.youtube.com/watch?v=1vMic8ixfVI&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=14",
     },
     {
       _archived: false,
@@ -1199,6 +1227,8 @@ export default {
         "In this talk, we explore how to leverage tech, UX, and psychology to enhance your app and give it the best possible chance of reaching the top of the app stores!",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "643837081cd44590d313f744",
+      "talk-url":
+        "https://www.youtube.com/watch?v=UrJGrhOHNI8&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=3",
     },
     {
       _archived: false,
@@ -1221,6 +1251,8 @@ export default {
         "Why and how we migrated the Messenger desktop app from Electron to React Native, and the challenges and lessons learned along the way.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "6438368d7b175a3f66c0cd39",
+      "talk-url":
+        "https://www.youtube.com/watch?v=ChDQZpWQbwk&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=16",
     },
     {
       _archived: false,
@@ -1247,6 +1279,8 @@ export default {
         "An inside look at the journey and challenges of building and consuming React Native Windows by Microsoft developers.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383665c904fe0c4fbe022d",
+      "talk-url":
+        "https://www.youtube.com/watch?v=kMJNEFHj8b8&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=13",
     },
     {
       _archived: false,
@@ -1269,6 +1303,8 @@ export default {
         "A walkthrough of Codegen, a pillar of the New Architecture, and how you can contribute to the React Native repository.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383488e1f971584163babf",
+      "talk-url":
+        "https://www.youtube.com/watch?v=3sgOgB9pl1U&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=11",
     },
     {
       _archived: false,
@@ -1291,6 +1327,8 @@ export default {
         "This talk is a crash course covering the process of building and shipping apps and a review of common tools in the React Native ecosystem so you can feel confident deploying and getting back to developing.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383446c904fe593dbdbf25",
+      "talk-url":
+        "https://www.youtube.com/watch?v=uiu_hqXoHpA&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=5",
     },
     {
       _archived: false,
@@ -1313,6 +1351,8 @@ export default {
         "This talk will discuss React Native performance myths and compare real-world React Native apps with pure native development to bust them.",
       _cid: "640a728fc24f8e31ee5fe18e",
       _id: "64383418937ac90615f559bb",
+      "talk-url":
+        "https://www.youtube.com/watch?v=B_KbqzK66hM&list=PLFHvL21g9bk30F2UaJfn6TqJn15MAoBOc&index=15",
     },
     {
       _archived: false,
