@@ -1,7 +1,7 @@
 import { ExpoConfig, ConfigContext } from "@expo/config"
 import { version } from "./package.json"
 
-const BUILD_NUMBER = 8
+const BUILD_NUMBER = 9
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
