@@ -1,6 +1,6 @@
 # The official App for #ChainReact2023
 
-Coming soon! This will be the home for the app for [Chain React 2023](https://cr.infinite.red/), the only React Native focused conference in the USA, hosted by [Infinite Red](https://infinite.red/). Stay tuned for updates ❤️ ⚛
+This is the home for the official app of [Chain React 2023](https://cr.infinite.red/), the only React Native focused conference in the USA, hosted by [Infinite Red](https://infinite.red/). This event happened May 17-19, 2023, in Portland, Oregon.
 
 <img src="./assets/branding-banner.jpg" alt="branding-banner" /><br />
 
