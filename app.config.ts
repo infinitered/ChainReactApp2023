@@ -103,6 +103,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         android: {
           enableProguardInReleaseBuilds: true,
           enableShrinkResourcesInReleaseBuilds: true,
+          unstable_networkInspector: true,
+        },
+        ios: {
+          unstable_networkInspector: true,
         },
       },
     ],
