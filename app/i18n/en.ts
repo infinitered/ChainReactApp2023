@@ -4,6 +4,9 @@ const en = {
     cancel: "Cancel",
     back: "Back",
     comingSoon: "Coming soon",
+    appClosedPart1: "Hey, this app is not being used in 2024; go to ",
+    appClosedPart2: " to get all the details!",
+    appClosedLinkText: "ChainReactConf.com",
   },
   welcomeScreen: {
     heading: "Welcome to Chain React!",
