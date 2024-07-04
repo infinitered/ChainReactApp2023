@@ -8,8 +8,7 @@ import {
   ViewStyle,
   useWindowDimensions,
 } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
-import { Button, Screen, Text } from "../components"
+import { Button, ClosedBanner, Screen, Text } from "../components"
 import { useAppNavigation } from "../hooks"
 import { AppStackScreenProps } from "../navigators"
 import { colors, spacing } from "../theme"
@@ -32,7 +31,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
   }, [])
 
   return (
-    <Screen style={$container}>
+    <Screen safeAreaEdges={["top", "bottom"]} style={$container}>
+      <ClosedBanner />
       <View style={$topContainer}>
         <Image style={$welcomeLogo} source={welcomeLogo} />
       </View>
@@ -58,7 +58,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
         />
       </View>
 
-      <SafeAreaView style={$bottomContainer} edges={["bottom"]}>
+      <View style={$bottomContainer}>
         <View
           style={[
             $bottomContentContainer,
@@ -72,7 +72,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = (_props) => {
             onPress={goNext}
           />
         </View>
-      </SafeAreaView>
+      </View>
     </Screen>
   )
 }
@@ -85,7 +85,7 @@ const $container: ViewStyle = {
 const $topContainer: ViewStyle = {
   flexShrink: 1,
   flexGrow: 1,
-  flexBasis: "25%",
+  flexBasis: "20%",
   justifyContent: "flex-start",
 }
 
@@ -100,10 +100,8 @@ const $middleContainer: ViewStyle = {
 const $bottomContainer: ViewStyle = {
   flexShrink: 1,
   flexGrow: 0,
-  flexBasis: "25%",
+  flexBasis: "20%",
   backgroundColor: colors.background,
-  borderTopLeftRadius: 16,
-  borderTopRightRadius: 16,
 }
 
 const $bottomContentContainer: ViewStyle = {
