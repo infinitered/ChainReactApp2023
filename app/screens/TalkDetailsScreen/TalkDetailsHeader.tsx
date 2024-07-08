@@ -1,7 +1,7 @@
 import React from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import Animated, { interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { Text } from "../../components"
+import { ClosedBanner, Text } from "../../components"
 import { BackButton } from "../../navigators/BackButton"
 import { colors, layout, spacing } from "../../theme"
 
@@ -36,16 +36,19 @@ export const TalkDetailsHeader: React.FunctionComponent<TalkDetailsHeaderProps> 
     }, [headingHeight])
 
     return (
-      <View style={$rowContainer}>
-        <BackButton />
-        <AnimatedText
-          allowFontScaling={false}
-          preset="navHeader"
-          style={[$centerTitle, $animatedTitle]}
-        >
-          {title}
-        </AnimatedText>
-      </View>
+      <>
+        <ClosedBanner />
+        <View style={$rowContainer}>
+          <BackButton />
+          <AnimatedText
+            allowFontScaling={false}
+            preset="navHeader"
+            style={[$centerTitle, $animatedTitle]}
+          >
+            {title}
+          </AnimatedText>
+        </View>
+      </>
     )
   }
 

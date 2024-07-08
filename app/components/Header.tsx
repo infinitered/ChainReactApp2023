@@ -14,6 +14,7 @@ import { Text, TextProps } from "./Text"
 import { Icon, IconTypes } from "./Icon"
 import { isRTL, translate } from "../i18n"
 import SafeAreaViewFixed from "./SafeAreaViewFixed"
+import { ClosedBanner } from "./ClosedBanner"
 
 export interface HeaderProps {
   /**
@@ -175,6 +176,7 @@ export function Header(props: HeaderProps) {
       {...HeaderViewProps}
       style={[$safeArea, HeaderViewProps?.style, { backgroundColor }]}
     >
+      <ClosedBanner />
       <View style={[$container, $containerStyleOverride]}>
         <HeaderAction
           tx={leftTx}
